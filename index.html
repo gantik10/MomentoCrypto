@@ -357,6 +357,29 @@
   }
   .results-cta { text-align: center; }
 
+  /* LOAD MORE BUTTON */
+  .load-more-wrap { text-align: center; margin-bottom: 40px; }
+  .load-more-btn {
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--green);
+    background: transparent;
+    border: 1.5px solid rgba(57,255,20,0.3);
+    padding: 14px 40px;
+    cursor: pointer;
+    transition: all 0.25s;
+  }
+  .load-more-btn:hover {
+    border-color: var(--green);
+    background: var(--green-faint);
+    box-shadow: 0 0 30px rgba(57,255,20,0.15);
+  }
+  .trades-hidden { display: none; }
+  .trades-hidden.show { display: grid; }
+
   /* TRADE CARDS - Telegram style */
   .trades-grid {
     display: grid;
@@ -1016,6 +1039,205 @@
 
   </div>
 
+  <!-- LOAD MORE -->
+  <div class="load-more-wrap reveal">
+    <button class="load-more-btn" id="loadMoreTrades">LOAD MORE RESULTS ↓</button>
+  </div>
+
+  <!-- HIDDEN TRADES (9 more) -->
+  <div class="trades-grid trades-hidden" id="moreTrades">
+
+    <!-- Trade 7: DOGE -->
+    <div class="trade-card reveal">
+      <div class="trade-msg">
+        <div class="trade-msg-header"><span class="dot-green"></span> Trade opened</div>
+        <div class="trade-msg-line"><strong>DOGEUSDT long · market</strong></div>
+        <div class="trade-msg-line">Entry: 0.0900 · Lev: 50× · Margin: 200.00 USDT</div>
+        <div class="trade-msg-line">SL: 0.0885 · TP: —</div>
+        <div class="trade-msg-line">Opened: 05 Apr 2026, 14:20</div>
+        <div class="trade-time">2:20 PM</div>
+      </div>
+      <div class="trade-msg">
+        <div class="trade-msg-header"><span class="dot-blue"></span> Trade closed <span class="dot-green-small"></span></div>
+        <div class="trade-msg-line"><strong>DOGEUSDT long · manual</strong></div>
+        <div class="trade-msg-line">Entry: 0.0900 · Exit: 0.0940</div>
+        <div class="trade-msg-line"><span class="trade-pnl">PnL: +222.22% · 444.44 USDT</span></div>
+        <div class="trade-msg-line">Opened: 05 Apr 2026, 14:20</div>
+        <div class="trade-msg-line">Closed: 06 Apr 2026, 21:05 (30h 45m)</div>
+        <div class="trade-time">9:05 PM</div>
+      </div>
+    </div>
+
+    <!-- Trade 8: XRP -->
+    <div class="trade-card reveal">
+      <div class="trade-msg">
+        <div class="trade-msg-header"><span class="dot-green"></span> Trade opened</div>
+        <div class="trade-msg-line"><strong>XRPUSDT long · limit</strong></div>
+        <div class="trade-msg-line">Entry: 1.2800 · Lev: 25× · Margin: 300.00 USDT</div>
+        <div class="trade-msg-line">SL: 1.2550 · TP: —</div>
+        <div class="trade-msg-line">Opened: 03 Apr 2026, 08:45</div>
+        <div class="trade-time">8:45 AM</div>
+      </div>
+      <div class="trade-msg">
+        <div class="trade-msg-header"><span class="dot-blue"></span> Trade closed <span class="dot-green-small"></span></div>
+        <div class="trade-msg-line"><strong>XRPUSDT long · manual</strong></div>
+        <div class="trade-msg-line">Entry: 1.2800 · Exit: 1.3400</div>
+        <div class="trade-msg-line"><span class="trade-pnl">PnL: +117.19% · 351.56 USDT</span></div>
+        <div class="trade-msg-line">Opened: 03 Apr 2026, 08:45</div>
+        <div class="trade-msg-line">Closed: 05 Apr 2026, 17:30 (56h 45m)</div>
+        <div class="trade-time">5:30 PM</div>
+      </div>
+    </div>
+
+    <!-- Trade 9: LINK -->
+    <div class="trade-card reveal">
+      <div class="trade-msg">
+        <div class="trade-msg-header"><span class="dot-green"></span> Trade opened</div>
+        <div class="trade-msg-line"><strong>LINKUSDT long · market</strong></div>
+        <div class="trade-msg-line">Entry: 8.66 · Lev: 25× · Margin: 250.00 USDT</div>
+        <div class="trade-msg-line">SL: 8.40 · TP: —</div>
+        <div class="trade-msg-line">Opened: 04 Apr 2026, 11:10</div>
+        <div class="trade-time">11:10 AM</div>
+      </div>
+      <div class="trade-msg">
+        <div class="trade-msg-header"><span class="dot-blue"></span> Trade closed <span class="dot-green-small"></span></div>
+        <div class="trade-msg-line"><strong>LINKUSDT long · manual</strong></div>
+        <div class="trade-msg-line">Entry: 8.66 · Exit: 8.99</div>
+        <div class="trade-msg-line"><span class="trade-pnl">PnL: +95.27% · 238.17 USDT</span></div>
+        <div class="trade-msg-line">Opened: 04 Apr 2026, 11:10</div>
+        <div class="trade-msg-line">Closed: 06 Apr 2026, 09:35 (46h 25m)</div>
+        <div class="trade-time">9:35 AM</div>
+      </div>
+    </div>
+
+    <!-- Trade 10: PEPE -->
+    <div class="trade-card reveal">
+      <div class="trade-msg">
+        <div class="trade-msg-header"><span class="dot-green"></span> Trade opened</div>
+        <div class="trade-msg-line"><strong>PEPEUSDT long · market</strong></div>
+        <div class="trade-msg-line">Entry: 0.0000025 · Lev: 10× · Margin: 150.00 USDT</div>
+        <div class="trade-msg-line">SL: 0.0000023 · TP: —</div>
+        <div class="trade-msg-line">Opened: 01 Apr 2026, 16:00</div>
+        <div class="trade-time">4:00 PM</div>
+      </div>
+      <div class="trade-msg">
+        <div class="trade-msg-header"><span class="dot-blue"></span> Trade closed <span class="dot-green-small"></span></div>
+        <div class="trade-msg-line"><strong>PEPEUSDT long · manual</strong></div>
+        <div class="trade-msg-line">Entry: 0.0000025 · Exit: 0.00000336</div>
+        <div class="trade-msg-line"><span class="trade-pnl">PnL: +344.00% · 516.00 USDT</span></div>
+        <div class="trade-msg-line">Opened: 01 Apr 2026, 16:00</div>
+        <div class="trade-msg-line">Closed: 03 Apr 2026, 20:18 (52h 18m)</div>
+        <div class="trade-time">8:18 PM</div>
+      </div>
+    </div>
+
+    <!-- Trade 11: SUI -->
+    <div class="trade-card reveal">
+      <div class="trade-msg">
+        <div class="trade-msg-header"><span class="dot-green"></span> Trade opened</div>
+        <div class="trade-msg-line"><strong>SUIUSDT long · market</strong></div>
+        <div class="trade-msg-line">Entry: 0.8500 · Lev: 25× · Margin: 200.00 USDT</div>
+        <div class="trade-msg-line">SL: 0.8300 · TP: —</div>
+        <div class="trade-msg-line">Opened: 04 Apr 2026, 19:30</div>
+        <div class="trade-time">7:30 PM</div>
+      </div>
+      <div class="trade-msg">
+        <div class="trade-msg-header"><span class="dot-blue"></span> Trade closed <span class="dot-green-small"></span></div>
+        <div class="trade-msg-line"><strong>SUIUSDT long · manual</strong></div>
+        <div class="trade-msg-line">Entry: 0.8500 · Exit: 0.8900</div>
+        <div class="trade-msg-line"><span class="trade-pnl">PnL: +117.65% · 235.29 USDT</span></div>
+        <div class="trade-msg-line">Opened: 04 Apr 2026, 19:30</div>
+        <div class="trade-msg-line">Closed: 06 Apr 2026, 12:15 (40h 45m)</div>
+        <div class="trade-time">12:15 PM</div>
+      </div>
+    </div>
+
+    <!-- Trade 12: WIF -->
+    <div class="trade-card reveal">
+      <div class="trade-msg">
+        <div class="trade-msg-header"><span class="dot-green"></span> Trade opened</div>
+        <div class="trade-msg-line"><strong>WIFUSDT short · market</strong></div>
+        <div class="trade-msg-line">Entry: 0.1851 · Lev: 50× · Margin: 180.00 USDT</div>
+        <div class="trade-msg-line">SL: 0.1880 · TP: —</div>
+        <div class="trade-msg-line">Opened: 01 Apr 2026, 13:10</div>
+        <div class="trade-time">1:10 PM</div>
+      </div>
+      <div class="trade-msg">
+        <div class="trade-msg-header"><span class="dot-blue"></span> Trade closed <span class="dot-green-small"></span></div>
+        <div class="trade-msg-line"><strong>WIFUSDT short · manual</strong></div>
+        <div class="trade-msg-line">Entry: 0.1851 · Exit: 0.1793</div>
+        <div class="trade-msg-line"><span class="trade-pnl">PnL: +156.67% · 282.01 USDT</span></div>
+        <div class="trade-msg-line">Opened: 01 Apr 2026, 13:10</div>
+        <div class="trade-msg-line">Closed: 04 Apr 2026, 10:42 (69h 32m)</div>
+        <div class="trade-time">10:42 AM</div>
+      </div>
+    </div>
+
+    <!-- Trade 13: ONDO -->
+    <div class="trade-card reveal">
+      <div class="trade-msg">
+        <div class="trade-msg-header"><span class="dot-green"></span> Trade opened</div>
+        <div class="trade-msg-line"><strong>ONDOUSDT short · market</strong></div>
+        <div class="trade-msg-line">Entry: 0.2736 · Lev: 50× · Margin: 200.00 USDT</div>
+        <div class="trade-msg-line">SL: 0.2790 · TP: —</div>
+        <div class="trade-msg-line">Opened: 02 Apr 2026, 09:40</div>
+        <div class="trade-time">9:40 AM</div>
+      </div>
+      <div class="trade-msg">
+        <div class="trade-msg-header"><span class="dot-blue"></span> Trade closed <span class="dot-green-small"></span></div>
+        <div class="trade-msg-line"><strong>ONDOUSDT short · manual</strong></div>
+        <div class="trade-msg-line">Entry: 0.2736 · Exit: 0.2600</div>
+        <div class="trade-msg-line"><span class="trade-pnl">PnL: +248.54% · 497.08 USDT</span></div>
+        <div class="trade-msg-line">Opened: 02 Apr 2026, 09:40</div>
+        <div class="trade-msg-line">Closed: 04 Apr 2026, 15:20 (53h 40m)</div>
+        <div class="trade-time">3:20 PM</div>
+      </div>
+    </div>
+
+    <!-- Trade 14: FET -->
+    <div class="trade-card reveal">
+      <div class="trade-msg">
+        <div class="trade-msg-header"><span class="dot-green"></span> Trade opened</div>
+        <div class="trade-msg-line"><strong>FETUSDT long · limit</strong></div>
+        <div class="trade-msg-line">Entry: 0.2252 · Lev: 25× · Margin: 250.00 USDT</div>
+        <div class="trade-msg-line">SL: 0.2180 · TP: —</div>
+        <div class="trade-msg-line">Opened: 04 Apr 2026, 22:15</div>
+        <div class="trade-time">10:15 PM</div>
+      </div>
+      <div class="trade-msg">
+        <div class="trade-msg-header"><span class="dot-blue"></span> Trade closed <span class="dot-green-small"></span></div>
+        <div class="trade-msg-line"><strong>FETUSDT long · manual</strong></div>
+        <div class="trade-msg-line">Entry: 0.2252 · Exit: 0.2417</div>
+        <div class="trade-msg-line"><span class="trade-pnl">PnL: +183.15% · 457.87 USDT</span></div>
+        <div class="trade-msg-line">Opened: 04 Apr 2026, 22:15</div>
+        <div class="trade-msg-line">Closed: 06 Apr 2026, 18:50 (44h 35m)</div>
+        <div class="trade-time">6:50 PM</div>
+      </div>
+    </div>
+
+    <!-- Trade 15: TIA -->
+    <div class="trade-card reveal">
+      <div class="trade-msg">
+        <div class="trade-msg-header"><span class="dot-green"></span> Trade opened</div>
+        <div class="trade-msg-line"><strong>TIAUSDT short · market</strong></div>
+        <div class="trade-msg-line">Entry: 0.2947 · Lev: 50× · Margin: 200.00 USDT</div>
+        <div class="trade-msg-line">SL: 0.3010 · TP: —</div>
+        <div class="trade-msg-line">Opened: 01 Apr 2026, 10:30</div>
+        <div class="trade-time">10:30 AM</div>
+      </div>
+      <div class="trade-msg">
+        <div class="trade-msg-header"><span class="dot-blue"></span> Trade closed <span class="dot-green-small"></span></div>
+        <div class="trade-msg-line"><strong>TIAUSDT short · manual</strong></div>
+        <div class="trade-msg-line">Entry: 0.2947 · Exit: 0.2830</div>
+        <div class="trade-msg-line"><span class="trade-pnl">PnL: +198.51% · 397.01 USDT</span></div>
+        <div class="trade-msg-line">Opened: 01 Apr 2026, 10:30</div>
+        <div class="trade-msg-line">Closed: 03 Apr 2026, 16:45 (54h 15m)</div>
+        <div class="trade-time">4:45 PM</div>
+      </div>
+    </div>
+
+  </div>
+
   <div class="results-cta reveal">
     <a href="https://t.me/momentocrypto_bot" class="tg-btn">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12l-6.871 4.326-2.962-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.194 1.006.131.833.941z" fill="currentColor"/></svg>
@@ -1272,6 +1494,15 @@
     });
   }, { threshold: 0.5 });
   counters.forEach(c => counterObserver.observe(c));
+
+  // Load More trades
+  document.getElementById('loadMoreTrades').addEventListener('click', function() {
+    const more = document.getElementById('moreTrades');
+    more.classList.add('show');
+    this.style.display = 'none';
+    // Re-observe new reveal elements
+    more.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+  });
 </script>
 </body>
 </html>
