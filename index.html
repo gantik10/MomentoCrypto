@@ -1503,6 +1503,30 @@
     // Re-observe new reveal elements
     more.querySelectorAll('.reveal').forEach(el => observer.observe(el));
   });
+
+  // === ANALYTICS TRACKER ===
+  (function() {
+    const API = window.location.origin + '/api/track.php';
+    const device = /Mobi/i.test(navigator.userAgent) ? (/Tablet|iPad/i.test(navigator.userAgent) ? 'tablet' : 'mobile') : 'desktop';
+
+    function track(type, extra) {
+      const payload = Object.assign({ type, ref: document.referrer, page: location.pathname, device }, extra || {});
+      navigator.sendBeacon ? navigator.sendBeacon(API, JSON.stringify(payload)) : fetch(API, { method: 'POST', body: JSON.stringify(payload), keepalive: true });
+    }
+
+    // Track page visit
+    track('visit');
+
+    // Track all CTA button clicks
+    document.addEventListener('click', function(e) {
+      const btn = e.target.closest('a[href*="t.me"], .pkg-btn, .nav-cta, .tg-btn, .load-more-btn');
+      if (btn) {
+        const section = btn.closest('section')?.id || btn.closest('nav') ? 'nav' : 'other';
+        const text = btn.textContent.trim().substring(0, 50);
+        track('click', { button: text, section: section });
+      }
+    });
+  })();
 </script>
 </body>
 </html>

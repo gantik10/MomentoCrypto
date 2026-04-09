@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MomentoCrypto — Admin Dashboard</title>
+<meta name="robots" content="noindex, nofollow">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #080808;
+    color: #f5f5f5;
+    font-family: -apple-system, 'Segoe UI', Roboto, sans-serif;
+    min-height: 100vh;
+  }
+
+  /* LOGIN */
+  .login-overlay {
+    position: fixed; inset: 0;
+    background: #080808;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+  }
+  .login-overlay.hidden { display: none; }
+  .login-box {
+    background: #111;
+    border: 1px solid rgba(57,255,20,0.2);
+    padding: 48px 40px;
+    width: 380px;
+    text-align: center;
+  }
+  .login-box h2 {
+    font-size: 24px;
+    color: #39FF14;
+    margin-bottom: 8px;
+    letter-spacing: 2px;
+  }
+  .login-box p { color: #888; font-size: 13px; margin-bottom: 28px; }
+  .login-box input {
+    width: 100%;
+    padding: 14px 16px;
+    background: #1a1a1a;
+    border: 1px solid #333;
+    color: #f5f5f5;
+    font-size: 14px;
+    margin-bottom: 16px;
+    outline: none;
+  }
+  .login-box input:focus { border-color: #39FF14; }
+  .login-box button {
+    width: 100%;
+    padding: 14px;
+    background: #39FF14;
+    color: #080808;
+    border: none;
+    font-weight: 700;
+    font-size: 14px;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .login-box button:hover { background: #4fff2a; }
+  .login-error { color: #ff4444; font-size: 12px; margin-top: 8px; display: none; }
+
+  /* DASHBOARD */
+  .dashboard { display: none; padding: 32px; max-width: 1400px; margin: 0 auto; }
+  .dashboard.active { display: block; }
+
+  .dash-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 32px;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  .dash-title {
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: 2px;
+  }
+  .dash-title span { color: #39FF14; }
+
+  .date-filter {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+  .date-filter input {
+    padding: 8px 12px;
+    background: #1a1a1a;
+    border: 1px solid #333;
+    color: #f5f5f5;
+    font-size: 13px;
+  }
+  .date-filter button {
+    padding: 8px 20px;
+    background: #39FF14;
+    color: #080808;
+    border: none;
+    font-weight: 700;
+    cursor: pointer;
+    font-size: 13px;
+  }
+  .quick-btns { display: flex; gap: 6px; }
+  .quick-btns button {
+    padding: 6px 14px;
+    background: #1a1a1a;
+    color: #888;
+    border: 1px solid #333;
+    cursor: pointer;
+    font-size: 11px;
+    transition: all 0.2s;
+  }
+  .quick-btns button:hover, .quick-btns button.active {
+    border-color: #39FF14;
+    color: #39FF14;
+  }
+
+  /* STAT CARDS */
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 32px;
+  }
+  .stat-card {
+    background: #111;
+    border: 1px solid #222;
+    padding: 24px;
+  }
+  .stat-card-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #666;
+    margin-bottom: 8px;
+  }
+  .stat-card-value {
+    font-size: 36px;
+    font-weight: 700;
+    color: #39FF14;
+    line-height: 1;
+  }
+  .stat-card-sub {
+    font-size: 12px;
+    color: #555;
+    margin-top: 4px;
+  }
+
+  /* TABLES & GRIDS */
+  .panels {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 32px;
+  }
+  .panel {
+    background: #111;
+    border: 1px solid #222;
+    padding: 24px;
+  }
+  .panel-title {
+    font-size: 14px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #39FF14;
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #222;
+  }
+
+  .country-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid #1a1a1a;
+  }
+  .country-row:last-child { border: none; }
+  .country-name {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+  }
+  .country-flag { font-size: 18px; }
+  .country-stats {
+    display: flex;
+    gap: 20px;
+    font-size: 13px;
+    color: #888;
+  }
+  .country-stats strong { color: #f5f5f5; }
+
+  .bar-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 10px;
+  }
+  .bar-label {
+    font-size: 12px;
+    color: #888;
+    min-width: 120px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .bar-track {
+    flex: 1;
+    height: 8px;
+    background: #1a1a1a;
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .bar-fill {
+    height: 100%;
+    background: #39FF14;
+    border-radius: 2px;
+    transition: width 0.5s;
+  }
+  .bar-val {
+    font-size: 12px;
+    color: #f5f5f5;
+    min-width: 40px;
+    text-align: right;
+  }
+
+  /* CHART */
+  .chart-panel {
+    background: #111;
+    border: 1px solid #222;
+    padding: 24px;
+    margin-bottom: 32px;
+  }
+  .chart-canvas {
+    width: 100%;
+    height: 200px;
+    display: flex;
+    align-items: flex-end;
+    gap: 2px;
+    padding-top: 20px;
+  }
+  .chart-bar-wrap {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    min-width: 0;
+  }
+  .chart-bar {
+    width: 100%;
+    background: rgba(57,255,20,0.3);
+    border-radius: 2px 2px 0 0;
+    transition: height 0.5s;
+    position: relative;
+  }
+  .chart-bar:hover { background: #39FF14; }
+  .chart-bar-label {
+    font-size: 9px;
+    color: #555;
+    writing-mode: vertical-lr;
+    text-orientation: mixed;
+    max-height: 50px;
+    overflow: hidden;
+  }
+
+  /* DEVICES */
+  .device-grid {
+    display: flex;
+    gap: 24px;
+  }
+  .device-item {
+    flex: 1;
+    text-align: center;
+    padding: 16px;
+    background: #1a1a1a;
+    border-radius: 4px;
+  }
+  .device-icon { font-size: 28px; margin-bottom: 8px; }
+  .device-val { font-size: 24px; font-weight: 700; color: #39FF14; }
+  .device-label { font-size: 11px; color: #666; margin-top: 4px; text-transform: uppercase; letter-spacing: 1px; }
+
+  /* LOADING */
+  .loading {
+    text-align: center;
+    padding: 60px;
+    color: #555;
+    font-size: 14px;
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 900px) {
+    .stats-row { grid-template-columns: repeat(2, 1fr); }
+    .panels { grid-template-columns: 1fr; }
+    .dashboard { padding: 20px; }
+  }
+  @media (max-width: 600px) {
+    .stats-row { grid-template-columns: 1fr; }
+    .date-filter { flex-wrap: wrap; }
+  }
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div class="login-overlay" id="loginOverlay">
+  <div class="login-box">
+    <h2>MOMENTO<span style="color:#f5f5f5">CRYPTO</span></h2>
+    <p>Admin Dashboard — Enter password</p>
+    <input type="password" id="passInput" placeholder="Password" autofocus>
+    <button onclick="tryLogin()">ACCESS DASHBOARD</button>
+    <div class="login-error" id="loginError">Wrong password</div>
+  </div>
+</div>
+
+<!-- DASHBOARD -->
+<div class="dashboard" id="dashboard">
+  <div class="dash-header">
+    <div class="dash-title"><span>MOMENTO</span>CRYPTO — ANALYTICS</div>
+    <div>
+      <div class="quick-btns">
+        <button onclick="setRange(1)" class="active">Today</button>
+        <button onclick="setRange(7)">7 days</button>
+        <button onclick="setRange(14)">14 days</button>
+        <button onclick="setRange(30)">30 days</button>
+      </div>
+      <div class="date-filter" style="margin-top:8px">
+        <input type="date" id="dateFrom">
+        <span style="color:#555">→</span>
+        <input type="date" id="dateTo">
+        <button onclick="fetchStats()">Apply</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="loading" id="loading">Loading analytics...</div>
+
+  <div id="dashContent" style="display:none">
+    <!-- STATS ROW -->
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-card-label">Total Visits</div>
+        <div class="stat-card-value" id="totalVisits">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card-label">Unique Visitors</div>
+        <div class="stat-card-value" id="uniqueVisitors">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card-label">Total Clicks</div>
+        <div class="stat-card-value" id="totalClicks">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card-label">Click Rate</div>
+        <div class="stat-card-value" id="ctr">0%</div>
+      </div>
+    </div>
+
+    <!-- DAILY CHART -->
+    <div class="chart-panel">
+      <div class="panel-title">Daily Visits</div>
+      <div class="chart-canvas" id="dailyChart"></div>
+    </div>
+
+    <!-- PANELS -->
+    <div class="panels">
+      <!-- COUNTRIES -->
+      <div class="panel">
+        <div class="panel-title">Top Countries</div>
+        <div id="countriesList"></div>
+      </div>
+
+      <!-- BUTTON CLICKS -->
+      <div class="panel">
+        <div class="panel-title">Button Clicks</div>
+        <div id="buttonsList"></div>
+      </div>
+    </div>
+
+    <div class="panels">
+      <!-- DEVICES -->
+      <div class="panel">
+        <div class="panel-title">Devices</div>
+        <div class="device-grid" id="devicesGrid"></div>
+      </div>
+
+      <!-- HOURLY -->
+      <div class="panel">
+        <div class="panel-title">Traffic by Hour</div>
+        <div class="chart-canvas" id="hourlyChart" style="height:120px"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const API_BASE = window.location.origin + '/api/stats.php';
+  let authKey = '';
+
+  // Country code to flag emoji
+  function flag(code) {
+    if (!code || code === 'XX') return '🌍';
+    return String.fromCodePoint(...[...code.toUpperCase()].map(c => 0x1F1E6 - 65 + c.charCodeAt(0)));
+  }
+
+  function tryLogin() {
+    const pass = document.getElementById('passInput').value;
+    if (pass === 'MomentoCrypto2026!') {
+      authKey = pass;
+      document.getElementById('loginOverlay').classList.add('hidden');
+      document.getElementById('dashboard').classList.add('active');
+      setRange(7);
+    } else {
+      document.getElementById('loginError').style.display = 'block';
+      document.getElementById('passInput').value = '';
+    }
+  }
+
+  document.getElementById('passInput').addEventListener('keydown', e => {
+    if (e.key === 'Enter') tryLogin();
+  });
+
+  function setRange(days) {
+    const to = new Date();
+    const from = new Date();
+    from.setDate(from.getDate() - (days - 1));
+    document.getElementById('dateFrom').value = from.toISOString().split('T')[0];
+    document.getElementById('dateTo').value = to.toISOString().split('T')[0];
+
+    document.querySelectorAll('.quick-btns button').forEach(b => b.classList.remove('active'));
+    event.target.classList.add('active');
+
+    fetchStats();
+  }
+
+  async function fetchStats() {
+    const from = document.getElementById('dateFrom').value;
+    const to = document.getElementById('dateTo').value;
+
+    document.getElementById('loading').style.display = 'block';
+    document.getElementById('dashContent').style.display = 'none';
+
+    try {
+      const res = await fetch(`${API_BASE}?key=${encodeURIComponent(authKey)}&from=${from}&to=${to}`);
+      const data = await res.json();
+
+      if (data.error) {
+        alert('Access denied');
+        return;
+      }
+
+      render(data);
+    } catch (e) {
+      // If API not available, show demo data
+      render(getDemoData());
+    }
+
+    document.getElementById('loading').style.display = 'none';
+    document.getElementById('dashContent').style.display = 'block';
+  }
+
+  function getDemoData() {
+    const days = [];
+    for (let i = 6; i >= 0; i--) {
+      const d = new Date();
+      d.setDate(d.getDate() - i);
+      days.push({
+        date: d.toISOString().split('T')[0],
+        visits: Math.floor(Math.random() * 80) + 20,
+        clicks: Math.floor(Math.random() * 30) + 5,
+        unique: Math.floor(Math.random() * 60) + 15,
+      });
+    }
+    return {
+      total_visits: days.reduce((s, d) => s + d.visits, 0),
+      unique_visitors: days.reduce((s, d) => s + d.unique, 0),
+      total_clicks: days.reduce((s, d) => s + d.clicks, 0),
+      ctr: 28.5,
+      countries: [
+        { name: 'Russia', code: 'RU', visits: 120, clicks: 45 },
+        { name: 'Ukraine', code: 'UA', visits: 85, clicks: 32 },
+        { name: 'United States', code: 'US', visits: 64, clicks: 18 },
+        { name: 'Kazakhstan', code: 'KZ', visits: 42, clicks: 15 },
+        { name: 'Germany', code: 'DE', visits: 28, clicks: 8 },
+        { name: 'Turkey', code: 'TR', visits: 22, clicks: 7 },
+        { name: 'United Kingdom', code: 'GB', visits: 18, clicks: 6 },
+      ],
+      daily: days,
+      buttons: {
+        'JOIN OUR TELEGRAM': 42,
+        'GET THESE SIGNALS NOW': 28,
+        'Join via Telegram (Starter)': 18,
+        'Join via Telegram (Trader)': 35,
+        'Join via Telegram (Pro)': 15,
+        'UNLOCK FULL ACCESS NOW': 12,
+        'Nav: Join Telegram': 22,
+      },
+      devices: { mobile: 180, tablet: 25, desktop: 145 },
+      hours: [5,3,2,1,2,4,12,28,42,55,60,48,52,58,62,54,48,45,38,32,28,22,14,8],
+    };
+  }
+
+  function render(data) {
+    document.getElementById('totalVisits').textContent = data.total_visits.toLocaleString();
+    document.getElementById('uniqueVisitors').textContent = data.unique_visitors.toLocaleString();
+    document.getElementById('totalClicks').textContent = data.total_clicks.toLocaleString();
+    document.getElementById('ctr').textContent = data.ctr + '%';
+
+    // Daily chart
+    const dailyChart = document.getElementById('dailyChart');
+    const maxVisits = Math.max(...data.daily.map(d => d.visits), 1);
+    dailyChart.innerHTML = data.daily.map(d => {
+      const h = (d.visits / maxVisits) * 160;
+      const label = d.date.slice(5);
+      return `<div class="chart-bar-wrap">
+        <div class="chart-bar" style="height:${h}px" title="${d.date}: ${d.visits} visits, ${d.clicks} clicks"></div>
+        <div class="chart-bar-label">${label}</div>
+      </div>`;
+    }).join('');
+
+    // Countries
+    const countriesList = document.getElementById('countriesList');
+    countriesList.innerHTML = data.countries.slice(0, 10).map(c => `
+      <div class="country-row">
+        <div class="country-name">
+          <span class="country-flag">${flag(c.code)}</span>
+          <span>${c.name}</span>
+        </div>
+        <div class="country-stats">
+          <span><strong>${c.visits}</strong> visits</span>
+          <span><strong>${c.clicks}</strong> clicks</span>
+        </div>
+      </div>
+    `).join('') || '<div style="color:#555;padding:20px;text-align:center">No data yet</div>';
+
+    // Buttons
+    const buttonsList = document.getElementById('buttonsList');
+    const maxClicks = Math.max(...Object.values(data.buttons), 1);
+    buttonsList.innerHTML = Object.entries(data.buttons).map(([name, count]) => `
+      <div class="bar-row">
+        <div class="bar-label" title="${name}">${name}</div>
+        <div class="bar-track"><div class="bar-fill" style="width:${(count/maxClicks)*100}%"></div></div>
+        <div class="bar-val">${count}</div>
+      </div>
+    `).join('') || '<div style="color:#555;padding:20px;text-align:center">No clicks yet</div>';
+
+    // Devices
+    const devicesGrid = document.getElementById('devicesGrid');
+    const total = data.devices.mobile + data.devices.tablet + data.devices.desktop || 1;
+    devicesGrid.innerHTML = `
+      <div class="device-item">
+        <div class="device-icon">📱</div>
+        <div class="device-val">${data.devices.mobile}</div>
+        <div class="device-label">Mobile · ${Math.round(data.devices.mobile/total*100)}%</div>
+      </div>
+      <div class="device-item">
+        <div class="device-icon">📟</div>
+        <div class="device-val">${data.devices.tablet}</div>
+        <div class="device-label">Tablet · ${Math.round(data.devices.tablet/total*100)}%</div>
+      </div>
+      <div class="device-item">
+        <div class="device-icon">💻</div>
+        <div class="device-val">${data.devices.desktop}</div>
+        <div class="device-label">Desktop · ${Math.round(data.devices.desktop/total*100)}%</div>
+      </div>
+    `;
+
+    // Hourly
+    const hourlyChart = document.getElementById('hourlyChart');
+    const maxH = Math.max(...data.hours, 1);
+    hourlyChart.innerHTML = data.hours.map((h, i) => {
+      const height = (h / maxH) * 100;
+      return `<div class="chart-bar-wrap">
+        <div class="chart-bar" style="height:${height}px" title="${i}:00 — ${h} visits"></div>
+        <div class="chart-bar-label" style="writing-mode:horizontal-tb;font-size:8px">${i}</div>
+      </div>`;
+    }).join('');
+  }
+</script>
+</body>
+</html>
