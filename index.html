@@ -1257,7 +1257,7 @@
     <div class="pkg-card reveal">
       <div class="pkg-duration">01 Month</div>
       <div class="pkg-name">STARTER</div>
-      <div class="pkg-price">$15</div>
+      <div class="pkg-price">$50</div>
       <div class="pkg-price-sub">/ month</div>
       <div class="pkg-desc">Perfect for testing the waters. Get full access to all signals and the community for one month.</div>
       <ul class="pkg-features">
@@ -1266,37 +1266,37 @@
         <li>Private Telegram channel</li>
         <li>Analyst commentary</li>
       </ul>
-      <a href="https://t.me/momentocrypto_bot" class="pkg-btn">→ Join via Telegram</a>
+      <button class="pkg-btn" onclick="payPackage('starter')">→ Pay with Crypto</button>
     </div>
 
     <div class="pkg-card featured reveal">
       <div class="pkg-duration">03 Months</div>
       <div class="pkg-name">TRADER</div>
-      <div class="pkg-price">$40</div>
-      <div class="pkg-price-sub">/ 3 months · save 56%</div>
-      <div class="pkg-desc">Our most popular plan. Two months to build consistency and watch your portfolio grow.</div>
+      <div class="pkg-price">$120</div>
+      <div class="pkg-price-sub">/ 3 months · save 20%</div>
+      <div class="pkg-desc">Our most popular plan. Three months to build consistency and watch your portfolio grow.</div>
       <ul class="pkg-features">
         <li>Everything in Starter</li>
         <li>Priority signal alerts</li>
         <li>Market analysis reports</li>
         <li>Community chat access</li>
       </ul>
-      <a href="https://t.me/momentocrypto_bot" class="pkg-btn">→ Join via Telegram</a>
+      <button class="pkg-btn" onclick="payPackage('trader')">→ Pay with Crypto</button>
     </div>
 
     <div class="pkg-card reveal">
       <div class="pkg-duration">06 Months</div>
       <div class="pkg-name">PRO</div>
-      <div class="pkg-price">$70</div>
-      <div class="pkg-price-sub">/ 6 months · save 78%</div>
-      <div class="pkg-desc">Maximum exposure, maximum gains. Three months of premium signals for serious traders.</div>
+      <div class="pkg-price">$200</div>
+      <div class="pkg-price-sub">/ 6 months · save 33%</div>
+      <div class="pkg-desc">Maximum exposure, maximum gains. Six months of premium signals for serious traders.</div>
       <ul class="pkg-features">
         <li>Everything in Trader</li>
         <li>1-on-1 strategy sessions</li>
         <li>Portfolio review calls</li>
         <li>Early signal previews</li>
       </ul>
-      <a href="https://t.me/momentocrypto_bot" class="pkg-btn">→ Join via Telegram</a>
+      <button class="pkg-btn" onclick="payPackage('pro')">→ Pay with Crypto</button>
     </div>
   </div>
 </section>
@@ -1503,6 +1503,35 @@
     // Re-observe new reveal elements
     more.querySelectorAll('.reveal').forEach(el => observer.observe(el));
   });
+
+  // === PAYMENT ===
+  async function payPackage(pkg) {
+    const btn = event.target;
+    const originalText = btn.textContent;
+    btn.textContent = 'PROCESSING...';
+    btn.disabled = true;
+
+    try {
+      const res = await fetch('/api/pay.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ package: pkg }),
+      });
+      const data = await res.json();
+
+      if (data.ok && data.payment_url) {
+        window.location.href = data.payment_url;
+      } else {
+        alert('Payment error. Please try again.');
+        btn.textContent = originalText;
+        btn.disabled = false;
+      }
+    } catch (e) {
+      alert('Connection error. Please try again.');
+      btn.textContent = originalText;
+      btn.disabled = false;
+    }
+  }
 
   // === ANALYTICS TRACKER ===
   (function() {
