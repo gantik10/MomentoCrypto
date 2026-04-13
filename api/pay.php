@@ -6,8 +6,17 @@ header('Access-Control-Allow-Headers: Content-Type');
 
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') { exit(0); }
 
-// ===== OXAPAY CREDENTIALS =====
-$MERCHANT_API_KEY = 'YOUR_OXAPAY_MERCHANT_API_KEY';
+// ===== LOAD .env =====
+$envFile = __DIR__ . '/../.env';
+if (file_exists($envFile)) {
+    foreach (file($envFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES) as $line) {
+        if (str_starts_with(trim($line), '#')) continue;
+        [$key, $val] = explode('=', $line, 2);
+        $_ENV[trim($key)] = trim($val);
+    }
+}
+$MERCHANT_API_KEY = $_ENV['OXAPAY_MERCHANT_API_KEY'] ?? '';
+$SANDBOX = ($_ENV['PAYMENT_SANDBOX'] ?? 'false') === 'true';
 // ===============================
 
 $CALLBACK_URL = 'https://momentocrypto.com/api/webhook.php';
@@ -41,6 +50,7 @@ $data = [
     'description' => $pkg['name'],
     'thanks_message' => 'Payment successful! Copy your activation code on the next page.',
     'lifetime' => 60,
+    'sandbox' => $SANDBOX,
 ];
 
 $ch = curl_init('https://api.oxapay.com/v1/payment/invoice');
