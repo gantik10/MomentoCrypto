@@ -41,7 +41,6 @@ $pkg = $packages[$package];
 $orderId = $package . '_' . time() . '_' . bin2hex(random_bytes(4));
 
 $data = [
-    'merchant_api_key' => $MERCHANT_API_KEY,
     'amount' => $pkg['amount'],
     'currency' => 'USD',
     'order_id' => $orderId,
@@ -60,6 +59,7 @@ curl_setopt_array($ch, [
     CURLOPT_RETURNTRANSFER => true,
     CURLOPT_HTTPHEADER => [
         'Content-Type: application/json',
+        'merchant_api_key: ' . $MERCHANT_API_KEY,
     ],
 ]);
 
