@@ -735,122 +735,403 @@
   }
   .inside-cta { text-align: center; }
 
-  /* HOW IT WORKS */
-  .how-flow {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 14px;
-    max-width: 1100px;
+  /* HOW IT WORKS — illustrated cards */
+  .how-grid-v2 {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    max-width: 1200px;
     margin: 56px auto 0;
-    flex-wrap: wrap;
   }
-  .how-node {
+  .how-card {
+    position: relative;
+    background: #0b0b0b;
+    border: 1px solid rgba(57,255,20,0.12);
+    border-radius: 16px;
+    padding: 28px 20px 24px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 16px;
-    flex-shrink: 0;
+    gap: 20px;
+    transition: transform 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease;
+    overflow: hidden;
   }
-  .how-icon {
+  .how-card:hover {
+    transform: translateY(-6px);
+    border-color: rgba(57,255,20,0.35);
+    box-shadow: 0 20px 50px rgba(0,0,0,0.6), 0 0 30px rgba(57,255,20,0.1);
+  }
+  .how-step-num {
+    position: absolute;
+    top: 14px;
+    right: 18px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 36px;
+    color: rgba(57,255,20,0.15);
+    letter-spacing: 2px;
+    line-height: 1;
+    pointer-events: none;
+  }
+  .how-mock {
     position: relative;
-    width: 110px;
-    height: 110px;
-    border-radius: 50%;
+    width: 100%;
+    height: 200px;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: radial-gradient(circle at 30% 30%, rgba(57,255,20,0.18), rgba(57,255,20,0.04) 70%);
-    border: 1.5px solid rgba(57,255,20,0.35);
-    color: var(--green);
-    box-shadow: 0 0 40px rgba(57,255,20,0.12), inset 0 0 20px rgba(57,255,20,0.08);
-    transition: transform 0.35s ease, box-shadow 0.35s ease, border-color 0.35s ease;
+    padding: 8px;
   }
-  .how-icon:hover {
-    transform: translateY(-6px) scale(1.05);
-    border-color: var(--green);
-    box-shadow: 0 0 60px rgba(57,255,20,0.3), inset 0 0 24px rgba(57,255,20,0.15);
-  }
-  .how-icon svg { filter: drop-shadow(0 0 8px rgba(57,255,20,0.5)); }
-  .how-icon-tg { color: #22c1e8; border-color: rgba(34,193,232,0.4); background: radial-gradient(circle at 30% 30%, rgba(34,193,232,0.2), rgba(34,193,232,0.04) 70%); box-shadow: 0 0 40px rgba(34,193,232,0.15), inset 0 0 20px rgba(34,193,232,0.1); }
-  .how-icon-tg svg { filter: drop-shadow(0 0 8px rgba(34,193,232,0.6)); }
-  .how-icon-pay { color: #ffb547; border-color: rgba(255,181,71,0.4); background: radial-gradient(circle at 30% 30%, rgba(255,181,71,0.2), rgba(255,181,71,0.04) 70%); box-shadow: 0 0 40px rgba(255,181,71,0.15), inset 0 0 20px rgba(255,181,71,0.1); }
-  .how-icon-pay svg { filter: drop-shadow(0 0 8px rgba(255,181,71,0.6)); }
-  .how-bell-dot {
-    position: absolute;
-    top: 22px;
-    right: 28px;
-    width: 12px;
-    height: 12px;
-    background: #ff4757;
-    border: 2px solid var(--black);
-    border-radius: 50%;
-    animation: fabPulse 1.8s infinite;
-  }
-  .how-label {
+  .how-card-title {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 15px;
+    font-size: 18px;
     letter-spacing: 2.5px;
     color: var(--white);
     text-align: center;
     line-height: 1.2;
-    max-width: 130px;
+    border-top: 1px solid rgba(57,255,20,0.1);
+    padding-top: 18px;
+    width: 100%;
   }
-  .how-arrow {
-    color: rgba(57,255,20,0.5);
-    flex-shrink: 0;
+
+  /* STEP 1: Mini packages mockup */
+  .how-mock-plans {
+    gap: 6px;
+    perspective: 600px;
+  }
+  .mock-plan {
+    flex: 1;
+    background: #0f0f0f;
+    border: 1px solid rgba(57,255,20,0.15);
+    border-radius: 8px;
+    padding: 12px 8px 10px;
+    text-align: center;
+    position: relative;
+    transform: rotateY(-5deg);
+    max-width: 62px;
+    transition: transform 0.3s ease;
+  }
+  .mock-plan.featured {
+    border-color: var(--green);
+    box-shadow: 0 0 16px rgba(57,255,20,0.3);
+    transform: rotateY(0deg) translateY(-6px) scale(1.08);
+    z-index: 2;
+  }
+  .how-card:hover .mock-plan.featured { transform: rotateY(0deg) translateY(-10px) scale(1.12); }
+  .mock-badge {
+    position: absolute;
+    top: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--green);
+    color: var(--black);
+    font-family: 'Space Mono', monospace;
+    font-size: 7px;
+    font-weight: 700;
+    padding: 2px 6px;
+    border-radius: 4px;
+    letter-spacing: 0.5px;
+  }
+  .mock-plan-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 7px;
+    color: rgba(245,245,245,0.5);
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+  }
+  .mock-plan-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 14px;
+    letter-spacing: 1px;
+    color: var(--white);
+    margin-bottom: 4px;
+  }
+  .mock-plan-price {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 16px;
+    color: var(--green);
+    margin-bottom: 6px;
+  }
+  .mock-plan-btn {
+    font-family: 'Space Mono', monospace;
+    font-size: 7px;
+    font-weight: 700;
+    background: rgba(57,255,20,0.1);
+    border: 1px solid rgba(57,255,20,0.3);
+    color: var(--green);
+    padding: 4px 6px;
+    border-radius: 4px;
+    letter-spacing: 0.5px;
+  }
+  .mock-plan.featured .mock-plan-btn { background: var(--green); color: var(--black); border-color: var(--green); }
+  .mock-cursor {
+    position: absolute;
+    bottom: 28px;
+    left: 52%;
+    width: 14px;
+    height: 18px;
+    background: transparent;
+    pointer-events: none;
+    animation: cursorPoint 2.5s ease-in-out infinite;
+  }
+  .mock-cursor::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 0;
+    border-left: 8px solid var(--white);
+    border-top: 4px solid transparent;
+    border-bottom: 12px solid transparent;
+    transform: rotate(-20deg);
+    filter: drop-shadow(0 0 4px rgba(0,0,0,0.5));
+  }
+  @keyframes cursorPoint {
+    0%, 100% { transform: translate(0, 0); }
+    50% { transform: translate(2px, -4px); }
+  }
+
+  /* STEP 2: Bot chat mockup */
+  .how-mock-bot {
+    flex-direction: column;
+    align-items: stretch;
+    background: #17212b;
+    border-radius: 10px;
+    overflow: hidden;
+    padding: 0;
+    box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
+  }
+  .mock-bot-header {
     display: flex;
     align-items: center;
-    margin-top: -36px;
-    animation: arrowPulse 2.5s ease-in-out infinite;
+    gap: 8px;
+    padding: 10px 12px;
+    background: #232e3c;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
   }
-  @keyframes arrowPulse {
-    0%, 100% { opacity: 0.4; transform: translateX(0); }
-    50% { opacity: 1; transform: translateX(4px); }
+  .mock-bot-avatar {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #39FF14, #0ec04a);
+    color: #000;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
   }
+  .mock-bot-info { flex: 1; }
+  .mock-bot-name {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    color: #fff;
+  }
+  .mock-bot-status {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 9px;
+    color: #70bfff;
+  }
+  .mock-bot-body {
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    flex: 1;
+  }
+  .mock-msg {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 10px;
+    line-height: 1.35;
+    padding: 6px 9px;
+    border-radius: 10px;
+    max-width: 85%;
+    word-wrap: break-word;
+  }
+  .mock-msg-in {
+    background: #182533;
+    color: #fff;
+    align-self: flex-start;
+    border-bottom-left-radius: 3px;
+  }
+  .mock-msg-out {
+    background: #2b5278;
+    color: #fff;
+    align-self: flex-end;
+    border-bottom-right-radius: 3px;
+    font-family: 'Space Mono', monospace;
+    letter-spacing: 1px;
+  }
+  .mock-check { color: #39FF14; font-weight: 700; margin-right: 3px; }
+
+  /* STEP 3: Alert notification + chart */
+  .how-mock-alert {
+    flex-direction: column;
+    gap: 10px;
+  }
+  .mock-notif {
+    width: 100%;
+    background: rgba(255,255,255,0.08);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 10px;
+    padding: 10px 12px;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    animation: notifSlide 3s ease-in-out infinite;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+  }
+  @keyframes notifSlide {
+    0%, 100% { transform: translateY(0); }
+    5%, 15% { transform: translateY(-2px); }
+    10% { transform: translateY(0); }
+  }
+  .mock-notif-icon {
+    width: 30px;
+    height: 30px;
+    border-radius: 7px;
+    background: #22c1e8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .mock-notif-body { flex: 1; min-width: 0; }
+  .mock-notif-title {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 2px;
+  }
+  .mock-notif-text {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 9px;
+    color: rgba(255,255,255,0.75);
+    line-height: 1.35;
+  }
+  .mock-notif-time {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 9px;
+    color: rgba(255,255,255,0.5);
+    flex-shrink: 0;
+  }
+  .mock-chart {
+    width: 100%;
+    height: 70px;
+    background: rgba(57,255,20,0.03);
+    border-radius: 8px;
+    padding: 6px;
+  }
+  .mock-chart svg { width: 100%; height: 100%; }
+
+  /* STEP 4: PnL card */
+  .how-mock-win {
+    flex-direction: column;
+    position: relative;
+  }
+  .mock-pnl-card {
+    width: 100%;
+    background: linear-gradient(160deg, #0f2f1a 0%, #061309 100%);
+    border: 1px solid rgba(57,255,20,0.4);
+    border-radius: 12px;
+    padding: 16px 14px;
+    text-align: center;
+    box-shadow: 0 0 32px rgba(57,255,20,0.18);
+  }
+  .mock-pnl-header {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 10px;
+    color: #70bfff;
+    margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+  }
+  .mock-dot-blue {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #4a9eff;
+    display: inline-block;
+  }
+  .mock-pnl-pair {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    color: rgba(245,245,245,0.6);
+    margin-bottom: 8px;
+    letter-spacing: 0.5px;
+  }
+  .mock-pnl-big {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 40px;
+    color: var(--green);
+    letter-spacing: 1px;
+    line-height: 1;
+    text-shadow: 0 0 20px rgba(57,255,20,0.6);
+    margin-bottom: 4px;
+  }
+  .mock-pnl-usd {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--green);
+    margin-bottom: 8px;
+  }
+  .mock-pnl-meta {
+    font-family: 'Space Mono', monospace;
+    font-size: 8px;
+    color: rgba(245,245,245,0.4);
+    letter-spacing: 0.3px;
+  }
+  .mock-confetti {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+  .mock-confetti span {
+    position: absolute;
+    font-size: 18px;
+    animation: confettiFloat 3s ease-in-out infinite;
+  }
+  .mock-confetti span:nth-child(1) { top: 8px; left: 12px; animation-delay: 0s; }
+  .mock-confetti span:nth-child(2) { top: 20px; right: 14px; animation-delay: 0.6s; }
+  .mock-confetti span:nth-child(3) { bottom: 26px; left: 18px; animation-delay: 1.2s; }
+  @keyframes confettiFloat {
+    0%, 100% { transform: translateY(0) rotate(0deg); opacity: 0.8; }
+    50% { transform: translateY(-8px) rotate(15deg); opacity: 1; }
+  }
+
   .how-note {
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 12px;
     max-width: 680px;
-    margin: 60px auto 0;
-    padding: 18px 24px;
+    margin: 48px auto 0;
+    padding: 16px 24px;
     background: rgba(57,255,20,0.06);
     border: 1px solid rgba(57,255,20,0.25);
     border-radius: 999px;
     font-family: 'DM Sans', sans-serif;
-    font-size: 14px;
+    font-size: 13px;
     color: rgba(245,245,245,0.9);
     text-align: center;
     line-height: 1.5;
   }
   .how-note svg { color: var(--green); flex-shrink: 0; }
-  @media (max-width: 900px) {
-    .how-flow { gap: 8px; }
-    .how-icon { width: 90px; height: 90px; }
-    .how-icon svg { width: 40px; height: 40px; }
-    .how-label { font-size: 13px; }
-    .how-arrow svg { width: 28px; height: 16px; }
-    .how-arrow { margin-top: -30px; }
+
+  @media (max-width: 1024px) {
+    .how-grid-v2 { grid-template-columns: repeat(2, 1fr); }
   }
   @media (max-width: 600px) {
-    .how-flow {
-      flex-direction: column;
-      gap: 4px;
-    }
-    .how-arrow {
-      margin-top: 0;
-      transform: rotate(90deg);
-    }
-    .how-arrow svg { width: 30px; height: 16px; }
-    .how-note {
-      border-radius: 14px;
-      flex-direction: column;
-      gap: 8px;
-      font-size: 13px;
-      padding: 16px 20px;
-    }
+    .how-grid-v2 { grid-template-columns: 1fr; max-width: 380px; }
+    .how-mock { height: 180px; }
+    .how-note { flex-direction: column; gap: 8px; font-size: 12px; padding: 14px 20px; border-radius: 14px; }
   }
 
   /* PAYMENT TRUST (OxaPay + coins) */
@@ -1221,60 +1502,114 @@
 <!-- HOW IT WORKS -->
 <section id="how">
   <div class="section-label reveal">How it works</div>
-  <h2 class="reveal">4 STEPS TO<br><span>WINNING TRADES.</span></h2>
+  <h2 class="reveal">FROM SIGNUP TO<br><span>WINNING TRADES.</span></h2>
 
-  <div class="how-flow reveal">
-    <div class="how-node">
-      <div class="how-icon how-icon-pay">
-        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-          <rect x="2" y="5" width="20" height="14" rx="2"/>
-          <line x1="2" y1="10" x2="22" y2="10"/>
-          <circle cx="8" cy="15" r="1.2" fill="currentColor" stroke="none"/>
-          <circle cx="12" cy="15" r="1.2" fill="currentColor" stroke="none"/>
-        </svg>
+  <div class="how-grid-v2">
+
+    <!-- STEP 1: SELECT YOUR PLAN -->
+    <div class="how-card reveal">
+      <div class="how-step-num">01</div>
+      <div class="how-mock how-mock-plans">
+        <div class="mock-plan">
+          <div class="mock-plan-label">01 Month</div>
+          <div class="mock-plan-name">STARTER</div>
+          <div class="mock-plan-price">$50</div>
+          <div class="mock-plan-btn">→ Pay</div>
+        </div>
+        <div class="mock-plan featured">
+          <div class="mock-badge">BEST</div>
+          <div class="mock-plan-label">03 Months</div>
+          <div class="mock-plan-name">TRADER</div>
+          <div class="mock-plan-price">$120</div>
+          <div class="mock-plan-btn">→ Pay</div>
+        </div>
+        <div class="mock-plan">
+          <div class="mock-plan-label">06 Months</div>
+          <div class="mock-plan-name">PRO</div>
+          <div class="mock-plan-price">$200</div>
+          <div class="mock-plan-btn">→ Pay</div>
+        </div>
+        <div class="mock-cursor"></div>
       </div>
-      <div class="how-label">PAY WITH CRYPTO</div>
+      <div class="how-card-title">SELECT YOUR PLAN</div>
     </div>
 
-    <div class="how-arrow"><svg width="40" height="20" viewBox="0 0 40 20" fill="none"><path d="M0 10 L32 10 M24 3 L32 10 L24 17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-
-    <div class="how-node">
-      <div class="how-icon how-icon-code">
-        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-          <rect x="3" y="4" width="18" height="16" rx="2"/>
-          <path d="M8 11h8 M8 15h5"/>
-          <circle cx="17" cy="8" r="1.5" fill="currentColor" stroke="none"/>
-        </svg>
+    <!-- STEP 2: ACTIVATE YOUR BOT -->
+    <div class="how-card reveal">
+      <div class="how-step-num">02</div>
+      <div class="how-mock how-mock-bot">
+        <div class="mock-bot-header">
+          <div class="mock-bot-avatar">M</div>
+          <div class="mock-bot-info">
+            <div class="mock-bot-name">MomentoCrypto Bot</div>
+            <div class="mock-bot-status">online</div>
+          </div>
+        </div>
+        <div class="mock-bot-body">
+          <div class="mock-msg mock-msg-in">Welcome! Send your activation code to join the signals channel.</div>
+          <div class="mock-msg mock-msg-out">cr89Rp</div>
+          <div class="mock-msg mock-msg-in"><span class="mock-check">✓</span> Code accepted. You've been added to the channel.</div>
+        </div>
       </div>
-      <div class="how-label">GET YOUR CODE</div>
+      <div class="how-card-title">ACTIVATE YOUR BOT</div>
     </div>
 
-    <div class="how-arrow"><svg width="40" height="20" viewBox="0 0 40 20" fill="none"><path d="M0 10 L32 10 M24 3 L32 10 L24 17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-
-    <div class="how-node">
-      <div class="how-icon how-icon-tg">
-        <svg width="48" height="48" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12l-6.871 4.326-2.962-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.194 1.006.131.833.941z"/></svg>
+    <!-- STEP 3: GET ALERT AND TRADE -->
+    <div class="how-card reveal">
+      <div class="how-step-num">03</div>
+      <div class="how-mock how-mock-alert">
+        <div class="mock-notif">
+          <div class="mock-notif-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="#fff"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12l-6.871 4.326-2.962-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.194 1.006.131.833.941z"/></svg>
+          </div>
+          <div class="mock-notif-body">
+            <div class="mock-notif-title">MomentoCrypto Signals</div>
+            <div class="mock-notif-text">🚀 Trade opened · SOLUSDT long<br>Entry: 142.30 · TP: 156.00 · SL: 138.50</div>
+          </div>
+          <div class="mock-notif-time">now</div>
+        </div>
+        <div class="mock-chart">
+          <svg viewBox="0 0 220 70" preserveAspectRatio="none">
+            <defs>
+              <linearGradient id="chartGrad" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#39FF14" stop-opacity="0.5"/>
+                <stop offset="100%" stop-color="#39FF14" stop-opacity="0"/>
+              </linearGradient>
+            </defs>
+            <path d="M0 55 L20 52 L40 58 L60 50 L80 48 L100 42 L120 38 L140 32 L160 28 L180 20 L200 14 L220 8 L220 70 L0 70 Z" fill="url(#chartGrad)"/>
+            <path d="M0 55 L20 52 L40 58 L60 50 L80 48 L100 42 L120 38 L140 32 L160 28 L180 20 L200 14 L220 8" stroke="#39FF14" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+            <circle cx="220" cy="8" r="3" fill="#39FF14"/>
+          </svg>
+        </div>
       </div>
-      <div class="how-label">JOIN TELEGRAM</div>
+      <div class="how-card-title">GET ALERT & TRADE</div>
     </div>
 
-    <div class="how-arrow"><svg width="40" height="20" viewBox="0 0 40 20" fill="none"><path d="M0 10 L32 10 M24 3 L32 10 L24 17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-
-    <div class="how-node">
-      <div class="how-icon how-icon-bell">
-        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/>
-          <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/>
-        </svg>
-        <span class="how-bell-dot"></span>
+    <!-- STEP 4: WIN TOGETHER -->
+    <div class="how-card reveal">
+      <div class="how-step-num">04</div>
+      <div class="how-mock how-mock-win">
+        <div class="mock-pnl-card">
+          <div class="mock-pnl-header">
+            <span class="mock-dot-blue"></span> Trade closed
+          </div>
+          <div class="mock-pnl-pair">SOLUSDT long · 10×</div>
+          <div class="mock-pnl-big">+42.18%</div>
+          <div class="mock-pnl-usd">+210.90 USDT</div>
+          <div class="mock-pnl-meta">Entry 142.30 → Exit 148.30</div>
+        </div>
+        <div class="mock-confetti">
+          <span>🎉</span><span>💰</span><span>📈</span>
+        </div>
       </div>
-      <div class="how-label">GET ALERTS</div>
+      <div class="how-card-title">WIN WITH MOMENTO</div>
     </div>
+
   </div>
 
   <div class="how-note reveal">
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-    <span>Turn on Telegram notifications — signals drop when our traders spot the setup</span>
+    <span>Keep Telegram notifications ON — signals drop when our traders spot the setup</span>
   </div>
 </section>
 
