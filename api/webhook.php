@@ -76,14 +76,19 @@ if ($isPaid) {
                 . "💵 Amount: *\${$amount} {$currency}*\n"
                 . "🆔 Order: `{$orderId}`\n"
                 . "🕐 Time: " . date('Y-m-d H:i') . " UTC";
-            @file_get_contents(
-                "https://api.telegram.org/bot{$token}/sendMessage?"
-                . http_build_query([
+            $ch = curl_init("https://api.telegram.org/bot{$token}/sendMessage");
+            curl_setopt_array($ch, [
+                CURLOPT_POST => true,
+                CURLOPT_POSTFIELDS => http_build_query([
                     'chat_id' => $chatId,
                     'text' => $msg,
                     'parse_mode' => 'Markdown',
-                ])
-            );
+                ]),
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_TIMEOUT => 10,
+            ]);
+            curl_exec($ch);
+            curl_close($ch);
         }
     }
 }
