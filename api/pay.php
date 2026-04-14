@@ -106,7 +106,7 @@ if ($result && isset($result['data']['payment_url'])) {
             curl_close($geoCh);
             if (($geo['status'] ?? '') === 'success') {
                 $flag = $geo['countryCode'] ?? '';
-                if ($flag && strlen($flag) === 2) {
+                if ($flag && strlen($flag) === 2 && function_exists('mb_chr')) {
                     $flag = mb_chr(0x1F1E6 + ord($flag[0]) - 65) . mb_chr(0x1F1E6 + ord($flag[1]) - 65);
                 }
                 $country = trim(($flag ? $flag . ' ' : '') . ($geo['country'] ?? ''));
