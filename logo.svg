@@ -1,0 +1,97 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <radialGradient id="bgGlow" cx="50%" cy="50%" r="70%">
+      <stop offset="0%" stop-color="#0f0f0f"/>
+      <stop offset="100%" stop-color="#080808"/>
+    </radialGradient>
+    <radialGradient id="greenGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#39FF14" stop-opacity="0.12"/>
+      <stop offset="100%" stop-color="#39FF14" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <filter id="glowStrong">
+      <feGaussianBlur stdDeviation="6" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <filter id="textGlow">
+      <feGaussianBlur stdDeviation="2" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <linearGradient id="chartGrad" x1="0" y1="1" x2="1" y2="0">
+      <stop offset="0%" stop-color="#39FF14" stop-opacity="0.2"/>
+      <stop offset="100%" stop-color="#39FF14"/>
+    </linearGradient>
+    <linearGradient id="chartFill" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#39FF14" stop-opacity="0.10"/>
+      <stop offset="100%" stop-color="#39FF14" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="512" height="512" rx="76" fill="url(#bgGlow)"/>
+
+  <!-- Border -->
+  <rect x="1" y="1" width="510" height="510" rx="75" fill="none" stroke="#39FF14" stroke-opacity="0.08" stroke-width="1"/>
+
+  <!-- Subtle grid -->
+  <g opacity="0.04" stroke="#39FF14" stroke-width="0.5">
+    <line x1="85" y1="0" x2="85" y2="512"/>
+    <line x1="171" y1="0" x2="171" y2="512"/>
+    <line x1="256" y1="0" x2="256" y2="512"/>
+    <line x1="341" y1="0" x2="341" y2="512"/>
+    <line x1="427" y1="0" x2="427" y2="512"/>
+    <line x1="0" y1="100" x2="512" y2="100"/>
+    <line x1="0" y1="186" x2="512" y2="186"/>
+    <line x1="0" y1="272" x2="512" y2="272"/>
+    <line x1="0" y1="358" x2="512" y2="358"/>
+  </g>
+
+  <!-- Center glow effect -->
+  <ellipse cx="300" cy="240" rx="200" ry="150" fill="url(#greenGlow)"/>
+
+  <!-- Chart line - aggressive uptrend -->
+  <polyline
+    points="60,320 100,315 130,305 165,310 200,285 230,270 260,250 290,230 310,245 340,195 375,170 405,135 435,95"
+    fill="none"
+    stroke="url(#chartGrad)"
+    stroke-width="3.5"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    filter="url(#glow)"
+  />
+
+  <!-- Chart fill area under line -->
+  <polygon
+    points="60,320 100,315 130,305 165,310 200,285 230,270 260,250 290,230 310,245 340,195 375,170 405,135 435,95 435,360 60,360"
+    fill="url(#chartFill)"
+  />
+
+  <!-- Signal crosshair on chart -->
+  <circle cx="375" cy="170" r="14" fill="none" stroke="#39FF14" stroke-width="1.5" opacity="0.5" filter="url(#glow)"/>
+  <circle cx="375" cy="170" r="4.5" fill="#39FF14" filter="url(#glowStrong)"/>
+  <line x1="375" y1="150" x2="375" y2="161" stroke="#39FF14" stroke-width="1" opacity="0.4"/>
+  <line x1="375" y1="179" x2="375" y2="190" stroke="#39FF14" stroke-width="1" opacity="0.4"/>
+  <line x1="355" y1="170" x2="366" y2="170" stroke="#39FF14" stroke-width="1" opacity="0.4"/>
+  <line x1="384" y1="170" x2="395" y2="170" stroke="#39FF14" stroke-width="1" opacity="0.4"/>
+
+  <!-- Tip pulse dot -->
+  <circle cx="435" cy="95" r="5" fill="#39FF14" filter="url(#glowStrong)"/>
+
+  <!-- Text: MOMENTO -->
+  <text x="256" y="438" text-anchor="middle" font-family="Impact, 'Arial Black', sans-serif" font-weight="400" font-size="58" letter-spacing="4" fill="#39FF14" filter="url(#textGlow)">MOMENTO</text>
+
+  <!-- Text: CRYPTO -->
+  <text x="256" y="482" text-anchor="middle" font-family="Impact, 'Arial Black', sans-serif" font-weight="400" font-size="36" letter-spacing="8" fill="#f5f5f5" opacity="0.85">CRYPTO</text>
+</svg>

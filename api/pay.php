@@ -25,7 +25,7 @@ $input = json_decode(file_get_contents('php://input'), true);
 $package = $input['package'] ?? '';
 
 $packages = [
-    'starter' => ['amount' => 1, 'name' => 'Starter — 1 Month'],
+    'starter' => ['amount' => 50, 'name' => 'Starter — 1 Month'],
     'trader'  => ['amount' => 120, 'name' => 'Trader — 3 Months'],
     'pro'     => ['amount' => 200, 'name' => 'Pro — 6 Months'],
 ];
