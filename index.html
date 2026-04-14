@@ -1143,6 +1143,75 @@ posthog.init('phc_v87BfH9wTYLYVYmFRtZJN4pnTracNcJvdwy6iL9pnocv', {
     .how-note { flex-direction: column; gap: 8px; font-size: 12px; padding: 14px 20px; border-radius: 14px; }
   }
 
+  /* FAQ */
+  .faq-list {
+    max-width: 780px;
+    margin: 48px auto 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .faq-item {
+    background: #0b0b0b;
+    border: 1px solid rgba(57,255,20,0.12);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: border-color 0.25s ease, background 0.25s ease;
+  }
+  .faq-item[open] {
+    border-color: rgba(57,255,20,0.35);
+    background: #0f0f0f;
+  }
+  .faq-item summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 20px 24px;
+    cursor: pointer;
+    list-style: none;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--white);
+    transition: color 0.2s ease;
+  }
+  .faq-item summary::-webkit-details-marker { display: none; }
+  .faq-item summary::after {
+    content: '+';
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    color: var(--green);
+    line-height: 1;
+    transition: transform 0.3s ease;
+    flex-shrink: 0;
+  }
+  .faq-item[open] summary::after { transform: rotate(45deg); }
+  .faq-item summary:hover { color: var(--green); }
+  .faq-item p {
+    margin: 0;
+    padding: 0 24px 22px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    line-height: 1.7;
+    color: rgba(245,245,245,0.7);
+  }
+  .faq-cta {
+    max-width: 780px;
+    margin: 48px auto 0;
+    text-align: center;
+  }
+  .faq-still {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    color: rgba(245,245,245,0.55);
+    margin-bottom: 16px;
+  }
+  @media (max-width: 600px) {
+    .faq-item summary { padding: 16px 18px; font-size: 14px; }
+    .faq-item p { padding: 0 18px 18px; font-size: 13px; }
+  }
+
   /* PAYMENT TRUST (OxaPay + coins) */
   .payment-trust {
     max-width: 900px;
@@ -1446,6 +1515,7 @@ posthog.init('phc_v87BfH9wTYLYVYmFRtZJN4pnTracNcJvdwy6iL9pnocv', {
     <li><a href="#packages">Packages</a></li>
     <li><a href="#reviews">Reviews</a></li>
     <li><a href="#inside">Inside</a></li>
+    <li><a href="#faq">FAQ</a></li>
     <li><a href="https://t.me/momentocrypto_support" target="_blank" rel="noopener" class="nav-support">Support</a></li>
   </ul>
   <a href="#packages" class="nav-cta">Get Access →</a>
@@ -1463,6 +1533,7 @@ posthog.init('phc_v87BfH9wTYLYVYmFRtZJN4pnTracNcJvdwy6iL9pnocv', {
   <a href="#packages">Packages</a>
   <a href="#reviews">Reviews</a>
   <a href="#inside">Inside</a>
+  <a href="#faq">FAQ</a>
   <a href="https://t.me/momentocrypto_support" target="_blank" rel="noopener">Support</a>
   <a href="#packages" class="tg-btn" style="margin-top:20px">
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12l-6.871 4.326-2.962-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.194 1.006.131.833.941z" fill="currentColor"/></svg>
@@ -2168,6 +2239,74 @@ posthog.init('phc_v87BfH9wTYLYVYmFRtZJN4pnTracNcJvdwy6iL9pnocv', {
     <a href="#packages" class="tg-btn">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12l-6.871 4.326-2.962-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.194 1.006.131.833.941z" fill="currentColor"/></svg>
       UNLOCK FULL ACCESS NOW
+    </a>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- FAQ -->
+<section id="faq">
+  <div class="section-label reveal">Frequently asked</div>
+  <h2 class="reveal">GOT <span>QUESTIONS?</span></h2>
+
+  <div class="faq-list reveal">
+    <details class="faq-item">
+      <summary>What exactly do I get when I join?</summary>
+      <p>Real-time trade alerts via Telegram with entry, stop loss, take profit, and leverage — plus live updates as trades develop and a full performance dashboard. Everything delivered straight to your phone.</p>
+    </details>
+
+    <details class="faq-item">
+      <summary>How many signals per day should I expect?</summary>
+      <p>Between 2 and 6 high-conviction setups per day on average. We don't spam — signals only drop when our traders spot a clean edge. Quality over quantity, always.</p>
+    </details>
+
+    <details class="faq-item">
+      <summary>What's the win rate?</summary>
+      <p>High enough to keep our members profitable month after month. We don't publish a fixed number because it shifts with market conditions — but every trade is tracked with full transparency inside the members' channel, so you can verify the results yourself before committing long-term.</p>
+    </details>
+
+    <details class="faq-item">
+      <summary>Why do you accept only crypto?</summary>
+      <p>Crypto payments are instant, work in 150+ countries, don't require bank approvals or KYC, and protect both sides from chargebacks. Nothing else comes close for a global community.</p>
+    </details>
+
+    <details class="faq-item">
+      <summary>Is crypto payment safe?</summary>
+      <p>Yes. Payments are processed by OxaPay, an established crypto payment gateway used by thousands of businesses. You pay from your own wallet — we never see your keys or funds.</p>
+    </details>
+
+    <details class="faq-item">
+      <summary>What happens right after I pay?</summary>
+      <p>You'll see a success page with a unique one-time activation code. Open our Telegram bot, paste the code, and you'll be added to the private channel in under a minute.</p>
+    </details>
+
+    <details class="faq-item">
+      <summary>Do I need to be an experienced trader?</summary>
+      <p>No. Every signal comes with a clear entry zone, take profit targets, and a hard stop loss. If you know how to place a market or limit order on Binance, Bybit, or any major exchange, you can follow along.</p>
+    </details>
+
+    <details class="faq-item">
+      <summary>What if I miss a signal?</summary>
+      <p>Turn on Telegram notifications for our channel — signals are time-sensitive. We pin every active trade so you can still catch late entries, but real-time alerts are what separate winners from watchers.</p>
+    </details>
+
+    <details class="faq-item">
+      <summary>Can I cancel or get a refund?</summary>
+      <p>Plans are non-refundable once the activation code is used, since that grants permanent access for the paid period. If you have issues before activating, message support within 24 hours and we'll sort it out.</p>
+    </details>
+
+    <details class="faq-item">
+      <summary>What coins do you trade?</summary>
+      <p>Mainly BTC, ETH, SOL, and top-20 altcoins by volume. We occasionally cover high-momentum meme coins (DOGE, PEPE, WIF) when the setup is clean. No shitcoins, no pump-and-dumps.</p>
+    </details>
+  </div>
+
+  <div class="faq-cta reveal">
+    <p class="faq-still">Still have questions?</p>
+    <a href="https://t.me/momentocrypto_support" target="_blank" rel="noopener" class="tg-btn">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12l-6.871 4.326-2.962-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.194 1.006.131.833.941z" fill="currentColor"/></svg>
+      MESSAGE SUPPORT
     </a>
   </div>
 </section>
