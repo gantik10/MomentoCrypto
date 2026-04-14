@@ -73,12 +73,19 @@ curl_setopt_array($ch, [
     CURLOPT_RETURNTRANSFER => true,
     CURLOPT_HTTPHEADER => [
         'Content-Type: application/json',
+        'User-Agent: MomentoCrypto/1.0',
     ],
+    CURLOPT_TIMEOUT => 30,
+    CURLOPT_SSL_VERIFYPEER => true,
 ]);
 
 $response = curl_exec($ch);
+$curlError = curl_error($ch);
 $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 curl_close($ch);
+
+// Debug log
+file_put_contents(__DIR__ . '/pay_debug.log', date('Y-m-d H:i:s') . "\nHTTP: {$httpCode}\nCurl Error: {$curlError}\nRequest: " . json_encode($data) . "\nResponse: {$response}\n\n", FILE_APPEND);
 
 $result = json_decode($response, true);
 
