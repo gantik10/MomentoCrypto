@@ -54,7 +54,6 @@ $tokens = array_filter($tokens, fn($t) => $t['created'] > time() - 86400);
 file_put_contents($tokensFile, json_encode($tokens));
 
 $data = [
-    'merchant_api_key' => $MERCHANT_API_KEY,
     'amount' => $pkg['amount'],
     'currency' => 'USD',
     'order_id' => $orderId,
@@ -74,6 +73,7 @@ curl_setopt_array($ch, [
     CURLOPT_HTTPHEADER => [
         'Content-Type: application/json',
         'User-Agent: MomentoCrypto/1.0',
+        'merchant_api_key: ' . $MERCHANT_API_KEY,
     ],
     CURLOPT_TIMEOUT => 30,
     CURLOPT_SSL_VERIFYPEER => true,
