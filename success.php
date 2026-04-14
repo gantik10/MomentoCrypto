@@ -263,9 +263,14 @@ posthog.init('phc_v87BfH9wTYLYVYmFRtZJN4pnTracNcJvdwy6iL9pnocv', {
 <script>
   // Fire payment_complete event (server confirmed this token is valid & unused)
   if (window.posthog) {
+    const orderId = <?= json_encode($tokens[$token]['order_id'] ?? '') ?>;
+    const pkg = <?= json_encode($package ?? '') ?>;
+    // Identify user by order_id so we can trace their full funnel back
+    posthog.identify(orderId, { package: pkg, first_purchase_at: new Date().toISOString() });
     posthog.capture('payment_complete', {
-      package: <?= json_encode($package ?? '') ?>,
-      order_id: <?= json_encode($tokens[$token]['order_id'] ?? '') ?>
+      package: pkg,
+      order_id: orderId,
+      $set: { is_customer: true, latest_package: pkg }
     });
   }
 

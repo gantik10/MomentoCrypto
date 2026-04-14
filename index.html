@@ -2452,6 +2452,124 @@ posthog.init('phc_v87BfH9wTYLYVYmFRtZJN4pnTracNcJvdwy6iL9pnocv', {
       posthog.capture('cta_click', { button: text, section: section, class: btn.className });
     }
   });
+
+  // === EXTENDED ANALYTICS ===
+  (function() {
+    if (!window.posthog) return;
+    const ph = window.posthog;
+    const pageStart = Date.now();
+    const secondsOnPage = () => Math.round((Date.now() - pageStart) / 1000);
+
+    // 1) Scroll depth (25/50/75/100%)
+    const scrollMarks = { 25: false, 50: false, 75: false, 100: false };
+    window.addEventListener('scroll', () => {
+      const h = document.documentElement;
+      const pct = Math.round(((h.scrollTop + window.innerHeight) / h.scrollHeight) * 100);
+      [25, 50, 75, 100].forEach(m => {
+        if (!scrollMarks[m] && pct >= m) {
+          scrollMarks[m] = true;
+          ph.capture('scroll_depth', { percent: m, seconds_on_page: secondsOnPage() });
+        }
+      });
+    }, { passive: true });
+
+    // 2) Section viewed (IntersectionObserver for all main sections)
+    const seenSections = new Set();
+    const sectionObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting && !seenSections.has(entry.target.id)) {
+          seenSections.add(entry.target.id);
+          ph.capture('section_viewed', {
+            section: entry.target.id,
+            seconds_on_page: secondsOnPage()
+          });
+        }
+      });
+    }, { threshold: 0.4 });
+    document.querySelectorAll('section[id]').forEach(s => sectionObserver.observe(s));
+
+    // 3) Time to first pay_click — register super property
+    let firstPayClickFired = false;
+    document.addEventListener('click', (e) => {
+      if (e.target.closest('.pkg-btn') && !firstPayClickFired) {
+        firstPayClickFired = true;
+        ph.capture('time_to_pay_click', {
+          seconds: secondsOnPage(),
+          scroll_max: Math.max(...Object.entries(scrollMarks).filter(([_, v]) => v).map(([k]) => +k), 0)
+        });
+      }
+    });
+
+    // 4) Package card hover duration
+    const hoverStart = {};
+    document.querySelectorAll('.pkg-card').forEach((card, idx) => {
+      const name = card.querySelector('.pkg-name')?.textContent.trim() || 'pkg_' + idx;
+      card.addEventListener('mouseenter', () => { hoverStart[name] = Date.now(); });
+      card.addEventListener('mouseleave', () => {
+        if (!hoverStart[name]) return;
+        const ms = Date.now() - hoverStart[name];
+        if (ms > 400) ph.capture('package_hover', { package: name, duration_ms: ms });
+        delete hoverStart[name];
+      });
+    });
+
+    // 5) FAQ interactions — which questions are opened
+    document.querySelectorAll('.faq-item').forEach((item) => {
+      item.addEventListener('toggle', () => {
+        if (item.open) {
+          const q = item.querySelector('summary')?.textContent.trim().substring(0, 80);
+          ph.capture('faq_opened', { question: q, seconds_on_page: secondsOnPage() });
+        }
+      });
+    });
+
+    // 6) Exit intent (mouseleave through top of page)
+    let exitFired = false;
+    document.addEventListener('mouseleave', (e) => {
+      if (e.clientY <= 0 && !exitFired) {
+        exitFired = true;
+        ph.capture('exit_intent', {
+          seconds_on_page: secondsOnPage(),
+          scroll_max: Math.max(...Object.entries(scrollMarks).filter(([_, v]) => v).map(([k]) => +k), 0),
+          saw_packages: seenSections.has('packages')
+        });
+      }
+    });
+
+    // 7) Trade card visibility (proof-of-results)
+    let tradeCardsSeen = 0;
+    const tradeObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          tradeCardsSeen++;
+          tradeObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.5 });
+    document.querySelectorAll('.trade-card').forEach(c => tradeObserver.observe(c));
+    window.addEventListener('beforeunload', () => {
+      ph.capture('trade_cards_seen', { count: tradeCardsSeen });
+    });
+
+    // 8) Support bubble: dismissed vs clicked
+    const bubble = document.getElementById('supportBubble');
+    const closeBtn = bubble?.querySelector('.support-bubble-close');
+    if (closeBtn) closeBtn.addEventListener('click', () => ph.capture('support_bubble_dismissed', { method: 'close_button' }));
+    document.querySelector('.support-fab')?.addEventListener('click', () => {
+      ph.capture('support_bubble_clicked', { bubble_visible: bubble && !bubble.classList.contains('hidden') });
+    });
+
+    // 9) Time on page (on unload)
+    window.addEventListener('beforeunload', () => {
+      ph.capture('page_exit', {
+        seconds_on_page: secondsOnPage(),
+        scroll_max: Math.max(...Object.entries(scrollMarks).filter(([_, v]) => v).map(([k]) => +k), 0),
+        sections_seen: Array.from(seenSections),
+        saw_packages: seenSections.has('packages'),
+        clicked_pay: firstPayClickFired
+      });
+    });
+  })();
 </script>
 </body>
 </html>
