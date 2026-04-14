@@ -183,7 +183,7 @@
   <!-- ACTIVATION CODE -->
   <div class="code-section">
     <div class="code-label">Your Activation Code</div>
-    <div class="code-value" id="codeValue">4jf24</div>
+    <div class="code-value" id="codeValue">—</div>
     <button class="copy-btn" id="copyBtn" onclick="copyCode()">COPY CODE</button>
   </div>
 
@@ -200,7 +200,7 @@
     </div>
     <div class="step">
       <div class="step-num">3</div>
-      <div class="step-text">Send your activation code: <strong class="green">4jf24</strong></div>
+      <div class="step-text">Send your activation code (shown above) to the bot</div>
     </div>
     <div class="step">
       <div class="step-num">4</div>
@@ -218,8 +218,21 @@
 </div>
 
 <script>
+  // Activation codes per package
+  const codes = {
+    starter: 'cr89Rp',
+    trader: 'fheuwi7',
+    pro: 'yfuire8'
+  };
+
+  // Get package from URL ?pkg=starter
+  const params = new URLSearchParams(window.location.search);
+  const pkg = params.get('pkg') || 'starter';
+  const code = codes[pkg] || codes.starter;
+
+  document.getElementById('codeValue').textContent = code;
+
   function copyCode() {
-    const code = document.getElementById('codeValue').textContent;
     navigator.clipboard.writeText(code).then(() => {
       const btn = document.getElementById('copyBtn');
       btn.textContent = 'COPIED!';
