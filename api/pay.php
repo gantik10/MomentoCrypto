@@ -91,6 +91,35 @@ file_put_contents(__DIR__ . '/pay_debug.log', date('Y-m-d H:i:s') . "\nHTTP: {$h
 $result = json_decode($response, true);
 
 if ($result && isset($result['data']['payment_url'])) {
+    // Notify Telegram: payment initiated
+    $tgToken = $_ENV['TELEGRAM_BOT_TOKEN'] ?? '';
+    $tgChat = $_ENV['TELEGRAM_CHAT_ID'] ?? '';
+    if ($tgToken && $tgChat) {
+        $country = $_SERVER['HTTP_CF_IPCOUNTRY'] ?? '';
+        $ip = $_SERVER['HTTP_X_FORWARDED_FOR'] ?? $_SERVER['REMOTE_ADDR'] ?? '';
+        $ip = explode(',', $ip)[0];
+        $msg = "🟡 *Payment initiated*\n\n"
+            . "📦 Plan: *{$pkg['name']}*\n"
+            . "💵 Amount: *\${$pkg['amount']} USD*\n"
+            . "🆔 Order: `{$orderId}`\n"
+            . ($country ? "🌍 Country: {$country}\n" : "")
+            . ($ip ? "🖥 IP: `{$ip}`\n" : "")
+            . "🕐 " . date('Y-m-d H:i') . " UTC";
+        $tgCh = curl_init("https://api.telegram.org/bot{$tgToken}/sendMessage");
+        curl_setopt_array($tgCh, [
+            CURLOPT_POST => true,
+            CURLOPT_POSTFIELDS => http_build_query([
+                'chat_id' => $tgChat,
+                'text' => $msg,
+                'parse_mode' => 'Markdown',
+            ]),
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_TIMEOUT => 5,
+        ]);
+        curl_exec($tgCh);
+        curl_close($tgCh);
+    }
+
     echo json_encode([
         'ok' => true,
         'payment_url' => $result['data']['payment_url'],
