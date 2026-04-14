@@ -62,6 +62,7 @@ $data = [
     'description' => $pkg['name'],
     'thanks_message' => 'Payment successful! Copy your activation code on the next page.',
     'lifetime' => 60,
+    'fee_paid_by_payer' => 0,
     'sandbox' => $SANDBOX,
 ];
 
