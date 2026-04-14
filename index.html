@@ -1266,7 +1266,7 @@
     <div class="pkg-card reveal">
       <div class="pkg-duration">01 Month</div>
       <div class="pkg-name">STARTER</div>
-      <div class="pkg-price">$15</div>
+      <div class="pkg-price">$50</div>
       <div class="pkg-price-sub">/ month</div>
       <div class="pkg-desc">Full access to all signals and the community. Daily crypto signals with entry, TP & SL levels, private Telegram channel and analyst commentary.</div>
       <ul class="pkg-features">
@@ -1275,14 +1275,14 @@
         <li>Private Telegram channel</li>
         <li>Analyst commentary</li>
       </ul>
-      <a href="https://t.me/momentocrypto_bot" class="pkg-btn">→ Join via Telegram</a>
+      <button class="pkg-btn" onclick="payPackage('starter')">→ Pay with Crypto</button>
     </div>
 
     <div class="pkg-card featured reveal">
       <div class="pkg-duration">03 Months</div>
       <div class="pkg-name">TRADER</div>
-      <div class="pkg-price">$40</div>
-      <div class="pkg-price-sub">/ 3 months · save 11%</div>
+      <div class="pkg-price">$120</div>
+      <div class="pkg-price-sub">/ 3 months · save 20%</div>
       <div class="pkg-desc">Full access to all signals and the community. Daily crypto signals with entry, TP & SL levels, private Telegram channel and analyst commentary.</div>
       <ul class="pkg-features">
         <li>Daily crypto signals</li>
@@ -1290,14 +1290,14 @@
         <li>Private Telegram channel</li>
         <li>Analyst commentary</li>
       </ul>
-      <a href="https://t.me/momentocrypto_bot" class="pkg-btn">→ Join via Telegram</a>
+      <button class="pkg-btn" onclick="payPackage('trader')">→ Pay with Crypto</button>
     </div>
 
     <div class="pkg-card reveal">
       <div class="pkg-duration">06 Months</div>
       <div class="pkg-name">PRO</div>
-      <div class="pkg-price">$70</div>
-      <div class="pkg-price-sub">/ 6 months · save 22%</div>
+      <div class="pkg-price">$200</div>
+      <div class="pkg-price-sub">/ 6 months · save 33%</div>
       <div class="pkg-desc">Full access to all signals and the community. Daily crypto signals with entry, TP & SL levels, private Telegram channel and analyst commentary.</div>
       <ul class="pkg-features">
         <li>Daily crypto signals</li>
@@ -1305,7 +1305,7 @@
         <li>Private Telegram channel</li>
         <li>Analyst commentary</li>
       </ul>
-      <a href="https://t.me/momentocrypto_bot" class="pkg-btn">→ Join via Telegram</a>
+      <button class="pkg-btn" onclick="payPackage('pro')">→ Pay with Crypto</button>
     </div>
   </div>
 </section>
@@ -1513,9 +1513,8 @@
     more.querySelectorAll('.reveal').forEach(el => observer.observe(el));
   });
 
-  // === PAYMENT ===
-  // TEST MODE: redirects straight to success page
-  // Switch to LIVE MODE when Heleket is approved
+  // === PAYMENT (OxaPay) ===
+  // TEST MODE: set to true to skip payment and go to success page
   const PAYMENT_TEST_MODE = false;
 
   async function payPackage(pkg) {
@@ -1525,12 +1524,11 @@
     btn.disabled = true;
 
     if (PAYMENT_TEST_MODE) {
-      // TEST: go directly to success page
-      setTimeout(() => { window.location.href = '/success.html'; }, 800);
+      setTimeout(() => { window.location.href = '/success.html?pkg=' + pkg; }, 800);
       return;
     }
 
-    // LIVE: create Heleket invoice
+    // LIVE: create OxaPay invoice
     try {
       const res = await fetch('/api/pay.php', {
         method: 'POST',

@@ -20,7 +20,6 @@ $SANDBOX = ($_ENV['PAYMENT_SANDBOX'] ?? 'false') === 'true';
 // ===============================
 
 $CALLBACK_URL = 'https://momentocrypto.com/api/webhook.php';
-$RETURN_URL = 'https://momentocrypto.com/success.html';
 
 $input = json_decode(file_get_contents('php://input'), true);
 $package = $input['package'] ?? '';
@@ -40,12 +39,27 @@ if (!isset($packages[$package])) {
 $pkg = $packages[$package];
 $orderId = $package . '_' . time() . '_' . bin2hex(random_bytes(4));
 
+// Generate unique one-time token for success page
+$token = bin2hex(random_bytes(32));
+$tokensFile = __DIR__ . '/tokens.json';
+$tokens = file_exists($tokensFile) ? json_decode(file_get_contents($tokensFile), true) : [];
+$tokens[$token] = [
+    'package' => $package,
+    'order_id' => $orderId,
+    'created' => time(),
+    'used' => false,
+];
+// Clean tokens older than 24h
+$tokens = array_filter($tokens, fn($t) => $t['created'] > time() - 86400);
+file_put_contents($tokensFile, json_encode($tokens));
+
 $data = [
+    'merchant_api_key' => $MERCHANT_API_KEY,
     'amount' => $pkg['amount'],
     'currency' => 'USD',
     'order_id' => $orderId,
     'callback_url' => $CALLBACK_URL,
-    'return_url' => $RETURN_URL,
+    'return_url' => 'https://momentocrypto.com/success.php?t=' . $token,
     'description' => $pkg['name'],
     'thanks_message' => 'Payment successful! Copy your activation code on the next page.',
     'lifetime' => 60,
@@ -59,7 +73,6 @@ curl_setopt_array($ch, [
     CURLOPT_RETURNTRANSFER => true,
     CURLOPT_HTTPHEADER => [
         'Content-Type: application/json',
-        'merchant_api_key: ' . $MERCHANT_API_KEY,
     ],
 ]);
 

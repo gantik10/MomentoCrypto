@@ -1,3 +1,4 @@
 .env
 api/analytics.json
 api/payments.log
+api/tokens.json

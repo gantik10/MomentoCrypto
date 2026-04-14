@@ -1,3 +1,9 @@
 <Files "analytics.json">
     Require all denied
 </Files>
+<Files "tokens.json">
+    Require all denied
+</Files>
+<Files "payments.log">
+    Require all denied
+</Files>
