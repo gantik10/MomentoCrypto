@@ -736,68 +736,122 @@
   .inside-cta { text-align: center; }
 
   /* HOW IT WORKS */
-  .how-intro {
-    font-family: 'DM Sans', sans-serif;
-    font-size: 16px;
-    color: rgba(245,245,245,0.6);
-    max-width: 640px;
-    margin: 16px auto 56px;
-    text-align: center;
-    line-height: 1.6;
+  .how-flow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    max-width: 1100px;
+    margin: 56px auto 0;
+    flex-wrap: wrap;
   }
-  .how-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    gap: 20px;
-    max-width: 1200px;
-    margin: 0 auto;
+  .how-node {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    flex-shrink: 0;
   }
-  .how-step {
-    background: #0f0f0f;
-    border: 1px solid rgba(57,255,20,0.12);
-    border-radius: 14px;
-    padding: 32px 26px;
-    transition: transform 0.3s ease, border-color 0.3s ease;
-  }
-  .how-step:hover {
-    transform: translateY(-4px);
-    border-color: rgba(57,255,20,0.3);
-  }
-  .how-num {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 42px;
+  .how-icon {
+    position: relative;
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: radial-gradient(circle at 30% 30%, rgba(57,255,20,0.18), rgba(57,255,20,0.04) 70%);
+    border: 1.5px solid rgba(57,255,20,0.35);
     color: var(--green);
-    letter-spacing: 2px;
-    margin-bottom: 12px;
-    text-shadow: 0 0 20px var(--green-glow);
+    box-shadow: 0 0 40px rgba(57,255,20,0.12), inset 0 0 20px rgba(57,255,20,0.08);
+    transition: transform 0.35s ease, box-shadow 0.35s ease, border-color 0.35s ease;
   }
-  .how-title {
+  .how-icon:hover {
+    transform: translateY(-6px) scale(1.05);
+    border-color: var(--green);
+    box-shadow: 0 0 60px rgba(57,255,20,0.3), inset 0 0 24px rgba(57,255,20,0.15);
+  }
+  .how-icon svg { filter: drop-shadow(0 0 8px rgba(57,255,20,0.5)); }
+  .how-icon-tg { color: #22c1e8; border-color: rgba(34,193,232,0.4); background: radial-gradient(circle at 30% 30%, rgba(34,193,232,0.2), rgba(34,193,232,0.04) 70%); box-shadow: 0 0 40px rgba(34,193,232,0.15), inset 0 0 20px rgba(34,193,232,0.1); }
+  .how-icon-tg svg { filter: drop-shadow(0 0 8px rgba(34,193,232,0.6)); }
+  .how-icon-pay { color: #ffb547; border-color: rgba(255,181,71,0.4); background: radial-gradient(circle at 30% 30%, rgba(255,181,71,0.2), rgba(255,181,71,0.04) 70%); box-shadow: 0 0 40px rgba(255,181,71,0.15), inset 0 0 20px rgba(255,181,71,0.1); }
+  .how-icon-pay svg { filter: drop-shadow(0 0 8px rgba(255,181,71,0.6)); }
+  .how-bell-dot {
+    position: absolute;
+    top: 22px;
+    right: 28px;
+    width: 12px;
+    height: 12px;
+    background: #ff4757;
+    border: 2px solid var(--black);
+    border-radius: 50%;
+    animation: fabPulse 1.8s infinite;
+  }
+  .how-label {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 22px;
-    letter-spacing: 2px;
+    font-size: 15px;
+    letter-spacing: 2.5px;
     color: var(--white);
-    margin-bottom: 12px;
+    text-align: center;
+    line-height: 1.2;
+    max-width: 130px;
   }
-  .how-desc {
-    font-family: 'DM Sans', sans-serif;
-    font-size: 14px;
-    color: rgba(245,245,245,0.65);
-    line-height: 1.7;
+  .how-arrow {
+    color: rgba(57,255,20,0.5);
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    margin-top: -36px;
+    animation: arrowPulse 2.5s ease-in-out infinite;
+  }
+  @keyframes arrowPulse {
+    0%, 100% { opacity: 0.4; transform: translateX(0); }
+    50% { opacity: 1; transform: translateX(4px); }
   }
   .how-note {
-    max-width: 760px;
-    margin: 40px auto 0;
-    padding: 20px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    max-width: 680px;
+    margin: 60px auto 0;
+    padding: 18px 24px;
     background: rgba(57,255,20,0.06);
     border: 1px solid rgba(57,255,20,0.25);
-    border-radius: 12px;
+    border-radius: 999px;
     font-family: 'DM Sans', sans-serif;
     font-size: 14px;
-    color: rgba(245,245,245,0.85);
+    color: rgba(245,245,245,0.9);
     text-align: center;
-    line-height: 1.6;
+    line-height: 1.5;
   }
-  .how-note strong { color: var(--green); }
+  .how-note svg { color: var(--green); flex-shrink: 0; }
+  @media (max-width: 900px) {
+    .how-flow { gap: 8px; }
+    .how-icon { width: 90px; height: 90px; }
+    .how-icon svg { width: 40px; height: 40px; }
+    .how-label { font-size: 13px; }
+    .how-arrow svg { width: 28px; height: 16px; }
+    .how-arrow { margin-top: -30px; }
+  }
+  @media (max-width: 600px) {
+    .how-flow {
+      flex-direction: column;
+      gap: 4px;
+    }
+    .how-arrow {
+      margin-top: 0;
+      transform: rotate(90deg);
+    }
+    .how-arrow svg { width: 30px; height: 16px; }
+    .how-note {
+      border-radius: 14px;
+      flex-direction: column;
+      gap: 8px;
+      font-size: 13px;
+      padding: 16px 20px;
+    }
+  }
 
   /* PAYMENT TRUST (OxaPay + coins) */
   .payment-trust {
@@ -1167,39 +1221,60 @@
 <!-- HOW IT WORKS -->
 <section id="how">
   <div class="section-label reveal">How it works</div>
-  <h2 class="reveal">FROM SIGNUP<br>TO <span>FIRST TRADE.</span></h2>
-  <p class="how-intro reveal">Simple, direct, and fully automated. Here's exactly what happens after you pay.</p>
+  <h2 class="reveal">4 STEPS TO<br><span>WINNING TRADES.</span></h2>
 
-  <div class="how-grid">
-    <div class="how-step reveal">
-      <div class="how-num">01</div>
-      <div class="how-title">Pay with Crypto</div>
-      <p class="how-desc">Choose your plan and pay securely with any major crypto through OxaPay. BTC, ETH, USDT, USDC and 40+ coins accepted. No KYC, no card, no bank.</p>
+  <div class="how-flow reveal">
+    <div class="how-node">
+      <div class="how-icon how-icon-pay">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="5" width="20" height="14" rx="2"/>
+          <line x1="2" y1="10" x2="22" y2="10"/>
+          <circle cx="8" cy="15" r="1.2" fill="currentColor" stroke="none"/>
+          <circle cx="12" cy="15" r="1.2" fill="currentColor" stroke="none"/>
+        </svg>
+      </div>
+      <div class="how-label">PAY WITH CRYPTO</div>
     </div>
-    <div class="how-step reveal">
-      <div class="how-num">02</div>
-      <div class="how-title">Get Your Access Code</div>
-      <p class="how-desc">Right after payment confirms, you'll see a one-time activation code on your success page. Copy it — you'll need it in the next step.</p>
+
+    <div class="how-arrow"><svg width="40" height="20" viewBox="0 0 40 20" fill="none"><path d="M0 10 L32 10 M24 3 L32 10 L24 17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+
+    <div class="how-node">
+      <div class="how-icon how-icon-code">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="4" width="18" height="16" rx="2"/>
+          <path d="M8 11h8 M8 15h5"/>
+          <circle cx="17" cy="8" r="1.5" fill="currentColor" stroke="none"/>
+        </svg>
+      </div>
+      <div class="how-label">GET YOUR CODE</div>
     </div>
-    <div class="how-step reveal">
-      <div class="how-num">03</div>
-      <div class="how-title">Open Telegram & Join</div>
-      <p class="how-desc">Click our bot, send your activation code, and you'll be added to the private signals channel instantly. Takes about 30 seconds.</p>
+
+    <div class="how-arrow"><svg width="40" height="20" viewBox="0 0 40 20" fill="none"><path d="M0 10 L32 10 M24 3 L32 10 L24 17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+
+    <div class="how-node">
+      <div class="how-icon how-icon-tg">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12l-6.871 4.326-2.962-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.194 1.006.131.833.941z"/></svg>
+      </div>
+      <div class="how-label">JOIN TELEGRAM</div>
     </div>
-    <div class="how-step reveal">
-      <div class="how-num">04</div>
-      <div class="how-title">Turn On Alerts</div>
-      <p class="how-desc"><strong class="green">Make sure Telegram notifications are ON for our channel.</strong> Signals drop when our traders spot the setup — sometimes within minutes of market moves. Miss the alert, miss the entry.</p>
-    </div>
-    <div class="how-step reveal">
-      <div class="how-num">05</div>
-      <div class="how-title">Follow the Plan</div>
-      <p class="how-desc">Every signal has a clear entry, take profit, and stop loss. Copy the trade on your exchange, set your TP/SL, and let the chart do its work. That's it.</p>
+
+    <div class="how-arrow"><svg width="40" height="20" viewBox="0 0 40 20" fill="none"><path d="M0 10 L32 10 M24 3 L32 10 L24 17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+
+    <div class="how-node">
+      <div class="how-icon how-icon-bell">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/>
+          <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/>
+        </svg>
+        <span class="how-bell-dot"></span>
+      </div>
+      <div class="how-label">GET ALERTS</div>
     </div>
   </div>
 
   <div class="how-note reveal">
-    <strong>Important:</strong> signals come when our traders post them — not on a fixed schedule. Keep Telegram alerts enabled so you never miss a setup.
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+    <span>Turn on Telegram notifications — signals drop when our traders spot the setup</span>
   </div>
 </section>
 
