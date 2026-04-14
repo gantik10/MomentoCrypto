@@ -95,15 +95,29 @@ if ($result && isset($result['data']['payment_url'])) {
     $tgToken = $_ENV['TELEGRAM_BOT_TOKEN'] ?? '';
     $tgChat = $_ENV['TELEGRAM_CHAT_ID'] ?? '';
     if ($tgToken && $tgChat) {
-        $country = $_SERVER['HTTP_CF_IPCOUNTRY'] ?? '';
         $ip = $_SERVER['HTTP_X_FORWARDED_FOR'] ?? $_SERVER['REMOTE_ADDR'] ?? '';
-        $ip = explode(',', $ip)[0];
+        $ip = trim(explode(',', $ip)[0]);
+        $country = '';
+        $city = '';
+        if ($ip && !in_array($ip, ['127.0.0.1', '::1'])) {
+            $geoCh = curl_init("http://ip-api.com/json/{$ip}?fields=status,country,countryCode,city");
+            curl_setopt_array($geoCh, [CURLOPT_RETURNTRANSFER => true, CURLOPT_TIMEOUT => 3]);
+            $geo = json_decode(curl_exec($geoCh), true);
+            curl_close($geoCh);
+            if (($geo['status'] ?? '') === 'success') {
+                $flag = $geo['countryCode'] ?? '';
+                if ($flag && strlen($flag) === 2) {
+                    $flag = mb_chr(0x1F1E6 + ord($flag[0]) - 65) . mb_chr(0x1F1E6 + ord($flag[1]) - 65);
+                }
+                $country = trim(($flag ? $flag . ' ' : '') . ($geo['country'] ?? ''));
+                $city = $geo['city'] ?? '';
+            }
+        }
         $msg = "🟡 *Payment initiated*\n\n"
             . "📦 Plan: *{$pkg['name']}*\n"
             . "💵 Amount: *\${$pkg['amount']} USD*\n"
             . "🆔 Order: `{$orderId}`\n"
-            . ($country ? "🌍 Country: {$country}\n" : "")
-            . ($ip ? "🖥 IP: `{$ip}`\n" : "")
+            . ($country ? "🌍 " . $country . ($city ? ", {$city}" : "") . "\n" : "")
             . "🕐 " . date('Y-m-d H:i') . " UTC";
         $tgCh = curl_init("https://api.telegram.org/bot{$tgToken}/sendMessage");
         curl_setopt_array($tgCh, [
