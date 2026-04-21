@@ -11,14 +11,102 @@
 <meta name="theme-color" content="#080808">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
 <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Bebas+Neue&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
-<!-- PostHog Analytics -->
+<!-- MC Analytics + rrweb Session Recording -->
+<script src="https://cdn.jsdelivr.net/npm/rrweb@2.0.0-alpha.17/dist/record/rrweb-record.min.js" crossorigin="anonymous" defer></script>
 <script>
-!function(t,e){var o,n,p,r;e.__SV||(window.posthog && window.posthog.__loaded)||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.crossOrigin="anonymous",p.async=!0,p.src=s.api_host.replace(".i.posthog.com","-assets.i.posthog.com")+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+".people (stub)"},o="init Dr qr Ci Br Zr Pr capture calculateEventProperties Ur register register_once register_for_session unregister unregister_for_session Xr getFeatureFlag getFeatureFlagPayload getFeatureFlagResult isFeatureEnabled reloadFeatureFlags updateFlags updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures on onFeatureFlags onSurveysLoaded onSessionId getSurveys getActiveMatchingSurveys renderSurvey displaySurvey cancelPendingSurvey canRenderSurvey canRenderSurveyAsync Jr identify setPersonProperties group resetGroups setPersonPropertiesForFlags resetPersonPropertiesForFlags setGroupPropertiesForFlags resetGroupPropertiesForFlags reset setIdentity clearIdentity get_distinct_id getGroups get_session_id get_session_replay_url alias set_config startSessionRecording stopSessionRecording sessionRecordingStarted captureException captureLog startExceptionAutocapture stopExceptionAutocapture loadToolbar get_property getSessionProperty Wr Hr createPersonProfile setInternalOrTestUser Gr Fr tn opt_in_capturing opt_out_capturing has_opted_in_capturing has_opted_out_capturing get_explicit_consent_status is_capturing clear_opt_in_out_capturing $r debug ki Yr getPageViewId captureTraceFeedback captureTraceMetric Rr".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
-posthog.init('phc_v87BfH9wTYLYVYmFRtZJN4pnTracNcJvdwy6iL9pnocv', {
-    api_host: 'https://us.i.posthog.com',
-    defaults: '2026-01-30',
-    person_profiles: 'identified_only',
-})
+(function(){
+  const API = '/api/analytics';
+  const sid = sessionStorage.getItem('mc_sid') || (function(){ const id = crypto.randomUUID ? crypto.randomUUID() : Math.random().toString(36).slice(2)+Date.now().toString(36); sessionStorage.setItem('mc_sid', id); return id; })();
+  if (!localStorage.getItem('mc_vid')) localStorage.setItem('mc_vid', crypto.randomUUID ? crypto.randomUUID() : Math.random().toString(36).slice(2));
+  window.__mc_sid = sid;
+  const queue = [];
+  const pageStart = Date.now();
+
+  function send(type, data) { queue.push({ sid, type, ts: Date.now(), data: data || {} }); }
+  function flush() {
+    if (!queue.length) return;
+    const batch = queue.splice(0, 50);
+    batch.forEach(ev => {
+      try { navigator.sendBeacon ? navigator.sendBeacon(API+'/event', JSON.stringify(ev)) : fetch(API+'/event', { method:'POST', body:JSON.stringify(ev), keepalive:true }); } catch{}
+    });
+  }
+  setInterval(flush, 3000);
+  document.addEventListener('visibilitychange', flush);
+  window.addEventListener('beforeunload', () => { send('time_on_page', { seconds: Math.round((Date.now()-pageStart)/1000) }); flush(); });
+
+  // Page view
+  const params = new URLSearchParams(location.search);
+  const utm = {}; ['utm_source','utm_medium','utm_campaign','utm_content','utm_term'].forEach(k => { if (params.get(k)) utm[k] = params.get(k); });
+  send('page_view', { path: location.pathname, referrer: document.referrer, utm: Object.keys(utm).length ? utm : null, screen: screen.width+'x'+screen.height, vid: localStorage.getItem('mc_vid') });
+
+  // Clicks
+  document.addEventListener('click', e => {
+    const el = e.target.closest('a,button,.pkg-btn,.tg-btn,.nav-cta,.faq-item summary,.support-fab,.oxapay-badge') || e.target;
+    const section = el.closest('section[id]')?.id || el.closest('nav') ? 'nav' : '';
+    const rect = document.documentElement;
+    send('click', {
+      tag: el.tagName, text: (el.textContent||'').trim().slice(0,50), class: el.className?.toString().slice(0,80),
+      section, id: el.closest('[id]')?.id || '',
+      xPct: Math.round(e.pageX / rect.scrollWidth * 100), yPct: Math.round(e.pageY / rect.scrollHeight * 100),
+      xVp: e.clientX, yVp: e.clientY
+    });
+  });
+
+  // Scroll depth
+  const scrollMarks = {};
+  window.addEventListener('scroll', () => {
+    const h = document.documentElement;
+    const pct = Math.round((h.scrollTop + window.innerHeight) / h.scrollHeight * 100);
+    [25,50,75,100].forEach(m => { if (!scrollMarks[m] && pct >= m) { scrollMarks[m] = true; send('scroll', { percent: m, seconds: Math.round((Date.now()-pageStart)/1000) }); } });
+  }, { passive: true });
+
+  // Section visibility
+  const seenSections = {};
+  const secObs = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      const id = entry.target.id;
+      if (entry.isIntersecting && !seenSections[id]) {
+        seenSections[id] = Date.now();
+        send('section_view', { section: id, seconds: Math.round((Date.now()-pageStart)/1000) });
+      }
+    });
+  }, { threshold: 0.4 });
+  document.querySelectorAll('section[id]').forEach(s => secObs.observe(s));
+
+  // FAQ opens
+  document.querySelectorAll('.faq-item').forEach(item => {
+    item.addEventListener('toggle', () => { if (item.open) send('faq_open', { question: item.querySelector('summary')?.textContent.trim().slice(0,80) }); });
+  });
+
+  // Exit intent
+  let exitFired = false;
+  document.addEventListener('mouseleave', e => {
+    if (e.clientY <= 0 && !exitFired) { exitFired = true; send('exit_intent', { seconds: Math.round((Date.now()-pageStart)/1000), scroll_max: Math.max(...Object.keys(scrollMarks).map(Number), 0) }); }
+  });
+
+  // Mouse movement sampling for heatmap
+  let mousePoints = [];
+  document.addEventListener('mousemove', e => {
+    const h = document.documentElement;
+    mousePoints.push({ x: Math.round(e.pageX/h.scrollWidth*100), y: Math.round(e.pageY/h.scrollHeight*100) });
+  });
+  setInterval(() => { if (mousePoints.length) { send('mouse_move', { points: mousePoints.splice(0) }); } }, 5000);
+
+  // rrweb session recording
+  window.addEventListener('load', () => {
+    if (typeof rrweb === 'undefined' || !rrweb.record) return;
+    let rrEvents = [];
+    rrweb.record({ emit(event) { rrEvents.push(event); } });
+    setInterval(() => {
+      if (!rrEvents.length) return;
+      const batch = rrEvents.splice(0);
+      try { fetch(API+'/rrweb', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ sid, events: batch }), keepalive:true }); } catch{}
+    }, 5000);
+    window.addEventListener('beforeunload', () => {
+      if (rrEvents.length) { try { navigator.sendBeacon(API+'/rrweb', JSON.stringify({ sid, events: rrEvents.splice(0) })); } catch{} }
+    });
+  });
+})();
 </script>
 <style>
   :root {
@@ -2412,7 +2500,10 @@ posthog.init('phc_v87BfH9wTYLYVYmFRtZJN4pnTracNcJvdwy6iL9pnocv', {
     btn.textContent = 'PROCESSING...';
     btn.disabled = true;
 
-    if (window.posthog) posthog.capture('pay_click', { package: pkg });
+    // MC Analytics: pay_click event with session ID
+    if (window.__mc_sid) {
+      fetch('/api/analytics/event', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ sid: window.__mc_sid, type:'pay_click', ts:Date.now(), data:{ package: pkg } }), keepalive:true });
+    }
 
     if (PAYMENT_TEST_MODE) {
       setTimeout(() => { window.location.href = '/success.html?pkg=' + pkg; }, 800);
@@ -2423,154 +2514,24 @@ posthog.init('phc_v87BfH9wTYLYVYmFRtZJN4pnTracNcJvdwy6iL9pnocv', {
       const res = await fetch('/api/pay.php', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ package: pkg }),
+        body: JSON.stringify({ package: pkg, sid: window.__mc_sid || '' }),
       });
       const data = await res.json();
 
       if (data.ok && data.payment_url) {
-        if (window.posthog) posthog.capture('oxapay_invoice_created', { package: pkg, order_id: data.order_id, track_id: data.track_id });
+        if (window.__mc_sid) fetch('/api/analytics/event', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ sid: window.__mc_sid, type:'invoice_created', ts:Date.now(), data:{ package: pkg, order_id: data.order_id } }), keepalive:true });
         window.location.href = data.payment_url;
       } else {
-        if (window.posthog) posthog.capture('payment_error', { package: pkg, reason: 'invoice_failed' });
         alert('Payment error. Please try again.');
         btn.textContent = originalText;
         btn.disabled = false;
       }
     } catch (e) {
-      if (window.posthog) posthog.capture('payment_error', { package: pkg, reason: 'connection' });
       alert('Connection error. Please try again.');
       btn.textContent = originalText;
       btn.disabled = false;
     }
   }
-
-  // Track CTA button clicks via PostHog
-  document.addEventListener('click', function(e) {
-    const btn = e.target.closest('.nav-cta, .tg-btn, .load-more-btn, .nav-support, .support-fab, .oxapay-badge');
-    if (btn && window.posthog) {
-      const section = btn.closest('section')?.id || (btn.closest('nav') ? 'nav' : 'other');
-      const text = btn.textContent.trim().substring(0, 50);
-      posthog.capture('cta_click', { button: text, section: section, class: btn.className });
-    }
-  });
-
-  // === EXTENDED ANALYTICS ===
-  (function() {
-    if (!window.posthog) return;
-    const ph = window.posthog;
-    const pageStart = Date.now();
-    const secondsOnPage = () => Math.round((Date.now() - pageStart) / 1000);
-
-    // 1) Scroll depth (25/50/75/100%)
-    const scrollMarks = { 25: false, 50: false, 75: false, 100: false };
-    window.addEventListener('scroll', () => {
-      const h = document.documentElement;
-      const pct = Math.round(((h.scrollTop + window.innerHeight) / h.scrollHeight) * 100);
-      [25, 50, 75, 100].forEach(m => {
-        if (!scrollMarks[m] && pct >= m) {
-          scrollMarks[m] = true;
-          ph.capture('scroll_depth', { percent: m, seconds_on_page: secondsOnPage() });
-        }
-      });
-    }, { passive: true });
-
-    // 2) Section viewed (IntersectionObserver for all main sections)
-    const seenSections = new Set();
-    const sectionObserver = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting && !seenSections.has(entry.target.id)) {
-          seenSections.add(entry.target.id);
-          ph.capture('section_viewed', {
-            section: entry.target.id,
-            seconds_on_page: secondsOnPage()
-          });
-        }
-      });
-    }, { threshold: 0.4 });
-    document.querySelectorAll('section[id]').forEach(s => sectionObserver.observe(s));
-
-    // 3) Time to first pay_click — register super property
-    let firstPayClickFired = false;
-    document.addEventListener('click', (e) => {
-      if (e.target.closest('.pkg-btn') && !firstPayClickFired) {
-        firstPayClickFired = true;
-        ph.capture('time_to_pay_click', {
-          seconds: secondsOnPage(),
-          scroll_max: Math.max(...Object.entries(scrollMarks).filter(([_, v]) => v).map(([k]) => +k), 0)
-        });
-      }
-    });
-
-    // 4) Package card hover duration
-    const hoverStart = {};
-    document.querySelectorAll('.pkg-card').forEach((card, idx) => {
-      const name = card.querySelector('.pkg-name')?.textContent.trim() || 'pkg_' + idx;
-      card.addEventListener('mouseenter', () => { hoverStart[name] = Date.now(); });
-      card.addEventListener('mouseleave', () => {
-        if (!hoverStart[name]) return;
-        const ms = Date.now() - hoverStart[name];
-        if (ms > 400) ph.capture('package_hover', { package: name, duration_ms: ms });
-        delete hoverStart[name];
-      });
-    });
-
-    // 5) FAQ interactions — which questions are opened
-    document.querySelectorAll('.faq-item').forEach((item) => {
-      item.addEventListener('toggle', () => {
-        if (item.open) {
-          const q = item.querySelector('summary')?.textContent.trim().substring(0, 80);
-          ph.capture('faq_opened', { question: q, seconds_on_page: secondsOnPage() });
-        }
-      });
-    });
-
-    // 6) Exit intent (mouseleave through top of page)
-    let exitFired = false;
-    document.addEventListener('mouseleave', (e) => {
-      if (e.clientY <= 0 && !exitFired) {
-        exitFired = true;
-        ph.capture('exit_intent', {
-          seconds_on_page: secondsOnPage(),
-          scroll_max: Math.max(...Object.entries(scrollMarks).filter(([_, v]) => v).map(([k]) => +k), 0),
-          saw_packages: seenSections.has('packages')
-        });
-      }
-    });
-
-    // 7) Trade card visibility (proof-of-results)
-    let tradeCardsSeen = 0;
-    const tradeObserver = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          tradeCardsSeen++;
-          tradeObserver.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.5 });
-    document.querySelectorAll('.trade-card').forEach(c => tradeObserver.observe(c));
-    window.addEventListener('beforeunload', () => {
-      ph.capture('trade_cards_seen', { count: tradeCardsSeen });
-    });
-
-    // 8) Support bubble: dismissed vs clicked
-    const bubble = document.getElementById('supportBubble');
-    const closeBtn = bubble?.querySelector('.support-bubble-close');
-    if (closeBtn) closeBtn.addEventListener('click', () => ph.capture('support_bubble_dismissed', { method: 'close_button' }));
-    document.querySelector('.support-fab')?.addEventListener('click', () => {
-      ph.capture('support_bubble_clicked', { bubble_visible: bubble && !bubble.classList.contains('hidden') });
-    });
-
-    // 9) Time on page (on unload)
-    window.addEventListener('beforeunload', () => {
-      ph.capture('page_exit', {
-        seconds_on_page: secondsOnPage(),
-        scroll_max: Math.max(...Object.entries(scrollMarks).filter(([_, v]) => v).map(([k]) => +k), 0),
-        sections_seen: Array.from(seenSections),
-        saw_packages: seenSections.has('packages'),
-        clicked_pay: firstPayClickFired
-      });
-    });
-  })();
 </script>
 </body>
 </html>

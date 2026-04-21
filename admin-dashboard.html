@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MC Analytics</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📊</text></svg>">
+<script src="https://cdn.jsdelivr.net/npm/rrweb-player@2.0.0-alpha.17/dist/index.js" defer></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/rrweb-player@2.0.0-alpha.17/dist/style.css">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+:root { --bg: #0a0a0a; --card: #111; --border: #222; --text: #e0e0e0; --muted: #666; --green: #39FF14; --red: #ff4757; --blue: #4a9eff; --orange: #ff9f43; --purple: #a855f7; }
+body { font-family: -apple-system, system-ui, 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); display: flex; min-height: 100vh; }
+a { color: var(--blue); text-decoration: none; }
+
+/* Auth screen */
+.auth-screen { display: flex; align-items: center; justify-content: center; width: 100%; height: 100vh; }
+.auth-box { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 40px; text-align: center; width: 320px; }
+.auth-box h2 { font-size: 20px; margin-bottom: 16px; }
+.auth-box input { width: 100%; padding: 10px 14px; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-size: 14px; margin-bottom: 12px; }
+.auth-box button { width: 100%; padding: 10px; background: var(--green); color: #000; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; }
+
+/* Layout */
+.sidebar { width: 220px; background: var(--card); border-right: 1px solid var(--border); padding: 20px 0; flex-shrink: 0; position: sticky; top: 0; height: 100vh; overflow-y: auto; }
+.sidebar h1 { font-size: 16px; padding: 0 20px 16px; color: var(--green); letter-spacing: 1px; }
+.nav-item { display: block; padding: 10px 20px; font-size: 13px; color: var(--muted); cursor: pointer; border-left: 3px solid transparent; transition: all 0.15s; }
+.nav-item:hover { color: var(--text); background: rgba(255,255,255,0.03); }
+.nav-item.active { color: var(--green); border-left-color: var(--green); background: rgba(57,255,20,0.05); }
+.main { flex: 1; padding: 24px 32px; overflow-y: auto; }
+
+/* Cards */
+.stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; margin-bottom: 24px; }
+.stat-card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 20px; }
+.stat-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+.stat-value { font-size: 28px; font-weight: 700; }
+.stat-sub { font-size: 11px; color: var(--muted); margin-top: 4px; }
+.stat-green { color: var(--green); }
+.stat-red { color: var(--red); }
+
+/* Period toggle */
+.period-bar { display: flex; gap: 8px; margin-bottom: 20px; }
+.period-btn { padding: 6px 16px; background: var(--card); border: 1px solid var(--border); border-radius: 6px; color: var(--muted); font-size: 12px; cursor: pointer; }
+.period-btn.active { background: var(--green); color: #000; border-color: var(--green); font-weight: 700; }
+
+/* Funnel */
+.funnel { margin: 20px 0; }
+.funnel-step { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; }
+.funnel-bar { height: 36px; background: rgba(57,255,20,0.15); border-radius: 6px; display: flex; align-items: center; padding: 0 14px; font-size: 13px; font-weight: 600; min-width: 60px; transition: width 0.5s ease; }
+.funnel-label { font-size: 12px; color: var(--muted); min-width: 130px; }
+.funnel-drop { font-size: 11px; color: var(--red); margin-left: 8px; }
+
+/* Table */
+.table-wrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+th { text-align: left; padding: 10px 12px; color: var(--muted); font-size: 11px; text-transform: uppercase; border-bottom: 1px solid var(--border); }
+td { padding: 10px 12px; border-bottom: 1px solid rgba(255,255,255,0.04); }
+tr:hover { background: rgba(255,255,255,0.02); }
+.badge { padding: 2px 8px; border-radius: 4px; font-size: 10px; font-weight: 700; }
+.badge-green { background: rgba(57,255,20,0.15); color: var(--green); }
+.badge-orange { background: rgba(255,159,67,0.15); color: var(--orange); }
+
+/* Chart */
+.chart-wrap { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 20px; margin-bottom: 24px; }
+.chart-title { font-size: 14px; font-weight: 600; margin-bottom: 16px; }
+canvas { width: 100% !important; height: 200px !important; }
+
+/* Session replay */
+.replay-wrap { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 20px; }
+.replay-meta { display: flex; flex-wrap: wrap; gap: 16px; margin-bottom: 16px; font-size: 12px; color: var(--muted); }
+.replay-meta span { background: rgba(255,255,255,0.05); padding: 4px 10px; border-radius: 4px; }
+
+/* Live */
+.live-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 6px; }
+.live-active { background: var(--green); box-shadow: 0 0 6px var(--green); }
+.live-idle { background: var(--orange); }
+
+/* Section title */
+.section-title { font-size: 18px; font-weight: 700; margin-bottom: 16px; }
+.section-sub { font-size: 12px; color: var(--muted); margin-bottom: 20px; }
+
+@media (max-width: 768px) { .sidebar { display: none; } .main { padding: 16px; } .stats-grid { grid-template-columns: 1fr 1fr; } }
+</style>
+</head>
+<body>
+
+<div id="authScreen" class="auth-screen">
+  <div class="auth-box">
+    <h2>MC Analytics</h2>
+    <input type="password" id="authPass" placeholder="Password" onkeydown="if(event.key==='Enter')doLogin()">
+    <button onclick="doLogin()">Login</button>
+  </div>
+</div>
+
+<div id="app" style="display:none;width:100%;display:none;">
+  <nav class="sidebar">
+    <h1>📊 MC Analytics</h1>
+    <div class="nav-item active" onclick="go('overview')">Overview</div>
+    <div class="nav-item" onclick="go('funnel')">Sales Funnel</div>
+    <div class="nav-item" onclick="go('revenue')">Revenue</div>
+    <div class="nav-item" onclick="go('sessions')">Session Recordings</div>
+    <div class="nav-item" onclick="go('heatmap')">Click Heatmap</div>
+    <div class="nav-item" onclick="go('traffic')">Traffic Sources</div>
+    <div class="nav-item" onclick="go('devices')">Devices & Countries</div>
+    <div class="nav-item" onclick="go('faq')">FAQ Engagement</div>
+    <div class="nav-item" onclick="go('live')">Live Visitors</div>
+  </nav>
+  <div class="main" id="content"></div>
+</div>
+
+<script>
+let TOKEN = sessionStorage.getItem('mc_admin_token') || '';
+let currentPeriod = '7d';
+let dashData = null;
+
+function doLogin() {
+  TOKEN = document.getElementById('authPass').value;
+  sessionStorage.setItem('mc_admin_token', TOKEN);
+  init();
+}
+
+async function api(path) {
+  const res = await fetch(path, { headers: { Authorization: `Bearer ${TOKEN}` } });
+  if (res.status === 401) { sessionStorage.removeItem('mc_admin_token'); TOKEN = ''; showAuth(); throw new Error('Unauthorized'); }
+  return res.json();
+}
+
+function showAuth() { document.getElementById('authScreen').style.display = 'flex'; document.getElementById('app').style.display = 'none'; }
+function showApp() { document.getElementById('authScreen').style.display = 'none'; document.getElementById('app').style.display = 'flex'; }
+
+async function init() {
+  try {
+    dashData = await api(`/api/analytics/dashboard?period=${currentPeriod}`);
+    showApp();
+    go('overview');
+  } catch { showAuth(); }
+}
+
+function go(page) {
+  document.querySelectorAll('.nav-item').forEach((n, i) => n.classList.toggle('active', n.textContent.toLowerCase().includes(page.slice(0, 4))));
+  const c = document.getElementById('content');
+  if (page === 'overview') renderOverview(c);
+  else if (page === 'funnel') renderFunnel(c);
+  else if (page === 'revenue') renderRevenue(c);
+  else if (page === 'sessions') renderSessions(c);
+  else if (page === 'heatmap') renderHeatmap(c);
+  else if (page === 'traffic') renderTraffic(c);
+  else if (page === 'devices') renderDevices(c);
+  else if (page === 'faq') renderFaq(c);
+  else if (page === 'live') renderLive(c);
+  else if (page.startsWith('session/')) renderReplay(c, page.split('/')[1]);
+}
+
+async function changePeriod(p) {
+  currentPeriod = p;
+  dashData = await api(`/api/analytics/dashboard?period=${p}`);
+  go('overview');
+}
+
+function periodBar() {
+  return `<div class="period-bar">
+    ${['today','7d','30d','all'].map(p => `<button class="period-btn ${currentPeriod===p?'active':''}" onclick="changePeriod('${p}')">${p === 'today' ? 'Today' : p === '7d' ? '7 Days' : p === '30d' ? '30 Days' : 'All Time'}</button>`).join('')}
+  </div>`;
+}
+
+function renderOverview(c) {
+  const d = dashData;
+  c.innerHTML = `
+    <div class="section-title">Overview</div>
+    ${periodBar()}
+    <div class="stats-grid">
+      <div class="stat-card"><div class="stat-label">Visitors</div><div class="stat-value">${d.visitors}</div></div>
+      <div class="stat-card"><div class="stat-label">Bounce Rate</div><div class="stat-value">${d.bounceRate}%</div></div>
+      <div class="stat-card"><div class="stat-label">Avg Time</div><div class="stat-value">${d.avgDuration}s</div></div>
+      <div class="stat-card"><div class="stat-label">Conversions</div><div class="stat-value stat-green">${d.converted}</div></div>
+      <div class="stat-card"><div class="stat-label">Conversion Rate</div><div class="stat-value">${d.conversionRate}%</div></div>
+      <div class="stat-card"><div class="stat-label">Revenue</div><div class="stat-value stat-green">$${d.totalRevenue}</div></div>
+    </div>
+    <div class="chart-wrap">
+      <div class="chart-title">Daily Visitors & Revenue</div>
+      <canvas id="dailyChart"></canvas>
+    </div>
+  `;
+  drawDailyChart(d.daily || []);
+}
+
+function drawDailyChart(daily) {
+  const canvas = document.getElementById('dailyChart');
+  if (!canvas || !daily.length) return;
+  const ctx = canvas.getContext('2d');
+  canvas.width = canvas.offsetWidth * 2;
+  canvas.height = 400;
+  const w = canvas.width, h = canvas.height;
+  const maxV = Math.max(...daily.map(d => d.visitors), 1);
+  const barW = Math.min(40, (w - 80) / daily.length - 4);
+  const startX = 60;
+
+  ctx.clearRect(0, 0, w, h);
+  ctx.fillStyle = '#333';
+  ctx.font = '20px sans-serif';
+
+  daily.forEach((d, i) => {
+    const x = startX + i * ((w - 80) / daily.length);
+    const barH = (d.visitors / maxV) * (h - 80);
+    ctx.fillStyle = d.converted ? 'rgba(57,255,20,0.6)' : 'rgba(255,255,255,0.15)';
+    ctx.fillRect(x, h - 40 - barH, barW, barH);
+    ctx.fillStyle = '#555';
+    ctx.font = '18px sans-serif';
+    ctx.save();
+    ctx.translate(x + barW / 2, h - 18);
+    ctx.rotate(-0.5);
+    ctx.fillText(d.date.slice(5), 0, 0);
+    ctx.restore();
+    ctx.fillStyle = '#aaa';
+    ctx.font = '18px sans-serif';
+    ctx.fillText(d.visitors, x, h - 44 - barH);
+    if (d.revenue) { ctx.fillStyle = '#39FF14'; ctx.fillText('$' + d.revenue, x, h - 62 - barH); }
+  });
+}
+
+function renderFunnel(c) {
+  const f = dashData.funnel || {};
+  const steps = [
+    { label: 'Visited site', value: f.visited || 0 },
+    { label: 'Saw packages', value: f.saw_packages || 0 },
+    { label: 'Clicked Pay', value: f.pay_clicked || 0 },
+    { label: 'Invoice created', value: f.invoice_created || 0 },
+    { label: 'Payment complete', value: f.payment_complete || 0 },
+  ];
+  const max = steps[0].value || 1;
+  c.innerHTML = `
+    <div class="section-title">Sales Funnel</div>
+    ${periodBar()}
+    <div class="funnel">
+      ${steps.map((s, i) => {
+        const pct = Math.round(s.value / max * 100);
+        const drop = i > 0 ? Math.round((1 - s.value / (steps[i - 1].value || 1)) * 100) : 0;
+        return `<div class="funnel-step">
+          <div class="funnel-label">${s.label}</div>
+          <div class="funnel-bar" style="width:${Math.max(pct, 5)}%">${s.value} (${pct}%)</div>
+          ${i > 0 ? `<span class="funnel-drop">-${drop}% drop</span>` : ''}
+        </div>`;
+      }).join('')}
+    </div>
+  `;
+}
+
+function renderRevenue(c) {
+  const d = dashData;
+  const pkg = d.packages || {};
+  c.innerHTML = `
+    <div class="section-title">Revenue</div>
+    ${periodBar()}
+    <div class="stats-grid">
+      <div class="stat-card"><div class="stat-label">Total Revenue</div><div class="stat-value stat-green">$${d.totalRevenue}</div></div>
+      <div class="stat-card"><div class="stat-label">Starter ($25)</div><div class="stat-value">${pkg.starter || 0} sales</div></div>
+      <div class="stat-card"><div class="stat-label">Trader ($60)</div><div class="stat-value">${pkg.trader || 0} sales</div></div>
+      <div class="stat-card"><div class="stat-label">Pro ($100)</div><div class="stat-value">${pkg.pro || 0} sales</div></div>
+    </div>
+    <div class="section-sub">Revenue by Country</div>
+    <div class="table-wrap"><table><thead><tr><th>Country</th><th>Visitors</th></tr></thead><tbody>
+      ${d.countries.slice(0, 20).map(([c, n]) => `<tr><td>${c}</td><td>${n}</td></tr>`).join('')}
+    </tbody></table></div>
+  `;
+}
+
+async function renderSessions(c) {
+  c.innerHTML = '<div class="section-title">Session Recordings</div><div class="section-sub">Loading...</div>';
+  try {
+    const data = await api('/api/analytics/sessions?limit=50');
+    c.innerHTML = `
+      <div class="section-title">Session Recordings (${data.total})</div>
+      <div class="table-wrap"><table><thead><tr><th>Time</th><th>Duration</th><th>Country</th><th>Device</th><th>Pages</th><th>Scroll</th><th>Converted</th><th></th></tr></thead><tbody>
+        ${data.sessions.map(s => `<tr>
+          <td>${new Date(s.start).toLocaleString()}</td>
+          <td>${Math.round((s.duration || 0) / 1000)}s</td>
+          <td>${s.country || '?'}</td>
+          <td>${s.device || '?'}</td>
+          <td>${s.pages || 0}</td>
+          <td>${s.scroll_max || 0}%</td>
+          <td>${s.converted ? '<span class="badge badge-green">YES</span>' : '<span class="badge badge-orange">NO</span>'}</td>
+          <td><button class="period-btn" onclick="go('session/${s.id}')">▶ Play</button></td>
+        </tr>`).join('')}
+      </tbody></table></div>
+    `;
+  } catch (e) { c.innerHTML = `<div class="stat-red">Failed: ${e.message}</div>`; }
+}
+
+async function renderReplay(c, sid) {
+  c.innerHTML = '<div class="section-title">Session Replay</div><div class="section-sub">Loading recording...</div>';
+  try {
+    const [session, rrData] = await Promise.all([
+      api(`/api/analytics/session/${sid}`),
+      api(`/api/analytics/session/${sid}/rrweb`)
+    ]);
+    const meta = session.meta || {};
+    c.innerHTML = `
+      <div class="section-title">Session Replay</div>
+      <div class="replay-meta">
+        <span>${meta.country || '?'}, ${meta.city || ''}</span>
+        <span>${meta.device || '?'} / ${meta.browser || '?'}</span>
+        <span>${Math.round((meta.duration || 0) / 1000)}s duration</span>
+        <span>${meta.pages || 0} pages</span>
+        <span>Scroll: ${meta.scroll_max || 0}%</span>
+        ${meta.converted ? '<span class="badge badge-green">CONVERTED</span>' : ''}
+        ${meta.referrer ? `<span>Ref: ${meta.referrer}</span>` : ''}
+      </div>
+      <div class="replay-wrap" id="replayContainer"></div>
+      <div class="section-sub" style="margin-top:16px;">Events Timeline (${session.events?.length || 0} events)</div>
+      <div class="table-wrap"><table><thead><tr><th>Time</th><th>Type</th><th>Details</th></tr></thead><tbody>
+        ${(session.events || []).map(e => `<tr>
+          <td>${new Date(e.ts).toLocaleTimeString()}</td>
+          <td><span class="badge badge-orange">${e.type}</span></td>
+          <td style="font-size:11px;color:var(--muted);">${JSON.stringify(e.data || {}).slice(0, 100)}</td>
+        </tr>`).join('')}
+      </tbody></table></div>
+    `;
+    // Init rrweb player
+    if (rrData.events?.length && typeof rrwebPlayer !== 'undefined') {
+      new rrwebPlayer({ target: document.getElementById('replayContainer'), props: { events: rrData.events, width: 800, height: 500 } });
+    } else if (!rrData.events?.length) {
+      document.getElementById('replayContainer').innerHTML = '<div style="padding:40px;text-align:center;color:var(--muted);">No recording data for this session</div>';
+    }
+  } catch (e) { c.innerHTML = `<div class="stat-red">Failed: ${e.message}</div>`; }
+}
+
+async function renderHeatmap(c) {
+  c.innerHTML = '<div class="section-title">Click Heatmap</div><div class="section-sub">Loading...</div>';
+  try {
+    const data = await api('/api/analytics/heatmap');
+    c.innerHTML = `
+      <div class="section-title">Click Heatmap (last 7 days)</div>
+      <div class="section-sub">${data.clicks.length} clicks recorded</div>
+      <div style="position:relative;background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden;height:600px;">
+        <iframe src="/" style="width:100%;height:1200px;border:none;transform:scale(0.5);transform-origin:top left;pointer-events:none;"></iframe>
+        <div id="heatmapOverlay" style="position:absolute;inset:0;pointer-events:none;"></div>
+      </div>
+    `;
+    const overlay = document.getElementById('heatmapOverlay');
+    const oW = overlay.offsetWidth, oH = 600;
+    data.clicks.forEach(click => {
+      const dot = document.createElement('div');
+      dot.style.cssText = `position:absolute;left:${click.x * oW / 100}px;top:${click.y * oH / 100 * 0.5}px;width:12px;height:12px;border-radius:50%;background:rgba(255,71,87,0.4);box-shadow:0 0 8px rgba(255,71,87,0.6);transform:translate(-50%,-50%);`;
+      overlay.appendChild(dot);
+    });
+  } catch (e) { c.innerHTML = `<div class="stat-red">Failed: ${e.message}</div>`; }
+}
+
+function renderTraffic(c) {
+  const refs = dashData.referrers || [];
+  c.innerHTML = `
+    <div class="section-title">Traffic Sources</div>
+    ${periodBar()}
+    <div class="table-wrap"><table><thead><tr><th>Source</th><th>Visitors</th><th>%</th></tr></thead><tbody>
+      ${refs.map(([src, n]) => `<tr>
+        <td>${src || 'direct'}</td>
+        <td>${n}</td>
+        <td>${dashData.visitors ? Math.round(n / dashData.visitors * 100) : 0}%</td>
+      </tr>`).join('')}
+    </tbody></table></div>
+  `;
+}
+
+function renderDevices(c) {
+  const devices = dashData.devices || [];
+  const browsers = dashData.browsers || [];
+  const countries = dashData.countries || [];
+  c.innerHTML = `
+    <div class="section-title">Devices & Countries</div>
+    ${periodBar()}
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px;">
+      <div>
+        <div class="chart-title">Devices</div>
+        <div class="table-wrap"><table><thead><tr><th>Device</th><th>Count</th></tr></thead><tbody>
+          ${devices.map(([d, n]) => `<tr><td>${d}</td><td>${n}</td></tr>`).join('')}
+        </tbody></table></div>
+      </div>
+      <div>
+        <div class="chart-title">Browsers</div>
+        <div class="table-wrap"><table><thead><tr><th>Browser</th><th>Count</th></tr></thead><tbody>
+          ${browsers.map(([b, n]) => `<tr><td>${b}</td><td>${n}</td></tr>`).join('')}
+        </tbody></table></div>
+      </div>
+      <div>
+        <div class="chart-title">Countries</div>
+        <div class="table-wrap"><table><thead><tr><th>Country</th><th>Count</th></tr></thead><tbody>
+          ${countries.slice(0, 20).map(([c, n]) => `<tr><td>${c}</td><td>${n}</td></tr>`).join('')}
+        </tbody></table></div>
+      </div>
+    </div>
+  `;
+}
+
+async function renderFaq(c) {
+  c.innerHTML = '<div class="section-title">FAQ Engagement</div><div class="section-sub">Loading...</div>';
+  try {
+    const data = await api('/api/analytics/faq');
+    c.innerHTML = `
+      <div class="section-title">FAQ Engagement (last 30 days)</div>
+      <div class="section-sub">Which questions visitors open most — reveals their biggest concerns</div>
+      <div class="table-wrap"><table><thead><tr><th>#</th><th>Question</th><th>Opens</th></tr></thead><tbody>
+        ${(data.faq || []).map((f, i) => `<tr><td>${i + 1}</td><td>${f.question}</td><td><strong>${f.count}</strong></td></tr>`).join('')}
+      </tbody></table></div>
+    `;
+  } catch (e) { c.innerHTML = `<div class="stat-red">Failed: ${e.message}</div>`; }
+}
+
+async function renderLive(c) {
+  try {
+    const data = await api('/api/analytics/live');
+    c.innerHTML = `
+      <div class="section-title">Live Visitors <span class="badge badge-green">${data.count} online</span></div>
+      <div class="section-sub">Auto-refreshes every 10 seconds</div>
+      <div class="table-wrap"><table><thead><tr><th>Status</th><th>Session</th><th>Country</th><th>Device</th><th>Pages</th><th>Scroll</th><th>Duration</th></tr></thead><tbody>
+        ${data.live.map(s => `<tr>
+          <td><span class="live-dot ${s.idle < 120 ? 'live-active' : 'live-idle'}"></span>${s.idle < 120 ? 'Active' : 'Idle'}</td>
+          <td>${s.id}</td>
+          <td>${s.country || '?'}</td>
+          <td>${s.device || '?'}</td>
+          <td>${s.pages}</td>
+          <td>${s.scroll_max || 0}%</td>
+          <td>${s.duration}s</td>
+        </tr>`).join('')}
+      </tbody></table></div>
+    `;
+    setTimeout(() => { if (document.querySelector('.nav-item.active')?.textContent.includes('Live')) renderLive(c); }, 10000);
+  } catch (e) { c.innerHTML = `<div class="stat-red">Failed: ${e.message}</div>`; }
+}
+
+// Init
+if (TOKEN) { init(); } else { showAuth(); }
+</script>
+</body>
+</html>
