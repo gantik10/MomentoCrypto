@@ -39,6 +39,7 @@ if ($isPaid) {
     // Extract package from order_id (format: starter_TIMESTAMP_HEX)
     $package = explode('_', $orderId)[0] ?? 'unknown';
     $packageNames = [
+        'trial' => 'Trial (1 Week)',
         'starter' => 'Starter (1 Month)',
         'trader' => 'Trader (3 Months)',
         'pro' => 'Pro (6 Months)',

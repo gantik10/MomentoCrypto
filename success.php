@@ -17,6 +17,7 @@ if (file_exists($envFile)) {
 }
 
 $activationCodes = [
+    'trial'   => $env['ACTIVATION_CODE_1W'] ?? '',
     'starter' => $env['ACTIVATION_CODE_1M'] ?? '',
     'trader'  => $env['ACTIVATION_CODE_3M'] ?? '',
     'pro'     => $env['ACTIVATION_CODE_6M'] ?? '',

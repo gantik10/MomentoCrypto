@@ -45,7 +45,7 @@ switch ($period) {
 $filtered = array_filter($sales, fn($s) => ($s['ts'] ?? 0) >= $since);
 
 $totalRevenue = 0;
-$byPackage = ['starter' => ['count' => 0, 'revenue' => 0], 'trader' => ['count' => 0, 'revenue' => 0], 'pro' => ['count' => 0, 'revenue' => 0]];
+$byPackage = ['trial' => ['count' => 0, 'revenue' => 0], 'starter' => ['count' => 0, 'revenue' => 0], 'trader' => ['count' => 0, 'revenue' => 0], 'pro' => ['count' => 0, 'revenue' => 0]];
 foreach ($filtered as $s) {
     $amt = floatval($s['amount'] ?? 0);
     $pkg = $s['package'] ?? 'unknown';
@@ -57,7 +57,7 @@ foreach ($filtered as $s) {
 }
 
 $totalSales = count($filtered);
-$names = ['starter' => 'Starter', 'trader' => 'Trader', 'pro' => 'Pro'];
+$names = ['trial' => 'Trial', 'starter' => 'Starter', 'trader' => 'Trader', 'pro' => 'Pro'];
 
 $msg = "{$title}\n_{$label}_\n\n";
 $msg .= "💰 Total revenue: *\${$totalRevenue}*\n";
