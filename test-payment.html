@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Payment Test — MomentoCrypto</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, system-ui, sans-serif; background: #0a0a0a; color: #e0e0e0; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 24px; }
+.container { max-width: 480px; width: 100%; }
+h1 { font-size: 24px; margin-bottom: 8px; color: #39FF14; }
+.sub { color: #666; font-size: 13px; margin-bottom: 32px; }
+.badge { display: inline-block; background: rgba(255,152,0,0.2); color: #ff9800; padding: 3px 10px; border-radius: 4px; font-size: 11px; font-weight: 700; margin-left: 8px; }
+.card { background: #111; border: 1px solid #222; border-radius: 12px; padding: 24px; margin-bottom: 16px; }
+.card h3 { font-size: 16px; margin-bottom: 16px; }
+label { display: block; font-size: 12px; color: #888; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; font-weight: 600; }
+select, input { width: 100%; padding: 10px 14px; background: #0a0a0a; border: 1px solid #333; border-radius: 8px; color: #e0e0e0; font-size: 14px; margin-bottom: 16px; }
+select:focus, input:focus { outline: none; border-color: #39FF14; }
+.btn { width: 100%; padding: 14px; background: #39FF14; color: #000; border: none; border-radius: 8px; font-size: 16px; font-weight: 700; cursor: pointer; }
+.btn:hover { opacity: 0.9; }
+.btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.log { margin-top: 24px; }
+.log-entry { background: #111; border: 1px solid #222; border-radius: 8px; padding: 12px; margin-bottom: 8px; font-family: monospace; font-size: 12px; word-break: break-all; }
+.log-ok { border-color: #39FF14; color: #39FF14; }
+.log-err { border-color: #ff4757; color: #ff4757; }
+.log-info { color: #888; }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>Payment Test <span class="badge">DEV / SANDBOX</span></h1>
+  <p class="sub">Test PremiumPay card payments. Uses dev.premiumpay.pro sandbox.</p>
+
+  <div class="card">
+    <h3>💳 Card Payment</h3>
+    <label>Package</label>
+    <select id="pkg">
+      <option value="trial">Trial — 1 Week (€7)</option>
+      <option value="starter">Starter — 1 Month (€25)</option>
+      <option value="trader">Trader — 3 Months (€60)</option>
+      <option value="pro">Pro — 6 Months (€100)</option>
+    </select>
+    <label>Email</label>
+    <input type="email" id="email" placeholder="your@email.com" value="">
+    <button class="btn" id="payBtn" onclick="testPay()">Pay with Card</button>
+  </div>
+
+  <div class="log" id="log"></div>
+</div>
+
+<script>
+function log(msg, type) {
+  const el = document.getElementById('log');
+  el.innerHTML = `<div class="log-entry ${type === 'ok' ? 'log-ok' : type === 'err' ? 'log-err' : 'log-info'}">${new Date().toLocaleTimeString()} — ${msg}</div>` + el.innerHTML;
+}
+
+async function testPay() {
+  const pkg = document.getElementById('pkg').value;
+  const email = document.getElementById('email').value.trim();
+  const btn = document.getElementById('payBtn');
+  btn.disabled = true; btn.textContent = 'Processing...';
+
+  log(`Creating ${pkg} payment...`, 'info');
+
+  try {
+    const res = await fetch('/api/pay-card.php', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ package: pkg, email }),
+    });
+    const data = await res.json();
+
+    if (data.ok && data.redirect) {
+      log(`✅ Payment created! ID: ${data.payment_id}, Order: ${data.order_id}`, 'ok');
+      log(`Redirecting to: ${data.redirect}`, 'info');
+      setTimeout(() => { window.location.href = data.redirect; }, 1500);
+    } else {
+      log(`❌ Error: ${JSON.stringify(data)}`, 'err');
+      btn.disabled = false; btn.textContent = 'Pay with Card';
+    }
+  } catch (e) {
+    log(`❌ Connection error: ${e.message}`, 'err');
+    btn.disabled = false; btn.textContent = 'Pay with Card';
+  }
+}
+</script>
+</body>
+</html>
