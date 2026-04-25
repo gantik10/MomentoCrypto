@@ -71,7 +71,7 @@ if ($isPaid) {
             $name = $packageNames[$package] ?? $package;
             $msg = "💳 *Card payment confirmed!*\n\n"
                 . "📦 Plan: *{$name}*\n"
-                . "💵 Amount: *€{$amount} {$currency}*\n"
+                . "💵 Amount: *${$amount} {$currency}*\n"
                 . "🆔 Order: `{$orderId}`\n"
                 . "🕐 " . date('Y-m-d H:i') . " UTC";
             $ch = curl_init("https://api.telegram.org/bot{$token}/sendMessage");

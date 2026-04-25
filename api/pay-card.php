@@ -61,7 +61,7 @@ $ip = trim(explode(',', $ip)[0]);
 // Create PremiumPay payment
 $data = [
     'amount' => $pkg['amount'],
-    'currency' => 'EUR',
+    'currency' => 'USD',
     'productDescription' => $pkg['name'],
     'productName' => 'MomentoCrypto ' . $pkg['name'],
     'clientOrderId' => $orderId,
@@ -122,7 +122,7 @@ if ($result && $result['status'] === 'ok' && isset($result['redirect'])) {
         }
         $msg = "🟡 *Card payment initiated*\n\n"
             . "📦 Plan: *{$pkg['name']}*\n"
-            . "💵 Amount: *€{$pkg['amount']}*\n"
+            . "💵 Amount: *${$pkg['amount']}*\n"
             . "🆔 Order: `{$orderId}`\n"
             . "💳 Method: Card (PremiumPay)\n"
             . ($country ? "🌍 {$country}\n" : "")
