@@ -17,7 +17,6 @@ if (file_exists($envFile)) {
 }
 
 $activationCodes = [
-    'trial'   => $env['ACTIVATION_CODE_1W'] ?? '',
     'starter' => $env['ACTIVATION_CODE_1M'] ?? '',
     'trader'  => $env['ACTIVATION_CODE_3M'] ?? '',
     'pro'     => $env['ACTIVATION_CODE_6M'] ?? '',
@@ -268,7 +267,7 @@ if (!$token || strlen($token) !== 64) {
   // Fire payment_complete event
   if (window.__mc_send) {
     window.__mc_send('payment_complete', {
-      sale: { package: <?= json_encode($package ?? '') ?>, order_id: <?= json_encode($tokens[$token]['order_id'] ?? '') ?>, amount: <?= json_encode(['trial'=>7,'starter'=>25,'trader'=>60,'pro'=>100][$package] ?? 0) ?> }
+      sale: { package: <?= json_encode($package ?? '') ?>, order_id: <?= json_encode($tokens[$token]['order_id'] ?? '') ?>, amount: <?= json_encode(['starter'=>25,'trader'=>60,'pro'=>100][$package] ?? 0) ?> }
     });
   }
 

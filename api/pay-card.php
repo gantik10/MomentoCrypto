@@ -26,7 +26,6 @@ $package = $input['package'] ?? '';
 $email = $input['email'] ?? '';
 
 $packages = [
-    'trial'   => ['amount' => 7, 'name' => 'Trial — 1 Week'],
     'starter' => ['amount' => 25, 'name' => 'Starter — 1 Month'],
     'trader'  => ['amount' => 60, 'name' => 'Trader — 3 Months'],
     'pro'     => ['amount' => 100, 'name' => 'Pro — 6 Months'],
