@@ -8,14 +8,49 @@
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body { font-family: 'DM Sans', sans-serif; background: #080808; color: #f5f5f5; min-height: 100vh; }
-.checkout-wrap { max-width: 460px; margin: 0 auto; padding: 40px 20px; }
+.checkout-wrap { max-width: 480px; margin: 0 auto; padding: 40px 20px; }
 .logo { text-align: center; margin-bottom: 28px; }
 .logo span { font-size: 18px; font-weight: 700; color: #39FF14; letter-spacing: 2px; }
 h1 { font-size: 24px; font-weight: 700; text-align: center; margin-bottom: 4px; }
 .subtitle { text-align: center; color: rgba(245,245,245,0.45); font-size: 13px; margin-bottom: 28px; }
+.section-label { font-size: 11px; font-weight: 600; color: rgba(245,245,245,0.4); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
+
+/* Custom package cards */
+.pkg-cards { display: flex; flex-direction: column; gap: 8px; margin-bottom: 24px; }
+.pkg-card {
+  display: flex; align-items: center; gap: 14px;
+  padding: 16px; background: #111; border: 2px solid #1a1a1a; border-radius: 14px;
+  cursor: pointer; transition: border-color 0.2s, background 0.2s; position: relative;
+}
+.pkg-card:hover { border-color: #333; }
+.pkg-card.active { border-color: #39FF14; background: rgba(57,255,20,0.04); }
+.pkg-radio { width: 20px; height: 20px; border-radius: 50%; border: 2px solid #333; flex-shrink: 0; display: flex; align-items: center; justify-content: center; transition: border-color 0.2s; }
+.pkg-card.active .pkg-radio { border-color: #39FF14; }
+.pkg-radio-dot { width: 10px; height: 10px; border-radius: 50%; background: #39FF14; opacity: 0; transition: opacity 0.2s; }
+.pkg-card.active .pkg-radio-dot { opacity: 1; }
+.pkg-info { flex: 1; }
+.pkg-title { font-size: 15px; font-weight: 600; color: #f5f5f5; }
+.pkg-detail { font-size: 11px; color: rgba(245,245,245,0.35); margin-top: 2px; }
+.pkg-monthly { font-size: 10px; color: rgba(245,245,245,0.25); margin-top: 1px; }
+.pkg-price-col { text-align: right; flex-shrink: 0; }
+.pkg-price-eur { font-size: 20px; font-weight: 700; color: #39FF14; }
+.pkg-price-usd { font-size: 10px; color: rgba(245,245,245,0.3); margin-top: 1px; }
+.pkg-badge {
+  position: absolute; top: -9px; left: 50%; transform: translateX(-50%);
+  background: #39FF14; color: #000; font-size: 9px; font-weight: 800;
+  padding: 2px 10px; border-radius: 6px; letter-spacing: 0.5px; white-space: nowrap;
+}
+.pkg-save { font-size: 10px; color: #39FF14; font-weight: 600; }
+
+/* Upsell nudge */
+.upsell {
+  background: rgba(57,255,20,0.05); border: 1px solid rgba(57,255,20,0.15); border-radius: 10px;
+  padding: 10px 14px; margin-bottom: 24px; font-size: 12px; color: rgba(245,245,245,0.6);
+  text-align: center; display: none;
+}
+.upsell strong { color: #39FF14; }
 
 /* Payment methods */
-.section-label { font-size: 11px; font-weight: 600; color: rgba(245,245,245,0.4); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
 .methods { display: flex; gap: 10px; margin-bottom: 24px; }
 .method-opt {
   flex: 1; padding: 16px 14px; background: #111; border: 2px solid #1a1a1a; border-radius: 14px;
@@ -29,18 +64,8 @@ h1 { font-size: 24px; font-weight: 700; text-align: center; margin-bottom: 4px; 
 .discount-badge {
   position: absolute; top: -9px; right: -9px;
   background: #39FF14; color: #000; font-size: 10px; font-weight: 800;
-  padding: 3px 8px; border-radius: 8px; letter-spacing: 0.3px;
+  padding: 3px 8px; border-radius: 8px;
 }
-
-/* Package dropdown */
-.pkg-select-wrap { margin-bottom: 24px; }
-.pkg-select {
-  width: 100%; padding: 14px 16px; background: #111; border: 1px solid #1a1a1a; border-radius: 12px;
-  color: #f5f5f5; font-size: 15px; font-family: inherit; appearance: none; cursor: pointer;
-  background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='%23666' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
-  background-repeat: no-repeat; background-position: right 16px center;
-}
-.pkg-select:focus { outline: none; border-color: #39FF14; }
 
 /* Summary */
 .summary { background: #111; border: 1px solid #1a1a1a; border-radius: 14px; padding: 16px; margin-bottom: 20px; }
@@ -50,6 +75,7 @@ h1 { font-size: 24px; font-weight: 700; text-align: center; margin-bottom: 4px; 
 .s-val { color: #f5f5f5; font-weight: 600; }
 .s-green { color: #39FF14; }
 .s-discount { color: #39FF14; font-size: 12px; }
+.s-old { text-decoration: line-through; color: rgba(245,245,245,0.25); font-size: 11px; margin-right: 6px; }
 
 /* Pay button */
 .pay-btn {
@@ -58,29 +84,70 @@ h1 { font-size: 24px; font-weight: 700; text-align: center; margin-bottom: 4px; 
 }
 .pay-btn:hover { opacity: 0.9; }
 .pay-btn:disabled { opacity: 0.35; cursor: not-allowed; }
-
 .secure { display: flex; align-items: center; justify-content: center; gap: 6px; margin-top: 14px; font-size: 11px; color: rgba(245,245,245,0.25); }
-
-/* Payment icons row on bottom */
 .payment-icons { display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 20px; padding-top: 20px; border-top: 1px solid #1a1a1a; }
 .payment-icons img { height: 20px; opacity: 0.4; }
-
 .error-msg { background: rgba(255,69,58,0.1); border: 1px solid rgba(255,69,58,0.2); color: #ff453a; padding: 10px 14px; border-radius: 10px; font-size: 13px; margin-bottom: 16px; display: none; }
-
 @media (max-width: 480px) { .methods { flex-direction: column; } }
 </style>
 </head>
 <body>
 <div class="checkout-wrap">
   <div class="logo"><span>MOMENTOCRYPTO</span></div>
-  <h1>Checkout</h1>
-  <p class="subtitle">Select your plan and payment method</p>
+  <h1>Complete Your Order</h1>
+  <p class="subtitle">Choose your plan and preferred payment method</p>
 
   <div id="errorMsg" class="error-msg"></div>
 
+  <!-- Custom package cards -->
+  <div class="section-label">Select Plan</div>
+  <div class="pkg-cards" id="pkgCards">
+    <div class="pkg-card" data-pkg="starter" onclick="selectPkg('starter')">
+      <div class="pkg-radio"><div class="pkg-radio-dot"></div></div>
+      <div class="pkg-info">
+        <div class="pkg-title">Starter</div>
+        <div class="pkg-detail">1 Month · Full access</div>
+        <div class="pkg-monthly">€23/mo</div>
+      </div>
+      <div class="pkg-price-col">
+        <div class="pkg-price-eur">€23</div>
+        <div class="pkg-price-usd">~$25</div>
+      </div>
+    </div>
+    <div class="pkg-card" data-pkg="trader" onclick="selectPkg('trader')" style="position:relative;">
+      <div class="pkg-badge">MOST POPULAR</div>
+      <div class="pkg-radio"><div class="pkg-radio-dot"></div></div>
+      <div class="pkg-info">
+        <div class="pkg-title">Trader</div>
+        <div class="pkg-detail">3 Months · Full access</div>
+        <div class="pkg-monthly">€18.33/mo · <span class="pkg-save">Save 20%</span></div>
+      </div>
+      <div class="pkg-price-col">
+        <div class="pkg-price-eur">€55</div>
+        <div class="pkg-price-usd">~$60</div>
+      </div>
+    </div>
+    <div class="pkg-card" data-pkg="pro" onclick="selectPkg('pro')" style="position:relative;">
+      <div class="pkg-badge" style="background:#FFD700;color:#000;">BEST VALUE</div>
+      <div class="pkg-radio"><div class="pkg-radio-dot"></div></div>
+      <div class="pkg-info">
+        <div class="pkg-title">Pro</div>
+        <div class="pkg-detail">6 Months · Full access</div>
+        <div class="pkg-monthly">€15.33/mo · <span class="pkg-save">Save 33%</span></div>
+      </div>
+      <div class="pkg-price-col">
+        <div class="pkg-price-eur">€92</div>
+        <div class="pkg-price-usd">~$100</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Upsell nudge -->
+  <div class="upsell" id="upsell"></div>
+
   <!-- Payment method -->
   <div class="section-label">Payment Method</div>
-  <div class="methods" id="methods">
+  <div class="methods">
     <div class="method-opt active" onclick="selectMethod('card')">
       <div class="method-icons">
         <img src="assets/icons/visa.svg" alt="Visa" height="14">
@@ -101,18 +168,8 @@ h1 { font-size: 24px; font-weight: 700; text-align: center; margin-bottom: 4px; 
     </div>
   </div>
 
-  <!-- Package dropdown -->
-  <div class="section-label">Plan</div>
-  <div class="pkg-select-wrap">
-    <select class="pkg-select" id="pkgSelect" onchange="updateSummary()">
-      <option value="starter">Starter — 1 Month</option>
-      <option value="trader">Trader — 3 Months (save 20%)</option>
-      <option value="pro">Pro — 6 Months (save 33%)</option>
-    </select>
-  </div>
-
   <!-- Summary -->
-  <div class="summary" id="summary">
+  <div class="summary">
     <div class="summary-row">
       <span class="s-label">Plan</span>
       <span class="s-val" id="sumPlan">Starter — 1 Month</span>
@@ -127,14 +184,12 @@ h1 { font-size: 24px; font-weight: 700; text-align: center; margin-bottom: 4px; 
     </div>
     <div class="summary-row total">
       <span class="s-label">Total</span>
-      <span class="s-val s-green" id="sumTotal">€23.00</span>
+      <span class="s-val" id="sumTotal"><span class="s-green">€23.00</span></span>
     </div>
   </div>
 
   <button class="pay-btn" id="payBtn" onclick="pay()">Pay €23.00</button>
-
   <div class="secure">🔒 Secure payment · Instant access after payment</div>
-
   <div class="payment-icons">
     <img src="assets/icons/visa.svg" alt="Visa">
     <img src="assets/icons/mastercard.svg" alt="Mastercard">
@@ -146,11 +201,23 @@ h1 { font-size: 24px; font-weight: 700; text-align: center; margin-bottom: 4px; 
 
 <script>
 const packages = {
-  starter: { name: 'Starter — 1 Month', eur: 23, usd: 25 },
-  trader:  { name: 'Trader — 3 Months', eur: 55, usd: 60 },
-  pro:     { name: 'Pro — 6 Months', eur: 92, usd: 100 },
+  starter: { name: 'Starter — 1 Month', eur: 23, usd: 25, monthly: '€23', next: 'trader', nextName: 'Trader (3 months)' },
+  trader:  { name: 'Trader — 3 Months', eur: 55, usd: 60, monthly: '€18.33', next: 'pro', nextName: 'Pro (6 months)' },
+  pro:     { name: 'Pro — 6 Months', eur: 92, usd: 100, monthly: '€15.33', next: null, nextName: null },
 };
+let selectedPkg = 'starter';
 let method = 'card';
+
+// Read package from URL param
+const urlPkg = new URLSearchParams(location.search).get('pkg');
+if (urlPkg && packages[urlPkg]) selectedPkg = urlPkg;
+
+function selectPkg(pkg) {
+  selectedPkg = pkg;
+  document.querySelectorAll('.pkg-card').forEach(el => el.classList.toggle('active', el.dataset.pkg === pkg));
+  updateUpsell();
+  updateSummary();
+}
 
 function selectMethod(m) {
   method = m;
@@ -158,8 +225,22 @@ function selectMethod(m) {
   updateSummary();
 }
 
+function updateUpsell() {
+  const pkg = packages[selectedPkg];
+  const upsell = document.getElementById('upsell');
+  if (selectedPkg === 'starter') {
+    upsell.innerHTML = `Upgrade to <strong>${pkg.nextName}</strong> and save <strong>20%</strong> — just ${packages.trader.monthly}/month instead of ${pkg.monthly}/month`;
+    upsell.style.display = 'block';
+  } else if (selectedPkg === 'trader') {
+    upsell.innerHTML = `Go <strong>${pkg.nextName}</strong> for the best value — only ${packages.pro.monthly}/month, <strong>save 33%</strong>`;
+    upsell.style.display = 'block';
+  } else {
+    upsell.style.display = 'none';
+  }
+}
+
 function updateSummary() {
-  const pkg = packages[document.getElementById('pkgSelect').value];
+  const pkg = packages[selectedPkg];
   const isCrypto = method === 'crypto';
   const base = isCrypto ? pkg.usd : pkg.eur;
   const discount = isCrypto ? Math.round(base * 0.05 * 100) / 100 : 0;
@@ -170,14 +251,18 @@ function updateSummary() {
   document.getElementById('sumMethod').textContent = isCrypto ? 'Crypto (BTC, ETH, USDT...)' : 'Card (Visa/MC)';
   document.getElementById('discountRow').style.display = isCrypto ? 'flex' : 'none';
   if (isCrypto) document.getElementById('sumDiscount').textContent = `-${cur}${discount.toFixed(2)}`;
-  document.getElementById('sumTotal').textContent = `${cur}${total.toFixed(2)}`;
+  const totalEl = document.getElementById('sumTotal');
+  if (isCrypto) {
+    totalEl.innerHTML = `<span class="s-old">${cur}${base.toFixed(2)}</span><span class="s-green">${cur}${total.toFixed(2)}</span>`;
+  } else {
+    totalEl.innerHTML = `<span class="s-green">${cur}${total.toFixed(2)}</span>`;
+  }
   document.getElementById('payBtn').textContent = `Pay ${cur}${total.toFixed(2)}`;
   document.getElementById('errorMsg').style.display = 'none';
 }
 
 async function pay() {
   const btn = document.getElementById('payBtn');
-  const pkgKey = document.getElementById('pkgSelect').value;
   btn.disabled = true; btn.textContent = 'Processing...';
   document.getElementById('errorMsg').style.display = 'none';
 
@@ -185,7 +270,7 @@ async function pay() {
     if (method === 'crypto') {
       const res = await fetch('/api/pay.php', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ package: pkgKey }),
+        body: JSON.stringify({ package: selectedPkg }),
       });
       const data = await res.json();
       if (data.ok && data.payment_url) { window.location.href = data.payment_url; }
@@ -193,7 +278,7 @@ async function pay() {
     } else {
       const res = await fetch('/api/pay-payou.php', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ package: pkgKey }),
+        body: JSON.stringify({ package: selectedPkg }),
       });
       const data = await res.json();
       if (data.ok && data.redirect) { window.location.href = data.redirect; }
@@ -206,7 +291,8 @@ async function pay() {
   }
 }
 
-updateSummary();
+// Init
+selectPkg(selectedPkg);
 </script>
 </body>
 </html>

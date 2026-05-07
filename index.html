@@ -2161,7 +2161,7 @@
         <li>Private Telegram channel</li>
         <li>Analyst commentary</li>
       </ul>
-      <button class="pkg-btn" onclick="payPackage('starter')">→ Pay with Crypto</button>
+      <button class="pkg-btn" onclick="payPackage('starter')">→ Select</button>
     </div>
 
     <div class="pkg-card featured reveal">
@@ -2176,7 +2176,7 @@
         <li>Private Telegram channel</li>
         <li>Analyst commentary</li>
       </ul>
-      <button class="pkg-btn" onclick="payPackage('trader')">→ Pay with Crypto</button>
+      <button class="pkg-btn" onclick="payPackage('trader')">→ Select</button>
     </div>
 
     <div class="pkg-card reveal">
@@ -2191,7 +2191,7 @@
         <li>Private Telegram channel</li>
         <li>Analyst commentary</li>
       </ul>
-      <button class="pkg-btn" onclick="payPackage('pro')">→ Pay with Crypto</button>
+      <button class="pkg-btn" onclick="payPackage('pro')">→ Select</button>
     </div>
   </div>
 
@@ -2521,15 +2521,13 @@
   const PAYMENT_TEST_MODE = false;
 
   async function payPackage(pkg) {
-    const btn = event.target;
-    const originalText = btn.textContent;
-    btn.textContent = 'PROCESSING...';
-    btn.disabled = true;
-
-    // MC Analytics: pay_click event with session ID
+    // Analytics
     if (window.__mc_sid) {
       fetch('/api/analytics/event', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ sid: window.__mc_sid, type:'pay_click', ts:Date.now(), data:{ package: pkg } }), keepalive:true });
     }
+    // Redirect to checkout page with selected package
+    window.location.href = '/checkout.html?pkg=' + pkg;
+    return;
 
     if (PAYMENT_TEST_MODE) {
       setTimeout(() => { window.location.href = '/success.html?pkg=' + pkg; }, 800);

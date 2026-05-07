@@ -71,9 +71,10 @@ if ($isPaid) {
         $chatId = $env['TELEGRAM_CHAT_ID'] ?? '';
         if ($token && $chatId) {
             $name = $packageNames[$package] ?? $package;
-            $msg = "💰 *New sale!*\n\n"
+            $msg = "💰 *New sale! (OxaPay Crypto)*\n\n"
                 . "📦 Plan: *{$name}*\n"
                 . "💵 Amount: *\${$amount} {$currency}*\n"
+                . "💳 Gateway: OxaPay (Crypto)\n"
                 . "🆔 Order: `{$orderId}`\n"
                 . "🕐 Time: " . date('Y-m-d H:i') . " UTC";
             $ch = curl_init("https://api.telegram.org/bot{$token}/sendMessage");
