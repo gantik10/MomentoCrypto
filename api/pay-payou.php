@@ -25,10 +25,11 @@ $input = json_decode(file_get_contents('php://input'), true);
 $package = $input['package'] ?? '';
 $email = $input['email'] ?? 'customer@momentocrypto.com';
 
+// EUR amounts for Payou card payments
 $packages = [
-    'starter' => ['amount' => 25, 'name' => 'Starter — 1 Month'],
-    'trader'  => ['amount' => 60, 'name' => 'Trader — 3 Months'],
-    'pro'     => ['amount' => 100, 'name' => 'Pro — 6 Months'],
+    'starter' => ['amount' => 23, 'name' => 'Starter — 1 Month'],
+    'trader'  => ['amount' => 55, 'name' => 'Trader — 3 Months'],
+    'pro'     => ['amount' => 92, 'name' => 'Pro — 6 Months'],
 ];
 
 if (!isset($packages[$package])) {
@@ -73,7 +74,6 @@ $params = http_build_query([
     'user_code' => 'mc_' . bin2hex(random_bytes(4)),
     'user_email' => $email,
     'hash' => $hash,
-    'lang' => 'en',
 ]);
 $redirectUrl = 'https://payou.pro/sci/v1/?' . $params;
 
