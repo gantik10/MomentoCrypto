@@ -429,6 +429,16 @@ async function pay() {
 
 updatePkgCards();
 selectPkg(selectedPkg);
+
+// Reset button state when returning via browser back (bfcache)
+window.addEventListener('pageshow', function(e) {
+  if (e.persisted) {
+    document.getElementById('payBtn').disabled = false;
+    updateSummary();
+  }
+});
+// Also reset on page load in case browser restored form state
+document.getElementById('payBtn').disabled = false;
 </script>
 </body>
 </html>
