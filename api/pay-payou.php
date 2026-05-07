@@ -70,7 +70,7 @@ $params = http_build_query([
     'summ' => $amount,
     'order_id' => $orderId,
     'Coment' => $pkg['name'],
-    'user_code' => 'mc_' . bin2hex(random_bytes(4)),
+    'user_code' => (string)time() . rand(100, 999),
     'user_email' => 'user' . bin2hex(random_bytes(4)) . '@momentocrypto.com',
     'hash' => $hash,
 ]);
