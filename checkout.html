@@ -7,106 +7,177 @@
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: 'DM Sans', sans-serif; background: #080808; color: #f5f5f5; min-height: 100vh; }
-.checkout-wrap { max-width: 480px; margin: 0 auto; padding: 40px 20px; }
-.logo { text-align: center; margin-bottom: 28px; }
-.logo span { font-size: 18px; font-weight: 700; color: #39FF14; letter-spacing: 2px; }
-h1 { font-size: 24px; font-weight: 700; text-align: center; margin-bottom: 4px; }
-.subtitle { text-align: center; color: rgba(245,245,245,0.45); font-size: 13px; margin-bottom: 28px; }
-.section-label { font-size: 11px; font-weight: 600; color: rgba(245,245,245,0.4); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
+body { font-family: 'DM Sans', sans-serif; background: #060606; color: #f5f5f5; min-height: 100vh; position: relative; overflow-x: hidden; }
 
-/* Custom package cards */
-.pkg-cards { display: flex; flex-direction: column; gap: 8px; margin-bottom: 24px; }
+/* Ambient background glow */
+body::before { content: ''; position: fixed; top: -200px; left: 50%; transform: translateX(-50%); width: 600px; height: 600px; background: radial-gradient(circle, rgba(57,255,20,0.06) 0%, transparent 70%); pointer-events: none; z-index: 0; }
+
+.checkout-page { position: relative; z-index: 1; }
+
+/* Header */
+.ck-header { display: flex; align-items: center; justify-content: space-between; max-width: 520px; margin: 0 auto; padding: 20px 20px 0; }
+.ck-logo { display: flex; align-items: center; gap: 8px; }
+.ck-logo-icon { width: 32px; height: 32px; background: linear-gradient(135deg, #39FF14, #2bc910); border-radius: 8px; display: flex; align-items: center; justify-content: center; }
+.ck-logo-text { font-size: 15px; font-weight: 700; color: rgba(245,245,245,0.7); letter-spacing: 1px; }
+.ck-back { font-size: 13px; color: rgba(245,245,245,0.35); text-decoration: none; }
+.ck-back:hover { color: rgba(245,245,245,0.6); }
+
+/* Steps indicator */
+.steps { display: flex; align-items: center; justify-content: center; gap: 0; max-width: 520px; margin: 24px auto 0; padding: 0 20px; }
+.step { display: flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 600; color: rgba(245,245,245,0.25); }
+.step.active { color: #39FF14; }
+.step-num { width: 24px; height: 24px; border-radius: 50%; border: 1.5px solid rgba(245,245,245,0.15); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; }
+.step.active .step-num { border-color: #39FF14; background: rgba(57,255,20,0.1); color: #39FF14; }
+.step.done .step-num { border-color: #39FF14; background: #39FF14; color: #000; }
+.step-line { width: 40px; height: 1px; background: rgba(245,245,245,0.1); margin: 0 8px; }
+
+.checkout-wrap { max-width: 520px; margin: 0 auto; padding: 28px 20px 40px; }
+
+h1 { font-size: 26px; font-weight: 700; text-align: center; margin-bottom: 4px; letter-spacing: -0.3px; }
+.subtitle { text-align: center; color: rgba(245,245,245,0.4); font-size: 13px; margin-bottom: 32px; }
+.section-label { font-size: 11px; font-weight: 700; color: rgba(245,245,245,0.3); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 12px; }
+
+/* Package cards */
+.pkg-cards { display: flex; flex-direction: column; gap: 10px; margin-bottom: 10px; }
 .pkg-card {
   display: flex; align-items: center; gap: 14px;
-  padding: 16px; background: #111; border: 2px solid #1a1a1a; border-radius: 14px;
-  cursor: pointer; transition: border-color 0.2s, background 0.2s; position: relative;
+  padding: 18px 16px; background: rgba(255,255,255,0.03); border: 1.5px solid rgba(255,255,255,0.06);
+  border-radius: 14px; cursor: pointer; transition: all 0.25s ease; position: relative;
 }
-.pkg-card:hover { border-color: #333; }
-.pkg-card.active { border-color: #39FF14; background: rgba(57,255,20,0.04); }
-.pkg-radio { width: 20px; height: 20px; border-radius: 50%; border: 2px solid #333; flex-shrink: 0; display: flex; align-items: center; justify-content: center; transition: border-color 0.2s; }
-.pkg-card.active .pkg-radio { border-color: #39FF14; }
-.pkg-radio-dot { width: 10px; height: 10px; border-radius: 50%; background: #39FF14; opacity: 0; transition: opacity 0.2s; }
-.pkg-card.active .pkg-radio-dot { opacity: 1; }
+.pkg-card:hover { border-color: rgba(57,255,20,0.2); background: rgba(57,255,20,0.02); }
+.pkg-card.active { border-color: #39FF14; background: rgba(57,255,20,0.05); box-shadow: 0 0 20px rgba(57,255,20,0.08), inset 0 0 20px rgba(57,255,20,0.02); }
+.pkg-radio { width: 20px; height: 20px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.15); flex-shrink: 0; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+.pkg-card.active .pkg-radio { border-color: #39FF14; box-shadow: 0 0 8px rgba(57,255,20,0.3); }
+.pkg-radio-dot { width: 10px; height: 10px; border-radius: 50%; background: #39FF14; opacity: 0; transform: scale(0); transition: all 0.2s; }
+.pkg-card.active .pkg-radio-dot { opacity: 1; transform: scale(1); }
 .pkg-info { flex: 1; }
-.pkg-title { font-size: 15px; font-weight: 600; color: #f5f5f5; }
-.pkg-detail { font-size: 11px; color: rgba(245,245,245,0.35); margin-top: 2px; }
-.pkg-monthly { font-size: 10px; color: rgba(245,245,245,0.25); margin-top: 1px; }
+.pkg-title { font-size: 16px; font-weight: 600; color: #f5f5f5; }
+.pkg-detail { font-size: 12px; color: rgba(245,245,245,0.35); margin-top: 3px; }
+.pkg-monthly { font-size: 11px; color: rgba(245,245,245,0.2); margin-top: 2px; }
 .pkg-price-col { text-align: right; flex-shrink: 0; }
-.pkg-price-eur { font-size: 20px; font-weight: 700; color: #39FF14; }
-.pkg-price-usd { font-size: 10px; color: rgba(245,245,245,0.3); margin-top: 1px; }
+.pkg-price-eur { font-size: 22px; font-weight: 700; color: #f5f5f5; }
+.pkg-card.active .pkg-price-eur { color: #39FF14; }
+.pkg-price-usd { font-size: 10px; color: rgba(245,245,245,0.25); margin-top: 2px; }
 .pkg-badge {
-  position: absolute; top: -9px; left: 50%; transform: translateX(-50%);
-  background: #39FF14; color: #000; font-size: 9px; font-weight: 800;
-  padding: 2px 10px; border-radius: 6px; letter-spacing: 0.5px; white-space: nowrap;
+  position: absolute; top: -10px; left: 50%; transform: translateX(-50%);
+  font-size: 9px; font-weight: 800; padding: 3px 12px; border-radius: 6px;
+  letter-spacing: 0.8px; white-space: nowrap; text-transform: uppercase;
 }
-.pkg-save { font-size: 10px; color: #39FF14; font-weight: 600; }
+.badge-popular { background: #39FF14; color: #000; }
+.badge-value { background: linear-gradient(135deg, #FFD700, #FFA500); color: #000; }
+.pkg-save { color: #39FF14; font-weight: 700; }
 
-/* Upsell nudge */
+/* Upsell */
 .upsell {
-  background: rgba(57,255,20,0.05); border: 1px solid rgba(57,255,20,0.15); border-radius: 10px;
-  padding: 10px 14px; margin-bottom: 24px; font-size: 12px; color: rgba(245,245,245,0.6);
-  text-align: center; display: none;
+  background: rgba(57,255,20,0.04); border: 1px solid rgba(57,255,20,0.1); border-radius: 10px;
+  padding: 10px 14px; margin-bottom: 28px; font-size: 12px; color: rgba(245,245,245,0.5);
+  text-align: center; display: none; line-height: 1.5;
 }
-.upsell strong { color: #39FF14; }
+.upsell strong { color: #39FF14; font-weight: 700; }
+
+/* Divider */
+.ck-divider { height: 1px; background: rgba(255,255,255,0.04); margin: 4px 0 28px; }
 
 /* Payment methods */
-.methods { display: flex; gap: 10px; margin-bottom: 24px; }
+.methods { display: flex; gap: 10px; margin-bottom: 28px; }
 .method-opt {
-  flex: 1; padding: 16px 14px; background: #111; border: 2px solid #1a1a1a; border-radius: 14px;
-  cursor: pointer; text-align: center; transition: border-color 0.2s, background 0.2s; position: relative;
+  flex: 1; padding: 18px 14px; background: rgba(255,255,255,0.03); border: 1.5px solid rgba(255,255,255,0.06);
+  border-radius: 14px; cursor: pointer; text-align: center; transition: all 0.25s ease; position: relative;
 }
-.method-opt:hover { border-color: #333; }
-.method-opt.active { border-color: #39FF14; background: rgba(57,255,20,0.04); }
-.method-icons { display: flex; align-items: center; justify-content: center; gap: 6px; margin-bottom: 8px; min-height: 24px; }
+.method-opt:hover { border-color: rgba(255,255,255,0.12); }
+.method-opt.active { border-color: #39FF14; background: rgba(57,255,20,0.04); box-shadow: 0 0 16px rgba(57,255,20,0.06); }
+.method-icons { display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 10px; min-height: 24px; }
 .method-name { font-size: 15px; font-weight: 600; color: #f5f5f5; }
-.method-sub { font-size: 11px; color: rgba(245,245,245,0.35); margin-top: 2px; }
+.method-sub { font-size: 11px; color: rgba(245,245,245,0.3); margin-top: 3px; }
 .discount-badge {
-  position: absolute; top: -9px; right: -9px;
+  position: absolute; top: -10px; right: -10px;
   background: #39FF14; color: #000; font-size: 10px; font-weight: 800;
-  padding: 3px 8px; border-radius: 8px;
+  padding: 3px 10px; border-radius: 8px; box-shadow: 0 2px 8px rgba(57,255,20,0.3);
 }
 
 /* Summary */
-.summary { background: #111; border: 1px solid #1a1a1a; border-radius: 14px; padding: 16px; margin-bottom: 20px; }
-.summary-row { display: flex; justify-content: space-between; align-items: center; padding: 5px 0; font-size: 13px; }
-.summary-row.total { border-top: 1px solid #1a1a1a; margin-top: 8px; padding-top: 10px; font-size: 16px; font-weight: 700; }
-.s-label { color: rgba(245,245,245,0.4); }
+.summary {
+  background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 16px; padding: 20px; margin-bottom: 20px;
+}
+.summary-title { font-size: 13px; font-weight: 700; color: rgba(245,245,245,0.5); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 14px; }
+.summary-row { display: flex; justify-content: space-between; align-items: center; padding: 6px 0; font-size: 14px; }
+.summary-row.total { border-top: 1px solid rgba(255,255,255,0.06); margin-top: 10px; padding-top: 14px; font-size: 18px; font-weight: 700; }
+.s-label { color: rgba(245,245,245,0.35); }
 .s-val { color: #f5f5f5; font-weight: 600; }
 .s-green { color: #39FF14; }
-.s-discount { color: #39FF14; font-size: 12px; }
-.s-old { text-decoration: line-through; color: rgba(245,245,245,0.25); font-size: 11px; margin-right: 6px; }
+.s-discount { color: #39FF14; font-size: 13px; font-weight: 600; }
+.s-old { text-decoration: line-through; color: rgba(245,245,245,0.2); font-size: 13px; margin-right: 6px; }
 
 /* Pay button */
 .pay-btn {
-  width: 100%; padding: 16px; background: #39FF14; color: #000; border: none; border-radius: 14px;
-  font-size: 16px; font-weight: 700; font-family: inherit; cursor: pointer; transition: opacity 0.15s;
+  width: 100%; padding: 18px; border: none; border-radius: 14px; font-size: 17px; font-weight: 700;
+  font-family: inherit; cursor: pointer; transition: all 0.2s ease; position: relative; overflow: hidden;
+  background: linear-gradient(135deg, #39FF14, #2bc910); color: #000;
+  box-shadow: 0 4px 20px rgba(57,255,20,0.25), 0 0 40px rgba(57,255,20,0.1);
 }
-.pay-btn:hover { opacity: 0.9; }
-.pay-btn:disabled { opacity: 0.35; cursor: not-allowed; }
-.secure { display: flex; align-items: center; justify-content: center; gap: 6px; margin-top: 14px; font-size: 11px; color: rgba(245,245,245,0.25); }
-.payment-icons { display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 20px; padding-top: 20px; border-top: 1px solid #1a1a1a; }
-.payment-icons img { height: 20px; opacity: 0.4; }
-.error-msg { background: rgba(255,69,58,0.1); border: 1px solid rgba(255,69,58,0.2); color: #ff453a; padding: 10px 14px; border-radius: 10px; font-size: 13px; margin-bottom: 16px; display: none; }
-@media (max-width: 480px) { .methods { flex-direction: column; } }
+.pay-btn:hover { box-shadow: 0 6px 28px rgba(57,255,20,0.35), 0 0 60px rgba(57,255,20,0.15); transform: translateY(-1px); }
+.pay-btn:active { transform: translateY(0); }
+.pay-btn:disabled { opacity: 0.35; cursor: not-allowed; transform: none; box-shadow: none; }
+
+/* Trust section */
+.trust { margin-top: 20px; text-align: center; }
+.trust-row { display: flex; align-items: center; justify-content: center; gap: 16px; margin-bottom: 12px; }
+.trust-item { display: flex; align-items: center; gap: 5px; font-size: 11px; color: rgba(245,245,245,0.25); }
+.trust-item svg { width: 14px; height: 14px; fill: rgba(245,245,245,0.2); }
+.payment-icons { display: flex; align-items: center; justify-content: center; gap: 12px; padding-top: 12px; border-top: 1px solid rgba(255,255,255,0.04); }
+.payment-icons img { height: 18px; opacity: 0.3; transition: opacity 0.2s; }
+.payment-icons img:hover { opacity: 0.6; }
+
+.guarantee { margin-top: 16px; padding: 12px 16px; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.04); border-radius: 10px; text-align: center; font-size: 11px; color: rgba(245,245,245,0.3); line-height: 1.5; }
+.guarantee strong { color: rgba(245,245,245,0.5); }
+
+.error-msg { background: rgba(255,69,58,0.08); border: 1px solid rgba(255,69,58,0.15); color: #ff453a; padding: 12px 16px; border-radius: 12px; font-size: 13px; margin-bottom: 16px; display: none; }
+
+@media (max-width: 480px) {
+  .methods { flex-direction: column; }
+  .steps { gap: 0; }
+  .step-line { width: 24px; }
+}
 </style>
 </head>
 <body>
+<div class="checkout-page">
+
+<!-- Header -->
+<div class="ck-header">
+  <div class="ck-logo">
+    <div class="ck-logo-icon">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M23.3545 16.0972C23.3545 19.4523 21.1944 21.6419 17.4944 22.164V17.4669C18.0012 17.1011 18.2468 16.5657 18.2468 15.8969C18.2468 14.6363 17.2997 13.8054 15.2627 13.8054H11.8562V11.3365H11.851V9.53639H15.005C16.8125 9.53639 17.6447 8.84864 17.6447 7.73162C17.6447 6.61459 16.8125 5.98396 15.005 5.98396H11.1767V11.3371H6.28394V1.71436H15.4349C19.9405 1.71436 22.7518 3.69107 22.7518 7.27292C22.7518 9.0777 21.8047 10.482 20.0832 11.5131C22.1785 12.4011 23.3545 13.9197 23.3545 16.0972Z" fill="#000"/><path d="M11.1761 12.0001H6.28393V22.2858H11.1905V14.4291H11.1755L11.1761 12.0001ZM0.645752 22.2858H5.55236V17.9383H0.645752V22.2858ZM11.9227 22.2858H16.8293V15.9108H11.9227V22.2858Z" fill="#000"/></svg>
+    </div>
+    <span class="ck-logo-text">MOMENTOCRYPTO</span>
+  </div>
+  <a href="/" class="ck-back">← Back to site</a>
+</div>
+
+<!-- Steps -->
+<div class="steps">
+  <div class="step done"><div class="step-num">✓</div><span>Plan</span></div>
+  <div class="step-line"></div>
+  <div class="step active"><div class="step-num">2</div><span>Payment</span></div>
+  <div class="step-line"></div>
+  <div class="step"><div class="step-num">3</div><span>Access</span></div>
+</div>
+
 <div class="checkout-wrap">
-  <div class="logo"><span>MOMENTOCRYPTO</span></div>
   <h1>Complete Your Order</h1>
-  <p class="subtitle">Choose your plan and preferred payment method</p>
+  <p class="subtitle">You're one step away from premium crypto signals</p>
 
   <div id="errorMsg" class="error-msg"></div>
 
-  <!-- Custom package cards -->
+  <!-- Package cards -->
   <div class="section-label">Select Plan</div>
   <div class="pkg-cards" id="pkgCards">
     <div class="pkg-card" data-pkg="starter" onclick="selectPkg('starter')">
       <div class="pkg-radio"><div class="pkg-radio-dot"></div></div>
       <div class="pkg-info">
         <div class="pkg-title">Starter</div>
-        <div class="pkg-detail">1 Month · Full access</div>
+        <div class="pkg-detail">1 Month · Full access to all signals</div>
         <div class="pkg-monthly">€23/mo</div>
       </div>
       <div class="pkg-price-col">
@@ -115,11 +186,11 @@ h1 { font-size: 24px; font-weight: 700; text-align: center; margin-bottom: 4px; 
       </div>
     </div>
     <div class="pkg-card" data-pkg="trader" onclick="selectPkg('trader')" style="position:relative;">
-      <div class="pkg-badge">MOST POPULAR</div>
+      <div class="pkg-badge badge-popular">MOST POPULAR</div>
       <div class="pkg-radio"><div class="pkg-radio-dot"></div></div>
       <div class="pkg-info">
         <div class="pkg-title">Trader</div>
-        <div class="pkg-detail">3 Months · Full access</div>
+        <div class="pkg-detail">3 Months · Full access to all signals</div>
         <div class="pkg-monthly">€18.33/mo · <span class="pkg-save">Save 20%</span></div>
       </div>
       <div class="pkg-price-col">
@@ -128,11 +199,11 @@ h1 { font-size: 24px; font-weight: 700; text-align: center; margin-bottom: 4px; 
       </div>
     </div>
     <div class="pkg-card" data-pkg="pro" onclick="selectPkg('pro')" style="position:relative;">
-      <div class="pkg-badge" style="background:#FFD700;color:#000;">BEST VALUE</div>
+      <div class="pkg-badge badge-value">BEST VALUE</div>
       <div class="pkg-radio"><div class="pkg-radio-dot"></div></div>
       <div class="pkg-info">
         <div class="pkg-title">Pro</div>
-        <div class="pkg-detail">6 Months · Full access</div>
+        <div class="pkg-detail">6 Months · Full access to all signals</div>
         <div class="pkg-monthly">€15.33/mo · <span class="pkg-save">Save 33%</span></div>
       </div>
       <div class="pkg-price-col">
@@ -142,8 +213,9 @@ h1 { font-size: 24px; font-weight: 700; text-align: center; margin-bottom: 4px; 
     </div>
   </div>
 
-  <!-- Upsell nudge -->
   <div class="upsell" id="upsell"></div>
+
+  <div class="ck-divider"></div>
 
   <!-- Payment method -->
   <div class="section-label">Payment Method</div>
@@ -151,7 +223,7 @@ h1 { font-size: 24px; font-weight: 700; text-align: center; margin-bottom: 4px; 
     <div class="method-opt active" onclick="selectMethod('card')">
       <div class="method-icons">
         <img src="assets/icons/visa.svg" alt="Visa" height="14">
-        <img src="assets/icons/mastercard.svg" alt="Mastercard" height="18">
+        <img src="assets/icons/mastercard.svg" alt="Mastercard" height="20">
       </div>
       <div class="method-name">Card</div>
       <div class="method-sub">Visa / Mastercard</div>
@@ -159,28 +231,29 @@ h1 { font-size: 24px; font-weight: 700; text-align: center; margin-bottom: 4px; 
     <div class="method-opt" onclick="selectMethod('crypto')" style="position:relative;">
       <div class="discount-badge">-5%</div>
       <div class="method-icons">
-        <img src="assets/icons/btc.svg" alt="BTC" height="20">
-        <img src="assets/icons/eth.svg" alt="ETH" height="20">
-        <img src="assets/icons/usdt.svg" alt="USDT" height="20">
+        <img src="assets/icons/btc.svg" alt="BTC" height="22">
+        <img src="assets/icons/eth.svg" alt="ETH" height="22">
+        <img src="assets/icons/usdt.svg" alt="USDT" height="22">
       </div>
       <div class="method-name">Crypto</div>
-      <div class="method-sub">50+ coins accepted</div>
+      <div class="method-sub">50+ coins · 5% discount</div>
     </div>
   </div>
 
   <!-- Summary -->
   <div class="summary">
+    <div class="summary-title">Order Summary</div>
     <div class="summary-row">
       <span class="s-label">Plan</span>
       <span class="s-val" id="sumPlan">Starter — 1 Month</span>
     </div>
     <div class="summary-row">
-      <span class="s-label">Method</span>
+      <span class="s-label">Payment</span>
       <span class="s-val" id="sumMethod">Card (Visa/MC)</span>
     </div>
     <div class="summary-row" id="discountRow" style="display:none;">
-      <span class="s-label">Crypto Discount</span>
-      <span class="s-discount" id="sumDiscount">-5%</span>
+      <span class="s-label">Crypto Discount (5%)</span>
+      <span class="s-discount" id="sumDiscount">-€1.15</span>
     </div>
     <div class="summary-row total">
       <span class="s-label">Total</span>
@@ -189,14 +262,36 @@ h1 { font-size: 24px; font-weight: 700; text-align: center; margin-bottom: 4px; 
   </div>
 
   <button class="pay-btn" id="payBtn" onclick="pay()">Pay €23.00</button>
-  <div class="secure">🔒 Secure payment · Instant access after payment</div>
-  <div class="payment-icons">
-    <img src="assets/icons/visa.svg" alt="Visa">
-    <img src="assets/icons/mastercard.svg" alt="Mastercard">
-    <img src="assets/icons/btc.svg" alt="BTC">
-    <img src="assets/icons/eth.svg" alt="ETH">
-    <img src="assets/icons/usdt.svg" alt="USDT">
+
+  <!-- Trust signals -->
+  <div class="trust">
+    <div class="trust-row">
+      <div class="trust-item">
+        <svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>
+        Secure payment
+      </div>
+      <div class="trust-item">
+        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+        Instant access
+      </div>
+      <div class="trust-item">
+        <svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>
+        24/7 signals
+      </div>
+    </div>
+    <div class="payment-icons">
+      <img src="assets/icons/visa.svg" alt="Visa">
+      <img src="assets/icons/mastercard.svg" alt="Mastercard">
+      <img src="assets/icons/btc.svg" alt="BTC">
+      <img src="assets/icons/eth.svg" alt="ETH">
+      <img src="assets/icons/usdt.svg" alt="USDT">
+    </div>
+    <div class="guarantee">
+      <strong>30-day money-back guarantee.</strong> If you're not satisfied with our signals within the first 30 days, contact support for a full refund. No questions asked.
+    </div>
   </div>
+
+</div>
 </div>
 
 <script>
@@ -208,7 +303,6 @@ const packages = {
 let selectedPkg = 'starter';
 let method = 'card';
 
-// Read package from URL param
 const urlPkg = new URLSearchParams(location.search).get('pkg');
 if (urlPkg && packages[urlPkg]) selectedPkg = urlPkg;
 
@@ -227,15 +321,15 @@ function selectMethod(m) {
 
 function updateUpsell() {
   const pkg = packages[selectedPkg];
-  const upsell = document.getElementById('upsell');
+  const u = document.getElementById('upsell');
   if (selectedPkg === 'starter') {
-    upsell.innerHTML = `Upgrade to <strong>${pkg.nextName}</strong> and save <strong>20%</strong> — just ${packages.trader.monthly}/month instead of ${pkg.monthly}/month`;
-    upsell.style.display = 'block';
+    u.innerHTML = `💡 Upgrade to <strong>${pkg.nextName}</strong> and pay just ${packages.trader.monthly}/mo instead of ${pkg.monthly}/mo — <strong>save 20%</strong>`;
+    u.style.display = 'block';
   } else if (selectedPkg === 'trader') {
-    upsell.innerHTML = `Go <strong>${pkg.nextName}</strong> for the best value — only ${packages.pro.monthly}/month, <strong>save 33%</strong>`;
-    upsell.style.display = 'block';
+    u.innerHTML = `💡 Go <strong>${pkg.nextName}</strong> for only ${packages.pro.monthly}/mo — <strong>save 33%</strong> and lock in for 6 months`;
+    u.style.display = 'block';
   } else {
-    upsell.style.display = 'none';
+    u.style.display = 'none';
   }
 }
 
@@ -251,11 +345,11 @@ function updateSummary() {
   document.getElementById('sumMethod').textContent = isCrypto ? 'Crypto (BTC, ETH, USDT...)' : 'Card (Visa/MC)';
   document.getElementById('discountRow').style.display = isCrypto ? 'flex' : 'none';
   if (isCrypto) document.getElementById('sumDiscount').textContent = `-${cur}${discount.toFixed(2)}`;
-  const totalEl = document.getElementById('sumTotal');
+  const t = document.getElementById('sumTotal');
   if (isCrypto) {
-    totalEl.innerHTML = `<span class="s-old">${cur}${base.toFixed(2)}</span><span class="s-green">${cur}${total.toFixed(2)}</span>`;
+    t.innerHTML = `<span class="s-old">${cur}${base.toFixed(2)}</span><span class="s-green">${cur}${total.toFixed(2)}</span>`;
   } else {
-    totalEl.innerHTML = `<span class="s-green">${cur}${total.toFixed(2)}</span>`;
+    t.innerHTML = `<span class="s-green">${cur}${total.toFixed(2)}</span>`;
   }
   document.getElementById('payBtn').textContent = `Pay ${cur}${total.toFixed(2)}`;
   document.getElementById('errorMsg').style.display = 'none';
@@ -265,24 +359,17 @@ async function pay() {
   const btn = document.getElementById('payBtn');
   btn.disabled = true; btn.textContent = 'Processing...';
   document.getElementById('errorMsg').style.display = 'none';
-
   try {
     if (method === 'crypto') {
-      const res = await fetch('/api/pay.php', {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ package: selectedPkg }),
-      });
+      const res = await fetch('/api/pay.php', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ package: selectedPkg }) });
       const data = await res.json();
       if (data.ok && data.payment_url) { window.location.href = data.payment_url; }
-      else throw new Error(data.error || 'Failed to create payment');
+      else throw new Error(data.error || 'Payment failed');
     } else {
-      const res = await fetch('/api/pay-payou.php', {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ package: selectedPkg }),
-      });
+      const res = await fetch('/api/pay-payou.php', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ package: selectedPkg }) });
       const data = await res.json();
       if (data.ok && data.redirect) { window.location.href = data.redirect; }
-      else throw new Error(data.error || 'Failed to create payment');
+      else throw new Error(data.error || 'Payment failed');
     }
   } catch (e) {
     document.getElementById('errorMsg').textContent = e.message;
@@ -291,7 +378,6 @@ async function pay() {
   }
 }
 
-// Init
 selectPkg(selectedPkg);
 </script>
 </body>
