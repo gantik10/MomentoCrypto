@@ -8,167 +8,140 @@
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body { font-family: 'DM Sans', sans-serif; background: #080808; color: #f5f5f5; min-height: 100vh; }
+.checkout-wrap { max-width: 460px; margin: 0 auto; padding: 40px 20px; }
+.logo { text-align: center; margin-bottom: 28px; }
+.logo span { font-size: 18px; font-weight: 700; color: #39FF14; letter-spacing: 2px; }
+h1 { font-size: 24px; font-weight: 700; text-align: center; margin-bottom: 4px; }
+.subtitle { text-align: center; color: rgba(245,245,245,0.45); font-size: 13px; margin-bottom: 28px; }
 
-.checkout-wrap { max-width: 520px; margin: 0 auto; padding: 40px 20px; }
-
-.logo { text-align: center; margin-bottom: 32px; }
-.logo span { font-family: 'DM Sans', sans-serif; font-size: 20px; font-weight: 700; color: #39FF14; letter-spacing: 2px; }
-
-h1 { font-size: 28px; font-weight: 700; text-align: center; margin-bottom: 6px; }
-.subtitle { text-align: center; color: rgba(245,245,245,0.5); font-size: 14px; margin-bottom: 32px; }
-
-/* Package selector */
-.packages { display: flex; gap: 10px; margin-bottom: 24px; }
-.pkg-opt {
-  flex: 1; padding: 16px 12px; background: #111; border: 2px solid #222; border-radius: 14px;
-  cursor: pointer; text-align: center; transition: border-color 0.2s, background 0.2s;
-}
-.pkg-opt:hover { border-color: #39FF14; }
-.pkg-opt.active { border-color: #39FF14; background: rgba(57,255,20,0.06); }
-.pkg-duration { font-size: 11px; color: rgba(245,245,245,0.5); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
-.pkg-name { font-size: 15px; font-weight: 700; color: #f5f5f5; margin-bottom: 4px; }
-.pkg-eur { font-size: 22px; font-weight: 800; color: #39FF14; }
-.pkg-usd { font-size: 11px; color: rgba(245,245,245,0.4); margin-top: 2px; }
-.pkg-save { font-size: 10px; color: #39FF14; font-weight: 600; margin-top: 4px; }
-
-/* Payment method */
-.method-label { font-size: 13px; font-weight: 600; color: rgba(245,245,245,0.5); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px; }
+/* Payment methods */
+.section-label { font-size: 11px; font-weight: 600; color: rgba(245,245,245,0.4); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
 .methods { display: flex; gap: 10px; margin-bottom: 24px; }
 .method-opt {
-  flex: 1; padding: 18px 14px; background: #111; border: 2px solid #222; border-radius: 14px;
+  flex: 1; padding: 16px 14px; background: #111; border: 2px solid #1a1a1a; border-radius: 14px;
   cursor: pointer; text-align: center; transition: border-color 0.2s, background 0.2s; position: relative;
 }
-.method-opt:hover { border-color: rgba(245,245,245,0.2); }
-.method-opt.active { border-color: #39FF14; background: rgba(57,255,20,0.06); }
-.method-icon { font-size: 28px; margin-bottom: 6px; }
-.method-name { font-size: 14px; font-weight: 600; color: #f5f5f5; }
-.method-sub { font-size: 11px; color: rgba(245,245,245,0.4); margin-top: 2px; }
+.method-opt:hover { border-color: #333; }
+.method-opt.active { border-color: #39FF14; background: rgba(57,255,20,0.04); }
+.method-icons { display: flex; align-items: center; justify-content: center; gap: 6px; margin-bottom: 8px; min-height: 24px; }
+.method-name { font-size: 15px; font-weight: 600; color: #f5f5f5; }
+.method-sub { font-size: 11px; color: rgba(245,245,245,0.35); margin-top: 2px; }
 .discount-badge {
-  position: absolute; top: -8px; right: -8px;
+  position: absolute; top: -9px; right: -9px;
   background: #39FF14; color: #000; font-size: 10px; font-weight: 800;
-  padding: 3px 8px; border-radius: 8px;
+  padding: 3px 8px; border-radius: 8px; letter-spacing: 0.3px;
 }
 
-/* Email */
-.email-row { margin-bottom: 24px; }
-.email-row label { display: block; font-size: 12px; font-weight: 600; color: rgba(245,245,245,0.5); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.3px; }
-.email-row input {
-  width: 100%; padding: 14px 16px; background: #111; border: 1px solid #222; border-radius: 12px;
-  color: #f5f5f5; font-size: 15px; font-family: inherit;
+/* Package dropdown */
+.pkg-select-wrap { margin-bottom: 24px; }
+.pkg-select {
+  width: 100%; padding: 14px 16px; background: #111; border: 1px solid #1a1a1a; border-radius: 12px;
+  color: #f5f5f5; font-size: 15px; font-family: inherit; appearance: none; cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='%23666' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 16px center;
 }
-.email-row input:focus { outline: none; border-color: #39FF14; }
+.pkg-select:focus { outline: none; border-color: #39FF14; }
 
 /* Summary */
-.summary {
-  background: #111; border: 1px solid #222; border-radius: 14px; padding: 18px; margin-bottom: 24px;
-}
-.summary-row { display: flex; justify-content: space-between; align-items: center; padding: 6px 0; font-size: 14px; }
-.summary-row.total { border-top: 1px solid #222; margin-top: 8px; padding-top: 12px; font-size: 16px; font-weight: 700; }
-.summary-label { color: rgba(245,245,245,0.5); }
-.summary-val { color: #f5f5f5; font-weight: 600; }
-.summary-val.green { color: #39FF14; }
-.summary-discount { color: #39FF14; font-size: 12px; }
+.summary { background: #111; border: 1px solid #1a1a1a; border-radius: 14px; padding: 16px; margin-bottom: 20px; }
+.summary-row { display: flex; justify-content: space-between; align-items: center; padding: 5px 0; font-size: 13px; }
+.summary-row.total { border-top: 1px solid #1a1a1a; margin-top: 8px; padding-top: 10px; font-size: 16px; font-weight: 700; }
+.s-label { color: rgba(245,245,245,0.4); }
+.s-val { color: #f5f5f5; font-weight: 600; }
+.s-green { color: #39FF14; }
+.s-discount { color: #39FF14; font-size: 12px; }
 
 /* Pay button */
 .pay-btn {
-  width: 100%; padding: 18px; background: #39FF14; color: #000; border: none; border-radius: 14px;
-  font-size: 17px; font-weight: 700; font-family: inherit; cursor: pointer;
-  transition: opacity 0.2s, transform 0.2s;
+  width: 100%; padding: 16px; background: #39FF14; color: #000; border: none; border-radius: 14px;
+  font-size: 16px; font-weight: 700; font-family: inherit; cursor: pointer; transition: opacity 0.15s;
 }
-.pay-btn:hover { opacity: 0.9; transform: translateY(-1px); }
-.pay-btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+.pay-btn:hover { opacity: 0.9; }
+.pay-btn:disabled { opacity: 0.35; cursor: not-allowed; }
 
-.secure-note { text-align: center; margin-top: 16px; font-size: 11px; color: rgba(245,245,245,0.3); }
+.secure { display: flex; align-items: center; justify-content: center; gap: 6px; margin-top: 14px; font-size: 11px; color: rgba(245,245,245,0.25); }
 
-/* Error */
-.error-msg { background: rgba(255,69,58,0.1); border: 1px solid rgba(255,69,58,0.3); color: #ff453a; padding: 12px 16px; border-radius: 10px; font-size: 13px; margin-bottom: 16px; display: none; }
+/* Payment icons row on bottom */
+.payment-icons { display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 20px; padding-top: 20px; border-top: 1px solid #1a1a1a; }
+.payment-icons img { height: 20px; opacity: 0.4; }
 
-@media (max-width: 480px) {
-  .packages { flex-direction: column; }
-  .methods { flex-direction: column; }
-  .pkg-eur { font-size: 20px; }
-}
+.error-msg { background: rgba(255,69,58,0.1); border: 1px solid rgba(255,69,58,0.2); color: #ff453a; padding: 10px 14px; border-radius: 10px; font-size: 13px; margin-bottom: 16px; display: none; }
+
+@media (max-width: 480px) { .methods { flex-direction: column; } }
 </style>
 </head>
 <body>
-
 <div class="checkout-wrap">
   <div class="logo"><span>MOMENTOCRYPTO</span></div>
-
-  <h1>Choose Your Plan</h1>
-  <p class="subtitle">Select a plan and payment method to get started</p>
+  <h1>Checkout</h1>
+  <p class="subtitle">Select your plan and payment method</p>
 
   <div id="errorMsg" class="error-msg"></div>
 
-  <!-- Package selector -->
-  <div class="packages" id="packages">
-    <div class="pkg-opt active" onclick="selectPkg('starter')">
-      <div class="pkg-duration">1 Month</div>
-      <div class="pkg-name">Starter</div>
-      <div class="pkg-eur" id="price-starter">€23</div>
-      <div class="pkg-usd">~$25 USD</div>
-    </div>
-    <div class="pkg-opt" onclick="selectPkg('trader')">
-      <div class="pkg-duration">3 Months</div>
-      <div class="pkg-name">Trader</div>
-      <div class="pkg-eur" id="price-trader">€55</div>
-      <div class="pkg-usd">~$60 USD</div>
-      <div class="pkg-save">Save 20%</div>
-    </div>
-    <div class="pkg-opt" onclick="selectPkg('pro')">
-      <div class="pkg-duration">6 Months</div>
-      <div class="pkg-name">Pro</div>
-      <div class="pkg-eur" id="price-pro">€92</div>
-      <div class="pkg-usd">~$100 USD</div>
-      <div class="pkg-save">Save 33%</div>
-    </div>
-  </div>
-
   <!-- Payment method -->
-  <div class="method-label">Payment Method</div>
+  <div class="section-label">Payment Method</div>
   <div class="methods" id="methods">
     <div class="method-opt active" onclick="selectMethod('card')">
-      <div class="method-icon">💳</div>
+      <div class="method-icons">
+        <img src="assets/icons/visa.svg" alt="Visa" height="14">
+        <img src="assets/icons/mastercard.svg" alt="Mastercard" height="18">
+      </div>
       <div class="method-name">Card</div>
       <div class="method-sub">Visa / Mastercard</div>
     </div>
     <div class="method-opt" onclick="selectMethod('crypto')" style="position:relative;">
       <div class="discount-badge">-5%</div>
-      <div class="method-icon">₿</div>
+      <div class="method-icons">
+        <img src="assets/icons/btc.svg" alt="BTC" height="20">
+        <img src="assets/icons/eth.svg" alt="ETH" height="20">
+        <img src="assets/icons/usdt.svg" alt="USDT" height="20">
+      </div>
       <div class="method-name">Crypto</div>
-      <div class="method-sub">BTC, ETH, USDT +40</div>
+      <div class="method-sub">50+ coins accepted</div>
     </div>
   </div>
 
-  <!-- Email -->
-  <div class="email-row">
-    <label>Email</label>
-    <input type="email" id="email" placeholder="your@email.com">
+  <!-- Package dropdown -->
+  <div class="section-label">Plan</div>
+  <div class="pkg-select-wrap">
+    <select class="pkg-select" id="pkgSelect" onchange="updateSummary()">
+      <option value="starter">Starter — 1 Month</option>
+      <option value="trader">Trader — 3 Months (save 20%)</option>
+      <option value="pro">Pro — 6 Months (save 33%)</option>
+    </select>
   </div>
 
-  <!-- Order summary -->
+  <!-- Summary -->
   <div class="summary" id="summary">
     <div class="summary-row">
-      <span class="summary-label">Plan</span>
-      <span class="summary-val" id="sum-plan">Starter — 1 Month</span>
+      <span class="s-label">Plan</span>
+      <span class="s-val" id="sumPlan">Starter — 1 Month</span>
     </div>
     <div class="summary-row">
-      <span class="summary-label">Method</span>
-      <span class="summary-val" id="sum-method">Card (Visa/MC)</span>
+      <span class="s-label">Method</span>
+      <span class="s-val" id="sumMethod">Card (Visa/MC)</span>
     </div>
-    <div class="summary-row" id="sum-discount-row" style="display:none;">
-      <span class="summary-label">Crypto Discount</span>
-      <span class="summary-discount" id="sum-discount">-5%</span>
+    <div class="summary-row" id="discountRow" style="display:none;">
+      <span class="s-label">Crypto Discount</span>
+      <span class="s-discount" id="sumDiscount">-5%</span>
     </div>
     <div class="summary-row total">
-      <span class="summary-label">Total</span>
-      <span class="summary-val green" id="sum-total">€23.00</span>
+      <span class="s-label">Total</span>
+      <span class="s-val s-green" id="sumTotal">€23.00</span>
     </div>
   </div>
 
   <button class="pay-btn" id="payBtn" onclick="pay()">Pay €23.00</button>
 
-  <div class="secure-note">🔒 Secure payment · Instant access after payment</div>
+  <div class="secure">🔒 Secure payment · Instant access after payment</div>
+
+  <div class="payment-icons">
+    <img src="assets/icons/visa.svg" alt="Visa">
+    <img src="assets/icons/mastercard.svg" alt="Mastercard">
+    <img src="assets/icons/btc.svg" alt="BTC">
+    <img src="assets/icons/eth.svg" alt="ETH">
+    <img src="assets/icons/usdt.svg" alt="USDT">
+  </div>
 </div>
 
 <script>
@@ -177,87 +150,59 @@ const packages = {
   trader:  { name: 'Trader — 3 Months', eur: 55, usd: 60 },
   pro:     { name: 'Pro — 6 Months', eur: 92, usd: 100 },
 };
+let method = 'card';
 
-let selectedPkg = 'starter';
-let selectedMethod = 'card';
-
-function selectPkg(pkg) {
-  selectedPkg = pkg;
-  document.querySelectorAll('.pkg-opt').forEach((el, i) => {
-    el.classList.toggle('active', ['starter','trader','pro'][i] === pkg);
-  });
-  updateSummary();
-}
-
-function selectMethod(method) {
-  selectedMethod = method;
-  document.querySelectorAll('.method-opt').forEach((el, i) => {
-    el.classList.toggle('active', ['card','crypto'][i] === method);
-  });
+function selectMethod(m) {
+  method = m;
+  document.querySelectorAll('.method-opt').forEach((el, i) => el.classList.toggle('active', ['card','crypto'][i] === m));
   updateSummary();
 }
 
 function updateSummary() {
-  const pkg = packages[selectedPkg];
-  const isCrypto = selectedMethod === 'crypto';
-  const basePrice = isCrypto ? pkg.usd : pkg.eur;
-  const discount = isCrypto ? Math.round(basePrice * 0.05 * 100) / 100 : 0;
-  const total = basePrice - discount;
-  const currency = isCrypto ? '$' : '€';
+  const pkg = packages[document.getElementById('pkgSelect').value];
+  const isCrypto = method === 'crypto';
+  const base = isCrypto ? pkg.usd : pkg.eur;
+  const discount = isCrypto ? Math.round(base * 0.05 * 100) / 100 : 0;
+  const total = base - discount;
+  const cur = isCrypto ? '$' : '€';
 
-  document.getElementById('sum-plan').textContent = pkg.name;
-  document.getElementById('sum-method').textContent = isCrypto ? 'Crypto (BTC, ETH, USDT...)' : 'Card (Visa/MC)';
-  document.getElementById('sum-discount-row').style.display = isCrypto ? 'flex' : 'none';
-  if (isCrypto) document.getElementById('sum-discount').textContent = `-${currency}${discount.toFixed(2)}`;
-  document.getElementById('sum-total').textContent = `${currency}${total.toFixed(2)}`;
-  document.getElementById('payBtn').textContent = `Pay ${currency}${total.toFixed(2)}`;
+  document.getElementById('sumPlan').textContent = pkg.name;
+  document.getElementById('sumMethod').textContent = isCrypto ? 'Crypto (BTC, ETH, USDT...)' : 'Card (Visa/MC)';
+  document.getElementById('discountRow').style.display = isCrypto ? 'flex' : 'none';
+  if (isCrypto) document.getElementById('sumDiscount').textContent = `-${cur}${discount.toFixed(2)}`;
+  document.getElementById('sumTotal').textContent = `${cur}${total.toFixed(2)}`;
+  document.getElementById('payBtn').textContent = `Pay ${cur}${total.toFixed(2)}`;
   document.getElementById('errorMsg').style.display = 'none';
 }
 
 async function pay() {
   const btn = document.getElementById('payBtn');
-  const email = document.getElementById('email').value.trim();
-  btn.disabled = true;
-  btn.textContent = 'Processing...';
+  const pkgKey = document.getElementById('pkgSelect').value;
+  btn.disabled = true; btn.textContent = 'Processing...';
   document.getElementById('errorMsg').style.display = 'none';
 
-  const pkg = packages[selectedPkg];
-  const isCrypto = selectedMethod === 'crypto';
-
   try {
-    if (isCrypto) {
-      // OxaPay crypto — 5% discount applied
-      const discountedAmount = Math.round(pkg.usd * 0.95 * 100) / 100;
+    if (method === 'crypto') {
       const res = await fetch('/api/pay.php', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ package: selectedPkg, email, discountAmount: discountedAmount }),
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ package: pkgKey }),
       });
       const data = await res.json();
-      if (data.ok && data.payment_url) {
-        window.location.href = data.payment_url;
-      } else {
-        throw new Error(data.error || 'Failed to create crypto payment');
-      }
+      if (data.ok && data.payment_url) { window.location.href = data.payment_url; }
+      else throw new Error(data.error || 'Failed to create payment');
     } else {
-      // Payou card — EUR pricing
       const res = await fetch('/api/pay-payou.php', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ package: selectedPkg, email }),
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ package: pkgKey }),
       });
       const data = await res.json();
-      if (data.ok && data.redirect) {
-        window.location.href = data.redirect;
-      } else {
-        throw new Error(data.error || 'Failed to create card payment');
-      }
+      if (data.ok && data.redirect) { window.location.href = data.redirect; }
+      else throw new Error(data.error || 'Failed to create payment');
     }
   } catch (e) {
     document.getElementById('errorMsg').textContent = e.message;
     document.getElementById('errorMsg').style.display = 'block';
-    btn.disabled = false;
-    updateSummary();
+    btn.disabled = false; updateSummary();
   }
 }
 

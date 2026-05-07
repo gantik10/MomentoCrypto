@@ -23,7 +23,6 @@ $PAYMENT_SYSTEM = $env['PAYOU_SYSTEM'] ?? 'card_EUR';
 
 $input = json_decode(file_get_contents('php://input'), true);
 $package = $input['package'] ?? '';
-$email = $input['email'] ?? 'customer@momentocrypto.com';
 
 // EUR amounts for Payou card payments
 $packages = [
@@ -72,7 +71,7 @@ $params = http_build_query([
     'order_id' => $orderId,
     'Coment' => $pkg['name'],
     'user_code' => 'mc_' . bin2hex(random_bytes(4)),
-    'user_email' => $email,
+    'user_email' => 'customer@momentocrypto.com',
     'hash' => $hash,
 ]);
 $redirectUrl = 'https://payou.pro/sci/v1/?' . $params;

@@ -1324,6 +1324,23 @@
     letter-spacing: 2px;
     color: rgba(245,245,245,0.5);
   }
+  .payment-icons-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 12px;
+  }
+  .payment-icon-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .payment-divider {
+    width: 1px;
+    height: 28px;
+    background: rgba(57,255,20,0.15);
+  }
   .oxapay-badge {
     display: inline-flex;
     transition: opacity 0.2s ease, transform 0.2s ease;
@@ -2180,12 +2197,21 @@
 
   <div class="payment-trust reveal">
     <div class="payment-row">
-      <span class="payment-label">Secure payments powered by</span>
-      <a href="https://oxapay.com" target="_blank" rel="noopener" class="oxapay-badge" aria-label="OxaPay">
-        <img src="assets/oxapay-badge-dark.svg" alt="OxaPay" width="148" height="46">
-      </a>
+      <span class="payment-label">Accepted payment methods</span>
     </div>
-    <div class="coins-row">
+    <div class="payment-icons-row">
+      <div class="payment-icon-group">
+        <img src="assets/icons/visa.svg" alt="Visa" height="16">
+        <img src="assets/icons/mastercard.svg" alt="Mastercard" height="22">
+      </div>
+      <span class="payment-divider"></span>
+      <div class="payment-icon-group">
+        <img src="assets/icons/btc.svg" alt="Bitcoin" height="24">
+        <img src="assets/icons/eth.svg" alt="Ethereum" height="24">
+        <img src="assets/icons/usdt.svg" alt="USDT" height="24">
+      </div>
+    </div>
+    <div class="coins-row" style="margin-top:16px;">
       <span class="coin-chip"><span class="coin-dot" style="background:#f7931a"></span>BTC</span>
       <span class="coin-chip"><span class="coin-dot" style="background:#627eea"></span>ETH</span>
       <span class="coin-chip"><span class="coin-dot" style="background:#26a17b"></span>USDT</span>
