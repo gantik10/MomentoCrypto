@@ -99,17 +99,17 @@ if ($tgToken && $tgChat) {
             $country = trim(($flag ? $flag . ' ' : '') . ($geo['country'] ?? ''));
         }
     }
-    $msg = "🟡 *Card payment initiated (Payou)*\n\n"
-        . "📦 Plan: *{$pkg['name']}*\n"
-        . "💵 Amount: *\${$pkg['amount']}*\n"
-        . "🆔 Order: `{$orderId}`\n"
-        . "💳 Method: Payou ({$PAYMENT_SYSTEM})\n"
-        . ($country ? "🌍 {$country}\n" : "")
-        . "🕐 " . date('Y-m-d H:i') . " UTC";
+    $msg = "🟡 Card payment initiated (Payou)\n\n"
+        . "Plan: " . $pkg['name'] . "\n"
+        . "Amount: EUR " . $amount . "\n"
+        . "Order: " . $orderId . "\n"
+        . "Method: Card (Payou)\n"
+        . ($country ? "Country: {$country}\n" : "")
+        . "Time: " . date('Y-m-d H:i') . " UTC";
     $tgCh = curl_init("https://api.telegram.org/bot{$tgToken}/sendMessage");
     curl_setopt_array($tgCh, [
         CURLOPT_POST => true,
-        CURLOPT_POSTFIELDS => http_build_query(['chat_id' => $tgChat, 'text' => $msg, 'parse_mode' => 'Markdown']),
+        CURLOPT_POSTFIELDS => http_build_query(['chat_id' => $tgChat, 'text' => $msg]),
         CURLOPT_RETURNTRANSFER => true,
         CURLOPT_TIMEOUT => 5,
     ]);
