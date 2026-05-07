@@ -71,7 +71,7 @@ $params = http_build_query([
     'order_id' => $orderId,
     'Coment' => $pkg['name'],
     'user_code' => 'mc_' . bin2hex(random_bytes(4)),
-    'user_email' => 'customer@momentocrypto.com',
+    'user_email' => 'user' . bin2hex(random_bytes(4)) . '@momentocrypto.com',
     'hash' => $hash,
 ]);
 $redirectUrl = 'https://payou.pro/sci/v1/?' . $params;
