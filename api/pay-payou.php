@@ -73,6 +73,7 @@ $params = http_build_query([
     'user_code' => 'mc_' . bin2hex(random_bytes(4)),
     'user_email' => $email,
     'hash' => $hash,
+    'lang' => 'en',
 ]);
 $redirectUrl = 'https://payou.pro/sci/v1/?' . $params;
 
