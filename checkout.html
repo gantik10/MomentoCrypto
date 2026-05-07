@@ -132,6 +132,8 @@ h1 { font-size: 26px; font-weight: 700; text-align: center; margin-bottom: 4px; 
 .guarantee { margin-top: 16px; padding: 12px 16px; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.04); border-radius: 10px; text-align: center; font-size: 11px; color: rgba(245,245,245,0.3); line-height: 1.5; }
 .guarantee strong { color: rgba(245,245,245,0.5); }
 
+.charge-note { text-align: center; font-size: 12px; color: rgba(245,245,245,0.35); margin-top: 8px; margin-bottom: 20px; }
+.charge-note strong { color: rgba(245,245,245,0.6); }
 .error-msg { background: rgba(255,69,58,0.08); border: 1px solid rgba(255,69,58,0.15); color: #ff453a; padding: 12px 16px; border-radius: 12px; font-size: 13px; margin-bottom: 16px; display: none; }
 
 @media (max-width: 480px) {
@@ -258,6 +260,8 @@ h1 { font-size: 26px; font-weight: 700; text-align: center; margin-bottom: 4px; 
     </div>
   </div>
 
+  <div class="charge-note" id="chargeNote" style="display:none;"></div>
+
   <button class="pay-btn" id="payBtn" onclick="pay()">Pay €23.00</button>
 
   <!-- Trust signals -->
@@ -289,16 +293,49 @@ h1 { font-size: 26px; font-weight: 700; text-align: center; margin-bottom: 4px; 
 </div>
 
 <script>
+// Geo detection: EU sees EUR natively, rest sees USD with EUR charge note
+const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || '';
+const isEU = tz.startsWith('Europe/');
+
 const packages = {
-  starter: { name: 'Starter — 1 Month', eur: 23, usd: 25, monthly: '€23', next: 'trader', nextName: 'Trader (3 months)' },
-  trader:  { name: 'Trader — 3 Months', eur: 55, usd: 60, monthly: '€18.33', next: 'pro', nextName: 'Pro (6 months)' },
-  pro:     { name: 'Pro — 6 Months', eur: 92, usd: 100, monthly: '€15.33', next: null, nextName: null },
+  starter: { name: 'Starter — 1 Month', eur: 23, usd: 25 },
+  trader:  { name: 'Trader — 3 Months', eur: 55, usd: 60 },
+  pro:     { name: 'Pro — 6 Months', eur: 92, usd: 100 },
 };
 let selectedPkg = 'starter';
 let method = 'card';
 
 const urlPkg = new URLSearchParams(location.search).get('pkg');
 if (urlPkg && packages[urlPkg]) selectedPkg = urlPkg;
+
+// Update package card display based on geo
+function updatePkgCards() {
+  document.querySelectorAll('.pkg-card').forEach(el => {
+    const pkg = packages[el.dataset.pkg];
+    if (!pkg) return;
+    const priceEl = el.querySelector('.pkg-price-eur');
+    const subEl = el.querySelector('.pkg-price-usd');
+    if (isEU) {
+      priceEl.textContent = `€${pkg.eur}`;
+      subEl.textContent = '';
+    } else {
+      priceEl.textContent = `$${pkg.usd}`;
+      subEl.textContent = `charged €${pkg.eur}`;
+    }
+  });
+  // Update monthly prices
+  const monthlyEls = document.querySelectorAll('.pkg-monthly');
+  const monthlyData = [
+    { eur: '€23/mo', usd: '$25/mo', save: '' },
+    { eur: '€18.33/mo', usd: '$20/mo', save: 'Save 20%' },
+    { eur: '€15.33/mo', usd: '$16.67/mo', save: 'Save 33%' },
+  ];
+  monthlyEls.forEach((el, i) => {
+    const d = monthlyData[i];
+    const price = isEU ? d.eur : d.usd;
+    el.innerHTML = d.save ? `${price} · <span class="pkg-save">${d.save}</span>` : price;
+  });
+}
 
 function selectPkg(pkg) {
   selectedPkg = pkg;
@@ -314,13 +351,16 @@ function selectMethod(m) {
 }
 
 function updateUpsell() {
-  const pkg = packages[selectedPkg];
   const u = document.getElementById('upsell');
+  const c = isEU ? '€' : '$';
   if (selectedPkg === 'starter') {
-    u.innerHTML = `💡 Upgrade to <strong>${pkg.nextName}</strong> and pay just ${packages.trader.monthly}/mo instead of ${pkg.monthly}/mo — <strong>save 20%</strong>`;
+    const traderMonthly = isEU ? '€18.33' : '$20';
+    const starterMonthly = isEU ? '€23' : '$25';
+    u.innerHTML = `💡 Upgrade to <strong>Trader (3 months)</strong> and pay just ${traderMonthly}/mo instead of ${starterMonthly}/mo — <strong>save 20%</strong>`;
     u.style.display = 'block';
   } else if (selectedPkg === 'trader') {
-    u.innerHTML = `💡 Go <strong>${pkg.nextName}</strong> for only ${packages.pro.monthly}/mo — <strong>save 33%</strong> and lock in for 6 months`;
+    const proMonthly = isEU ? '€15.33' : '$16.67';
+    u.innerHTML = `💡 Go <strong>Pro (6 months)</strong> for only ${proMonthly}/mo — <strong>save 33%</strong> and lock in for 6 months`;
     u.style.display = 'block';
   } else {
     u.style.display = 'none';
@@ -330,22 +370,37 @@ function updateUpsell() {
 function updateSummary() {
   const pkg = packages[selectedPkg];
   const isCrypto = method === 'crypto';
-  const base = isCrypto ? pkg.usd : pkg.eur;
-  const discount = isCrypto ? Math.round(base * 0.05 * 100) / 100 : 0;
-  const total = base - discount;
-  const cur = isCrypto ? '$' : '€';
+  const note = document.getElementById('chargeNote');
 
-  document.getElementById('sumPlan').textContent = pkg.name;
-  document.getElementById('sumMethod').textContent = isCrypto ? 'Crypto (BTC, ETH, USDT...)' : 'Card (Visa/MC)';
-  document.getElementById('discountRow').style.display = isCrypto ? 'flex' : 'none';
-  if (isCrypto) document.getElementById('sumDiscount').textContent = `-${cur}${discount.toFixed(2)}`;
-  const t = document.getElementById('sumTotal');
   if (isCrypto) {
-    t.innerHTML = `<span class="s-old">${cur}${base.toFixed(2)}</span><span class="s-green">${cur}${total.toFixed(2)}</span>`;
+    // Crypto always shows USD with 5% discount
+    const base = pkg.usd;
+    const discount = Math.round(base * 0.05 * 100) / 100;
+    const total = base - discount;
+    document.getElementById('sumPlan').textContent = pkg.name;
+    document.getElementById('sumMethod').textContent = 'Crypto (BTC, ETH, USDT...)';
+    document.getElementById('discountRow').style.display = 'flex';
+    document.getElementById('sumDiscount').textContent = `-$${discount.toFixed(2)}`;
+    document.getElementById('sumTotal').innerHTML = `<span class="s-old">$${base.toFixed(2)}</span><span class="s-green">$${total.toFixed(2)}</span>`;
+    document.getElementById('payBtn').textContent = `Pay $${total.toFixed(2)}`;
+    note.style.display = 'none';
   } else {
-    t.innerHTML = `<span class="s-green">${cur}${total.toFixed(2)}</span>`;
+    // Card: EU sees EUR, non-EU sees USD with EUR charge note
+    document.getElementById('sumPlan').textContent = pkg.name;
+    document.getElementById('sumMethod').textContent = 'Card (Visa/MC)';
+    document.getElementById('discountRow').style.display = 'none';
+
+    if (isEU) {
+      document.getElementById('sumTotal').innerHTML = `<span class="s-green">€${pkg.eur}.00</span>`;
+      document.getElementById('payBtn').textContent = `Pay €${pkg.eur}.00`;
+      note.style.display = 'none';
+    } else {
+      document.getElementById('sumTotal').innerHTML = `<span class="s-green">$${pkg.usd}.00</span>`;
+      document.getElementById('payBtn').textContent = `Pay $${pkg.usd}.00`;
+      note.innerHTML = `Your card will be charged <strong>€${pkg.eur}.00 EUR</strong> (≈ $${pkg.usd} USD)`;
+      note.style.display = 'block';
+    }
   }
-  document.getElementById('payBtn').textContent = `Pay ${cur}${total.toFixed(2)}`;
   document.getElementById('errorMsg').style.display = 'none';
 }
 
@@ -372,6 +427,7 @@ async function pay() {
   }
 }
 
+updatePkgCards();
 selectPkg(selectedPkg);
 </script>
 </body>

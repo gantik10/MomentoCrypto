@@ -2152,7 +2152,7 @@
     <div class="pkg-card reveal">
       <div class="pkg-duration">01 Month</div>
       <div class="pkg-name">STARTER</div>
-      <div class="pkg-price">$25</div>
+      <div class="pkg-price" data-usd="$25" data-eur="€23">$25</div>
       <div class="pkg-price-sub">/ month</div>
       <div class="pkg-desc">Full access to all signals and the community. Daily crypto signals with entry, TP & SL levels, private Telegram channel and analyst commentary.</div>
       <ul class="pkg-features">
@@ -2167,7 +2167,7 @@
     <div class="pkg-card featured reveal">
       <div class="pkg-duration">03 Months</div>
       <div class="pkg-name">TRADER</div>
-      <div class="pkg-price">$60</div>
+      <div class="pkg-price" data-usd="$60" data-eur="€55">$60</div>
       <div class="pkg-price-sub">/ 3 months · save 20%</div>
       <div class="pkg-desc">Full access to all signals and the community. Daily crypto signals with entry, TP & SL levels, private Telegram channel and analyst commentary.</div>
       <ul class="pkg-features">
@@ -2182,7 +2182,7 @@
     <div class="pkg-card reveal">
       <div class="pkg-duration">06 Months</div>
       <div class="pkg-name">PRO</div>
-      <div class="pkg-price">$100</div>
+      <div class="pkg-price" data-usd="$100" data-eur="€92">$100</div>
       <div class="pkg-price-sub">/ 6 months · save 33%</div>
       <div class="pkg-desc">Full access to all signals and the community. Daily crypto signals with entry, TP & SL levels, private Telegram channel and analyst commentary.</div>
       <ul class="pkg-features">
@@ -2447,6 +2447,17 @@
 </footer>
 
 <script>
+  // Geo-based pricing: EU sees EUR, everyone else sees USD
+  (function() {
+    const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || '';
+    const euTimezones = ['Europe/Amsterdam','Europe/Athens','Europe/Berlin','Europe/Bratislava','Europe/Brussels','Europe/Bucharest','Europe/Budapest','Europe/Copenhagen','Europe/Dublin','Europe/Helsinki','Europe/Lisbon','Europe/Ljubljana','Europe/Luxembourg','Europe/Madrid','Europe/Malta','Europe/Paris','Europe/Prague','Europe/Riga','Europe/Rome','Europe/Sofia','Europe/Stockholm','Europe/Tallinn','Europe/Vienna','Europe/Vilnius','Europe/Warsaw','Europe/Zagreb'];
+    const isEU = euTimezones.includes(tz) || tz.startsWith('Europe/');
+    window.__mcIsEU = isEU;
+    if (isEU) {
+      document.querySelectorAll('.pkg-price[data-eur]').forEach(el => { el.textContent = el.dataset.eur; });
+    }
+  })();
+
   // Auto-dismiss support bubble after 8s
   setTimeout(() => {
     const bubble = document.getElementById('supportBubble');
