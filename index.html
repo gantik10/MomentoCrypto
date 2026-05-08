@@ -2447,6 +2447,15 @@
 </footer>
 
 <script>
+  // Set payment button text based on card availability
+  (function() {
+    const utcHour = new Date().getUTCHours();
+    const cardAvailable = utcHour >= 6 && utcHour < 21;
+    if (cardAvailable) {
+      document.querySelectorAll('.pkg-btn').forEach(btn => { btn.textContent = '→ Select Plan'; });
+    }
+  })();
+
   // Auto-dismiss support bubble after 8s
   setTimeout(() => {
     const bubble = document.getElementById('supportBubble');
@@ -2521,15 +2530,22 @@
   const PAYMENT_TEST_MODE = false;
 
   async function payPackage(pkg) {
-    const btn = event.target;
-    const originalText = btn.textContent;
-    btn.textContent = 'PROCESSING...';
-    btn.disabled = true;
-
     // Analytics
     if (window.__mc_sid) {
       fetch('/api/analytics/event', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ sid: window.__mc_sid, type:'pay_click', ts:Date.now(), data:{ package: pkg } }), keepalive:true });
     }
+    // Card payments available 6:00-21:00 UTC (Payou operator hours 9:00-00:00 UTC+3)
+    const utcHour = new Date().getUTCHours();
+    const cardAvailable = utcHour >= 6 && utcHour < 21;
+    if (cardAvailable) {
+      window.location.href = '/checkout.html?pkg=' + pkg;
+      return;
+    }
+    // Outside card hours → direct to crypto
+    const btn = event.target;
+    const originalText = btn.textContent;
+    btn.textContent = 'PROCESSING...';
+    btn.disabled = true;
 
     if (PAYMENT_TEST_MODE) {
       setTimeout(() => { window.location.href = '/success.html?pkg=' + pkg; }, 800);

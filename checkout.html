@@ -177,11 +177,11 @@ h1 { font-size: 26px; font-weight: 700; text-align: center; margin-bottom: 4px; 
       <div class="pkg-info">
         <div class="pkg-title">Starter</div>
         <div class="pkg-detail">1 Month · Full access to all signals</div>
-        <div class="pkg-monthly">€23/mo</div>
+        <div class="pkg-monthly">$30/mo</div>
       </div>
       <div class="pkg-price-col">
-        <div class="pkg-price-eur">€23</div>
-        <div class="pkg-price-usd">~$25</div>
+        <div class="pkg-price-eur">$30</div>
+        <div class="pkg-price-usd"></div>
       </div>
     </div>
     <div class="pkg-card" data-pkg="trader" onclick="selectPkg('trader')" style="position:relative;">
@@ -190,11 +190,11 @@ h1 { font-size: 26px; font-weight: 700; text-align: center; margin-bottom: 4px; 
       <div class="pkg-info">
         <div class="pkg-title">Trader</div>
         <div class="pkg-detail">3 Months · Full access to all signals</div>
-        <div class="pkg-monthly">€18.33/mo · <span class="pkg-save">Save 20%</span></div>
+        <div class="pkg-monthly">$26.67/mo · <span class="pkg-save">Save 11%</span></div>
       </div>
       <div class="pkg-price-col">
-        <div class="pkg-price-eur">€55</div>
-        <div class="pkg-price-usd">~$60</div>
+        <div class="pkg-price-eur">$80</div>
+        <div class="pkg-price-usd"></div>
       </div>
     </div>
     <div class="pkg-card" data-pkg="pro" onclick="selectPkg('pro')" style="position:relative;">
@@ -203,11 +203,11 @@ h1 { font-size: 26px; font-weight: 700; text-align: center; margin-bottom: 4px; 
       <div class="pkg-info">
         <div class="pkg-title">Pro</div>
         <div class="pkg-detail">6 Months · Full access to all signals</div>
-        <div class="pkg-monthly">€15.33/mo · <span class="pkg-save">Save 33%</span></div>
+        <div class="pkg-monthly">$23.33/mo · <span class="pkg-save">Save 22%</span></div>
       </div>
       <div class="pkg-price-col">
-        <div class="pkg-price-eur">€92</div>
-        <div class="pkg-price-usd">~$100</div>
+        <div class="pkg-price-eur">$140</div>
+        <div class="pkg-price-usd"></div>
       </div>
     </div>
   </div>
@@ -228,14 +228,14 @@ h1 { font-size: 26px; font-weight: 700; text-align: center; margin-bottom: 4px; 
       <div class="method-sub">Visa / Mastercard</div>
     </div>
     <div class="method-opt" onclick="selectMethod('crypto')" style="position:relative;">
-      <div class="discount-badge">-5%</div>
+      <div class="discount-badge">-10%</div>
       <div class="method-icons">
         <img src="assets/icons/btc.svg" alt="BTC" height="22">
         <img src="assets/icons/eth.svg" alt="ETH" height="22">
         <img src="assets/icons/usdt.svg" alt="USDT" height="22">
       </div>
       <div class="method-name">Crypto</div>
-      <div class="method-sub">50+ coins · 5% discount</div>
+      <div class="method-sub">50+ coins · 10% discount</div>
     </div>
   </div>
 
@@ -251,7 +251,7 @@ h1 { font-size: 26px; font-weight: 700; text-align: center; margin-bottom: 4px; 
       <span class="s-val" id="sumMethod">Card (Visa/MC)</span>
     </div>
     <div class="summary-row" id="discountRow" style="display:none;">
-      <span class="s-label">Crypto Discount (5%)</span>
+      <span class="s-label">Crypto Discount (10%)</span>
       <span class="s-discount" id="sumDiscount">-€1.15</span>
     </div>
     <div class="summary-row total">
@@ -298,9 +298,9 @@ const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || '';
 const isEU = tz.startsWith('Europe/');
 
 const packages = {
-  starter: { name: 'Starter — 1 Month', eur: 23, usd: 25 },
-  trader:  { name: 'Trader — 3 Months', eur: 55, usd: 60 },
-  pro:     { name: 'Pro — 6 Months', eur: 92, usd: 100 },
+  starter: { name: 'Starter — 1 Month', eur: 27, usd: 30, cryptoUsd: 27 },
+  trader:  { name: 'Trader — 3 Months', eur: 73, usd: 80, cryptoUsd: 72 },
+  pro:     { name: 'Pro — 6 Months', eur: 128, usd: 140, cryptoUsd: 126 },
 };
 let selectedPkg = 'starter';
 let method = 'card';
@@ -326,9 +326,9 @@ function updatePkgCards() {
   // Update monthly prices
   const monthlyEls = document.querySelectorAll('.pkg-monthly');
   const monthlyData = [
-    { eur: '€23/mo', usd: '$25/mo', save: '' },
-    { eur: '€18.33/mo', usd: '$20/mo', save: 'Save 20%' },
-    { eur: '€15.33/mo', usd: '$16.67/mo', save: 'Save 33%' },
+    { eur: '€27/mo', usd: '$30/mo', save: '' },
+    { eur: '€24.33/mo', usd: '$26.67/mo', save: 'Save 11%' },
+    { eur: '€21.33/mo', usd: '$23.33/mo', save: 'Save 22%' },
   ];
   monthlyEls.forEach((el, i) => {
     const d = monthlyData[i];
@@ -354,12 +354,12 @@ function updateUpsell() {
   const u = document.getElementById('upsell');
   const c = isEU ? '€' : '$';
   if (selectedPkg === 'starter') {
-    const traderMonthly = isEU ? '€18.33' : '$20';
-    const starterMonthly = isEU ? '€23' : '$25';
+    const traderMonthly = isEU ? '€24.33' : '$26.67';
+    const starterMonthly = isEU ? '€27' : '$30';
     u.innerHTML = `💡 Upgrade to <strong>Trader (3 months)</strong> and pay just ${traderMonthly}/mo instead of ${starterMonthly}/mo — <strong>save 20%</strong>`;
     u.style.display = 'block';
   } else if (selectedPkg === 'trader') {
-    const proMonthly = isEU ? '€15.33' : '$16.67';
+    const proMonthly = isEU ? '€21.33' : '$23.33';
     u.innerHTML = `💡 Go <strong>Pro (6 months)</strong> for only ${proMonthly}/mo — <strong>save 33%</strong> and lock in for 6 months`;
     u.style.display = 'block';
   } else {
@@ -373,10 +373,10 @@ function updateSummary() {
   const note = document.getElementById('chargeNote');
 
   if (isCrypto) {
-    // Crypto always shows USD with 5% discount
+    // Crypto shows USD with 10% discount (pre-calculated)
     const base = pkg.usd;
-    const discount = Math.round(base * 0.05 * 100) / 100;
-    const total = base - discount;
+    const total = pkg.cryptoUsd;
+    const discount = base - total;
     document.getElementById('sumPlan').textContent = pkg.name;
     document.getElementById('sumMethod').textContent = 'Crypto (BTC, ETH, USDT...)';
     document.getElementById('discountRow').style.display = 'flex';

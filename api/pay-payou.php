@@ -26,9 +26,9 @@ $package = $input['package'] ?? '';
 
 // EUR amounts for Payou card payments
 $packages = [
-    'starter' => ['amount' => 23, 'name' => 'Starter — 1 Month'],
-    'trader'  => ['amount' => 55, 'name' => 'Trader — 3 Months'],
-    'pro'     => ['amount' => 92, 'name' => 'Pro — 6 Months'],
+    'starter' => ['amount' => 27, 'name' => 'Starter — 1 Month'],
+    'trader'  => ['amount' => 73, 'name' => 'Trader — 3 Months'],
+    'pro'     => ['amount' => 128, 'name' => 'Pro — 6 Months'],
 ];
 
 if (!isset($packages[$package])) {
