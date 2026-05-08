@@ -25,9 +25,9 @@ $input = json_decode(file_get_contents('php://input'), true);
 $package = $input['package'] ?? '';
 
 $packages = [
-    'starter' => ['amount' => 25, 'name' => 'Starter — 1 Month'],
-    'trader'  => ['amount' => 60, 'name' => 'Trader — 3 Months'],
-    'pro'     => ['amount' => 100, 'name' => 'Pro — 6 Months'],
+    'starter' => ['amount' => 27, 'name' => 'Starter — 1 Month'],
+    'trader'  => ['amount' => 72, 'name' => 'Trader — 3 Months'],
+    'pro'     => ['amount' => 126, 'name' => 'Pro — 6 Months'],
 ];
 
 if (!isset($packages[$package])) {
