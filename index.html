@@ -402,9 +402,24 @@
   .hero-stats {
     display: flex;
     gap: 48px;
-    margin-top: 60px;
-    padding-top: 48px;
+    margin-top: 40px;
+    padding-top: 32px;
     border-top: 1px solid rgba(57,255,20,0.15);
+  }
+  .hero-packages {
+    margin-top: 48px;
+    padding-top: 40px;
+    border-top: 1px solid rgba(57,255,20,0.1);
+  }
+  .hero-packages .packages-grid {
+    max-width: 100%;
+  }
+  .hero-packages .pkg-card {
+    padding: 24px 20px;
+  }
+  .hero-packages .pkg-desc,
+  .hero-packages .pkg-features {
+    display: none;
   }
   .stat-num {
     font-family: 'Bebas Neue', sans-serif;
@@ -1695,10 +1710,6 @@
     </div>
     <h1>SIGNALS<br>THAT <span class="green">HIT.</span></h1>
     <p class="hero-sub">Professional crypto signals with verified results. Join thousands of traders already winning with MomentoCrypto's premium community.</p>
-    <a href="#packages" class="tg-btn">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12l-6.871 4.326-2.962-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.194 1.006.131.833.941z" fill="currentColor"/></svg>
-      GET INSTANT ACCESS
-    </a>
     <div class="hero-stats">
       <div class="stat">
         <div class="stat-num" data-count="4200">0</div>
@@ -1717,6 +1728,37 @@
         <div class="stat-label">Track Record</div>
       </div>
     </div>
+
+    <!-- PACKAGES IN HERO -->
+    <div class="hero-packages">
+      <div class="packages-grid">
+        <div class="pkg-card">
+          <div class="pkg-duration">01 Month</div>
+          <div class="pkg-name">STARTER</div>
+          <div class="pkg-price">$30</div>
+          <div class="pkg-price-sub">/ month · <span style="color:#39FF14;font-weight:600;">$27 with crypto (-10%)</span></div>
+          <button class="pkg-btn pkg-btn-card" onclick="payCard('starter')" style="display:none;">Buy with Card <span class="pkg-btn-price">€27</span></button>
+          <button class="pkg-btn pkg-btn-crypto" onclick="payPackage('starter')">Buy with Crypto <span class="pkg-btn-old">$30</span> <span class="pkg-btn-price">$27</span> <span class="pkg-btn-discount">SAVE 10%</span></button>
+        </div>
+        <div class="pkg-card featured">
+          <div class="pkg-duration">03 Months</div>
+          <div class="pkg-name">TRADER</div>
+          <div class="pkg-price">$80</div>
+          <div class="pkg-price-sub">/ 3 months · save 11% · <span style="color:#39FF14;font-weight:600;">$72 with crypto</span></div>
+          <button class="pkg-btn pkg-btn-card" onclick="payCard('trader')" style="display:none;">Buy with Card <span class="pkg-btn-price">€73</span></button>
+          <button class="pkg-btn pkg-btn-crypto" onclick="payPackage('trader')">Buy with Crypto <span class="pkg-btn-old">$80</span> <span class="pkg-btn-price">$72</span> <span class="pkg-btn-discount">SAVE 10%</span></button>
+        </div>
+        <div class="pkg-card">
+          <div class="pkg-duration">06 Months</div>
+          <div class="pkg-name">PRO</div>
+          <div class="pkg-price">$140</div>
+          <div class="pkg-price-sub">/ 6 months · save 22% · <span style="color:#39FF14;font-weight:600;">$126 with crypto</span></div>
+          <button class="pkg-btn pkg-btn-card" onclick="payCard('pro')" style="display:none;">Buy with Card <span class="pkg-btn-price">€128</span></button>
+          <button class="pkg-btn pkg-btn-crypto" onclick="payPackage('pro')">Buy with Crypto <span class="pkg-btn-old">$140</span> <span class="pkg-btn-price">$126</span> <span class="pkg-btn-discount">SAVE 10%</span></button>
+        </div>
+      </div>
+    </div>
+
   </div>
 </section>
 
@@ -1843,129 +1885,129 @@
 
   <div class="trades-grid">
 
-    <!-- Trade 1: BTC short 10× | (68530-66250)/68530*10 = 33.27% | 500*0.3327 = 166.35 -->
+    <!-- Trade 1: BTC long | May 1 | +20.45% -->
     <div class="trade-card reveal">
       <div class="tg-bubble">
         <div class="tg-header"><span class="tg-dot-green"></span> Trade opened</div>
-        <div class="tg-line"><strong>BTCUSDT short · market</strong></div>
-        <div class="tg-line">Entry: 68,530 · Lev: 10× · Margin: 500.00 USDT</div>
-        <div class="tg-line">SL: 69,200 · TP: —</div>
-        <div class="tg-line">Opened: 01 Apr 2026, 09:15</div>
-        <div class="tg-time">9:15 AM</div>
+        <div class="tg-line"><strong>BTCUSDT long · market</strong></div>
+        <div class="tg-line">Entry: 78,250 · Lev: 10× · Margin: 500.00 USDT</div>
+        <div class="tg-line">SL: 77,600 · TP: —</div>
+        <div class="tg-line">Opened: 01 May 2026, 10:22</div>
+        <div class="tg-time">10:22 AM</div>
       </div>
       <div class="tg-bubble">
         <div class="tg-header"><span class="tg-dot-blue"></span> Trade closed</div>
-        <div class="tg-line"><strong>BTCUSDT short · manual</strong></div>
-        <div class="tg-line">Entry: 68,530 · Exit: 66,250</div>
-        <div class="tg-line"><span class="tg-pnl">PnL: +33.27% · 166.35 USDT</span></div>
-        <div class="tg-line">Opened: 01 Apr 2026, 09:15</div>
-        <div class="tg-line">Closed: 01 Apr 2026, 14:42 (5h 27m)</div>
-        <div class="tg-time">2:42 PM</div>
+        <div class="tg-line"><strong>BTCUSDT long · manual</strong></div>
+        <div class="tg-line">Entry: 78,250 · Exit: 79,850</div>
+        <div class="tg-line"><span class="tg-pnl">PnL: +20.45% · 102.25 USDT</span></div>
+        <div class="tg-line">Opened: 01 May 2026, 10:22</div>
+        <div class="tg-line">Closed: 01 May 2026, 12:04 (1h 42m)</div>
+        <div class="tg-time">12:04 PM</div>
       </div>
     </div>
 
-    <!-- Trade 2: ETH short 10× | (2098.5-2051.2)/2098.5*10 = 22.54% | 300*0.2254 = 67.63 -->
+    <!-- Trade 2: ETH long | May 1 | +23.64% -->
     <div class="trade-card reveal">
       <div class="tg-bubble">
         <div class="tg-header"><span class="tg-dot-green"></span> Trade opened</div>
-        <div class="tg-line"><strong>ETHUSDT short · market</strong></div>
-        <div class="tg-line">Entry: 2,098.50 · Lev: 10× · Margin: 300.00 USDT</div>
-        <div class="tg-line">SL: 2,125 · TP: —</div>
-        <div class="tg-line">Opened: 28 Mar 2026, 11:20</div>
-        <div class="tg-time">11:20 AM</div>
+        <div class="tg-line"><strong>ETHUSDT long · market</strong></div>
+        <div class="tg-line">Entry: 2,284 · Lev: 10× · Margin: 500.00 USDT</div>
+        <div class="tg-line">SL: 2,255 · TP: —</div>
+        <div class="tg-line">Opened: 01 May 2026, 14:30</div>
+        <div class="tg-time">2:30 PM</div>
       </div>
       <div class="tg-bubble">
         <div class="tg-header"><span class="tg-dot-blue"></span> Trade closed</div>
-        <div class="tg-line"><strong>ETHUSDT short · manual</strong></div>
-        <div class="tg-line">Entry: 2,098.50 · Exit: 2,051.20</div>
-        <div class="tg-line"><span class="tg-pnl">PnL: +22.54% · 67.63 USDT</span></div>
-        <div class="tg-line">Opened: 28 Mar 2026, 11:20</div>
-        <div class="tg-line">Closed: 28 Mar 2026, 15:48 (4h 28m)</div>
-        <div class="tg-time">3:48 PM</div>
+        <div class="tg-line"><strong>ETHUSDT long · manual</strong></div>
+        <div class="tg-line">Entry: 2,284 · Exit: 2,338</div>
+        <div class="tg-line"><span class="tg-pnl">PnL: +23.64% · 118.20 USDT</span></div>
+        <div class="tg-line">Opened: 01 May 2026, 14:30</div>
+        <div class="tg-line">Closed: 01 May 2026, 21:08 (6h 38m)</div>
+        <div class="tg-time">9:08 PM</div>
       </div>
     </div>
 
-    <!-- Trade 3: SOL short 10× | (91.35-82.70)/91.35*10 = 94.69% | 250*0.9469 = 236.73 -->
+    <!-- Trade 3: SOL long | May 2 | +49.88% -->
     <div class="trade-card reveal">
       <div class="tg-bubble">
         <div class="tg-header"><span class="tg-dot-green"></span> Trade opened</div>
-        <div class="tg-line"><strong>SOLUSDT short · market</strong></div>
-        <div class="tg-line">Entry: 91.35 · Lev: 10× · Margin: 250.00 USDT</div>
-        <div class="tg-line">SL: 93.50 · TP: —</div>
-        <div class="tg-line">Opened: 31 Mar 2026, 22:10</div>
-        <div class="tg-time">10:10 PM</div>
+        <div class="tg-line"><strong>SOLUSDT long · market</strong></div>
+        <div class="tg-line">Entry: 84.20 · Lev: 10× · Margin: 500.00 USDT</div>
+        <div class="tg-line">SL: 82.50 · TP: —</div>
+        <div class="tg-line">Opened: 02 May 2026, 08:45</div>
+        <div class="tg-time">8:45 AM</div>
       </div>
       <div class="tg-bubble">
         <div class="tg-header"><span class="tg-dot-blue"></span> Trade closed</div>
-        <div class="tg-line"><strong>SOLUSDT short · manual</strong></div>
-        <div class="tg-line">Entry: 91.35 · Exit: 82.70</div>
-        <div class="tg-line"><span class="tg-pnl">PnL: +94.69% · 236.73 USDT</span></div>
-        <div class="tg-line">Opened: 31 Mar 2026, 22:10</div>
-        <div class="tg-line">Closed: 01 Apr 2026, 01:25 (3h 15m)</div>
-        <div class="tg-time">1:25 AM</div>
+        <div class="tg-line"><strong>SOLUSDT long · manual</strong></div>
+        <div class="tg-line">Entry: 84.20 · Exit: 88.40</div>
+        <div class="tg-line"><span class="tg-pnl">PnL: +49.88% · 249.40 USDT</span></div>
+        <div class="tg-line">Opened: 02 May 2026, 08:45</div>
+        <div class="tg-line">Closed: 03 May 2026, 02:57 (18h 12m)</div>
+        <div class="tg-time">2:57 AM</div>
       </div>
     </div>
 
-    <!-- Trade 4: SIREN short 10× | (0.17644-0.17307)/0.17644*10 = 19.11% | 243.31*0.1911 = 46.50 -->
+    <!-- Trade 4: DOGE long | May 2 | +93.93% -->
     <div class="trade-card reveal">
       <div class="tg-bubble">
         <div class="tg-header"><span class="tg-dot-green"></span> Trade opened</div>
-        <div class="tg-line"><strong>SIRENUSDT short · market</strong></div>
-        <div class="tg-line">Entry: 0.17644 · Lev: 10× · Margin: 243.31 USDT</div>
-        <div class="tg-line">SL: 0.1790 · TP: —</div>
-        <div class="tg-line">Opened: 02 Apr 2026, 20:59</div>
-        <div class="tg-time">8:59 PM</div>
+        <div class="tg-line"><strong>DOGEUSDT long · market</strong></div>
+        <div class="tg-line">Entry: 0.1022 · Lev: 10× · Margin: 500.00 USDT</div>
+        <div class="tg-line">SL: 0.0980 · TP: —</div>
+        <div class="tg-line">Opened: 02 May 2026, 11:15</div>
+        <div class="tg-time">11:15 AM</div>
       </div>
       <div class="tg-bubble">
         <div class="tg-header"><span class="tg-dot-blue"></span> Trade closed</div>
-        <div class="tg-line"><strong>SIRENUSDT short · manual</strong></div>
-        <div class="tg-line">Entry: 0.17644 · Exit: 0.17307</div>
-        <div class="tg-line"><span class="tg-pnl">PnL: +19.11% · 46.50 USDT</span></div>
-        <div class="tg-line">Opened: 02 Apr 2026, 20:59</div>
-        <div class="tg-line">Closed: 02 Apr 2026, 23:10 (2h 11m)</div>
-        <div class="tg-time">11:10 PM</div>
+        <div class="tg-line"><strong>DOGEUSDT long · manual</strong></div>
+        <div class="tg-line">Entry: 0.1022 · Exit: 0.1118</div>
+        <div class="tg-line"><span class="tg-pnl">PnL: +93.93% · 469.65 USDT</span></div>
+        <div class="tg-line">Opened: 02 May 2026, 11:15</div>
+        <div class="tg-line">Closed: 04 May 2026, 12:30 (2d 1h 15m)</div>
+        <div class="tg-time">12:30 PM</div>
       </div>
     </div>
 
-    <!-- Trade 5: ARB long 10× | (0.0936-0.0878)/0.0878*10 = 66.06% | 200*0.6606 = 132.12 -->
+    <!-- Trade 5: BTC long | May 4 | +17.13% -->
     <div class="trade-card reveal">
       <div class="tg-bubble">
         <div class="tg-header"><span class="tg-dot-green"></span> Trade opened</div>
-        <div class="tg-line"><strong>ARBUSDT long · limit</strong></div>
-        <div class="tg-line">Entry: 0.0878 · Lev: 10× · Margin: 200.00 USDT</div>
-        <div class="tg-line">SL: 0.0862 · TP: —</div>
-        <div class="tg-line">Opened: 04 Apr 2026, 10:05</div>
-        <div class="tg-time">10:05 AM</div>
+        <div class="tg-line"><strong>BTCUSDT long · limit</strong></div>
+        <div class="tg-line">Entry: 79,980 · Lev: 10× · Margin: 500.00 USDT</div>
+        <div class="tg-line">SL: 79,200 · TP: —</div>
+        <div class="tg-line">Opened: 04 May 2026, 09:30</div>
+        <div class="tg-time">9:30 AM</div>
       </div>
       <div class="tg-bubble">
         <div class="tg-header"><span class="tg-dot-blue"></span> Trade closed</div>
-        <div class="tg-line"><strong>ARBUSDT long · manual</strong></div>
-        <div class="tg-line">Entry: 0.0878 · Exit: 0.0936</div>
-        <div class="tg-line"><span class="tg-pnl">PnL: +66.06% · 132.12 USDT</span></div>
-        <div class="tg-line">Opened: 04 Apr 2026, 10:05</div>
-        <div class="tg-line">Closed: 04 Apr 2026, 14:22 (4h 17m)</div>
-        <div class="tg-time">2:22 PM</div>
+        <div class="tg-line"><strong>BTCUSDT long · manual</strong></div>
+        <div class="tg-line">Entry: 79,980 · Exit: 81,350</div>
+        <div class="tg-line"><span class="tg-pnl">PnL: +17.13% · 85.65 USDT</span></div>
+        <div class="tg-line">Opened: 04 May 2026, 09:30</div>
+        <div class="tg-line">Closed: 04 May 2026, 14:57 (5h 27m)</div>
+        <div class="tg-time">2:57 PM</div>
       </div>
     </div>
 
-    <!-- Trade 6: AVAX long 10× | (9.38-8.92)/8.92*10 = 51.57% | 350*0.5157 = 180.49 -->
+    <!-- Trade 6: ETH long | May 4 | +36.59% -->
     <div class="trade-card reveal">
       <div class="tg-bubble">
         <div class="tg-header"><span class="tg-dot-green"></span> Trade opened</div>
-        <div class="tg-line"><strong>AVAXUSDT long · market</strong></div>
-        <div class="tg-line">Entry: 8.92 · Lev: 10× · Margin: 350.00 USDT</div>
-        <div class="tg-line">SL: 8.78 · TP: —</div>
-        <div class="tg-line">Opened: 05 Apr 2026, 07:30</div>
-        <div class="tg-time">7:30 AM</div>
+        <div class="tg-line"><strong>ETHUSDT long · market</strong></div>
+        <div class="tg-line">Entry: 2,323 · Lev: 10× · Margin: 500.00 USDT</div>
+        <div class="tg-line">SL: 2,290 · TP: —</div>
+        <div class="tg-line">Opened: 04 May 2026, 16:20</div>
+        <div class="tg-time">4:20 PM</div>
       </div>
       <div class="tg-bubble">
         <div class="tg-header"><span class="tg-dot-blue"></span> Trade closed</div>
-        <div class="tg-line"><strong>AVAXUSDT long · manual</strong></div>
-        <div class="tg-line">Entry: 8.92 · Exit: 9.38</div>
-        <div class="tg-line"><span class="tg-pnl">PnL: +51.57% · 180.49 USDT</span></div>
-        <div class="tg-line">Opened: 05 Apr 2026, 07:30</div>
-        <div class="tg-line">Closed: 05 Apr 2026, 13:15 (5h 45m)</div>
-        <div class="tg-time">1:15 PM</div>
+        <div class="tg-line"><strong>ETHUSDT long · manual</strong></div>
+        <div class="tg-line">Entry: 2,323 · Exit: 2,408</div>
+        <div class="tg-line"><span class="tg-pnl">PnL: +36.59% · 182.95 USDT</span></div>
+        <div class="tg-line">Opened: 04 May 2026, 16:20</div>
+        <div class="tg-line">Closed: 05 May 2026, 10:25 (18h 05m)</div>
+        <div class="tg-time">10:25 AM</div>
       </div>
     </div>
 
@@ -2180,60 +2222,8 @@
 
 <div class="divider"></div>
 
-<!-- PACKAGES -->
-<section id="packages">
-  <div class="section-label reveal">Choose your plan</div>
-  <h2 class="reveal">PICK YOUR<br><span>ACCESS.</span></h2>
-
-  <div class="packages-grid">
-    <div class="pkg-card reveal">
-      <div class="pkg-duration">01 Month</div>
-      <div class="pkg-name">STARTER</div>
-      <div class="pkg-price">$30</div>
-      <div class="pkg-price-sub">/ month · <span style="color:#39FF14;font-weight:600;">$27 with crypto (-10%)</span></div>
-      <div class="pkg-desc">Full access to all signals and the community. Daily crypto signals with entry, TP & SL levels, private Telegram channel and analyst commentary.</div>
-      <ul class="pkg-features">
-        <li>Daily crypto signals</li>
-        <li>Entry, TP & SL levels</li>
-        <li>Private Telegram channel</li>
-        <li>Analyst commentary</li>
-      </ul>
-      <button class="pkg-btn pkg-btn-card" onclick="payCard('starter')" style="display:none;">Buy with Card <span class="pkg-btn-price">€27</span></button>
-      <button class="pkg-btn pkg-btn-crypto" onclick="payPackage('starter')">Buy with Crypto <span class="pkg-btn-old">$30</span> <span class="pkg-btn-price">$27</span> <span class="pkg-btn-discount">SAVE 10%</span></button>
-    </div>
-
-    <div class="pkg-card featured reveal">
-      <div class="pkg-duration">03 Months</div>
-      <div class="pkg-name">TRADER</div>
-      <div class="pkg-price">$80</div>
-      <div class="pkg-price-sub">/ 3 months · save 11% · <span style="color:#39FF14;font-weight:600;">$72 with crypto (-10%)</span></div>
-      <div class="pkg-desc">Full access to all signals and the community. Daily crypto signals with entry, TP & SL levels, private Telegram channel and analyst commentary.</div>
-      <ul class="pkg-features">
-        <li>Daily crypto signals</li>
-        <li>Entry, TP & SL levels</li>
-        <li>Private Telegram channel</li>
-        <li>Analyst commentary</li>
-      </ul>
-      <button class="pkg-btn pkg-btn-card" onclick="payCard('trader')" style="display:none;">Buy with Card <span class="pkg-btn-price">€73</span></button>
-      <button class="pkg-btn pkg-btn-crypto" onclick="payPackage('trader')">Buy with Crypto <span class="pkg-btn-old">$80</span> <span class="pkg-btn-price">$72</span> <span class="pkg-btn-discount">SAVE 10%</span></button>
-    </div>
-
-    <div class="pkg-card reveal">
-      <div class="pkg-duration">06 Months</div>
-      <div class="pkg-name">PRO</div>
-      <div class="pkg-price">$140</div>
-      <div class="pkg-price-sub">/ 6 months · save 22% · <span style="color:#39FF14;font-weight:600;">$126 with crypto (-10%)</span></div>
-      <div class="pkg-desc">Full access to all signals and the community. Daily crypto signals with entry, TP & SL levels, private Telegram channel and analyst commentary.</div>
-      <ul class="pkg-features">
-        <li>Daily crypto signals</li>
-        <li>Entry, TP & SL levels</li>
-        <li>Private Telegram channel</li>
-        <li>Analyst commentary</li>
-      </ul>
-      <button class="pkg-btn pkg-btn-card" onclick="payCard('pro')" style="display:none;">Buy with Card <span class="pkg-btn-price">€128</span></button>
-      <button class="pkg-btn pkg-btn-crypto" onclick="payPackage('pro')">Buy with Crypto <span class="pkg-btn-old">$140</span> <span class="pkg-btn-price">$126</span> <span class="pkg-btn-discount">SAVE 10%</span></button>
-    </div>
-  </div>
+<!-- PACKAGES anchor (for nav links) -->
+<div id="packages"></div>
 
   <div class="payment-trust reveal">
     <div class="payment-row">
