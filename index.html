@@ -408,8 +408,34 @@
   }
   .hero-packages {
     margin-top: 48px;
-    padding-top: 40px;
-    border-top: 1px solid rgba(57,255,20,0.1);
+    padding: 40px 24px 32px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(57,255,20,0.08);
+    border-radius: 20px;
+  }
+  .hero-packages-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .hero-pkg-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    letter-spacing: 3px;
+    color: var(--white);
+  }
+  .hero-pkg-payment-icons {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .hero-pkg-accepts {
+    font-size: 11px;
+    color: rgba(245,245,245,0.35);
+    margin-right: 4px;
   }
   .hero-packages .packages-grid {
     max-width: 100%;
@@ -417,9 +443,21 @@
   .hero-packages .pkg-card {
     padding: 24px 20px;
   }
-  .hero-packages .pkg-desc,
-  .hero-packages .pkg-features {
-    display: none;
+
+  /* Bottom packages section */
+  .bottom-packages {
+    padding: 80px 60px;
+    max-width: 1200px;
+    margin: 0 auto;
+    text-align: center;
+  }
+  .bottom-packages .packages-grid {
+    text-align: left;
+  }
+  @media (max-width: 600px) {
+    .hero-packages { padding: 24px 16px 20px; }
+    .hero-pkg-title { font-size: 22px; }
+    .bottom-packages { padding: 60px 20px; }
   }
   .stat-num {
     font-family: 'Bebas Neue', sans-serif;
@@ -1730,13 +1768,30 @@
     </div>
 
     <!-- PACKAGES IN HERO -->
-    <div class="hero-packages">
+    <div class="hero-packages" id="packages">
+      <div class="hero-packages-header">
+        <h2 class="hero-pkg-title">Choose Your Plan</h2>
+        <div class="hero-pkg-payment-icons">
+          <span class="hero-pkg-accepts">We accept:</span>
+          <img src="assets/icons/visa.svg" alt="Visa" height="14">
+          <img src="assets/icons/mastercard.svg" alt="Mastercard" height="18">
+          <img src="assets/icons/btc.svg" alt="BTC" height="20">
+          <img src="assets/icons/eth.svg" alt="ETH" height="20">
+          <img src="assets/icons/usdt.svg" alt="USDT" height="20">
+        </div>
+      </div>
       <div class="packages-grid">
         <div class="pkg-card">
           <div class="pkg-duration">01 Month</div>
           <div class="pkg-name">STARTER</div>
           <div class="pkg-price">$30</div>
           <div class="pkg-price-sub">/ month · <span style="color:#39FF14;font-weight:600;">$27 with crypto (-10%)</span></div>
+          <ul class="pkg-features">
+            <li>Daily crypto signals</li>
+            <li>Entry, TP & SL levels</li>
+            <li>Private Telegram channel</li>
+            <li>Analyst commentary</li>
+          </ul>
           <button class="pkg-btn pkg-btn-card" onclick="payCard('starter')" style="display:none;">Buy with Card <span class="pkg-btn-price">€27</span></button>
           <button class="pkg-btn pkg-btn-crypto" onclick="payPackage('starter')">Buy with Crypto <span class="pkg-btn-old">$30</span> <span class="pkg-btn-price">$27</span> <span class="pkg-btn-discount">SAVE 10%</span></button>
         </div>
@@ -1745,6 +1800,12 @@
           <div class="pkg-name">TRADER</div>
           <div class="pkg-price">$80</div>
           <div class="pkg-price-sub">/ 3 months · save 11% · <span style="color:#39FF14;font-weight:600;">$72 with crypto</span></div>
+          <ul class="pkg-features">
+            <li>Everything in Starter</li>
+            <li>Priority signal delivery</li>
+            <li>Weekly market analysis</li>
+            <li>Analyst commentary</li>
+          </ul>
           <button class="pkg-btn pkg-btn-card" onclick="payCard('trader')" style="display:none;">Buy with Card <span class="pkg-btn-price">€73</span></button>
           <button class="pkg-btn pkg-btn-crypto" onclick="payPackage('trader')">Buy with Crypto <span class="pkg-btn-old">$80</span> <span class="pkg-btn-price">$72</span> <span class="pkg-btn-discount">SAVE 10%</span></button>
         </div>
@@ -1753,6 +1814,12 @@
           <div class="pkg-name">PRO</div>
           <div class="pkg-price">$140</div>
           <div class="pkg-price-sub">/ 6 months · save 22% · <span style="color:#39FF14;font-weight:600;">$126 with crypto</span></div>
+          <ul class="pkg-features">
+            <li>Everything in Trader</li>
+            <li>VIP signal access</li>
+            <li>1-on-1 trade reviews</li>
+            <li>Best value per month</li>
+          </ul>
           <button class="pkg-btn pkg-btn-card" onclick="payCard('pro')" style="display:none;">Buy with Card <span class="pkg-btn-price">€128</span></button>
           <button class="pkg-btn pkg-btn-crypto" onclick="payPackage('pro')">Buy with Crypto <span class="pkg-btn-old">$140</span> <span class="pkg-btn-price">$126</span> <span class="pkg-btn-discount">SAVE 10%</span></button>
         </div>
@@ -2222,8 +2289,6 @@
 
 <div class="divider"></div>
 
-<!-- PACKAGES anchor (for nav links) -->
-<div id="packages"></div>
 
   <div class="payment-trust reveal">
     <div class="payment-row">
@@ -2453,6 +2518,63 @@
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12l-6.871 4.326-2.962-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.194 1.006.131.833.941z" fill="currentColor"/></svg>
       MESSAGE SUPPORT
     </a>
+  </div>
+</section>
+
+<!-- BOTTOM PACKAGES CTA -->
+<section class="bottom-packages">
+  <div class="section-label reveal">Ready to start?</div>
+  <h2 class="reveal">GET <span>ACCESS NOW.</span></h2>
+  <div class="packages-grid">
+    <div class="pkg-card reveal">
+      <div class="pkg-duration">01 Month</div>
+      <div class="pkg-name">STARTER</div>
+      <div class="pkg-price">$30</div>
+      <div class="pkg-price-sub">/ month · <span style="color:#39FF14;font-weight:600;">$27 with crypto</span></div>
+      <ul class="pkg-features">
+        <li>Daily crypto signals</li>
+        <li>Entry, TP & SL levels</li>
+        <li>Private Telegram channel</li>
+        <li>Analyst commentary</li>
+      </ul>
+      <button class="pkg-btn pkg-btn-card" onclick="payCard('starter')" style="display:none;">Buy with Card <span class="pkg-btn-price">€27</span></button>
+      <button class="pkg-btn pkg-btn-crypto" onclick="payPackage('starter')">Buy with Crypto <span class="pkg-btn-old">$30</span> <span class="pkg-btn-price">$27</span> <span class="pkg-btn-discount">SAVE 10%</span></button>
+    </div>
+    <div class="pkg-card featured reveal">
+      <div class="pkg-duration">03 Months</div>
+      <div class="pkg-name">TRADER</div>
+      <div class="pkg-price">$80</div>
+      <div class="pkg-price-sub">/ 3 months · <span style="color:#39FF14;font-weight:600;">$72 with crypto</span></div>
+      <ul class="pkg-features">
+        <li>Everything in Starter</li>
+        <li>Priority signal delivery</li>
+        <li>Weekly market analysis</li>
+        <li>Analyst commentary</li>
+      </ul>
+      <button class="pkg-btn pkg-btn-card" onclick="payCard('trader')" style="display:none;">Buy with Card <span class="pkg-btn-price">€73</span></button>
+      <button class="pkg-btn pkg-btn-crypto" onclick="payPackage('trader')">Buy with Crypto <span class="pkg-btn-old">$80</span> <span class="pkg-btn-price">$72</span> <span class="pkg-btn-discount">SAVE 10%</span></button>
+    </div>
+    <div class="pkg-card reveal">
+      <div class="pkg-duration">06 Months</div>
+      <div class="pkg-name">PRO</div>
+      <div class="pkg-price">$140</div>
+      <div class="pkg-price-sub">/ 6 months · <span style="color:#39FF14;font-weight:600;">$126 with crypto</span></div>
+      <ul class="pkg-features">
+        <li>Everything in Trader</li>
+        <li>VIP signal access</li>
+        <li>1-on-1 trade reviews</li>
+        <li>Best value per month</li>
+      </ul>
+      <button class="pkg-btn pkg-btn-card" onclick="payCard('pro')" style="display:none;">Buy with Card <span class="pkg-btn-price">€128</span></button>
+      <button class="pkg-btn pkg-btn-crypto" onclick="payPackage('pro')">Buy with Crypto <span class="pkg-btn-old">$140</span> <span class="pkg-btn-price">$126</span> <span class="pkg-btn-discount">SAVE 10%</span></button>
+    </div>
+  </div>
+  <div class="payment-trust reveal" style="margin-top:24px;">
+    <div class="payment-icons-row">
+      <div class="payment-icon-group"><img src="assets/icons/visa.svg" alt="Visa" height="16"><img src="assets/icons/mastercard.svg" alt="Mastercard" height="22"></div>
+      <span class="payment-divider"></span>
+      <div class="payment-icon-group"><img src="assets/icons/btc.svg" alt="BTC" height="24"><img src="assets/icons/eth.svg" alt="ETH" height="24"><img src="assets/icons/usdt.svg" alt="USDT" height="24"></div>
+    </div>
   </div>
 </section>
 
