@@ -764,6 +764,13 @@
     font-size: 12px;
     font-weight: 400;
   }
+  .pkg-per-month {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    color: rgba(245,245,245,0.4);
+    letter-spacing: 0;
+  }
 
   /* Telegram popup */
   .tg-popup-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 10000; display: flex; align-items: center; justify-content: center; opacity: 0; visibility: hidden; transition: opacity 0.3s, visibility 0.3s; backdrop-filter: blur(4px); }
@@ -1784,10 +1791,10 @@
         <div class="pkg-card">
           <div class="pkg-duration">01 Month</div>
           <div class="pkg-name">STARTER</div>
-          <div class="pkg-price">$30</div>
-          <div class="pkg-price-sub">/ month · <span style="color:#39FF14;font-weight:600;">$27 with crypto (-10%)</span></div>
+          <div class="pkg-price">$30<span class="pkg-per-month">/mo</span></div>
+          <div class="pkg-price-sub"><span style="color:#39FF14;font-weight:600;">$27/mo with crypto</span></div>
           <ul class="pkg-features">
-            <li>Daily crypto signals</li>
+            <li>Full access to all signals</li>
             <li>Entry, TP & SL levels</li>
             <li>Private Telegram channel</li>
             <li>Analyst commentary</li>
@@ -1798,12 +1805,12 @@
         <div class="pkg-card featured">
           <div class="pkg-duration">03 Months</div>
           <div class="pkg-name">TRADER</div>
-          <div class="pkg-price">$80</div>
-          <div class="pkg-price-sub">/ 3 months · save 11% · <span style="color:#39FF14;font-weight:600;">$72 with crypto</span></div>
+          <div class="pkg-price">$80<span class="pkg-per-month"> · $26.67/mo</span></div>
+          <div class="pkg-price-sub"><span style="color:#39FF14;font-weight:600;">$72 with crypto · save $18</span></div>
           <ul class="pkg-features">
-            <li>Everything in Starter</li>
-            <li>Priority signal delivery</li>
-            <li>Weekly market analysis</li>
+            <li>Full access to all signals</li>
+            <li>Entry, TP & SL levels</li>
+            <li>Private Telegram channel</li>
             <li>Analyst commentary</li>
           </ul>
           <button class="pkg-btn pkg-btn-card" onclick="payCard('trader')" style="display:none;">Buy with Card <span class="pkg-btn-price">€73</span></button>
@@ -1812,13 +1819,13 @@
         <div class="pkg-card">
           <div class="pkg-duration">06 Months</div>
           <div class="pkg-name">PRO</div>
-          <div class="pkg-price">$140</div>
-          <div class="pkg-price-sub">/ 6 months · save 22% · <span style="color:#39FF14;font-weight:600;">$126 with crypto</span></div>
+          <div class="pkg-price">$140<span class="pkg-per-month"> · $23.33/mo</span></div>
+          <div class="pkg-price-sub"><span style="color:#39FF14;font-weight:600;">$126 with crypto · save $54</span></div>
           <ul class="pkg-features">
-            <li>Everything in Trader</li>
-            <li>VIP signal access</li>
-            <li>1-on-1 trade reviews</li>
-            <li>Best value per month</li>
+            <li>Full access to all signals</li>
+            <li>Entry, TP & SL levels</li>
+            <li>Private Telegram channel</li>
+            <li>Analyst commentary</li>
           </ul>
           <button class="pkg-btn pkg-btn-card" onclick="payCard('pro')" style="display:none;">Buy with Card <span class="pkg-btn-price">€128</span></button>
           <button class="pkg-btn pkg-btn-crypto" onclick="payPackage('pro')">Buy with Crypto <span class="pkg-btn-old">$140</span> <span class="pkg-btn-price">$126</span> <span class="pkg-btn-discount">SAVE 10%</span></button>
@@ -2529,10 +2536,10 @@
     <div class="pkg-card reveal">
       <div class="pkg-duration">01 Month</div>
       <div class="pkg-name">STARTER</div>
-      <div class="pkg-price">$30</div>
-      <div class="pkg-price-sub">/ month · <span style="color:#39FF14;font-weight:600;">$27 with crypto</span></div>
+      <div class="pkg-price">$30<span class="pkg-per-month">/mo</span></div>
+      <div class="pkg-price-sub"><span style="color:#39FF14;font-weight:600;">$27/mo with crypto</span></div>
       <ul class="pkg-features">
-        <li>Daily crypto signals</li>
+        <li>Full access to all signals</li>
         <li>Entry, TP & SL levels</li>
         <li>Private Telegram channel</li>
         <li>Analyst commentary</li>
@@ -2543,12 +2550,12 @@
     <div class="pkg-card featured reveal">
       <div class="pkg-duration">03 Months</div>
       <div class="pkg-name">TRADER</div>
-      <div class="pkg-price">$80</div>
-      <div class="pkg-price-sub">/ 3 months · <span style="color:#39FF14;font-weight:600;">$72 with crypto</span></div>
+      <div class="pkg-price">$80<span class="pkg-per-month"> · $26.67/mo</span></div>
+      <div class="pkg-price-sub"><span style="color:#39FF14;font-weight:600;">$72 with crypto · save $18</span></div>
       <ul class="pkg-features">
-        <li>Everything in Starter</li>
-        <li>Priority signal delivery</li>
-        <li>Weekly market analysis</li>
+        <li>Full access to all signals</li>
+        <li>Entry, TP & SL levels</li>
+        <li>Private Telegram channel</li>
         <li>Analyst commentary</li>
       </ul>
       <button class="pkg-btn pkg-btn-card" onclick="payCard('trader')" style="display:none;">Buy with Card <span class="pkg-btn-price">€73</span></button>
@@ -2557,13 +2564,13 @@
     <div class="pkg-card reveal">
       <div class="pkg-duration">06 Months</div>
       <div class="pkg-name">PRO</div>
-      <div class="pkg-price">$140</div>
-      <div class="pkg-price-sub">/ 6 months · <span style="color:#39FF14;font-weight:600;">$126 with crypto</span></div>
+      <div class="pkg-price">$140<span class="pkg-per-month"> · $23.33/mo</span></div>
+      <div class="pkg-price-sub"><span style="color:#39FF14;font-weight:600;">$126 with crypto · save $54</span></div>
       <ul class="pkg-features">
-        <li>Everything in Trader</li>
-        <li>VIP signal access</li>
-        <li>1-on-1 trade reviews</li>
-        <li>Best value per month</li>
+        <li>Full access to all signals</li>
+        <li>Entry, TP & SL levels</li>
+        <li>Private Telegram channel</li>
+        <li>Analyst commentary</li>
       </ul>
       <button class="pkg-btn pkg-btn-card" onclick="payCard('pro')" style="display:none;">Buy with Card <span class="pkg-btn-price">€128</span></button>
       <button class="pkg-btn pkg-btn-crypto" onclick="payPackage('pro')">Buy with Crypto <span class="pkg-btn-old">$140</span> <span class="pkg-btn-price">$126</span> <span class="pkg-btn-discount">SAVE 10%</span></button>
