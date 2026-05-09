@@ -668,36 +668,49 @@
     font-weight: 700;
   }
   .pkg-btn {
-    display: block;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
     width: 100%;
-    text-align: center;
-    font-family: 'Space Mono', monospace;
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 2px;
-    text-transform: uppercase;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
     text-decoration: none;
-    padding: 16px;
-    background: transparent;
-    color: var(--green);
-    border: 1.5px solid var(--green);
-    transition: all 0.25s;
+    padding: 14px 16px;
+    border-radius: 10px;
+    transition: all 0.2s;
     cursor: pointer;
+    border: none;
   }
-  .pkg-btn:hover, .pkg-card.featured .pkg-btn {
-    background: var(--green);
-    color: var(--black);
-    box-shadow: 0 0 30px var(--green-glow);
-  }
-  .pkg-card.featured .pkg-btn:hover { background: #4fff2a; }
   .pkg-btn-card {
-    background: rgba(255,255,255,0.06) !important;
-    color: #fff !important;
-    border-color: rgba(255,255,255,0.15) !important;
+    background: #fff;
+    color: #111;
     margin-bottom: 8px;
   }
-  .pkg-btn-card:hover { background: rgba(255,255,255,0.12) !important; border-color: rgba(255,255,255,0.3) !important; box-shadow: none !important; }
-  .pkg-btn-discount { opacity: 0.7; font-size: 9px; }
+  .pkg-btn-card:hover { background: #f0f0f0; }
+  .pkg-btn-card .pkg-btn-price { font-weight: 800; color: #111; }
+
+  .pkg-btn-crypto {
+    background: var(--green);
+    color: var(--black);
+  }
+  .pkg-btn-crypto:hover { background: #4fff2a; }
+  .pkg-btn-crypto .pkg-btn-price { font-weight: 800; }
+
+  .pkg-btn-discount {
+    background: rgba(0,0,0,0.15);
+    padding: 2px 7px;
+    border-radius: 5px;
+    font-size: 11px;
+    font-weight: 800;
+  }
+  .pkg-btn-old {
+    text-decoration: line-through;
+    opacity: 0.5;
+    font-size: 12px;
+    font-weight: 400;
+  }
 
   /* Telegram popup */
   .tg-popup-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 10000; display: flex; align-items: center; justify-content: center; opacity: 0; visibility: hidden; transition: opacity 0.3s, visibility 0.3s; backdrop-filter: blur(4px); }
@@ -2185,8 +2198,8 @@
         <li>Private Telegram channel</li>
         <li>Analyst commentary</li>
       </ul>
-      <button class="pkg-btn pkg-btn-card" onclick="payCard('starter')" style="display:none;">💳 Buy with Card · €27</button>
-      <button class="pkg-btn pkg-btn-crypto" onclick="payPackage('starter')">₿ Buy with Crypto · $27 <span class="pkg-btn-discount">-10%</span></button>
+      <button class="pkg-btn pkg-btn-card" onclick="payCard('starter')" style="display:none;">Buy with Card <span class="pkg-btn-price">€27</span></button>
+      <button class="pkg-btn pkg-btn-crypto" onclick="payPackage('starter')">Buy with Crypto <span class="pkg-btn-old">$30</span> <span class="pkg-btn-price">$27</span> <span class="pkg-btn-discount">SAVE 10%</span></button>
     </div>
 
     <div class="pkg-card featured reveal">
@@ -2201,8 +2214,8 @@
         <li>Private Telegram channel</li>
         <li>Analyst commentary</li>
       </ul>
-      <button class="pkg-btn pkg-btn-card" onclick="payCard('trader')" style="display:none;">💳 Buy with Card · €73</button>
-      <button class="pkg-btn pkg-btn-crypto" onclick="payPackage('trader')">₿ Buy with Crypto · $72 <span class="pkg-btn-discount">-10%</span></button>
+      <button class="pkg-btn pkg-btn-card" onclick="payCard('trader')" style="display:none;">Buy with Card <span class="pkg-btn-price">€73</span></button>
+      <button class="pkg-btn pkg-btn-crypto" onclick="payPackage('trader')">Buy with Crypto <span class="pkg-btn-old">$80</span> <span class="pkg-btn-price">$72</span> <span class="pkg-btn-discount">SAVE 10%</span></button>
     </div>
 
     <div class="pkg-card reveal">
@@ -2217,8 +2230,8 @@
         <li>Private Telegram channel</li>
         <li>Analyst commentary</li>
       </ul>
-      <button class="pkg-btn pkg-btn-card" onclick="payCard('pro')" style="display:none;">💳 Buy with Card · €128</button>
-      <button class="pkg-btn pkg-btn-crypto" onclick="payPackage('pro')">₿ Buy with Crypto · $126 <span class="pkg-btn-discount">-10%</span></button>
+      <button class="pkg-btn pkg-btn-card" onclick="payCard('pro')" style="display:none;">Buy with Card <span class="pkg-btn-price">€128</span></button>
+      <button class="pkg-btn pkg-btn-crypto" onclick="payPackage('pro')">Buy with Crypto <span class="pkg-btn-old">$140</span> <span class="pkg-btn-price">$126</span> <span class="pkg-btn-discount">SAVE 10%</span></button>
     </div>
   </div>
 
@@ -2616,9 +2629,9 @@
       popupEl.classList.add('show');
     }
 
-    // 1) Exit intent (mouse leaves top)
-    document.addEventListener('mouseleave', function(e) {
-      if (e.clientY <= 0) showPopup();
+    // 1) Exit intent (mouse leaves viewport through top)
+    document.addEventListener('mouseout', function(e) {
+      if (!e.relatedTarget && e.clientY <= 0) showPopup();
     });
 
     // 2) 3 minutes idle (no clicks, scrolls, or mouse moves)
