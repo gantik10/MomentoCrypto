@@ -690,6 +690,30 @@
     box-shadow: 0 0 30px var(--green-glow);
   }
   .pkg-card.featured .pkg-btn:hover { background: #4fff2a; }
+  .pkg-btn-card {
+    background: rgba(255,255,255,0.06) !important;
+    color: #fff !important;
+    border-color: rgba(255,255,255,0.15) !important;
+    margin-bottom: 8px;
+  }
+  .pkg-btn-card:hover { background: rgba(255,255,255,0.12) !important; border-color: rgba(255,255,255,0.3) !important; box-shadow: none !important; }
+  .pkg-btn-discount { opacity: 0.7; font-size: 9px; }
+
+  /* Telegram popup */
+  .tg-popup-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 10000; display: flex; align-items: center; justify-content: center; opacity: 0; visibility: hidden; transition: opacity 0.3s, visibility 0.3s; backdrop-filter: blur(4px); }
+  .tg-popup-overlay.show { opacity: 1; visibility: visible; }
+  .tg-popup { background: #111; border: 1px solid rgba(57,255,20,0.2); border-radius: 20px; padding: 36px 28px; max-width: 380px; width: 90%; text-align: center; position: relative; box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 40px rgba(57,255,20,0.08); transform: scale(0.95) translateY(10px); transition: transform 0.3s ease; }
+  .tg-popup-overlay.show .tg-popup { transform: scale(1) translateY(0); }
+  .tg-popup-close { position: absolute; top: 12px; right: 16px; background: none; border: none; color: rgba(255,255,255,0.3); font-size: 22px; cursor: pointer; line-height: 1; }
+  .tg-popup-close:hover { color: #fff; }
+  .tg-popup-icon { font-size: 48px; margin-bottom: 16px; }
+  .tg-popup h3 { color: #fff; font-size: 20px; font-weight: 700; margin-bottom: 10px; }
+  .tg-popup p { color: rgba(255,255,255,0.55); font-size: 14px; line-height: 1.6; margin-bottom: 20px; }
+  .tg-popup-btn { display: inline-flex; align-items: center; gap: 8px; padding: 14px 28px; background: #29A0DA; color: #fff; border: none; border-radius: 12px; font-size: 15px; font-weight: 700; font-family: inherit; cursor: pointer; text-decoration: none; transition: background 0.2s; }
+  .tg-popup-btn:hover { background: #1E90C9; }
+  .tg-popup-btn svg { flex-shrink: 0; }
+  .tg-popup-skip { display: block; margin-top: 12px; font-size: 12px; color: rgba(255,255,255,0.25); cursor: pointer; background: none; border: none; font-family: inherit; }
+  .tg-popup-skip:hover { color: rgba(255,255,255,0.5); }
 
   .pkg-crypto-icons {
     display: flex;
@@ -2161,7 +2185,8 @@
         <li>Private Telegram channel</li>
         <li>Analyst commentary</li>
       </ul>
-      <button class="pkg-btn" onclick="payPackage('starter')">→ Pay with Crypto</button>
+      <button class="pkg-btn pkg-btn-card" onclick="payCard('starter')" style="display:none;">💳 Buy with Card · €27</button>
+      <button class="pkg-btn pkg-btn-crypto" onclick="payPackage('starter')">₿ Buy with Crypto · $27 <span class="pkg-btn-discount">-10%</span></button>
     </div>
 
     <div class="pkg-card featured reveal">
@@ -2176,7 +2201,8 @@
         <li>Private Telegram channel</li>
         <li>Analyst commentary</li>
       </ul>
-      <button class="pkg-btn" onclick="payPackage('trader')">→ Pay with Crypto</button>
+      <button class="pkg-btn pkg-btn-card" onclick="payCard('trader')" style="display:none;">💳 Buy with Card · €73</button>
+      <button class="pkg-btn pkg-btn-crypto" onclick="payPackage('trader')">₿ Buy with Crypto · $72 <span class="pkg-btn-discount">-10%</span></button>
     </div>
 
     <div class="pkg-card reveal">
@@ -2191,7 +2217,8 @@
         <li>Private Telegram channel</li>
         <li>Analyst commentary</li>
       </ul>
-      <button class="pkg-btn" onclick="payPackage('pro')">→ Pay with Crypto</button>
+      <button class="pkg-btn pkg-btn-card" onclick="payCard('pro')" style="display:none;">💳 Buy with Card · €128</button>
+      <button class="pkg-btn pkg-btn-crypto" onclick="payPackage('pro')">₿ Buy with Crypto · $126 <span class="pkg-btn-discount">-10%</span></button>
     </div>
   </div>
 
@@ -2447,12 +2474,11 @@
 </footer>
 
 <script>
-  // Set payment button text based on card availability
+  // Show card buttons during Payou hours (6-21 UTC)
   (function() {
     const utcHour = new Date().getUTCHours();
-    const cardAvailable = utcHour >= 6 && utcHour < 21;
-    if (cardAvailable) {
-      document.querySelectorAll('.pkg-btn').forEach(btn => { btn.textContent = '→ Select Plan'; });
+    if (utcHour >= 6 && utcHour < 21) {
+      document.querySelectorAll('.pkg-btn-card').forEach(btn => { btn.style.display = 'block'; });
     }
   })();
 
@@ -2529,23 +2555,24 @@
   // TEST MODE: set to true to skip payment and go to success page
   const PAYMENT_TEST_MODE = false;
 
-  async function payPackage(pkg) {
-    // Analytics
-    if (window.__mc_sid) {
-      fetch('/api/analytics/event', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ sid: window.__mc_sid, type:'pay_click', ts:Date.now(), data:{ package: pkg } }), keepalive:true });
-    }
-    // Card payments available 6:00-21:00 UTC (Payou operator hours 9:00-00:00 UTC+3)
-    const utcHour = new Date().getUTCHours();
-    const cardAvailable = utcHour >= 6 && utcHour < 21;
-    if (cardAvailable) {
-      window.location.href = '/checkout.html?pkg=' + pkg;
-      return;
-    }
-    // Outside card hours → direct to crypto
+  // Pay with card (Payou)
+  async function payCard(pkg) {
     const btn = event.target;
-    const originalText = btn.textContent;
-    btn.textContent = 'PROCESSING...';
-    btn.disabled = true;
+    btn.textContent = 'PROCESSING...'; btn.disabled = true;
+    if (window.__mc_sid) fetch('/api/analytics/event', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ sid: window.__mc_sid, type:'pay_click', ts:Date.now(), data:{ package: pkg, method: 'card' } }), keepalive:true });
+    try {
+      const res = await fetch('/api/pay-payou.php', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ package: pkg }) });
+      const data = await res.json();
+      if (data.ok && data.redirect) { window.location.href = data.redirect; }
+      else { alert('Payment error. Please try again.'); btn.textContent = '💳 Buy with Card'; btn.disabled = false; }
+    } catch { alert('Connection error. Please try again.'); btn.textContent = '💳 Buy with Card'; btn.disabled = false; }
+  }
+
+  // Pay with crypto (OxaPay)
+  async function payPackage(pkg) {
+    const btn = event.target;
+    btn.textContent = 'PROCESSING...'; btn.disabled = true;
+    if (window.__mc_sid) fetch('/api/analytics/event', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ sid: window.__mc_sid, type:'pay_click', ts:Date.now(), data:{ package: pkg, method: 'crypto' } }), keepalive:true });
 
     if (PAYMENT_TEST_MODE) {
       setTimeout(() => { window.location.href = '/success.html?pkg=' + pkg; }, 800);
@@ -2574,6 +2601,59 @@
       btn.disabled = false;
     }
   }
+
+  // === TELEGRAM POPUP ===
+  // Triggers: (1) exit intent, (2) 3 min idle, (3) returning from payment page
+  // Only shows once per session, only on landing page (not success.php)
+  (function() {
+    if (sessionStorage.getItem('mc_popup_shown')) return;
+    const popupEl = document.getElementById('tgPopupOverlay');
+    if (!popupEl) return;
+
+    function showPopup() {
+      if (sessionStorage.getItem('mc_popup_shown')) return;
+      sessionStorage.setItem('mc_popup_shown', '1');
+      popupEl.classList.add('show');
+    }
+
+    // 1) Exit intent (mouse leaves top)
+    document.addEventListener('mouseleave', function(e) {
+      if (e.clientY <= 0) showPopup();
+    });
+
+    // 2) 3 minutes idle (no clicks, scrolls, or mouse moves)
+    let idleTimer;
+    function resetIdle() { clearTimeout(idleTimer); idleTimer = setTimeout(showPopup, 3 * 60 * 1000); }
+    ['click', 'scroll', 'mousemove', 'touchstart', 'keydown'].forEach(ev => document.addEventListener(ev, resetIdle, { passive: true }));
+    resetIdle();
+
+    // 3) Returning from payment page (bfcache)
+    window.addEventListener('pageshow', function(e) {
+      if (e.persisted) {
+        showPopup();
+        document.querySelectorAll('.pkg-btn').forEach(btn => { btn.disabled = false; if (btn.classList.contains('pkg-btn-card')) btn.textContent = btn.textContent; });
+        document.querySelectorAll('.pkg-btn-crypto').forEach(btn => { btn.disabled = false; });
+      }
+    });
+  })();
+
+  function closePopup() { document.getElementById('tgPopupOverlay').classList.remove('show'); }
 </script>
+
+<!-- Telegram Popup -->
+<div class="tg-popup-overlay" id="tgPopupOverlay">
+  <div class="tg-popup">
+    <button class="tg-popup-close" onclick="closePopup()">×</button>
+    <div class="tg-popup-icon">📊</div>
+    <h3>Check Our Results First</h3>
+    <p>Not sure yet? See our verified trade history, real P&L results, and community stats before subscribing. Join our free Telegram bot — no commitment.</p>
+    <a href="https://t.me/momentocrypto_bot?start=popup" target="_blank" rel="noopener" class="tg-popup-btn">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12l-6.871 4.326-2.962-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.194 1.006.131.833.941z"/></svg>
+      View Free Stats
+    </a>
+    <button class="tg-popup-skip" onclick="closePopup()">I'll decide on my own</button>
+  </div>
+</div>
+
 </body>
 </html>
