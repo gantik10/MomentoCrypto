@@ -76,6 +76,13 @@ $params = http_build_query([
 ]);
 $redirectUrl = 'https://payou.pro/sci/v1/?' . $params;
 
+// Save to pending orders for status polling
+$pendingFile = __DIR__ . '/payou_pending.json';
+$pending = file_exists($pendingFile) ? json_decode(file_get_contents($pendingFile), true) ?: [] : [];
+$pending[] = ['order_id' => $orderId, 'package' => $package, 'amount' => $amount, 'token' => $token, 'created' => time(), 'status' => 'pending'];
+$pending = array_filter($pending, fn($o) => $o['created'] > time() - 7200); // keep 2 hours
+file_put_contents($pendingFile, json_encode(array_values($pending), JSON_PRETTY_PRINT));
+
 // Debug log
 file_put_contents(__DIR__ . '/pay_payou_debug.log', date('Y-m-d H:i:s') . "\nOrder: {$orderId}\nAmount: {$amount}\nSystem: {$PAYMENT_SYSTEM}\nHash: {$hash}\nRedirect: {$redirectUrl}\n\n", FILE_APPEND);
 
