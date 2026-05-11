@@ -2606,13 +2606,8 @@
 </footer>
 
 <script>
-  // Show card buttons during Payou hours (6-21 UTC)
-  (function() {
-    const utcHour = new Date().getUTCHours();
-    if (utcHour >= 6 && utcHour < 21) {
-      document.querySelectorAll('.pkg-btn-card').forEach(btn => { btn.style.display = 'block'; });
-    }
-  })();
+  // Show card buttons (24/7)
+  document.querySelectorAll('.pkg-btn-card').forEach(btn => { btn.style.display = 'block'; });
 
   // Auto-dismiss support bubble after 8s
   setTimeout(() => {
