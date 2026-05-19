@@ -35,13 +35,16 @@ function require_admin($adminPass) {
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-    // Public — return all posts, newest first
+    // Public — newest first, paginated
     usort($posts, fn($a, $b) => ($b['ts'] ?? 0) - ($a['ts'] ?? 0));
-    $limit = isset($_GET['limit']) ? min(100, max(1, (int)$_GET['limit'])) : 30;
+    $limit = isset($_GET['limit']) ? min(100, max(1, (int)$_GET['limit'])) : 10;
+    $offset = isset($_GET['offset']) ? max(0, (int)$_GET['offset']) : 0;
     echo json_encode([
         'ok' => true,
-        'posts' => array_slice($posts, 0, $limit),
+        'posts' => array_values(array_slice($posts, $offset, $limit)),
         'total' => count($posts),
+        'offset' => $offset,
+        'limit' => $limit,
         'public_since' => $env['DAILY_RESULTS_PUBLIC_SINCE'] ?? '2026-05-12',
     ]);
     exit;
@@ -78,19 +81,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $post = [
         'id' => $id,
         'date' => $date,
-        'title' => trim($input['title'] ?? ''),
-        'body' => trim($input['body'] ?? ''),
+        // Bilingual fields — both required
+        'title_pt' => trim($input['title_pt'] ?? ''),
+        'title_en' => trim($input['title_en'] ?? ''),
+        'body_pt'  => trim($input['body_pt'] ?? ''),
+        'body_en'  => trim($input['body_en'] ?? ''),
         'image' => trim($input['image'] ?? ''),
-        'win_count' => isset($input['win_count']) ? (int)$input['win_count'] : null,
-        'loss_count' => isset($input['loss_count']) ? (int)$input['loss_count'] : null,
-        'total_pnl_pct' => isset($input['total_pnl_pct']) ? (float)$input['total_pnl_pct'] : null,
+        'win_count' => isset($input['win_count']) && $input['win_count'] !== '' ? (int)$input['win_count'] : null,
+        'loss_count' => isset($input['loss_count']) && $input['loss_count'] !== '' ? (int)$input['loss_count'] : null,
+        'total_pnl_pct' => isset($input['total_pnl_pct']) && $input['total_pnl_pct'] !== '' ? (float)$input['total_pnl_pct'] : null,
         'ts' => strtotime($date) ?: time(),
         'updated_at' => time(),
     ];
 
-    if (!$post['title'] || !$post['body']) {
+    if (!$post['title_pt'] || !$post['body_pt'] || !$post['title_en'] || !$post['body_en']) {
         http_response_code(400);
-        echo json_encode(['error' => 'title and body are required']);
+        echo json_encode(['error' => 'Both languages required: title_pt, body_pt, title_en, body_en']);
         exit;
     }
 

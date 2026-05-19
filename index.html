@@ -501,11 +501,116 @@
   .results-intro {
     color: var(--white-dim);
     font-size: 16px;
-    max-width: 480px;
+    max-width: 540px;
     line-height: 1.7;
-    margin-bottom: 60px;
+    margin-bottom: 28px;
   }
-  .results-cta { text-align: center; }
+  .results-since {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(57,255,20,0.06);
+    border: 1px solid rgba(57,255,20,0.25);
+    border-radius: 999px;
+    padding: 10px 18px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    color: rgba(245,245,245,0.85);
+    margin-bottom: 40px;
+    line-height: 1.5;
+    max-width: 800px;
+  }
+  .results-since strong { color: var(--green); font-weight: 700; }
+  .results-since .dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--green);
+    box-shadow: 0 0 10px var(--green);
+    animation: blink 1.2s step-end infinite;
+    flex-shrink: 0;
+  }
+  .results-cta { text-align: center; margin-top: 40px; }
+
+  /* Daily-results feed cards */
+  .daily-feed { display: flex; flex-direction: column; gap: 20px; margin-bottom: 48px; }
+  .daily-card {
+    display: grid;
+    grid-template-columns: 320px 1fr;
+    gap: 24px;
+    background: var(--gray-mid);
+    border: 1px solid rgba(57,255,20,0.12);
+    border-radius: 14px;
+    overflow: hidden;
+    transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+  }
+  .daily-card:hover {
+    border-color: rgba(57,255,20,0.3);
+    transform: translateY(-3px);
+    box-shadow: 0 12px 32px rgba(0,0,0,0.4), 0 0 28px rgba(57,255,20,0.08);
+  }
+  .daily-card-img {
+    background: #0a0a0a;
+    min-height: 240px;
+    display: flex;
+    align-items: stretch;
+    overflow: hidden;
+  }
+  .daily-card-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .daily-card-img-empty {
+    width: 100%;
+    display: flex; align-items: center; justify-content: center;
+    color: rgba(57,255,20,0.25);
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 60px; letter-spacing: 4px;
+  }
+  .daily-card-body { padding: 24px 28px 24px 0; display: flex; flex-direction: column; gap: 10px; }
+  .daily-card-meta {
+    display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+    font-family: 'Space Mono', monospace;
+    font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase;
+    color: var(--green);
+  }
+  .daily-card-meta .date { color: rgba(245,245,245,0.55); }
+  .daily-card-pill {
+    background: rgba(57,255,20,0.1);
+    border: 1px solid rgba(57,255,20,0.25);
+    padding: 3px 9px; border-radius: 999px;
+    font-size: 10px; color: var(--green);
+  }
+  .daily-card-pill.loss { background: rgba(255,71,87,0.08); border-color: rgba(255,71,87,0.25); color: #ff6e7c; }
+  .daily-card-pill.pnl { background: var(--green); color: var(--black); border-color: var(--green); font-weight: 700; }
+  .daily-card-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px; letter-spacing: 1.5px;
+    color: var(--white); line-height: 1.15;
+  }
+  .daily-card-body-text {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px; line-height: 1.7;
+    color: rgba(245,245,245,0.78);
+    white-space: pre-wrap; word-wrap: break-word;
+  }
+  .daily-card-body-text strong { color: var(--white); }
+  .daily-card-tg-link {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-family: 'Space Mono', monospace;
+    font-size: 11px; font-weight: 700; letter-spacing: 1.5px;
+    color: var(--green); text-decoration: none;
+    margin-top: auto; padding-top: 8px;
+  }
+  .daily-card-tg-link:hover { color: #4fff2a; }
+  .daily-empty {
+    text-align: center; padding: 48px 24px;
+    color: var(--white-dim); font-size: 14px;
+    border: 1px dashed rgba(57,255,20,0.2);
+    border-radius: 14px;
+  }
+  @media (max-width: 800px) {
+    .daily-card { grid-template-columns: 1fr; }
+    .daily-card-img { min-height: 200px; max-height: 280px; }
+    .daily-card-body { padding: 20px 22px; }
+    .daily-card-title { font-size: 22px; }
+  }
 
   /* LOAD MORE BUTTON */
   .load-more-wrap { text-align: center; margin-bottom: 40px; }
@@ -1971,339 +2076,18 @@
 
 <div class="divider"></div>
 
-<!-- RESULTS -->
+<!-- RESULTS — daily public posts (admin-published, dynamic) -->
 <section id="results">
-  <div class="section-label reveal">Verified trades</div>
-  <h2 class="reveal">REAL <span>RESULTS.</span><br>REAL PROFITS.</h2>
-  <p class="results-intro reveal">Every signal backed by transparent P&L. No cherry-picking. No hiding losses. This is what our community achieves together.</p>
-
-  <div class="trades-grid">
-
-    <!-- Trade 1: BTC long | May 1 | +20.45% -->
-    <div class="trade-card reveal">
-      <div class="tg-bubble">
-        <div class="tg-header"><span class="tg-dot-green"></span> Trade opened</div>
-        <div class="tg-line"><strong>BTCUSDT long · market</strong></div>
-        <div class="tg-line">Entry: 78,250 · Lev: 10× · Margin: 500.00 USDT</div>
-        <div class="tg-line">SL: 77,600 · TP: —</div>
-        <div class="tg-line">Opened: 01 May 2026, 10:22</div>
-        <div class="tg-time">10:22 AM</div>
-      </div>
-      <div class="tg-bubble">
-        <div class="tg-header"><span class="tg-dot-blue"></span> Trade closed</div>
-        <div class="tg-line"><strong>BTCUSDT long · manual</strong></div>
-        <div class="tg-line">Entry: 78,250 · Exit: 79,850</div>
-        <div class="tg-line"><span class="tg-pnl">PnL: +20.45% · 102.25 USDT</span></div>
-        <div class="tg-line">Opened: 01 May 2026, 10:22</div>
-        <div class="tg-line">Closed: 01 May 2026, 12:04 (1h 42m)</div>
-        <div class="tg-time">12:04 PM</div>
-      </div>
-    </div>
-
-    <!-- Trade 2: ETH long | May 1 | +23.64% -->
-    <div class="trade-card reveal">
-      <div class="tg-bubble">
-        <div class="tg-header"><span class="tg-dot-green"></span> Trade opened</div>
-        <div class="tg-line"><strong>ETHUSDT long · market</strong></div>
-        <div class="tg-line">Entry: 2,284 · Lev: 10× · Margin: 500.00 USDT</div>
-        <div class="tg-line">SL: 2,255 · TP: —</div>
-        <div class="tg-line">Opened: 01 May 2026, 14:30</div>
-        <div class="tg-time">2:30 PM</div>
-      </div>
-      <div class="tg-bubble">
-        <div class="tg-header"><span class="tg-dot-blue"></span> Trade closed</div>
-        <div class="tg-line"><strong>ETHUSDT long · manual</strong></div>
-        <div class="tg-line">Entry: 2,284 · Exit: 2,338</div>
-        <div class="tg-line"><span class="tg-pnl">PnL: +23.64% · 118.20 USDT</span></div>
-        <div class="tg-line">Opened: 01 May 2026, 14:30</div>
-        <div class="tg-line">Closed: 01 May 2026, 21:08 (6h 38m)</div>
-        <div class="tg-time">9:08 PM</div>
-      </div>
-    </div>
-
-    <!-- Trade 3: SOL long | May 2 | +49.88% -->
-    <div class="trade-card reveal">
-      <div class="tg-bubble">
-        <div class="tg-header"><span class="tg-dot-green"></span> Trade opened</div>
-        <div class="tg-line"><strong>SOLUSDT long · market</strong></div>
-        <div class="tg-line">Entry: 84.20 · Lev: 10× · Margin: 500.00 USDT</div>
-        <div class="tg-line">SL: 82.50 · TP: —</div>
-        <div class="tg-line">Opened: 02 May 2026, 08:45</div>
-        <div class="tg-time">8:45 AM</div>
-      </div>
-      <div class="tg-bubble">
-        <div class="tg-header"><span class="tg-dot-blue"></span> Trade closed</div>
-        <div class="tg-line"><strong>SOLUSDT long · manual</strong></div>
-        <div class="tg-line">Entry: 84.20 · Exit: 88.40</div>
-        <div class="tg-line"><span class="tg-pnl">PnL: +49.88% · 249.40 USDT</span></div>
-        <div class="tg-line">Opened: 02 May 2026, 08:45</div>
-        <div class="tg-line">Closed: 03 May 2026, 02:57 (18h 12m)</div>
-        <div class="tg-time">2:57 AM</div>
-      </div>
-    </div>
-
-    <!-- Trade 4: DOGE long | May 2 | +93.93% -->
-    <div class="trade-card reveal">
-      <div class="tg-bubble">
-        <div class="tg-header"><span class="tg-dot-green"></span> Trade opened</div>
-        <div class="tg-line"><strong>DOGEUSDT long · market</strong></div>
-        <div class="tg-line">Entry: 0.1022 · Lev: 10× · Margin: 500.00 USDT</div>
-        <div class="tg-line">SL: 0.0980 · TP: —</div>
-        <div class="tg-line">Opened: 02 May 2026, 11:15</div>
-        <div class="tg-time">11:15 AM</div>
-      </div>
-      <div class="tg-bubble">
-        <div class="tg-header"><span class="tg-dot-blue"></span> Trade closed</div>
-        <div class="tg-line"><strong>DOGEUSDT long · manual</strong></div>
-        <div class="tg-line">Entry: 0.1022 · Exit: 0.1118</div>
-        <div class="tg-line"><span class="tg-pnl">PnL: +93.93% · 469.65 USDT</span></div>
-        <div class="tg-line">Opened: 02 May 2026, 11:15</div>
-        <div class="tg-line">Closed: 04 May 2026, 12:30 (2d 1h 15m)</div>
-        <div class="tg-time">12:30 PM</div>
-      </div>
-    </div>
-
-    <!-- Trade 5: BTC long | May 4 | +17.13% -->
-    <div class="trade-card reveal">
-      <div class="tg-bubble">
-        <div class="tg-header"><span class="tg-dot-green"></span> Trade opened</div>
-        <div class="tg-line"><strong>BTCUSDT long · limit</strong></div>
-        <div class="tg-line">Entry: 79,980 · Lev: 10× · Margin: 500.00 USDT</div>
-        <div class="tg-line">SL: 79,200 · TP: —</div>
-        <div class="tg-line">Opened: 04 May 2026, 09:30</div>
-        <div class="tg-time">9:30 AM</div>
-      </div>
-      <div class="tg-bubble">
-        <div class="tg-header"><span class="tg-dot-blue"></span> Trade closed</div>
-        <div class="tg-line"><strong>BTCUSDT long · manual</strong></div>
-        <div class="tg-line">Entry: 79,980 · Exit: 81,350</div>
-        <div class="tg-line"><span class="tg-pnl">PnL: +17.13% · 85.65 USDT</span></div>
-        <div class="tg-line">Opened: 04 May 2026, 09:30</div>
-        <div class="tg-line">Closed: 04 May 2026, 14:57 (5h 27m)</div>
-        <div class="tg-time">2:57 PM</div>
-      </div>
-    </div>
-
-    <!-- Trade 6: ETH long | May 4 | +36.59% -->
-    <div class="trade-card reveal">
-      <div class="tg-bubble">
-        <div class="tg-header"><span class="tg-dot-green"></span> Trade opened</div>
-        <div class="tg-line"><strong>ETHUSDT long · market</strong></div>
-        <div class="tg-line">Entry: 2,323 · Lev: 10× · Margin: 500.00 USDT</div>
-        <div class="tg-line">SL: 2,290 · TP: —</div>
-        <div class="tg-line">Opened: 04 May 2026, 16:20</div>
-        <div class="tg-time">4:20 PM</div>
-      </div>
-      <div class="tg-bubble">
-        <div class="tg-header"><span class="tg-dot-blue"></span> Trade closed</div>
-        <div class="tg-line"><strong>ETHUSDT long · manual</strong></div>
-        <div class="tg-line">Entry: 2,323 · Exit: 2,408</div>
-        <div class="tg-line"><span class="tg-pnl">PnL: +36.59% · 182.95 USDT</span></div>
-        <div class="tg-line">Opened: 04 May 2026, 16:20</div>
-        <div class="tg-line">Closed: 05 May 2026, 10:25 (18h 05m)</div>
-        <div class="tg-time">10:25 AM</div>
-      </div>
-    </div>
-
+  <div class="section-label reveal">Verified results</div>
+  <h2 class="reveal">DAILY <span>RESULTS.</span><br>PUBLISHED HERE.</h2>
+  <p class="results-intro reveal">A public daily recap of every trading day: closed trades, % gained, and the real P&amp;L screenshot. No cherry-picking. No hiding losses.</p>
+  <div class="results-since reveal" id="resultsSince">
+    <span class="dot"></span>
+    <span><strong>We've been publishing daily results publicly since May 12, 2026.</strong> Before that, results stayed inside our private Telegram channel for paid members. Now we publish them here too for full public transparency.</span>
   </div>
 
-  <!-- LOAD MORE -->
-  <div class="load-more-wrap reveal">
-    <button class="load-more-btn" id="loadMoreTrades">LOAD MORE RESULTS ↓</button>
-  </div>
-
-  <!-- HIDDEN TRADES (9 more) -->
-  <div class="trades-grid trades-hidden" id="moreTrades">
-
-    <!-- Trade 7: DOGE long 10× | (0.094-0.090)/0.090*10 = 44.44% | 200*0.4444 = 88.89 -->
-    <div class="trade-card reveal">
-      <div class="tg-bubble">
-        <div class="tg-header"><span class="tg-dot-green"></span> Trade opened</div>
-        <div class="tg-line"><strong>DOGEUSDT long · market</strong></div>
-        <div class="tg-line">Entry: 0.0900 · Lev: 10× · Margin: 200.00 USDT</div>
-        <div class="tg-line">SL: 0.0880 · TP: —</div>
-        <div class="tg-line">Opened: 05 Apr 2026, 14:20</div>
-        <div class="tg-time">2:20 PM</div>
-      </div>
-      <div class="tg-bubble">
-        <div class="tg-header"><span class="tg-dot-blue"></span> Trade closed</div>
-        <div class="tg-line"><strong>DOGEUSDT long · manual</strong></div>
-        <div class="tg-line">Entry: 0.0900 · Exit: 0.0940</div>
-        <div class="tg-line"><span class="tg-pnl">PnL: +44.44% · 88.89 USDT</span></div>
-        <div class="tg-line">Opened: 05 Apr 2026, 14:20</div>
-        <div class="tg-line">Closed: 05 Apr 2026, 17:35 (3h 15m)</div>
-        <div class="tg-time">5:35 PM</div>
-      </div>
-    </div>
-
-    <!-- Trade 8: XRP long 10× | (1.34-1.28)/1.28*10 = 46.88% | 300*0.4688 = 140.63 -->
-    <div class="trade-card reveal">
-      <div class="tg-bubble">
-        <div class="tg-header"><span class="tg-dot-green"></span> Trade opened</div>
-        <div class="tg-line"><strong>XRPUSDT long · limit</strong></div>
-        <div class="tg-line">Entry: 1.2800 · Lev: 10× · Margin: 300.00 USDT</div>
-        <div class="tg-line">SL: 1.2550 · TP: —</div>
-        <div class="tg-line">Opened: 03 Apr 2026, 08:45</div>
-        <div class="tg-time">8:45 AM</div>
-      </div>
-      <div class="tg-bubble">
-        <div class="tg-header"><span class="tg-dot-blue"></span> Trade closed</div>
-        <div class="tg-line"><strong>XRPUSDT long · manual</strong></div>
-        <div class="tg-line">Entry: 1.2800 · Exit: 1.3400</div>
-        <div class="tg-line"><span class="tg-pnl">PnL: +46.88% · 140.63 USDT</span></div>
-        <div class="tg-line">Opened: 03 Apr 2026, 08:45</div>
-        <div class="tg-line">Closed: 03 Apr 2026, 14:38 (5h 53m)</div>
-        <div class="tg-time">2:38 PM</div>
-      </div>
-    </div>
-
-    <!-- Trade 9: LINK long 10× | (8.99-8.66)/8.66*10 = 38.11% | 250*0.3811 = 95.27 -->
-    <div class="trade-card reveal">
-      <div class="tg-bubble">
-        <div class="tg-header"><span class="tg-dot-green"></span> Trade opened</div>
-        <div class="tg-line"><strong>LINKUSDT long · market</strong></div>
-        <div class="tg-line">Entry: 8.66 · Lev: 10× · Margin: 250.00 USDT</div>
-        <div class="tg-line">SL: 8.40 · TP: —</div>
-        <div class="tg-line">Opened: 04 Apr 2026, 11:10</div>
-        <div class="tg-time">11:10 AM</div>
-      </div>
-      <div class="tg-bubble">
-        <div class="tg-header"><span class="tg-dot-blue"></span> Trade closed</div>
-        <div class="tg-line"><strong>LINKUSDT long · manual</strong></div>
-        <div class="tg-line">Entry: 8.66 · Exit: 8.99</div>
-        <div class="tg-line"><span class="tg-pnl">PnL: +38.11% · 95.27 USDT</span></div>
-        <div class="tg-line">Opened: 04 Apr 2026, 11:10</div>
-        <div class="tg-line">Closed: 04 Apr 2026, 15:32 (4h 22m)</div>
-        <div class="tg-time">3:32 PM</div>
-      </div>
-    </div>
-
-    <!-- Trade 10: PEPE long 5× | (0.00000336-0.0000025)/0.0000025*5 = 172.00% | 150*1.72 = 258.00 -->
-    <div class="trade-card reveal">
-      <div class="tg-bubble">
-        <div class="tg-header"><span class="tg-dot-green"></span> Trade opened</div>
-        <div class="tg-line"><strong>PEPEUSDT long · market</strong></div>
-        <div class="tg-line">Entry: 0.0000025 · Lev: 5× · Margin: 150.00 USDT</div>
-        <div class="tg-line">SL: 0.0000023 · TP: —</div>
-        <div class="tg-line">Opened: 01 Apr 2026, 16:00</div>
-        <div class="tg-time">4:00 PM</div>
-      </div>
-      <div class="tg-bubble">
-        <div class="tg-header"><span class="tg-dot-blue"></span> Trade closed</div>
-        <div class="tg-line"><strong>PEPEUSDT long · manual</strong></div>
-        <div class="tg-line">Entry: 0.0000025 · Exit: 0.00000336</div>
-        <div class="tg-line"><span class="tg-pnl">PnL: +172.00% · 258.00 USDT</span></div>
-        <div class="tg-line">Opened: 01 Apr 2026, 16:00</div>
-        <div class="tg-line">Closed: 01 Apr 2026, 21:48 (5h 48m)</div>
-        <div class="tg-time">9:48 PM</div>
-      </div>
-    </div>
-
-    <!-- Trade 11: SUI long 10× | (0.89-0.85)/0.85*10 = 47.06% | 200*0.4706 = 94.12 -->
-    <div class="trade-card reveal">
-      <div class="tg-bubble">
-        <div class="tg-header"><span class="tg-dot-green"></span> Trade opened</div>
-        <div class="tg-line"><strong>SUIUSDT long · market</strong></div>
-        <div class="tg-line">Entry: 0.8500 · Lev: 10× · Margin: 200.00 USDT</div>
-        <div class="tg-line">SL: 0.8300 · TP: —</div>
-        <div class="tg-line">Opened: 04 Apr 2026, 19:30</div>
-        <div class="tg-time">7:30 PM</div>
-      </div>
-      <div class="tg-bubble">
-        <div class="tg-header"><span class="tg-dot-blue"></span> Trade closed</div>
-        <div class="tg-line"><strong>SUIUSDT long · manual</strong></div>
-        <div class="tg-line">Entry: 0.8500 · Exit: 0.8900</div>
-        <div class="tg-line"><span class="tg-pnl">PnL: +47.06% · 94.12 USDT</span></div>
-        <div class="tg-line">Opened: 04 Apr 2026, 19:30</div>
-        <div class="tg-line">Closed: 04 Apr 2026, 22:50 (3h 20m)</div>
-        <div class="tg-time">10:50 PM</div>
-      </div>
-    </div>
-
-    <!-- Trade 12: WIF short 10× | (0.1851-0.1793)/0.1851*10 = 31.33% | 180*0.3133 = 56.40 -->
-    <div class="trade-card reveal">
-      <div class="tg-bubble">
-        <div class="tg-header"><span class="tg-dot-green"></span> Trade opened</div>
-        <div class="tg-line"><strong>WIFUSDT short · market</strong></div>
-        <div class="tg-line">Entry: 0.1851 · Lev: 10× · Margin: 180.00 USDT</div>
-        <div class="tg-line">SL: 0.1880 · TP: —</div>
-        <div class="tg-line">Opened: 01 Apr 2026, 13:10</div>
-        <div class="tg-time">1:10 PM</div>
-      </div>
-      <div class="tg-bubble">
-        <div class="tg-header"><span class="tg-dot-blue"></span> Trade closed</div>
-        <div class="tg-line"><strong>WIFUSDT short · manual</strong></div>
-        <div class="tg-line">Entry: 0.1851 · Exit: 0.1793</div>
-        <div class="tg-line"><span class="tg-pnl">PnL: +31.33% · 56.40 USDT</span></div>
-        <div class="tg-line">Opened: 01 Apr 2026, 13:10</div>
-        <div class="tg-line">Closed: 01 Apr 2026, 17:42 (4h 32m)</div>
-        <div class="tg-time">5:42 PM</div>
-      </div>
-    </div>
-
-    <!-- Trade 13: ONDO short 10× | (0.2736-0.2600)/0.2736*10 = 49.71% | 200*0.4971 = 99.42 -->
-    <div class="trade-card reveal">
-      <div class="tg-bubble">
-        <div class="tg-header"><span class="tg-dot-green"></span> Trade opened</div>
-        <div class="tg-line"><strong>ONDOUSDT short · market</strong></div>
-        <div class="tg-line">Entry: 0.2736 · Lev: 10× · Margin: 200.00 USDT</div>
-        <div class="tg-line">SL: 0.2790 · TP: —</div>
-        <div class="tg-line">Opened: 02 Apr 2026, 09:40</div>
-        <div class="tg-time">9:40 AM</div>
-      </div>
-      <div class="tg-bubble">
-        <div class="tg-header"><span class="tg-dot-blue"></span> Trade closed</div>
-        <div class="tg-line"><strong>ONDOUSDT short · manual</strong></div>
-        <div class="tg-line">Entry: 0.2736 · Exit: 0.2600</div>
-        <div class="tg-line"><span class="tg-pnl">PnL: +49.71% · 99.42 USDT</span></div>
-        <div class="tg-line">Opened: 02 Apr 2026, 09:40</div>
-        <div class="tg-line">Closed: 02 Apr 2026, 15:18 (5h 38m)</div>
-        <div class="tg-time">3:18 PM</div>
-      </div>
-    </div>
-
-    <!-- Trade 14: FET long 10× | (0.2417-0.2252)/0.2252*10 = 73.27% | 250*0.7327 = 183.17 -->
-    <div class="trade-card reveal">
-      <div class="tg-bubble">
-        <div class="tg-header"><span class="tg-dot-green"></span> Trade opened</div>
-        <div class="tg-line"><strong>FETUSDT long · limit</strong></div>
-        <div class="tg-line">Entry: 0.2252 · Lev: 10× · Margin: 250.00 USDT</div>
-        <div class="tg-line">SL: 0.2180 · TP: —</div>
-        <div class="tg-line">Opened: 04 Apr 2026, 22:15</div>
-        <div class="tg-time">10:15 PM</div>
-      </div>
-      <div class="tg-bubble">
-        <div class="tg-header"><span class="tg-dot-blue"></span> Trade closed</div>
-        <div class="tg-line"><strong>FETUSDT long · manual</strong></div>
-        <div class="tg-line">Entry: 0.2252 · Exit: 0.2417</div>
-        <div class="tg-line"><span class="tg-pnl">PnL: +73.27% · 183.17 USDT</span></div>
-        <div class="tg-line">Opened: 04 Apr 2026, 22:15</div>
-        <div class="tg-line">Closed: 05 Apr 2026, 01:27 (3h 12m)</div>
-        <div class="tg-time">1:27 AM</div>
-      </div>
-    </div>
-
-    <!-- Trade 15: TIA short 10× | (0.2947-0.2830)/0.2947*10 = 39.70% | 200*0.3970 = 79.40 -->
-    <div class="trade-card reveal">
-      <div class="tg-bubble">
-        <div class="tg-header"><span class="tg-dot-green"></span> Trade opened</div>
-        <div class="tg-line"><strong>TIAUSDT short · market</strong></div>
-        <div class="tg-line">Entry: 0.2947 · Lev: 10× · Margin: 200.00 USDT</div>
-        <div class="tg-line">SL: 0.3010 · TP: —</div>
-        <div class="tg-line">Opened: 01 Apr 2026, 10:30</div>
-        <div class="tg-time">10:30 AM</div>
-      </div>
-      <div class="tg-bubble">
-        <div class="tg-header"><span class="tg-dot-blue"></span> Trade closed</div>
-        <div class="tg-line"><strong>TIAUSDT short · manual</strong></div>
-        <div class="tg-line">Entry: 0.2947 · Exit: 0.2830</div>
-        <div class="tg-line"><span class="tg-pnl">PnL: +39.70% · 79.40 USDT</span></div>
-        <div class="tg-line">Opened: 01 Apr 2026, 10:30</div>
-        <div class="tg-line">Closed: 01 Apr 2026, 14:05 (3h 35m)</div>
-        <div class="tg-time">2:05 PM</div>
-      </div>
-    </div>
-
+  <div class="daily-feed" id="dailyFeed">
+    <div class="daily-empty">Loading results…</div>
   </div>
 
   <div class="results-cta reveal">
@@ -2689,14 +2473,109 @@
   }, { threshold: 0.5 });
   counters.forEach(c => counterObserver.observe(c));
 
-  // Load More trades
-  document.getElementById('loadMoreTrades').addEventListener('click', function() {
-    const more = document.getElementById('moreTrades');
-    more.classList.add('show');
-    this.style.display = 'none';
-    // Re-observe new reveal elements
-    more.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+  // Load daily results — paginated, image-below-text, click image to expand
+  function escapeHtml(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch])); }
+  function fmtDateEN(dateStr) {
+    if (!dateStr) return '';
+    const [y, m, d] = dateStr.split('-');
+    const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+    return `${months[parseInt(m, 10) - 1]} ${parseInt(d, 10)}, ${y}`;
+  }
+  function renderDailyCard(p) {
+    const title = p.title_en || p.title_pt || p.title || '';
+    const body = p.body_en || p.body_pt || p.body || '';
+    const pillsParts = [];
+    if (p.win_count != null && p.loss_count != null) {
+      pillsParts.push(`<span class="daily-card-pill">${p.win_count}W</span>`);
+      if (p.loss_count > 0) pillsParts.push(`<span class="daily-card-pill loss">${p.loss_count}L</span>`);
+    }
+    if (p.total_pnl_pct != null) {
+      const sign = p.total_pnl_pct >= 0 ? '+' : '';
+      pillsParts.push(`<span class="daily-card-pill pnl">${sign}${p.total_pnl_pct.toFixed(1)}%</span>`);
+    }
+    const img = p.image
+      ? `<div class="daily-card-img" onclick="openLightbox('${escapeHtml(p.image).replace(/'/g, "\\'")}')"><img src="${escapeHtml(p.image)}" alt="${escapeHtml(title)}" loading="lazy"></div>`
+      : '';
+    return `<article class="daily-card reveal">
+      <div class="daily-card-body">
+        <div class="daily-card-meta">
+          <span class="date">${escapeHtml(fmtDateEN(p.date))}</span>
+          ${pillsParts.join('')}
+        </div>
+        <div class="daily-card-title">${escapeHtml(title)}</div>
+        <div class="daily-card-body-text">${escapeHtml(body)}</div>
+      </div>
+      ${img}
+      <a href="https://t.me/momentocrypto_bot?start=tradefb" target="_blank" rel="noopener" class="daily-card-tg-link">VIEW ALL ON TELEGRAM →</a>
+    </article>`;
+  }
+
+  window.openLightbox = function(src) {
+    let lb = document.getElementById('dailyLightbox');
+    if (!lb) {
+      lb = document.createElement('div');
+      lb.id = 'dailyLightbox';
+      lb.className = 'daily-lightbox';
+      lb.innerHTML = '<button class="daily-lightbox-close" aria-label="Close">×</button><img alt="">';
+      lb.addEventListener('click', () => lb.classList.remove('show'));
+      document.body.appendChild(lb);
+    }
+    lb.querySelector('img').src = src;
+    lb.classList.add('show');
+  };
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') document.getElementById('dailyLightbox')?.classList.remove('show');
   });
+
+  let _dailyOffset = 0;
+  let _dailyTotal = 0;
+  const DAILY_PAGE_SIZE = 10;
+  async function loadDailyPage(append) {
+    const feed = document.getElementById('dailyFeed');
+    const since = document.getElementById('resultsSince');
+    const moreBtn = document.getElementById('dailyLoadMore');
+    if (moreBtn) { moreBtn.disabled = true; moreBtn.textContent = 'LOADING…'; }
+    try {
+      const r = await fetch(`/api/daily-results.php?limit=${DAILY_PAGE_SIZE}&offset=${_dailyOffset}`);
+      const data = await r.json();
+      _dailyTotal = data.total || 0;
+      if (!append) {
+        if (!data.posts || !data.posts.length) {
+          feed.innerHTML = `<div class="daily-empty">Today's results are published throughout the day. Check back later, or join Telegram for real-time signals.</div>`;
+          return;
+        }
+        feed.innerHTML = data.posts.map(renderDailyCard).join('');
+      } else {
+        feed.insertAdjacentHTML('beforeend', data.posts.map(renderDailyCard).join(''));
+      }
+      _dailyOffset += data.posts.length;
+      feed.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+      if (data.public_since && since) {
+        since.querySelector('span:last-child').innerHTML = `<strong>We've been publishing daily results publicly since ${escapeHtml(fmtDateEN(data.public_since))}.</strong> Before that, results stayed inside our private Telegram channel for paid members. Now we publish them here too for full public transparency.`;
+      }
+      const wrap = document.getElementById('dailyLoadMoreWrap');
+      if (_dailyOffset < _dailyTotal) {
+        if (!wrap) {
+          const w = document.createElement('div');
+          w.id = 'dailyLoadMoreWrap';
+          w.className = 'daily-load-more-wrap reveal';
+          w.innerHTML = `<button id="dailyLoadMore" class="daily-load-more">LOAD MORE RESULTS (${_dailyTotal - _dailyOffset} more) ↓</button>`;
+          feed.after(w);
+          document.getElementById('dailyLoadMore').addEventListener('click', () => loadDailyPage(true));
+          observer.observe(w);
+        } else {
+          document.getElementById('dailyLoadMore').textContent = `LOAD MORE RESULTS (${_dailyTotal - _dailyOffset} more) ↓`;
+          document.getElementById('dailyLoadMore').disabled = false;
+        }
+      } else if (wrap) {
+        wrap.remove();
+      }
+    } catch (e) {
+      if (!append) feed.innerHTML = `<div class="daily-empty">Couldn't load results right now. Try refreshing the page.</div>`;
+      if (moreBtn) { moreBtn.disabled = false; moreBtn.textContent = 'TRY AGAIN'; }
+    }
+  }
+  loadDailyPage(false);
 
   // === PAYMENT (OxaPay) ===
   // TEST MODE: set to true to skip payment and go to success page
