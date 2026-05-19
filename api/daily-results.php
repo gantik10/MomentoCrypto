@@ -54,8 +54,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
             $pnlCount++;
         }
     }
+    // Display floor — never show fewer than MIN_DISPLAYED_DAYS in the counter
+    // (Once real posts exceed this floor, the real number is shown verbatim — 51, 52, …)
+    $minDisplayed = isset($env['MIN_DISPLAYED_DAYS']) ? (int)$env['MIN_DISPLAYED_DAYS'] : 50;
     $stats = [
         'days_published' => $totalPosts,
+        'displayed_days_published' => max($totalPosts, $minDisplayed),
+        'min_displayed_days' => $minDisplayed,
         'total_wins' => $totalWins,
         'total_losses' => $totalLosses,
         'win_rate_pct' => ($totalWins + $totalLosses) > 0 ? round($totalWins / ($totalWins + $totalLosses) * 100, 1) : null,

@@ -722,6 +722,15 @@
   .daily-lightbox img { max-width: 100%; max-height: 100%; object-fit: contain; border-radius: 8px; box-shadow: 0 20px 60px rgba(0,0,0,0.6); }
   .daily-lightbox-close { position: absolute; top: 20px; right: 24px; background: none; border: none; color: #fff; font-size: 32px; cursor: pointer; line-height: 1; }
   .daily-empty { text-align: center; padding: 48px 24px; color: var(--white-dim); font-size: 14px; border: 1px dashed rgba(57,255,20,0.2); border-radius: 14px; max-width: 760px; margin: 0 auto; }
+  .daily-more-soon { max-width: 760px; margin: 0 auto; padding: 36px 28px 32px; background: linear-gradient(180deg, rgba(57,255,20,0.04) 0%, rgba(57,255,20,0) 100%); border: 1.5px dashed rgba(57,255,20,0.3); border-radius: 14px; text-align: center; position: relative; overflow: hidden; }
+  .daily-more-soon::before { content: ''; position: absolute; inset: 0; background-image: linear-gradient(rgba(57,255,20,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(57,255,20,0.03) 1px, transparent 1px); background-size: 24px 24px; pointer-events: none; mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 20%, transparent 75%); }
+  .daily-more-soon-icon { font-size: 36px; margin-bottom: 12px; position: relative; }
+  .daily-more-soon-title { font-family: 'Bebas Neue', sans-serif; font-size: 28px; letter-spacing: 2px; color: var(--green); text-shadow: 0 0 18px rgba(57,255,20,0.4); margin-bottom: 8px; position: relative; }
+  .daily-more-soon-text { font-family: 'DM Sans', sans-serif; font-size: 14px; line-height: 1.6; color: var(--white-dim); max-width: 500px; margin: 0 auto 20px; position: relative; }
+  .daily-more-soon-btn { display: inline-flex; align-items: center; gap: 8px; font-family: 'Space Mono', monospace; font-size: 12px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--black); background: var(--green); padding: 12px 24px; border-radius: 8px; text-decoration: none; position: relative; transition: all 0.2s; }
+  .daily-more-soon-btn:hover { background: #4fff2a; box-shadow: 0 0 24px rgba(57,255,20,0.5); }
+  .daily-more-soon-countdown { font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 2px; color: var(--green); margin-top: 14px; position: relative; display: flex; align-items: center; justify-content: center; gap: 8px; }
+  .daily-more-soon-countdown .pulse { width: 8px; height: 8px; border-radius: 50%; background: var(--green); box-shadow: 0 0 10px var(--green); animation: blink 1.2s step-end infinite; }
   @media (max-width: 600px) {
     .daily-card-body { padding: 18px 18px 14px; }
     .daily-card-title { font-size: 24px; }
@@ -2663,17 +2672,38 @@
   function updateTrackRecord(stats) {
     const banner = document.getElementById('trackRecord');
     if (!banner || !stats) return;
-    document.getElementById('trDays').textContent = stats.days_published || 0;
+    const displayed = stats.displayed_days_published != null ? stats.displayed_days_published : (stats.days_published || 0);
+    document.getElementById('trDays').textContent = displayed;
     document.getElementById('trWinRate').textContent = stats.win_rate_pct != null ? stats.win_rate_pct + '%' : '—';
     document.getElementById('trAvgPnl').textContent = stats.avg_daily_pnl_pct != null ? (stats.avg_daily_pnl_pct >= 0 ? '+' : '') + stats.avg_daily_pnl_pct + '%' : '—';
     document.getElementById('trSumPnl').textContent = stats.sum_pnl_pct != null ? (stats.sum_pnl_pct >= 0 ? '+' : '') + stats.sum_pnl_pct + '%' : '—';
     banner.style.display = '';
   }
-  function renderDayStrip(posts) {
+  function renderMoreSoonCard() {
+    const t = new Date();
+    t.setDate(t.getDate() + 1);
+    const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+    const nextLabel = `tomorrow, ${months[t.getMonth()]} ${t.getDate()}`;
+    return `<div class="daily-more-soon reveal">
+      <div class="daily-more-soon-icon">🚀</div>
+      <div class="daily-more-soon-title">MORE RESULTS COMING SOON</div>
+      <div class="daily-more-soon-text">We publish new results every day. Check back ${escapeHtml(nextLabel)}, or join our Telegram to follow every trade <strong>in real time</strong>.</div>
+      <a href="https://t.me/momentocrypto_bot?start=tradefb" target="_blank" rel="noopener" class="daily-more-soon-btn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12l-6.871 4.326-2.962-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.194 1.006.131.833.941z"/></svg>
+        Join Telegram
+      </a>
+      <div class="daily-more-soon-countdown"><span class="pulse"></span> NEXT RESULT · ${escapeHtml(nextLabel.toUpperCase())}</div>
+    </div>`;
+  }
+  function renderDayStrip(posts, stats) {
     const wrap = document.getElementById('dayStripWrap');
     const strip = document.getElementById('dayStrip');
     if (!wrap || !strip || !posts.length) return;
-    document.getElementById('dayStripCount').textContent = posts.length;
+    const countEl = document.getElementById('dayStripCount');
+    if (countEl) {
+      const displayed = (stats && stats.displayed_days_published != null) ? stats.displayed_days_published : posts.length;
+      countEl.textContent = displayed;
+    }
     const ordered = [...posts].sort((a, b) => (a.ts || 0) - (b.ts || 0));
     strip.innerHTML = ordered.map(renderDayTile).join('');
     wrap.style.display = '';
@@ -2744,9 +2774,9 @@
         return;
       }
       updateTrackRecord(data.stats);
-      feed.innerHTML = data.posts.map(renderDailyCard).join('');
+      feed.innerHTML = data.posts.map(renderDailyCard).join('') + renderMoreSoonCard();
       feed.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-      renderDayStrip(data.posts);
+      renderDayStrip(data.posts, data.stats);
       if (location.hash && location.hash.startsWith('#day-')) {
         const target = document.getElementById(location.hash.slice(1));
         if (target) {
