@@ -35,16 +35,41 @@ function require_admin($adminPass) {
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-    // Public — newest first, paginated
+    // Public — newest first
     usort($posts, fn($a, $b) => ($b['ts'] ?? 0) - ($a['ts'] ?? 0));
-    $limit = isset($_GET['limit']) ? min(100, max(1, (int)$_GET['limit'])) : 10;
+    $limit = isset($_GET['limit']) ? min(500, max(1, (int)$_GET['limit'])) : 200;
     $offset = isset($_GET['offset']) ? max(0, (int)$_GET['offset']) : 0;
+
+    // Track-record stats over ALL posts (not just paginated slice)
+    $totalPosts = count($posts);
+    $totalWins = 0;
+    $totalLosses = 0;
+    $totalPnl = 0;
+    $pnlCount = 0;
+    foreach ($posts as $p) {
+        if (isset($p['win_count'])) $totalWins += (int)$p['win_count'];
+        if (isset($p['loss_count'])) $totalLosses += (int)$p['loss_count'];
+        if (isset($p['total_pnl_pct']) && $p['total_pnl_pct'] !== null) {
+            $totalPnl += (float)$p['total_pnl_pct'];
+            $pnlCount++;
+        }
+    }
+    $stats = [
+        'days_published' => $totalPosts,
+        'total_wins' => $totalWins,
+        'total_losses' => $totalLosses,
+        'win_rate_pct' => ($totalWins + $totalLosses) > 0 ? round($totalWins / ($totalWins + $totalLosses) * 100, 1) : null,
+        'avg_daily_pnl_pct' => $pnlCount > 0 ? round($totalPnl / $pnlCount, 1) : null,
+        'sum_pnl_pct' => $pnlCount > 0 ? round($totalPnl, 1) : null,
+    ];
+
     echo json_encode([
         'ok' => true,
         'posts' => array_values(array_slice($posts, $offset, $limit)),
-        'total' => count($posts),
+        'total' => $totalPosts,
         'offset' => $offset,
         'limit' => $limit,
+        'stats' => $stats,
         'public_since' => $env['DAILY_RESULTS_PUBLIC_SINCE'] ?? '2026-05-12',
     ]);
     exit;
