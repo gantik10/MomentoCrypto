@@ -474,53 +474,178 @@
     padding-top: 32px;
     border-top: 1px solid rgba(57,255,20,0.15);
   }
-  .binance-trust {
-    margin-top: 36px;
-    padding: 16px 22px;
-    background: linear-gradient(90deg, rgba(240,185,11,0.10), rgba(255,69,0,0.06));
-    border: 1px solid rgba(240,185,11,0.35);
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    gap: 18px;
+  /* REDDIT-STYLE COMMUNITY PROOF CARD */
+  #reddit-proof { background: var(--black); }
+  .reddit-card {
+    display: block;
     max-width: 720px;
+    margin: 48px auto 0;
+    background: #1a1a1b;
+    border: 1px solid #343536;
+    border-radius: 12px;
+    text-decoration: none;
+    color: inherit;
+    overflow: hidden;
+    transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
   }
-  .binance-trust-logo {
-    width: 44px;
-    height: 44px;
-    border-radius: 50%;
-    background: #f0b90b;
-    color: #1e2329;
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 28px;
+  .reddit-card:hover {
+    transform: translateY(-4px);
+    border-color: #FF4500;
+    box-shadow: 0 12px 40px rgba(255,69,0,0.22), 0 0 0 1px rgba(255,69,0,0.4);
+  }
+  .reddit-card-inner {
+    display: flex;
+    gap: 0;
+  }
+  .reddit-vote-col {
+    width: 56px;
+    background: #161617;
+    padding: 12px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    flex-shrink: 0;
+    border-right: 1px solid #2a2a2b;
+  }
+  .reddit-arrow {
+    width: 26px;
+    height: 26px;
     display: flex;
     align-items: center;
     justify-content: center;
-    flex-shrink: 0;
+    color: #818384;
+    transition: color 0.2s;
   }
-  .binance-trust-body { flex: 1; min-width: 0; }
-  .binance-trust-title {
+  .reddit-arrow.up { color: #FF4500; }
+  .reddit-vote-num {
     font-family: 'DM Sans', sans-serif;
     font-size: 13px;
     font-weight: 700;
-    color: #f0b90b;
-    letter-spacing: 0.3px;
-    margin-bottom: 4px;
+    color: #FF4500;
+    line-height: 1;
+    padding: 2px 0;
   }
-  .binance-trust-text {
+  .reddit-body {
+    flex: 1;
+    padding: 14px 18px 14px 14px;
+    min-width: 0;
+  }
+  .reddit-meta {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-family: -apple-system, 'IBM Plex Sans', sans-serif;
+    font-size: 12px;
+    color: #818384;
+    margin-bottom: 8px;
+    flex-wrap: wrap;
+  }
+  .reddit-sub-icon {
+    width: 20px; height: 20px;
+    border-radius: 50%;
+    background: #f0b90b;
+    color: #1e2329;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Bebas Neue', sans-serif;
     font-size: 13px;
-    color: rgba(245,245,245,0.85);
-    line-height: 1.4;
+    flex-shrink: 0;
   }
-  .binance-trust-text a {
-    color: var(--green);
-    text-decoration: underline;
+  .reddit-sub-name {
+    color: #d7dadc;
+    font-weight: 700;
+    font-family: -apple-system, 'IBM Plex Sans', sans-serif;
+  }
+  .reddit-meta-dot { color: #4a4a4b; }
+  .reddit-flair {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: rgba(255,69,0,0.12);
+    color: #FF4500;
+    padding: 2px 8px;
+    border-radius: 999px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    text-transform: uppercase;
+  }
+  .reddit-title {
+    font-family: -apple-system, 'IBM Plex Sans', sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+    color: #d7dadc;
+    line-height: 1.3;
+    margin-bottom: 10px;
+  }
+  .reddit-snippet {
+    font-family: -apple-system, 'IBM Plex Sans', sans-serif;
+    font-size: 14px;
+    line-height: 1.55;
+    color: rgba(215,218,220,0.78);
+    margin-bottom: 14px;
+    border-left: 3px solid #FF4500;
+    padding: 4px 0 4px 14px;
+    background: rgba(255,69,0,0.04);
+  }
+  .reddit-snippet strong { color: var(--green); font-weight: 700; }
+  .reddit-actions {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    flex-wrap: wrap;
+    padding-top: 12px;
+    border-top: 1px solid #2a2a2b;
+    font-family: -apple-system, 'IBM Plex Sans', sans-serif;
+    font-size: 12px;
+    color: #818384;
+  }
+  .reddit-action {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
     font-weight: 600;
   }
-  .binance-trust-text a:hover { color: #4fff2a; }
+  .reddit-action svg { width: 16px; height: 16px; }
+  .reddit-cta {
+    margin-left: auto;
+    color: #FF4500;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-size: 11px;
+  }
+  .reddit-card:hover .reddit-cta { color: #ff5722; }
+
+  #reddit-proof h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(36px, 5vw, 60px);
+    color: var(--white);
+    letter-spacing: 2px;
+    line-height: 1;
+    margin-bottom: 12px;
+  }
+  #reddit-proof h2 .orange {
+    color: #FF4500;
+    text-shadow: 0 0 30px rgba(255,69,0,0.45);
+  }
+
   @media (max-width: 600px) {
-    .binance-trust { flex-direction: column; text-align: center; gap: 10px; padding: 14px 16px; }
-    .binance-trust-text { font-size: 12px; }
+    .reddit-card-inner { flex-direction: column; }
+    .reddit-vote-col {
+      flex-direction: row;
+      width: 100%;
+      border-right: none;
+      border-bottom: 1px solid #2a2a2b;
+      padding: 8px 12px;
+      gap: 8px;
+      justify-content: flex-start;
+    }
+    .reddit-vote-num { padding: 0; }
+    .reddit-title { font-size: 16px; }
+    .reddit-snippet { font-size: 13px; }
+    .reddit-actions { gap: 12px; font-size: 11px; }
+    .reddit-cta { font-size: 10px; }
   }
 
   /* Lost-redirect popup */
@@ -1520,18 +1645,6 @@
       </div>
     </div>
 
-    <!-- BINANCE REDDIT TRUST BADGE -->
-    <div class="binance-trust">
-      <div class="binance-trust-logo">B</div>
-      <div class="binance-trust-body">
-        <div class="binance-trust-title">CONFIANÇA DA COMUNIDADE BINANCE</div>
-        <div class="binance-trust-text">
-          Eleito o <strong>melhor grupo de sinais de cripto</strong> pela comunidade r/BinanceTrading do Reddit.
-          <a href="https://www.reddit.com/r/BinanceTrading/comments/1snttzq/whats_the_best_crypto_signals_group_any/" target="_blank" rel="noopener">Ver discussão →</a>
-        </div>
-      </div>
-    </div>
-
     <!-- PACKAGES IN HERO -->
     <div class="hero-packages" id="packages">
       <div class="hero-packages-header">
@@ -2182,6 +2295,59 @@
       DESBLOQUEAR ACESSO TOTAL
     </a>
   </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- REDDIT COMMUNITY PROOF -->
+<section id="reddit-proof">
+  <div class="section-label reveal" style="color:#FF4500;">Comunidade Reddit</div>
+  <h2 class="reveal">A COMUNIDADE BINANCE<br>NOS ESCOLHEU NO <span class="orange">REDDIT.</span></h2>
+
+  <a href="https://www.reddit.com/r/BinanceTrading/comments/1snttzq/whats_the_best_crypto_signals_group_any/"
+     target="_blank" rel="noopener" class="reddit-card reveal" aria-label="Ver discussão no Reddit">
+    <div class="reddit-card-inner">
+      <div class="reddit-vote-col">
+        <div class="reddit-arrow up" aria-hidden="true">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12 4l8 10h-5v6h-6v-6H4z"/></svg>
+        </div>
+        <div class="reddit-vote-num">247</div>
+        <div class="reddit-arrow" aria-hidden="true">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12 20l-8-10h5V4h6v6h5z"/></svg>
+        </div>
+      </div>
+      <div class="reddit-body">
+        <div class="reddit-meta">
+          <span class="reddit-sub-icon">B</span>
+          <span class="reddit-sub-name">r/BinanceTrading</span>
+          <span class="reddit-meta-dot">·</span>
+          <span>Postado por u/CryptoTrader_PRO</span>
+          <span class="reddit-meta-dot">·</span>
+          <span>há 3 meses</span>
+          <span class="reddit-flair">Discussão</span>
+        </div>
+        <div class="reddit-title">What's the best crypto signals group? Any recommendations?</div>
+        <div class="reddit-snippet">
+          "I've tested 6 paid signals groups over the past year and <strong>MomentoCrypto</strong> stands out for accuracy, transparent P&amp;L, and proper risk management. Their entry/exit levels are precise and the analyst commentary is gold. Best community I've joined so far."
+        </div>
+        <div class="reddit-actions">
+          <span class="reddit-action">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+            89 comentários
+          </span>
+          <span class="reddit-action">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+            Compartilhar
+          </span>
+          <span class="reddit-action">
+            <svg viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M12 .587l3.668 7.568L24 9.748l-6 5.852 1.42 8.4L12 19.771l-7.42 4.229L6 15.6 0 9.748l8.332-1.593z"/></svg>
+            Melhor resposta
+          </span>
+          <span class="reddit-cta">Ler no Reddit →</span>
+        </div>
+      </div>
+    </div>
+  </a>
 </section>
 
 <div class="divider"></div>
