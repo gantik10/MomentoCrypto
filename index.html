@@ -937,8 +937,43 @@
     opacity: 0.5;
   }
 
-  /* REVIEWS */
+  /* REVIEWS — Telegram screenshot gallery */
   #reviews { background: var(--black); }
+  .reviews-gallery {
+    column-count: 3;
+    column-gap: 18px;
+    margin: 56px 0 32px;
+  }
+  @media (max-width: 900px) { .reviews-gallery { column-count: 2; column-gap: 14px; } }
+  @media (max-width: 500px) { .reviews-gallery { column-count: 1; } }
+  .review-shot {
+    display: block;
+    margin: 0 0 18px;
+    break-inside: avoid;
+    border-radius: 14px;
+    overflow: hidden;
+    background: var(--gray-mid);
+    border: 1px solid rgba(57,255,20,0.12);
+    cursor: zoom-in;
+    transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+  }
+  .review-shot:hover {
+    border-color: rgba(57,255,20,0.35);
+    transform: translateY(-3px);
+    box-shadow: 0 12px 32px rgba(0,0,0,0.45), 0 0 28px rgba(57,255,20,0.08);
+  }
+  .review-shot img { display: block; width: 100%; height: auto; }
+  .reviews-empty {
+    text-align: center;
+    padding: 56px 24px;
+    color: var(--white-dim);
+    font-size: 14px;
+    border: 1px dashed rgba(57,255,20,0.2);
+    border-radius: 14px;
+    max-width: 600px;
+    margin: 56px auto 0;
+  }
+
   .reviews-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -2171,85 +2206,10 @@
   <div class="section-label reveal">Community speaks</div>
   <h2 class="reveal">WHAT OUR<br><span>MEMBERS SAY.</span></h2>
 
-  <div class="reviews-grid">
-    <div class="review-card reveal">
-      <div class="review-stars">★★★★★</div>
-      <div class="review-quote">"</div>
-      <p class="review-text">Doubled my portfolio in the first month. The signals are incredibly precise and the team explains the reasoning behind every trade. Best investment decision I made.</p>
-      <div class="review-author">
-        <div class="review-avatar">AK</div>
-        <div>
-          <div class="review-name">ALEKSEI K.</div>
-          <div class="review-handle">@alex_crypto_kz</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="review-card reveal">
-      <div class="review-stars">★★★★★</div>
-      <div class="review-quote">"</div>
-      <p class="review-text">I was skeptical at first but the results channel doesn't lie. Hit all three take profits on the SOL call last week. This community is the real deal, no hype.</p>
-      <div class="review-author">
-        <div class="review-avatar">MV</div>
-        <div>
-          <div class="review-name">MARINA V.</div>
-          <div class="review-handle">@mvtrader</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="review-card reveal">
-      <div class="review-stars">★★★★★</div>
-      <div class="review-quote">"</div>
-      <p class="review-text">Been in crypto for 4 years and MomentoCrypto is by far the best paid group I've ever joined. Clear entries, tight stop losses. They protect your capital first.</p>
-      <div class="review-author">
-        <div class="review-avatar">DP</div>
-        <div>
-          <div class="review-name">DMITRI P.</div>
-          <div class="review-handle">@dp_defi</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="review-card reveal">
-      <div class="review-stars">★★★★★</div>
-      <div class="review-quote">"</div>
-      <p class="review-text">The 3-month package paid for itself in the first two weeks. Consistently 80%+ win rate with proper risk management taught at every step. Highly recommended.</p>
-      <div class="review-author">
-        <div class="review-avatar">NR</div>
-        <div>
-          <div class="review-name">NIKITA R.</div>
-          <div class="review-handle">@nikita_trades</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="review-card reveal">
-      <div class="review-stars">★★★★★</div>
-      <div class="review-quote">"</div>
-      <p class="review-text">Quick alerts straight to my phone on Telegram. Never miss a signal. Made +340% on the AVAX call this quarter. The analyst commentary adds so much context.</p>
-      <div class="review-author">
-        <div class="review-avatar">OB</div>
-        <div>
-          <div class="review-name">OLENA B.</div>
-          <div class="review-handle">@olena_bull</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="review-card reveal">
-      <div class="review-stars">★★★★★</div>
-      <div class="review-quote">"</div>
-      <p class="review-text">Transferred from another signals group and the difference is night and day. Transparent, accountable, and actually profitable. MomentoCrypto is the standard now.</p>
-      <div class="review-author">
-        <div class="review-avatar">IS</div>
-        <div>
-          <div class="review-name">IVAN S.</div>
-          <div class="review-handle">@ivan_signal</div>
-        </div>
-      </div>
-    </div>
+  <div class="reviews-gallery" id="reviewsGallery">
+    <div class="reviews-empty">Loading reviews…</div>
   </div>
+  <div id="reviewsTail"></div>
 </section>
 
 <div class="divider"></div>
@@ -2574,8 +2534,7 @@
     const tail = document.getElementById('dailyTail');
     if (!tail) return;
     if (_shown < _allPosts.length) {
-      const remaining = _allPosts.length - _shown;
-      tail.innerHTML = `<div class="daily-load-more-wrap"><button class="daily-load-more" id="dailyLoadMore">LOAD MORE (${remaining} more) ↓</button></div>`;
+      tail.innerHTML = `<div class="daily-load-more-wrap"><button class="daily-load-more" id="dailyLoadMore">LOAD MORE ↓</button></div>`;
       document.getElementById('dailyLoadMore').addEventListener('click', loadMore);
     } else {
       tail.innerHTML = renderMoreSoonCard();
@@ -2617,6 +2576,55 @@
     }
   }
   loadDailyResults();
+
+  // === REVIEWS GALLERY (Telegram screenshots) ===
+  const REVIEWS_BATCH = 9;
+  let _allReviews = [];
+  let _shownReviews = 0;
+
+  function renderReviewShot(r) {
+    const src = escapeHtml(r.image || '').replace(/'/g, "\\'");
+    return `<a class="review-shot reveal" onclick="openLightbox('${src}'); return false;" href="${escapeHtml(r.image || '')}"><img src="${escapeHtml(r.image || '')}" alt="Telegram review" loading="lazy"></a>`;
+  }
+  function renderReviewsTail() {
+    const tail = document.getElementById('reviewsTail');
+    if (!tail) return;
+    if (_shownReviews < _allReviews.length) {
+      tail.innerHTML = `<div class="daily-load-more-wrap"><button class="daily-load-more" id="reviewsLoadMore">LOAD MORE ↓</button></div>`;
+      document.getElementById('reviewsLoadMore').addEventListener('click', loadMoreReviews);
+    } else {
+      tail.innerHTML = '';
+    }
+  }
+  function loadMoreReviews() {
+    const gallery = document.getElementById('reviewsGallery');
+    const batch = _allReviews.slice(_shownReviews, _shownReviews + REVIEWS_BATCH);
+    gallery.insertAdjacentHTML('beforeend', batch.map(renderReviewShot).join(''));
+    _shownReviews += batch.length;
+    gallery.querySelectorAll('.reveal:not(.visible)').forEach(el => observer.observe(el));
+    renderReviewsTail();
+  }
+  async function loadReviews() {
+    const gallery = document.getElementById('reviewsGallery');
+    if (!gallery) return;
+    try {
+      const r = await fetch('/api/reviews.php');
+      const data = await r.json();
+      _allReviews = data.reviews || [];
+      if (!_allReviews.length) {
+        gallery.innerHTML = '';
+        return;
+      }
+      const first = _allReviews.slice(0, REVIEWS_BATCH);
+      gallery.innerHTML = first.map(renderReviewShot).join('');
+      _shownReviews = first.length;
+      gallery.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+      renderReviewsTail();
+    } catch (e) {
+      gallery.innerHTML = `<div class="reviews-empty">Couldn't load right now.</div>`;
+    }
+  }
+  loadReviews();
 
   // === PAYMENT (OxaPay) ===
   // TEST MODE: set to true to skip payment and go to success page

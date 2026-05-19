@@ -1382,8 +1382,47 @@ document.addEventListener('DOMContentLoaded', () => {
   .tg-popup-skip { display: block; margin-top: 12px; font-size: 12px; color: rgba(255,255,255,0.25); cursor: pointer; background: none; border: none; font-family: inherit; }
   .tg-popup-skip:hover { color: rgba(255,255,255,0.5); }
 
-  /* REVIEWS */
+  /* REVIEWS — Telegram screenshot gallery */
   #reviews { background: var(--black); }
+  .reviews-gallery {
+    column-count: 3;
+    column-gap: 18px;
+    margin: 56px 0 32px;
+  }
+  @media (max-width: 900px) { .reviews-gallery { column-count: 2; column-gap: 14px; } }
+  @media (max-width: 500px) { .reviews-gallery { column-count: 1; } }
+  .review-shot {
+    display: block;
+    margin: 0 0 18px;
+    break-inside: avoid;
+    border-radius: 14px;
+    overflow: hidden;
+    background: var(--gray-mid);
+    border: 1px solid rgba(57,255,20,0.12);
+    cursor: zoom-in;
+    transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+  }
+  .review-shot:hover {
+    border-color: rgba(57,255,20,0.35);
+    transform: translateY(-3px);
+    box-shadow: 0 12px 32px rgba(0,0,0,0.45), 0 0 28px rgba(57,255,20,0.08);
+  }
+  .review-shot img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+  .reviews-empty {
+    text-align: center;
+    padding: 56px 24px;
+    color: var(--white-dim);
+    font-size: 14px;
+    border: 1px dashed rgba(57,255,20,0.2);
+    border-radius: 14px;
+    max-width: 600px;
+    margin: 56px auto 0;
+  }
+
   .reviews-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -2310,85 +2349,10 @@ document.addEventListener('DOMContentLoaded', () => {
   <div class="section-label reveal">A comunidade fala</div>
   <h2 class="reveal">O QUE NOSSOS<br><span>MEMBROS DIZEM.</span></h2>
 
-  <div class="reviews-grid">
-    <div class="review-card reveal">
-      <div class="review-stars">★★★★★</div>
-      <div class="review-quote">"</div>
-      <p class="review-text">Dobrei meu portfólio no primeiro mês. Os sinais são incrivelmente precisos e a equipe explica o raciocínio por trás de cada operação. Melhor decisão de investimento que já tomei.</p>
-      <div class="review-author">
-        <div class="review-avatar">LF</div>
-        <div>
-          <div class="review-name">LUCAS F.</div>
-          <div class="review-handle">@lucas_cripto_sp</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="review-card reveal">
-      <div class="review-stars">★★★★★</div>
-      <div class="review-quote">"</div>
-      <p class="review-text">Eu estava cético no início, mas o canal de resultados não mente. Bateu os três take profits da SOL semana passada. Essa comunidade é a verdadeira, sem hype.</p>
-      <div class="review-author">
-        <div class="review-avatar">MS</div>
-        <div>
-          <div class="review-name">MARIANA S.</div>
-          <div class="review-handle">@maritrader</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="review-card reveal">
-      <div class="review-stars">★★★★★</div>
-      <div class="review-quote">"</div>
-      <p class="review-text">Estou no mercado cripto há 4 anos e a MomentoCrypto é de longe o melhor grupo pago que já participei. Entradas claras, stops apertados. Eles protegem seu capital primeiro.</p>
-      <div class="review-author">
-        <div class="review-avatar">RC</div>
-        <div>
-          <div class="review-name">RAFAEL C.</div>
-          <div class="review-handle">@rafa_defi</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="review-card reveal">
-      <div class="review-stars">★★★★★</div>
-      <div class="review-quote">"</div>
-      <p class="review-text">O plano de 3 meses se pagou nas primeiras duas semanas. Consistentemente 80%+ de acerto com gestão de risco bem ensinada em cada passo. Recomendo demais.</p>
-      <div class="review-author">
-        <div class="review-avatar">PA</div>
-        <div>
-          <div class="review-name">PEDRO A.</div>
-          <div class="review-handle">@pedro_trades</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="review-card reveal">
-      <div class="review-stars">★★★★★</div>
-      <div class="review-quote">"</div>
-      <p class="review-text">Alertas rápidos direto no celular pelo Telegram. Nunca perco um sinal. Fiz +340% na AVAX neste trimestre. Os comentários do analista trazem muito contexto.</p>
-      <div class="review-author">
-        <div class="review-avatar">CO</div>
-        <div>
-          <div class="review-name">CAMILA O.</div>
-          <div class="review-handle">@camila_bull</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="review-card reveal">
-      <div class="review-stars">★★★★★</div>
-      <div class="review-quote">"</div>
-      <p class="review-text">Migrei de outro grupo de sinais e a diferença é absurda. Transparente, responsável e realmente lucrativo. MomentoCrypto é o novo padrão.</p>
-      <div class="review-author">
-        <div class="review-avatar">BR</div>
-        <div>
-          <div class="review-name">BRUNO R.</div>
-          <div class="review-handle">@bruno_signal</div>
-        </div>
-      </div>
-    </div>
+  <div class="reviews-gallery" id="reviewsGallery">
+    <div class="reviews-empty">Carregando avaliações…</div>
   </div>
+  <div id="reviewsTail"></div>
 </section>
 
 <div class="divider"></div>
@@ -2760,8 +2724,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const tail = document.getElementById('dailyTail');
     if (!tail) return;
     if (_shown < _allPosts.length) {
-      const remaining = _allPosts.length - _shown;
-      tail.innerHTML = `<div class="daily-load-more-wrap"><button class="daily-load-more" id="dailyLoadMore">CARREGAR MAIS (${remaining} restantes) ↓</button></div>`;
+      tail.innerHTML = `<div class="daily-load-more-wrap"><button class="daily-load-more" id="dailyLoadMore">CARREGAR MAIS ↓</button></div>`;
       document.getElementById('dailyLoadMore').addEventListener('click', loadMore);
     } else {
       tail.innerHTML = renderMoreSoonCard();
@@ -2804,6 +2767,55 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
   loadDailyResults();
+
+  // === REVIEWS GALLERY (Telegram screenshots) ===
+  const REVIEWS_BATCH = 9;
+  let _allReviews = [];
+  let _shownReviews = 0;
+
+  function renderReviewShot(r) {
+    const src = escapeHtml(r.image || '').replace(/'/g, "\\'");
+    return `<a class="review-shot reveal" onclick="openLightbox('${src}'); return false;" href="${escapeHtml(r.image || '')}"><img src="${escapeHtml(r.image || '')}" alt="Avaliação no Telegram" loading="lazy"></a>`;
+  }
+  function renderReviewsTail() {
+    const tail = document.getElementById('reviewsTail');
+    if (!tail) return;
+    if (_shownReviews < _allReviews.length) {
+      tail.innerHTML = `<div class="daily-load-more-wrap"><button class="daily-load-more" id="reviewsLoadMore">CARREGAR MAIS ↓</button></div>`;
+      document.getElementById('reviewsLoadMore').addEventListener('click', loadMoreReviews);
+    } else {
+      tail.innerHTML = '';
+    }
+  }
+  function loadMoreReviews() {
+    const gallery = document.getElementById('reviewsGallery');
+    const batch = _allReviews.slice(_shownReviews, _shownReviews + REVIEWS_BATCH);
+    gallery.insertAdjacentHTML('beforeend', batch.map(renderReviewShot).join(''));
+    _shownReviews += batch.length;
+    gallery.querySelectorAll('.reveal:not(.visible)').forEach(el => observer.observe(el));
+    renderReviewsTail();
+  }
+  async function loadReviews() {
+    const gallery = document.getElementById('reviewsGallery');
+    if (!gallery) return;
+    try {
+      const r = await fetch('/api/reviews.php');
+      const data = await r.json();
+      _allReviews = data.reviews || [];
+      if (!_allReviews.length) {
+        gallery.innerHTML = '';
+        return;
+      }
+      const first = _allReviews.slice(0, REVIEWS_BATCH);
+      gallery.innerHTML = first.map(renderReviewShot).join('');
+      _shownReviews = first.length;
+      gallery.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+      renderReviewsTail();
+    } catch (e) {
+      gallery.innerHTML = `<div class="reviews-empty">Não foi possível carregar agora.</div>`;
+    }
+  }
+  loadReviews();
 
   // === PAYMENT ===
   // Values for pixel (must match each gateway's actual charge currency)

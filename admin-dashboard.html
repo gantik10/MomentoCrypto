@@ -102,6 +102,7 @@ canvas { width: 100% !important; height: 200px !important; }
     <div class="nav-item" onclick="go('traffic')">Traffic Sources</div>
     <div class="nav-item" onclick="go('fb')">FB & Affiliates</div>
     <div class="nav-item" onclick="go('daily')">Daily Results</div>
+    <div class="nav-item" onclick="go('reviews')">TG Reviews</div>
     <div class="nav-item" onclick="go('devices')">Devices & Countries</div>
     <div class="nav-item" onclick="go('faq')">FAQ Engagement</div>
     <div class="nav-item" onclick="go('live')">Live Visitors</div>
@@ -148,6 +149,7 @@ function go(page) {
   else if (page === 'traffic') renderTraffic(c);
   else if (page === 'fb') renderFbAttribution(c);
   else if (page === 'daily') renderDailyAdmin(c);
+  else if (page === 'reviews') renderReviewsAdmin(c);
   else if (page === 'devices') renderDevices(c);
   else if (page === 'faq') renderFaq(c);
   else if (page === 'live') renderLive(c);
@@ -560,6 +562,145 @@ async function renderFbAttribution(c) {
 }
 
 function escapeHTML(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch])); }
+
+async function renderReviewsAdmin(c) {
+  c.innerHTML = `<div class="section-title">Telegram Reviews</div><div class="section-sub">Loading…</div>`;
+  let reviews = [];
+  try {
+    const r = await fetch('/api/reviews.php');
+    const data = await r.json();
+    reviews = data.reviews || [];
+  } catch (e) {
+    c.innerHTML = `<div class="section-title">Telegram Reviews</div><div class="stat-red">Failed to load: ${e.message}</div>`;
+    return;
+  }
+  c.innerHTML = `
+    <div class="section-title">Telegram Reviews</div>
+    <div class="section-sub">Screenshots from Telegram members. Both /br and / read from the same gallery. Latest upload appears first.</div>
+
+    <div class="chart-wrap">
+      <div class="chart-title">Upload a new review</div>
+      <div style="font-size:11px;color:var(--green);font-weight:700;letter-spacing:0.5px;margin-bottom:8px;">📋 PASTE (⌘V / Ctrl+V), drop, or pick a file — uploads instantly</div>
+      <div id="reviewPasteZone" tabindex="0" style="margin-top:6px;padding:32px 14px;border:1.5px dashed rgba(57,255,20,0.4);border-radius:10px;background:rgba(57,255,20,0.03);color:var(--muted);font-size:13px;text-align:center;cursor:pointer;outline:none;transition:all 0.2s;">
+        📋 Click here, then press ⌘V / Ctrl+V to paste a Telegram screenshot — or drop image files here
+      </div>
+      <input id="reviewFileInput" type="file" accept="image/*" multiple style="margin-top:10px;color:var(--muted);">
+      <div id="reviewStatus" style="margin-top:10px;font-size:12px;color:var(--muted);"></div>
+    </div>
+
+    <div class="chart-wrap">
+      <div class="chart-title">Published reviews (${reviews.length})</div>
+      <div id="reviewsGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:14px;margin-top:8px;">
+        ${reviews.map(r => `
+          <div style="position:relative;background:#0a0a0a;border:1px solid var(--border);border-radius:10px;overflow:hidden;">
+            <img src="${escapeHTML(r.image)}" style="width:100%;height:auto;display:block;cursor:zoom-in;" onclick="window.open('${escapeHTML(r.image)}', '_blank')">
+            <button onclick="deleteReview('${escapeHTML(r.id)}')" title="Delete" style="position:absolute;top:6px;right:6px;background:rgba(0,0,0,0.75);border:1px solid rgba(255,71,87,0.5);color:#ff6e7c;width:28px;height:28px;border-radius:50%;cursor:pointer;font-size:14px;line-height:1;display:flex;align-items:center;justify-content:center;">×</button>
+          </div>
+        `).join('') || '<div style="grid-column:1/-1;text-align:center;color:var(--muted);padding:32px;">No reviews yet — upload your first screenshot above.</div>'}
+      </div>
+    </div>
+
+    <div class="chart-wrap" style="font-size:12px;color:var(--muted);line-height:1.6;">
+      <div class="chart-title" style="color:var(--text);">How it works</div>
+      <strong>Paste anywhere on this page</strong> — take a screenshot in Telegram (e.g., ⌘⇧4 region capture on Mac, Win+Shift+S on Windows), then press ⌘V / Ctrl+V right here.<br>
+      Each pasted/dropped image uploads instantly and appears in the grid below + on /br and / under the "Reviews" section.<br>
+      First 9 reviews show by default on the public site; visitors click "Load more" to see the rest.
+    </div>
+  `;
+
+  // Wire up upload handlers
+  async function uploadReviewBlob(blob, name) {
+    const status = document.getElementById('reviewStatus');
+    status.textContent = `Uploading ${name || 'image'}…`;
+    try {
+      // 1) Upload the image
+      const fd = new FormData();
+      fd.append('image', blob, name || ('paste-' + Date.now() + '.png'));
+      const ur = await fetch('/api/reviews-upload.php', { method: 'POST', headers: { Authorization: `Bearer ${TOKEN}` }, body: fd });
+      const upData = await ur.json();
+      if (!upData.ok || !upData.url) { status.textContent = 'Upload failed: ' + (upData.error || 'unknown'); return; }
+      // 2) Persist as a review record
+      const cr = await fetch('/api/reviews.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${TOKEN}` },
+        body: JSON.stringify({ image: upData.url }),
+      });
+      const cData = await cr.json();
+      if (cData.ok) {
+        status.textContent = '✓ Uploaded — reloading list…';
+        setTimeout(() => go('reviews'), 500);
+      } else {
+        status.textContent = 'Save failed: ' + (cData.error || 'unknown');
+      }
+    } catch (e) { status.textContent = 'Error: ' + e.message; }
+  }
+
+  const pasteZone = document.getElementById('reviewPasteZone');
+  const fileInput = document.getElementById('reviewFileInput');
+
+  fileInput.addEventListener('change', (e) => {
+    Array.from(e.target.files || []).forEach(f => { if (f.type.startsWith('image/')) uploadReviewBlob(f, f.name); });
+  });
+
+  function handleReviewPaste(e) {
+    // Only fire when the Reviews admin tab is currently rendered
+    const zone = document.getElementById('reviewPasteZone');
+    if (!zone) return;
+    const items = (e.clipboardData || e.originalEvent?.clipboardData)?.items;
+    if (!items) return;
+    let handled = false;
+    for (const item of items) {
+      if (item.kind === 'file' && item.type.startsWith('image/')) {
+        const blob = item.getAsFile();
+        if (blob) { handled = true; uploadReviewBlob(blob, 'pasted.' + (item.type.split('/')[1] || 'png')); }
+      }
+    }
+    if (handled) {
+      e.preventDefault();
+      zone.style.background = 'rgba(57,255,20,0.18)';
+      zone.textContent = '✓ Pasted — uploading…';
+      setTimeout(() => {
+        zone.style.background = 'rgba(57,255,20,0.03)';
+        zone.textContent = '📋 Click here, then press ⌘V / Ctrl+V to paste a Telegram screenshot — or drop image files here';
+      }, 1500);
+    }
+  }
+  // Document-level listener — guarded by reviewPasteZone presence so it's effectively scoped to this tab
+  // Replace any previous instance to avoid stacking
+  if (window._mcReviewPasteHandler) document.removeEventListener('paste', window._mcReviewPasteHandler);
+  window._mcReviewPasteHandler = handleReviewPaste;
+  document.addEventListener('paste', handleReviewPaste);
+  pasteZone.addEventListener('click', () => pasteZone.focus());
+  pasteZone.addEventListener('focus', () => { pasteZone.style.borderColor = 'var(--green)'; pasteZone.style.background = 'rgba(57,255,20,0.08)'; });
+  pasteZone.addEventListener('blur', () => { pasteZone.style.borderColor = 'rgba(57,255,20,0.4)'; pasteZone.style.background = 'rgba(57,255,20,0.03)'; });
+
+  ['dragenter', 'dragover'].forEach(ev => pasteZone.addEventListener(ev, (e) => {
+    e.preventDefault(); e.stopPropagation();
+    pasteZone.style.background = 'rgba(57,255,20,0.12)';
+    pasteZone.style.borderColor = 'var(--green)';
+  }));
+  ['dragleave', 'drop'].forEach(ev => pasteZone.addEventListener(ev, (e) => {
+    e.preventDefault(); e.stopPropagation();
+    pasteZone.style.background = 'rgba(57,255,20,0.03)';
+    pasteZone.style.borderColor = 'rgba(57,255,20,0.4)';
+  }));
+  pasteZone.addEventListener('drop', (e) => {
+    Array.from(e.dataTransfer?.files || []).forEach(f => { if (f.type.startsWith('image/')) uploadReviewBlob(f, f.name); });
+  });
+}
+
+window.deleteReview = async function(id) {
+  if (!confirm('Delete this review screenshot?')) return;
+  try {
+    const r = await fetch('/api/reviews.php?delete=' + encodeURIComponent(id), {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${TOKEN}` },
+    });
+    const data = await r.json();
+    if (data.ok) go('reviews');
+    else alert('Delete failed: ' + (data.error || 'unknown'));
+  } catch (e) { alert('Error: ' + e.message); }
+};
 
 async function renderDailyAdmin(c) {
   c.innerHTML = `<div class="section-title">Daily Results</div><div class="section-sub">Loading…</div>`;
