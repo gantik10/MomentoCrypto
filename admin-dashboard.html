@@ -101,6 +101,7 @@ canvas { width: 100% !important; height: 200px !important; }
     <div class="nav-item" onclick="go('heatmap')">Click Heatmap</div>
     <div class="nav-item" onclick="go('traffic')">Traffic Sources</div>
     <div class="nav-item" onclick="go('fb')">FB & Affiliates</div>
+    <div class="nav-item" onclick="go('daily')">Daily Results</div>
     <div class="nav-item" onclick="go('devices')">Devices & Countries</div>
     <div class="nav-item" onclick="go('faq')">FAQ Engagement</div>
     <div class="nav-item" onclick="go('live')">Live Visitors</div>
@@ -146,6 +147,7 @@ function go(page) {
   else if (page === 'heatmap') renderHeatmap(c);
   else if (page === 'traffic') renderTraffic(c);
   else if (page === 'fb') renderFbAttribution(c);
+  else if (page === 'daily') renderDailyAdmin(c);
   else if (page === 'devices') renderDevices(c);
   else if (page === 'faq') renderFaq(c);
   else if (page === 'live') renderLive(c);
@@ -558,6 +560,157 @@ async function renderFbAttribution(c) {
 }
 
 function escapeHTML(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch])); }
+
+async function renderDailyAdmin(c) {
+  c.innerHTML = `<div class="section-title">Daily Results</div><div class="section-sub">Loading…</div>`;
+  let posts = [];
+  try {
+    const r = await fetch('/api/daily-results.php?limit=100');
+    const data = await r.json();
+    posts = data.posts || [];
+  } catch (e) {
+    c.innerHTML = `<div class="section-title">Daily Results</div><div class="stat-red">Failed to load: ${e.message}</div>`;
+    return;
+  }
+  const today = new Date().toISOString().slice(0, 10);
+  c.innerHTML = `
+    <div class="section-title">Daily Results</div>
+    <div class="section-sub">Public daily-results feed shown on /br. Posts are sorted newest-first by date. ID auto-defaults to the date (YYYY-MM-DD) — same ID overwrites the existing post.</div>
+
+    <div class="chart-wrap">
+      <div class="chart-title">New / Edit post</div>
+      <form id="dailyForm" onsubmit="return saveDaily(event)" style="display:grid;gap:12px;">
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:10px;">
+          <label style="font-size:11px;color:var(--muted);">Date<br><input name="date" type="date" required value="${today}" style="width:100%;padding:8px 10px;background:var(--bg);border:1px solid var(--border);border-radius:6px;color:var(--text);"></label>
+          <label style="font-size:11px;color:var(--muted);">Wins<br><input name="win_count" type="number" min="0" placeholder="e.g. 5" style="width:100%;padding:8px 10px;background:var(--bg);border:1px solid var(--border);border-radius:6px;color:var(--text);"></label>
+          <label style="font-size:11px;color:var(--muted);">Losses<br><input name="loss_count" type="number" min="0" placeholder="e.g. 1" style="width:100%;padding:8px 10px;background:var(--bg);border:1px solid var(--border);border-radius:6px;color:var(--text);"></label>
+          <label style="font-size:11px;color:var(--muted);">Total PnL %<br><input name="total_pnl_pct" type="number" step="0.1" placeholder="e.g. 18.2" style="width:100%;padding:8px 10px;background:var(--bg);border:1px solid var(--border);border-radius:6px;color:var(--text);"></label>
+        </div>
+        <label style="font-size:11px;color:var(--muted);">Title<br>
+          <input name="title" type="text" required placeholder="e.g. Resultados de 19 de Maio · 5 trades · +18.2%" style="width:100%;padding:10px 12px;background:var(--bg);border:1px solid var(--border);border-radius:6px;color:var(--text);font-size:14px;">
+        </label>
+        <label style="font-size:11px;color:var(--muted);">Body (texto com parágrafos e emojis)<br>
+          <textarea name="body" required rows="8" placeholder="📊 Dia espetacular!&#10;&#10;✅ BTC long fechou em +6.3%&#10;✅ ETH long fechou em +4.1%&#10;..." style="width:100%;padding:10px 12px;background:var(--bg);border:1px solid var(--border);border-radius:6px;color:var(--text);font-family:inherit;font-size:14px;resize:vertical;"></textarea>
+        </label>
+        <label style="font-size:11px;color:var(--muted);">Image (PNG/JPG/WebP, max 8MB)<br>
+          <input name="image_file" type="file" accept="image/*" style="margin-top:6px;color:var(--muted);">
+          <input name="image" type="hidden">
+          <span id="imgPreview" style="display:block;margin-top:8px;"></span>
+        </label>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <button type="submit" style="padding:10px 24px;background:var(--green);color:#000;border:none;border-radius:6px;font-weight:700;cursor:pointer;">Publish</button>
+          <button type="button" onclick="document.getElementById('dailyForm').reset();document.getElementById('imgPreview').innerHTML=''" style="padding:10px 16px;background:var(--card);color:var(--muted);border:1px solid var(--border);border-radius:6px;cursor:pointer;">Reset</button>
+          <span id="saveMsg" style="font-size:12px;color:var(--muted);"></span>
+        </div>
+      </form>
+    </div>
+
+    <div class="chart-wrap">
+      <div class="chart-title">Published posts (${posts.length})</div>
+      <div class="table-wrap"><table>
+        <thead><tr><th>Date</th><th>Title</th><th>W/L</th><th>PnL %</th><th>Image</th><th></th></tr></thead>
+        <tbody>
+          ${posts.map(p => `<tr>
+            <td>${escapeHTML(p.date || '')}</td>
+            <td style="max-width:340px;">${escapeHTML((p.title || '').slice(0, 80))}</td>
+            <td>${p.win_count != null ? p.win_count + 'W' : '—'} / ${p.loss_count != null ? p.loss_count + 'L' : '—'}</td>
+            <td><strong>${p.total_pnl_pct != null ? (p.total_pnl_pct >= 0 ? '+' : '') + p.total_pnl_pct.toFixed(1) + '%' : '—'}</strong></td>
+            <td>${p.image ? `<a href="${escapeHTML(p.image)}" target="_blank">view</a>` : '—'}</td>
+            <td><button onclick="editDaily(${JSON.stringify(p).replace(/"/g, '&quot;')})" style="padding:4px 10px;background:var(--card);border:1px solid var(--border);color:var(--text);border-radius:4px;cursor:pointer;font-size:11px;">Edit</button>
+                <button onclick="deleteDaily('${escapeHTML(p.id)}')" style="padding:4px 10px;background:rgba(255,71,87,0.15);border:1px solid rgba(255,71,87,0.4);color:var(--red);border-radius:4px;cursor:pointer;font-size:11px;margin-left:4px;">Delete</button></td>
+          </tr>`).join('') || '<tr><td colspan="6" style="color:var(--muted);text-align:center;padding:32px;">No posts yet — publish your first daily result above.</td></tr>'}
+        </tbody>
+      </table></div>
+    </div>
+
+    <div class="chart-wrap" style="font-size:12px;color:var(--muted);line-height:1.6;">
+      <div class="chart-title" style="color:var(--text);">Backfill tip</div>
+      To seed the feed with your last 7-8 days, just publish them one by one above with the correct date. The site sorts by date automatically.<br>
+      The "Publicamos desde…" cover line on /br defaults to <code>2026-05-12</code> — change it by setting <code>DAILY_RESULTS_PUBLIC_SINCE=YYYY-MM-DD</code> in <code>/root/MomentoCrypto/.env</code>.
+    </div>
+  `;
+
+  // Image upload handler
+  const fileInput = document.querySelector('input[name="image_file"]');
+  fileInput.addEventListener('change', async (e) => {
+    const f = e.target.files[0];
+    if (!f) return;
+    const dateVal = document.querySelector('input[name="date"]').value;
+    const fd = new FormData();
+    fd.append('image', f);
+    fd.append('date', dateVal);
+    document.getElementById('saveMsg').textContent = 'Uploading…';
+    try {
+      const r = await fetch('/api/daily-results-upload.php', { method: 'POST', headers: { Authorization: `Bearer ${TOKEN}` }, body: fd });
+      const data = await r.json();
+      if (data.ok && data.url) {
+        document.querySelector('input[name="image"]').value = data.url;
+        document.getElementById('imgPreview').innerHTML = `<img src="${data.url}" style="max-height:120px;border-radius:6px;margin-top:4px;"> <span style="font-size:11px;color:var(--muted);margin-left:8px;">${data.url}</span>`;
+        document.getElementById('saveMsg').textContent = 'Image uploaded ✓';
+      } else {
+        document.getElementById('saveMsg').textContent = 'Upload failed: ' + (data.error || 'unknown');
+      }
+    } catch (err) {
+      document.getElementById('saveMsg').textContent = 'Upload error: ' + err.message;
+    }
+  });
+}
+
+window.saveDaily = async function(ev) {
+  ev.preventDefault();
+  const f = ev.target;
+  const body = {
+    date: f.date.value,
+    title: f.title.value.trim(),
+    body: f.body.value.trim(),
+    image: f.image.value,
+    win_count: f.win_count.value === '' ? null : parseInt(f.win_count.value, 10),
+    loss_count: f.loss_count.value === '' ? null : parseInt(f.loss_count.value, 10),
+    total_pnl_pct: f.total_pnl_pct.value === '' ? null : parseFloat(f.total_pnl_pct.value),
+  };
+  document.getElementById('saveMsg').textContent = 'Saving…';
+  try {
+    const r = await fetch('/api/daily-results.php', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${TOKEN}` },
+      body: JSON.stringify(body),
+    });
+    const data = await r.json();
+    if (data.ok) {
+      document.getElementById('saveMsg').textContent = 'Published ✓ Reloading…';
+      setTimeout(() => go('daily'), 600);
+    } else {
+      document.getElementById('saveMsg').textContent = 'Failed: ' + (data.error || 'unknown');
+    }
+  } catch (err) { document.getElementById('saveMsg').textContent = 'Error: ' + err.message; }
+  return false;
+};
+
+window.editDaily = function(p) {
+  const f = document.getElementById('dailyForm');
+  f.date.value = p.date || '';
+  f.title.value = p.title || '';
+  f.body.value = p.body || '';
+  f.image.value = p.image || '';
+  f.win_count.value = p.win_count == null ? '' : p.win_count;
+  f.loss_count.value = p.loss_count == null ? '' : p.loss_count;
+  f.total_pnl_pct.value = p.total_pnl_pct == null ? '' : p.total_pnl_pct;
+  if (p.image) document.getElementById('imgPreview').innerHTML = `<img src="${p.image}" style="max-height:120px;border-radius:6px;">`;
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+};
+
+window.deleteDaily = async function(id) {
+  if (!confirm('Delete post ' + id + ' permanently?')) return;
+  try {
+    const r = await fetch('/api/daily-results.php?delete=' + encodeURIComponent(id), {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${TOKEN}` },
+    });
+    const data = await r.json();
+    if (data.ok) go('daily');
+    else alert('Delete failed: ' + (data.error || 'unknown'));
+  } catch (e) { alert('Error: ' + e.message); }
+};
 
 // Init
 if (TOKEN) { init(); } else { showAuth(); }

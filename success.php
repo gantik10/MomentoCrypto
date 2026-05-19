@@ -97,11 +97,19 @@ $t = $isBR ? [
     'footer_note' => 'This link is one-time only. Save your code now. If you have any issues, contact support via the bot.',
 ];
 
-// Build Telegram start param: paid_<package>_<orderid>_<utm_source>
-// Bot can parse this to attribute the user to the affiliate
-$tgStart = 'paid';
-if ($orderId) $tgStart .= '_' . substr(preg_replace('/[^a-zA-Z0-9_]/', '', $orderId), 0, 40);
-if ($utmSource) $tgStart .= '_' . substr(preg_replace('/[^a-zA-Z0-9]/', '', $utmSource), 0, 20);
+// Build Telegram start param:
+//   FB attributed buyers → ?start=tradefb (single channel for FB cohort)
+//   Other buyers → paid_<orderid>_<utm_source> (per-order attribution)
+$attribution = isset($tokData) ? ($tokData['attribution'] ?? []) : [];
+$isFbUser = !empty($attribution['fbclid']) || !empty($attribution['fbc']) ||
+    preg_match('/(facebook|^fb$|meta|instagram|^ig$)/i', $utmSource);
+if ($isFbUser) {
+    $tgStart = 'tradefb';
+} else {
+    $tgStart = 'paid';
+    if ($orderId) $tgStart .= '_' . substr(preg_replace('/[^a-zA-Z0-9_]/', '', $orderId), 0, 40);
+    if ($utmSource) $tgStart .= '_' . substr(preg_replace('/[^a-zA-Z0-9]/', '', $utmSource), 0, 20);
+}
 $tgBotLink = 'https://t.me/momentocrypto_bot?start=' . urlencode($tgStart);
 
 $currencySymbol = $currency === 'BRL' ? 'R$' : ($currency === 'EUR' ? '€' : '$');
