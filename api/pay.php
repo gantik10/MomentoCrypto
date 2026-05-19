@@ -23,7 +23,15 @@ $CALLBACK_URL = 'https://momentocrypto.com/api/webhook.php';
 
 $input = json_decode(file_get_contents('php://input'), true);
 $package = $input['package'] ?? '';
+$locale = $input['locale'] ?? 'en';
+$attribution = is_array($input['attribution'] ?? null) ? $input['attribution'] : [];
+$attribution['ip'] = trim(explode(',', $_SERVER['HTTP_X_FORWARDED_FOR'] ?? $_SERVER['HTTP_X_REAL_IP'] ?? $_SERVER['REMOTE_ADDR'] ?? '')[0]);
+$attribution['user_agent'] = $_SERVER['HTTP_USER_AGENT'] ?? '';
+if (empty($attribution['landing_url'])) {
+    $attribution['landing_url'] = $locale === 'pt-BR' ? 'https://momentocrypto.com/br' : 'https://momentocrypto.com/';
+}
 
+// OxaPay charges in USD always — crypto-native users worldwide understand USD pricing
 $packages = [
     'starter' => ['amount' => 27, 'name' => 'Starter — 1 Month'],
     'trader'  => ['amount' => 72, 'name' => 'Trader — 3 Months'],
@@ -48,6 +56,11 @@ $tokens[$token] = [
     'order_id' => $orderId,
     'created' => time(),
     'used' => false,
+    'locale' => $locale,
+    'amount' => $pkg['amount'],
+    'currency' => 'USD',
+    'method' => 'oxapay_crypto',
+    'attribution' => $attribution,
 ];
 // Clean tokens older than 24h
 $tokens = array_filter($tokens, fn($t) => $t['created'] > time() - 86400);

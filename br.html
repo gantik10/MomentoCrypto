@@ -11,6 +11,72 @@
 <meta name="theme-color" content="#080808">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
 <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Bebas+Neue&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+
+<!-- ============= META PIXEL + ATTRIBUTION CAPTURE ============= -->
+<script>
+(function(){
+  // 1) Capture attribution at landing (90-day window)
+  function readCookie(name) {
+    const m = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
+    return m ? decodeURIComponent(m[2]) : '';
+  }
+  function getQueryParam(k) {
+    return new URLSearchParams(location.search).get(k) || '';
+  }
+  const KEY = 'mc_attribution_br';
+  const ATTR_TTL = 90 * 24 * 60 * 60 * 1000;
+  let stored = {};
+  try { stored = JSON.parse(localStorage.getItem(KEY) || '{}'); } catch{}
+  const isExpired = !stored.ts || (Date.now() - stored.ts > ATTR_TTL);
+  // Refresh attribution if URL has new fbclid/utm OR no stored attribution
+  const hasNewFbclid = !!getQueryParam('fbclid');
+  const hasNewUtm = !!getQueryParam('utm_source');
+  if (isExpired || hasNewFbclid || hasNewUtm || !stored.landing_url) {
+    const fbclid = getQueryParam('fbclid');
+    stored = {
+      ts: Date.now(),
+      landing_url: location.href,
+      referrer: document.referrer,
+      fbclid: fbclid,
+      fbc: fbclid ? ('fb.1.' + Date.now() + '.' + fbclid) : (readCookie('_fbc') || ''),
+      utm_source: getQueryParam('utm_source'),
+      utm_medium: getQueryParam('utm_medium'),
+      utm_campaign: getQueryParam('utm_campaign'),
+      utm_content: getQueryParam('utm_content'),
+      utm_term: getQueryParam('utm_term'),
+      affiliate_id: getQueryParam('aff') || getQueryParam('affiliate_id'),
+    };
+    localStorage.setItem(KEY, JSON.stringify(stored));
+  }
+  // Always refresh fbp (the Meta Pixel cookie, updates each visit)
+  window.__mc_attribution = function() {
+    let s = {};
+    try { s = JSON.parse(localStorage.getItem(KEY) || '{}'); } catch{}
+    s.fbp = readCookie('_fbp');
+    return s;
+  };
+
+  // 2) Initialize Meta Pixel (pixel_id loaded from /api/config.php — set META_PIXEL_ID in .env)
+  !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
+  fetch('/api/config.php').then(r=>r.json()).then(cfg => {
+    if (!cfg.meta_pixel_id) { console.warn('[MC] No META_PIXEL_ID configured; pixel disabled.'); return; }
+    window.__mc_meta_pixel_id = cfg.meta_pixel_id;
+    fbq('init', cfg.meta_pixel_id);
+    fbq('track', 'PageView');
+    // Pixel sets _fbp cookie now — re-fetch attribution will include it on next pay click
+  }).catch(e => console.warn('[MC] config.php fetch failed:', e));
+
+  // Helper: fire pixel event safely
+  window.__mc_pixel = function(eventName, params, eventId) {
+    if (window.fbq && window.__mc_meta_pixel_id) {
+      const opts = eventId ? { eventID: eventId } : undefined;
+      fbq('track', eventName, params || {}, opts);
+    }
+  };
+})();
+</script>
+<!-- ============= END META PIXEL ============= -->
+
 <!-- MC Analytics + rrweb Session Recording -->
 <script src="https://cdn.jsdelivr.net/npm/rrweb@2.0.0-alpha.17/dist/record/rrweb-record.min.js" crossorigin="anonymous" defer></script>
 <script>
@@ -2183,32 +2249,46 @@
   });
 
   // === PAYMENT ===
+  // BRL-equivalent values for pixel (must match landing-page display)
+  const PKG_VALUES_PIX = { starter: { brl: 149, usd: 27 }, trader: { brl: 399, usd: 72 }, pro: { brl: 699, usd: 126 } };
+  const PKG_VALUES_CRYPTO = { starter: { usd: 27 }, trader: { usd: 72 }, pro: { usd: 126 } };
+
   // Pix payment (Payou MoneyBRL_Sp)
   async function payPix(pkg) {
     const btn = event.target.closest('button');
     const originalHTML = btn.innerHTML;
     btn.textContent = 'PROCESSANDO...'; btn.disabled = true;
-    if (window.__mc_sid) fetch('/api/analytics/event', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ sid: window.__mc_sid, type:'pay_click', ts:Date.now(), data:{ package: pkg, method: 'pix', locale: 'pt-BR' } }), keepalive:true });
+    const attribution = window.__mc_attribution ? window.__mc_attribution() : {};
+    const v = PKG_VALUES_PIX[pkg] || {};
+    if (window.__mc_sid) fetch('/api/analytics/event', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ sid: window.__mc_sid, type:'pay_click', ts:Date.now(), data:{ package: pkg, method: 'pix', locale: 'pt-BR', attribution } }), keepalive:true });
+    // Meta Pixel: InitiateCheckout
+    if (window.__mc_pixel) window.__mc_pixel('InitiateCheckout', { content_ids: [pkg], content_type: 'product', value: v.brl, currency: 'BRL', num_items: 1 });
     try {
-      const res = await fetch('/api/pay-payou-br.php', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ package: pkg }) });
+      const res = await fetch('/api/pay-payou-br.php', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ package: pkg, attribution }) });
       const data = await res.json();
-      if (data.ok && data.redirect) { window.location.href = data.redirect; }
-      else { alert('Erro no pagamento. Tente novamente.'); btn.innerHTML = originalHTML; btn.disabled = false; }
+      if (data.ok && data.redirect) {
+        if (window.__mc_pixel) window.__mc_pixel('AddPaymentInfo', { content_ids: [pkg], value: v.brl, currency: 'BRL' });
+        window.location.href = data.redirect;
+      } else { alert('Erro no pagamento. Tente novamente.'); btn.innerHTML = originalHTML; btn.disabled = false; }
     } catch { alert('Erro de conexão. Tente novamente.'); btn.innerHTML = originalHTML; btn.disabled = false; }
   }
 
-  // Crypto payment (OxaPay)
+  // Crypto payment (OxaPay — USD)
   async function payPackage(pkg) {
     const btn = event.target.closest('button');
     const originalHTML = btn.innerHTML;
     btn.textContent = 'PROCESSANDO...'; btn.disabled = true;
-    if (window.__mc_sid) fetch('/api/analytics/event', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ sid: window.__mc_sid, type:'pay_click', ts:Date.now(), data:{ package: pkg, method: 'crypto', locale: 'pt-BR' } }), keepalive:true });
+    const attribution = window.__mc_attribution ? window.__mc_attribution() : {};
+    const v = PKG_VALUES_CRYPTO[pkg] || {};
+    if (window.__mc_sid) fetch('/api/analytics/event', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ sid: window.__mc_sid, type:'pay_click', ts:Date.now(), data:{ package: pkg, method: 'crypto', locale: 'pt-BR', attribution } }), keepalive:true });
+    if (window.__mc_pixel) window.__mc_pixel('InitiateCheckout', { content_ids: [pkg], content_type: 'product', value: v.usd, currency: 'USD', num_items: 1 });
 
     try {
-      const res = await fetch('/api/pay.php', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ package: pkg, sid: window.__mc_sid || '' }) });
+      const res = await fetch('/api/pay.php', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ package: pkg, sid: window.__mc_sid || '', locale: 'pt-BR', attribution }) });
       const data = await res.json();
       if (data.ok && data.payment_url) {
         if (window.__mc_sid) fetch('/api/analytics/event', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ sid: window.__mc_sid, type:'invoice_created', ts:Date.now(), data:{ package: pkg, order_id: data.order_id } }), keepalive:true });
+        if (window.__mc_pixel) window.__mc_pixel('AddPaymentInfo', { content_ids: [pkg], value: v.usd, currency: 'USD' });
         window.location.href = data.payment_url;
       } else {
         alert('Erro no pagamento. Tente novamente.');
@@ -2221,6 +2301,31 @@
       btn.disabled = false;
     }
   }
+
+  // Meta Pixel: ViewContent when packages section enters viewport
+  (function() {
+    const pkgSection = document.getElementById('packages');
+    if (!pkgSection) return;
+    let fired = false;
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting && !fired) {
+          fired = true;
+          if (window.__mc_pixel) window.__mc_pixel('ViewContent', { content_type: 'product_group', content_category: 'signals', content_ids: ['starter','trader','pro'] });
+          obs.disconnect();
+        }
+      });
+    }, { threshold: 0.4 });
+    obs.observe(pkgSection);
+  })();
+
+  // Meta Pixel: Lead when user clicks any Telegram bot/support link
+  document.addEventListener('click', (e) => {
+    const a = e.target.closest('a[href*="t.me/momentocrypto"]');
+    if (a && window.__mc_pixel) {
+      window.__mc_pixel('Lead', { content_name: 'telegram_click', content_category: a.href.includes('bot') ? 'bot' : 'support' });
+    }
+  });
 
   // Telegram popup (exit intent + 3min idle + bfcache)
   (function() {

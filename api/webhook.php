@@ -2,8 +2,11 @@
 // OxaPay sends POST webhook when payment status changes
 // Logs all payments and sends instant Telegram notification on success
 
+require_once __DIR__ . '/meta_capi.php';
+
 $logFile = __DIR__ . '/payments.log';
 $salesFile = __DIR__ . '/sales.json';
+$tokensFile = __DIR__ . '/tokens.json';
 $input = file_get_contents('php://input');
 $data = json_decode($input, true) ?: [];
 
@@ -55,6 +58,16 @@ if ($isPaid) {
         if (($s['track_id'] ?? '') === $trackId && $trackId !== '') { $alreadyLogged = true; break; }
     }
     if (!$alreadyLogged) {
+        // Pull attribution from token (set at pay.php time)
+        $attribution = [];
+        $tokens = file_exists($tokensFile) ? json_decode(file_get_contents($tokensFile), true) ?: [] : [];
+        foreach ($tokens as $tk => $tokData) {
+            if (($tokData['order_id'] ?? '') === $orderId) {
+                $attribution = $tokData['attribution'] ?? [];
+                break;
+            }
+        }
+
         $sales[] = [
             'ts' => time(),
             'date' => date('Y-m-d H:i:s'),
@@ -63,8 +76,19 @@ if ($isPaid) {
             'package' => $package,
             'amount' => $amount,
             'currency' => $currency,
+            'method' => 'oxapay_crypto',
+            'attribution' => $attribution,
         ];
         file_put_contents($salesFile, json_encode($sales, JSON_PRETTY_PRINT));
+
+        // Fire Meta Conversions API Purchase event server-side
+        mc_send_meta_purchase([
+            'order_id' => $orderId,
+            'package' => $package,
+            'amount' => $amount,
+            'currency' => $currency,
+            'attribution' => $attribution,
+        ]);
 
         // Send instant Telegram notification
         $token = $env['TELEGRAM_BOT_TOKEN'] ?? '';

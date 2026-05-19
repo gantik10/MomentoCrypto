@@ -3,6 +3,8 @@
 // Payou POSTs: AMOUNT, status, intid, SIGN, MERCHANT_ORDER_ID
 // Must respond: {order_id}|success or {order_id}|error
 
+require_once __DIR__ . '/meta_capi.php';
+
 $logFile = __DIR__ . '/payments-payou.log';
 $salesFile = __DIR__ . '/sales.json';
 
@@ -68,10 +70,12 @@ if ($status === 'success') {
     $pending = file_exists($pendingFile) ? json_decode(file_get_contents($pendingFile), true) ?: [] : [];
     $currency = 'EUR';
     $method = 'payou_card';
+    $attribution = [];
     foreach ($pending as $p) {
         if (($p['order_id'] ?? '') === $orderId) {
             $currency = $p['currency'] ?? 'EUR';
             $method = $p['method'] ?? 'payou_card';
+            $attribution = $p['attribution'] ?? [];
             break;
         }
     }
@@ -93,8 +97,18 @@ if ($status === 'success') {
             'amount' => $amountFloat,
             'currency' => $currency,
             'method' => $method,
+            'attribution' => $attribution,
         ];
         file_put_contents($salesFile, json_encode($sales, JSON_PRETTY_PRINT));
+
+        // Fire Meta Conversions API Purchase event server-side
+        mc_send_meta_purchase([
+            'order_id' => $orderId,
+            'package' => $package,
+            'amount' => $amountFloat,
+            'currency' => $currency,
+            'attribution' => $attribution,
+        ]);
 
         // Telegram notification — plain text (Markdown breaks on $, *, _)
         $token = $env['TELEGRAM_BOT_TOKEN'] ?? '';

@@ -23,6 +23,12 @@ $PAYMENT_SYSTEM = $env['PAYOU_SYSTEM_BRL'] ?? 'MoneyBRL_Sp';
 
 $input = json_decode(file_get_contents('php://input'), true);
 $package = $input['package'] ?? '';
+$attribution = is_array($input['attribution'] ?? null) ? $input['attribution'] : [];
+
+// Enrich attribution with server-known values
+$attribution['ip'] = trim(explode(',', $_SERVER['HTTP_X_FORWARDED_FOR'] ?? $_SERVER['HTTP_X_REAL_IP'] ?? $_SERVER['REMOTE_ADDR'] ?? '')[0]);
+$attribution['user_agent'] = $_SERVER['HTTP_USER_AGENT'] ?? '';
+if (empty($attribution['landing_url'])) $attribution['landing_url'] = 'https://momentocrypto.com/br';
 
 // BRL amounts for Payou Pix payments
 $packages = [
@@ -57,6 +63,10 @@ $tokens[$token] = [
     'created' => time(),
     'used' => false,
     'locale' => 'pt-BR',
+    'amount' => $pkg['amount'],
+    'currency' => 'BRL',
+    'method' => 'payou_pix',
+    'attribution' => $attribution,
 ];
 $tokens = array_filter($tokens, fn($t) => $t['created'] > time() - 86400);
 file_put_contents($tokensFile, json_encode($tokens));
@@ -89,6 +99,7 @@ $pending[] = [
     'token' => $token,
     'created' => time(),
     'status' => 'pending',
+    'attribution' => $attribution,
 ];
 $pending = array_filter($pending, fn($o) => $o['created'] > time() - 7200);
 file_put_contents($pendingFile, json_encode(array_values($pending), JSON_PRETTY_PRINT));

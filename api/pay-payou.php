@@ -23,6 +23,10 @@ $PAYMENT_SYSTEM = $env['PAYOU_SYSTEM'] ?? 'card_EUR';
 
 $input = json_decode(file_get_contents('php://input'), true);
 $package = $input['package'] ?? '';
+$attribution = is_array($input['attribution'] ?? null) ? $input['attribution'] : [];
+$attribution['ip'] = trim(explode(',', $_SERVER['HTTP_X_FORWARDED_FOR'] ?? $_SERVER['HTTP_X_REAL_IP'] ?? $_SERVER['REMOTE_ADDR'] ?? '')[0]);
+$attribution['user_agent'] = $_SERVER['HTTP_USER_AGENT'] ?? '';
+if (empty($attribution['landing_url'])) $attribution['landing_url'] = 'https://momentocrypto.com/';
 
 // EUR amounts for Payou card payments
 $packages = [
@@ -56,6 +60,11 @@ $tokens[$token] = [
     'order_id' => $orderId,
     'created' => time(),
     'used' => false,
+    'locale' => 'en',
+    'amount' => $pkg['amount'],
+    'currency' => 'EUR',
+    'method' => 'payou_card',
+    'attribution' => $attribution,
 ];
 $tokens = array_filter($tokens, fn($t) => $t['created'] > time() - 86400);
 file_put_contents($tokensFile, json_encode($tokens));
@@ -79,7 +88,7 @@ $redirectUrl = 'https://payou.pro/sci/v1/?' . $params;
 // Save to pending orders for status polling
 $pendingFile = __DIR__ . '/payou_pending.json';
 $pending = file_exists($pendingFile) ? json_decode(file_get_contents($pendingFile), true) ?: [] : [];
-$pending[] = ['order_id' => $orderId, 'package' => $package, 'amount' => $amount, 'token' => $token, 'created' => time(), 'status' => 'pending'];
+$pending[] = ['order_id' => $orderId, 'package' => $package, 'amount' => $amount, 'currency' => 'EUR', 'method' => 'payou_card', 'token' => $token, 'created' => time(), 'status' => 'pending', 'attribution' => $attribution];
 $pending = array_filter($pending, fn($o) => $o['created'] > time() - 7200); // keep 2 hours
 file_put_contents($pendingFile, json_encode(array_values($pending), JSON_PRETTY_PRINT));
 

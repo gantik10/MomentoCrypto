@@ -2,6 +2,8 @@
 // Polls Payou status API for recent orders, sends TG notification when paid
 // Run via cron every 2 minutes: */2 * * * * php /root/MomentoCrypto/api/check-payou.php
 
+require_once __DIR__ . '/meta_capi.php';
+
 $envFile = __DIR__ . '/../.env';
 $env = [];
 if (file_exists($envFile)) {
@@ -70,6 +72,7 @@ foreach ($pending as $key => &$order) {
             if (($s['order_id'] ?? '') === $orderId) { $alreadyLogged = true; break; }
         }
         if (!$alreadyLogged) {
+            $attribution = $order['attribution'] ?? [];
             $sales[] = [
                 'ts' => time(),
                 'date' => date('Y-m-d H:i:s'),
@@ -79,8 +82,18 @@ foreach ($pending as $key => &$order) {
                 'amount' => $amount,
                 'currency' => $currency,
                 'method' => $method,
+                'attribution' => $attribution,
             ];
             file_put_contents($salesFile, json_encode($sales, JSON_PRETTY_PRINT));
+
+            // Fire Meta Conversions API Purchase event server-side
+            mc_send_meta_purchase([
+                'order_id' => $orderId,
+                'package' => $package,
+                'amount' => $amount,
+                'currency' => $currency,
+                'attribution' => $attribution,
+            ]);
         }
 
         // Send TG notification (Pix or Card)
