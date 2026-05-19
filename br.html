@@ -799,176 +799,71 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   .results-cta { text-align: center; margin-top: 40px; }
 
-  /* Track-record stats banner */
-  .track-record {
+  /* Daily-results feed — 3-column blog-style grid */
+  .daily-feed {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 14px;
-    margin-bottom: 28px;
-    max-width: 760px;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 22px;
+    margin-bottom: 24px;
   }
-  .tr-stat {
-    background: var(--gray-mid);
-    border: 1px solid rgba(57,255,20,0.15);
-    border-radius: 12px;
-    padding: 16px 14px;
-    text-align: center;
-  }
-  .tr-stat-num {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 34px;
-    color: var(--green);
-    line-height: 1;
-    text-shadow: 0 0 14px rgba(57,255,20,0.35);
-  }
-  .tr-stat-label {
-    font-family: 'Space Mono', monospace;
-    font-size: 9px;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    color: var(--white-dim);
-    margin-top: 6px;
-  }
-  @media (max-width: 600px) {
-    .track-record { grid-template-columns: repeat(2, 1fr); gap: 10px; }
-    .tr-stat-num { font-size: 26px; }
-    .tr-stat { padding: 12px 10px; }
-  }
-
-  /* Day-strip horizontal navigation */
-  .day-strip-wrap {
-    position: sticky;
-    top: 76px;
-    z-index: 50;
-    background: rgba(8,8,8,0.96);
-    backdrop-filter: blur(8px);
-    border-top: 1px solid rgba(57,255,20,0.08);
-    border-bottom: 1px solid rgba(57,255,20,0.08);
-    margin: 0 -60px 24px;
-    padding: 14px 60px;
-  }
-  .day-strip-title {
-    font-family: 'Space Mono', monospace;
-    font-size: 10px;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    color: var(--white-dim);
-    margin-bottom: 10px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-  .day-strip-title .live-dot {
-    width: 8px; height: 8px;
-    border-radius: 50%;
-    background: var(--green);
-    box-shadow: 0 0 10px var(--green);
-    animation: blink 1.2s step-end infinite;
-  }
-  .day-strip {
-    display: flex;
-    gap: 8px;
-    overflow-x: auto;
-    overflow-y: hidden;
-    scrollbar-width: thin;
-    scrollbar-color: rgba(57,255,20,0.3) transparent;
-    padding-bottom: 4px;
-    scroll-snap-type: x proximity;
-  }
-  .day-strip::-webkit-scrollbar { height: 6px; }
-  .day-strip::-webkit-scrollbar-track { background: transparent; }
-  .day-strip::-webkit-scrollbar-thumb { background: rgba(57,255,20,0.25); border-radius: 3px; }
-  .day-strip::-webkit-scrollbar-thumb:hover { background: rgba(57,255,20,0.5); }
-  .day-tile {
-    flex-shrink: 0;
-    min-width: 78px;
-    background: var(--gray-mid);
-    border: 1.5px solid rgba(57,255,20,0.12);
-    border-radius: 10px;
-    padding: 9px 10px;
-    text-align: center;
-    cursor: pointer;
-    transition: all 0.2s;
-    text-decoration: none;
-    color: inherit;
-    scroll-snap-align: start;
-    position: relative;
-  }
-  .day-tile:hover { border-color: rgba(57,255,20,0.5); transform: translateY(-2px); }
-  .day-tile.active {
-    border-color: var(--green);
-    background: rgba(57,255,20,0.08);
-    box-shadow: 0 0 18px rgba(57,255,20,0.25);
-  }
-  .day-tile-month {
-    font-family: 'Space Mono', monospace;
-    font-size: 9px;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    color: var(--white-dim);
-    margin-bottom: 2px;
-  }
-  .day-tile-day {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 22px;
-    color: var(--white);
-    line-height: 1;
-  }
-  .day-tile-pnl {
-    font-family: 'Space Mono', monospace;
-    font-size: 10px;
-    font-weight: 700;
-    margin-top: 4px;
-    line-height: 1;
-  }
-  .day-tile-pnl.pos { color: var(--green); }
-  .day-tile-pnl.neg { color: #ff6e7c; }
-  .day-tile-pnl.neutral { color: var(--white-dim); }
-  .day-tile-dot {
-    position: absolute;
-    top: 6px;
-    right: 6px;
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-  }
-  .day-tile-dot.win { background: var(--green); box-shadow: 0 0 6px var(--green); }
-  .day-tile-dot.loss { background: #ff6e7c; box-shadow: 0 0 6px #ff6e7c; }
-  @media (max-width: 600px) {
-    .day-strip-wrap { margin: 0 -20px 18px; padding: 12px 20px; top: 64px; }
-    .day-tile { min-width: 68px; padding: 8px 8px; }
-    .day-tile-day { font-size: 20px; }
-  }
-
-  /* Daily-results feed — vertical card, full-aspect image */
-  .daily-feed { display: flex; flex-direction: column; gap: 24px; margin-bottom: 32px; scroll-margin-top: 180px; }
+  @media (max-width: 1024px) { .daily-feed { grid-template-columns: repeat(2, 1fr); gap: 18px; } }
+  @media (max-width: 700px)  { .daily-feed { grid-template-columns: 1fr; gap: 16px; } }
   .daily-card {
     display: flex;
     flex-direction: column;
     background: var(--gray-mid);
     border: 1px solid rgba(57,255,20,0.12);
-    border-radius: 14px;
+    border-radius: 12px;
     overflow: hidden;
     transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
-    max-width: 760px;
-    margin: 0 auto;
-    width: 100%;
-    scroll-margin-top: 180px;
-  }
-  .daily-card.highlight {
-    border-color: var(--green);
-    box-shadow: 0 0 0 1px var(--green), 0 0 40px rgba(57,255,20,0.18);
+    position: relative;
   }
   .daily-card:hover {
     border-color: rgba(57,255,20,0.3);
     transform: translateY(-3px);
     box-shadow: 0 12px 32px rgba(0,0,0,0.4), 0 0 28px rgba(57,255,20,0.08);
   }
+  /* Today / latest post — actively pulsing glow */
+  @keyframes todayPulse {
+    0%, 100% { box-shadow: 0 0 0 1.5px var(--green), 0 0 22px rgba(57,255,20,0.28), 0 0 50px rgba(57,255,20,0.12); }
+    50%      { box-shadow: 0 0 0 1.5px var(--green), 0 0 38px rgba(57,255,20,0.55), 0 0 80px rgba(57,255,20,0.25); }
+  }
+  .daily-card.today {
+    border-color: var(--green);
+    animation: todayPulse 2.6s ease-in-out infinite;
+  }
+  .daily-card.today:hover { transform: translateY(-3px); }
+  .daily-card-today-badge {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--green);
+    color: var(--black);
+    font-family: 'Space Mono', monospace;
+    font-size: 9.5px;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 999px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    z-index: 2;
+    box-shadow: 0 0 14px rgba(57,255,20,0.5);
+  }
+  .daily-card-today-badge::before {
+    content: '';
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--black);
+    animation: blink 1.2s step-end infinite;
+  }
   .daily-card-body {
-    padding: 22px 26px 18px;
+    padding: 18px 20px 14px;
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 8px;
   }
   .daily-card-meta {
     display: flex;
@@ -994,16 +889,16 @@ document.addEventListener('DOMContentLoaded', () => {
   .daily-card-pill.pnl { background: var(--green); color: var(--black); border-color: var(--green); font-weight: 700; }
   .daily-card-title {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 30px;
-    letter-spacing: 1.5px;
+    font-size: 22px;
+    letter-spacing: 1.2px;
     color: var(--white);
     line-height: 1.15;
   }
   .daily-card-body-text {
     font-family: 'DM Sans', sans-serif;
-    font-size: 14.5px;
-    line-height: 1.7;
-    color: rgba(245,245,245,0.82);
+    font-size: 13px;
+    line-height: 1.65;
+    color: rgba(245,245,245,0.78);
     white-space: pre-wrap;
     word-wrap: break-word;
   }
@@ -1022,7 +917,7 @@ document.addEventListener('DOMContentLoaded', () => {
     display: block;
     width: 100%;
     height: auto;
-    max-height: 720px;
+    max-height: 420px;
     object-fit: contain;
   }
   .daily-card-img-empty {
@@ -1041,12 +936,12 @@ document.addEventListener('DOMContentLoaded', () => {
     align-items: center;
     gap: 6px;
     font-family: 'Space Mono', monospace;
-    font-size: 11px;
+    font-size: 10.5px;
     font-weight: 700;
     letter-spacing: 1.5px;
     color: var(--green);
     text-decoration: none;
-    padding: 14px 26px;
+    padding: 11px 20px;
     border-top: 1px solid rgba(57,255,20,0.08);
     background: rgba(57,255,20,0.02);
   }
@@ -2309,21 +2204,10 @@ document.addEventListener('DOMContentLoaded', () => {
     <span><strong>Publicamos resultados diários públicos desde 12 de Maio de 2026.</strong> Antes disso, mantínhamos no canal privado do Telegram para nossos membros pagos. Agora também publicamos aqui para máxima transparência.</span>
   </div>
 
-  <div class="track-record reveal" id="trackRecord" style="display:none;">
-    <div class="tr-stat"><div class="tr-stat-num" id="trDays">0</div><div class="tr-stat-label">Dias publicados</div></div>
-    <div class="tr-stat"><div class="tr-stat-num" id="trWinRate">—</div><div class="tr-stat-label">Taxa de Acerto</div></div>
-    <div class="tr-stat"><div class="tr-stat-num" id="trAvgPnl">—</div><div class="tr-stat-label">PnL Médio/Dia</div></div>
-    <div class="tr-stat"><div class="tr-stat-num" id="trSumPnl">—</div><div class="tr-stat-label">PnL Acumulado</div></div>
-  </div>
-
-  <div class="day-strip-wrap reveal" id="dayStripWrap" style="display:none;">
-    <div class="day-strip-title"><span class="live-dot"></span> NAVEGUE PELOS DIAS · <span id="dayStripCount">0</span> dias publicados</div>
-    <div class="day-strip" id="dayStrip"></div>
-  </div>
-
   <div class="daily-feed" id="dailyFeed">
     <div class="daily-empty">Carregando resultados…</div>
   </div>
+  <div id="dailyTail"></div>
 
   <div class="results-cta reveal">
     <a href="#packages" class="tg-btn">
@@ -2818,26 +2702,20 @@ document.addEventListener('DOMContentLoaded', () => {
     const months = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
     return `${parseInt(d, 10)} de ${months[parseInt(m, 10) - 1]} de ${y}`;
   }
-  function renderDailyCard(p) {
+  function renderDailyCard(p, isLatest) {
     const title = p.title_pt || p.title_en || p.title || '';
     const body = p.body_pt || p.body_en || p.body || '';
-    const pillsParts = [];
-    if (p.win_count != null && p.loss_count != null) {
-      pillsParts.push(`<span class="daily-card-pill">${p.win_count}W</span>`);
-      if (p.loss_count > 0) pillsParts.push(`<span class="daily-card-pill loss">${p.loss_count}L</span>`);
-    }
-    if (p.total_pnl_pct != null) {
-      const sign = p.total_pnl_pct >= 0 ? '+' : '';
-      pillsParts.push(`<span class="daily-card-pill pnl">${sign}${p.total_pnl_pct.toFixed(1)}%</span>`);
-    }
+    const today = new Date().toISOString().slice(0, 10);
+    const badgeText = (p.date === today) ? 'HOJE · AO VIVO' : 'MAIS RECENTE';
+    const todayBadge = isLatest ? `<span class="daily-card-today-badge">${badgeText}</span>` : '';
     const img = p.image
       ? `<div class="daily-card-img" onclick="openLightbox('${escapeHtml(p.image).replace(/'/g, "\\'")}')"><img src="${escapeHtml(p.image)}" alt="${escapeHtml(title)}" loading="lazy"></div>`
       : '';
-    return `<article class="daily-card reveal" id="day-${escapeHtml(p.date)}" data-date="${escapeHtml(p.date)}">
+    return `<article class="daily-card reveal${isLatest ? ' today' : ''}" id="day-${escapeHtml(p.date)}" data-date="${escapeHtml(p.date)}">
+      ${todayBadge}
       <div class="daily-card-body">
         <div class="daily-card-meta">
           <span class="date">${escapeHtml(fmtDateBR(p.date))}</span>
-          ${pillsParts.join('')}
         </div>
         <div class="daily-card-title">${escapeHtml(title)}</div>
         <div class="daily-card-body-text">${escapeHtml(body)}</div>
@@ -2848,7 +2726,6 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function renderMoreSoonCard() {
-    // Compute next-day label in BR locale (Brasília UTC-3, but use server-passed if needed)
     const t = new Date();
     t.setDate(t.getDate() + 1);
     const months = ['janeiro','fevereiro','março','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro'];
@@ -2863,93 +2740,6 @@ document.addEventListener('DOMContentLoaded', () => {
       </a>
       <div class="daily-more-soon-countdown"><span class="pulse"></span> PRÓXIMO RESULTADO · ${escapeHtml(nextLabel.toUpperCase())}</div>
     </div>`;
-  }
-
-  function renderDayTile(p) {
-    const [, m, d] = p.date.split('-');
-    const monthsShort = ['JAN','FEV','MAR','ABR','MAI','JUN','JUL','AGO','SET','OUT','NOV','DEZ'];
-    const monthLbl = monthsShort[parseInt(m, 10) - 1] || '';
-    let pnlClass = 'neutral';
-    let pnlText = '—';
-    let dotClass = '';
-    if (p.total_pnl_pct != null) {
-      pnlClass = p.total_pnl_pct >= 0 ? 'pos' : 'neg';
-      pnlText = (p.total_pnl_pct >= 0 ? '+' : '') + p.total_pnl_pct.toFixed(1) + '%';
-    }
-    if (p.win_count != null && p.loss_count != null) {
-      dotClass = (p.loss_count === 0 && p.win_count > 0) ? 'win' : (p.loss_count > p.win_count ? 'loss' : '');
-    }
-    return `<a class="day-tile" href="#day-${escapeHtml(p.date)}" data-date="${escapeHtml(p.date)}">
-      ${dotClass ? `<span class="day-tile-dot ${dotClass}"></span>` : ''}
-      <div class="day-tile-month">${monthLbl}</div>
-      <div class="day-tile-day">${parseInt(d, 10)}</div>
-      <div class="day-tile-pnl ${pnlClass}">${pnlText}</div>
-    </a>`;
-  }
-
-  function updateTrackRecord(stats) {
-    const banner = document.getElementById('trackRecord');
-    if (!banner || !stats) return;
-    // Show floored count (50+) until real count exceeds it, then show real
-    const displayed = stats.displayed_days_published != null ? stats.displayed_days_published : (stats.days_published || 0);
-    document.getElementById('trDays').textContent = displayed;
-    document.getElementById('trWinRate').textContent = stats.win_rate_pct != null ? stats.win_rate_pct + '%' : '—';
-    document.getElementById('trAvgPnl').textContent = stats.avg_daily_pnl_pct != null ? (stats.avg_daily_pnl_pct >= 0 ? '+' : '') + stats.avg_daily_pnl_pct + '%' : '—';
-    document.getElementById('trSumPnl').textContent = stats.sum_pnl_pct != null ? (stats.sum_pnl_pct >= 0 ? '+' : '') + stats.sum_pnl_pct + '%' : '—';
-    banner.style.display = '';
-  }
-
-  function renderDayStrip(posts, stats) {
-    const wrap = document.getElementById('dayStripWrap');
-    const strip = document.getElementById('dayStrip');
-    if (!wrap || !strip || !posts.length) return;
-    const countEl = document.getElementById('dayStripCount');
-    if (countEl) {
-      const displayed = (stats && stats.displayed_days_published != null) ? stats.displayed_days_published : posts.length;
-      countEl.textContent = displayed;
-    }
-    // Oldest → newest so most recent is on the right (we'll auto-scroll to it)
-    const ordered = [...posts].sort((a, b) => (a.ts || 0) - (b.ts || 0));
-    strip.innerHTML = ordered.map(renderDayTile).join('');
-    wrap.style.display = '';
-    // Mark most recent as active and scroll to end
-    const tiles = strip.querySelectorAll('.day-tile');
-    if (tiles.length) {
-      tiles[tiles.length - 1].classList.add('active');
-      strip.scrollLeft = strip.scrollWidth;
-    }
-    // Click handler — highlight target card + active state
-    strip.addEventListener('click', (e) => {
-      const t = e.target.closest('.day-tile');
-      if (!t) return;
-      strip.querySelectorAll('.day-tile').forEach(x => x.classList.remove('active'));
-      t.classList.add('active');
-      const date = t.getAttribute('data-date');
-      const card = document.getElementById('day-' + date);
-      if (card) {
-        card.classList.add('highlight');
-        setTimeout(() => card.classList.remove('highlight'), 1800);
-      }
-    });
-    // Update active tile as user scrolls feed (IntersectionObserver)
-    const feedObserver = new IntersectionObserver((entries) => {
-      entries.forEach(en => {
-        if (en.isIntersecting) {
-          const date = en.target.getAttribute('data-date');
-          strip.querySelectorAll('.day-tile').forEach(x => x.classList.toggle('active', x.getAttribute('data-date') === date));
-          // Auto-scroll the strip so the active tile is visible
-          const activeTile = strip.querySelector('.day-tile.active');
-          if (activeTile) {
-            const rect = activeTile.getBoundingClientRect();
-            const wrapRect = strip.getBoundingClientRect();
-            if (rect.left < wrapRect.left || rect.right > wrapRect.right) {
-              activeTile.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
-            }
-          }
-        }
-      });
-    }, { rootMargin: '-40% 0px -50% 0px', threshold: 0 });
-    document.querySelectorAll('.daily-card[data-date]').forEach(c => feedObserver.observe(c));
   }
 
   window.openLightbox = function(src) {
@@ -2969,6 +2759,33 @@ document.addEventListener('DOMContentLoaded', () => {
     if (e.key === 'Escape') document.getElementById('dailyLightbox')?.classList.remove('show');
   });
 
+  // Pagination: load 6 at a time. "Load more" until none left → swap for "More results to come"
+  const DAILY_BATCH = 6;
+  let _allPosts = [];
+  let _shown = 0;
+
+  function renderTail() {
+    const tail = document.getElementById('dailyTail');
+    if (!tail) return;
+    if (_shown < _allPosts.length) {
+      const remaining = _allPosts.length - _shown;
+      tail.innerHTML = `<div class="daily-load-more-wrap"><button class="daily-load-more" id="dailyLoadMore">CARREGAR MAIS (${remaining} restantes) ↓</button></div>`;
+      document.getElementById('dailyLoadMore').addEventListener('click', loadMore);
+    } else {
+      tail.innerHTML = renderMoreSoonCard();
+      tail.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    }
+  }
+
+  function loadMore() {
+    const feed = document.getElementById('dailyFeed');
+    const batch = _allPosts.slice(_shown, _shown + DAILY_BATCH);
+    feed.insertAdjacentHTML('beforeend', batch.map(p => renderDailyCard(p, false)).join(''));
+    _shown += batch.length;
+    feed.querySelectorAll('.reveal:not(.visible)').forEach(el => observer.observe(el));
+    renderTail();
+  }
+
   async function loadDailyResults() {
     const feed = document.getElementById('dailyFeed');
     const since = document.getElementById('resultsSince');
@@ -2978,25 +2795,18 @@ document.addEventListener('DOMContentLoaded', () => {
       if (data.public_since && since) {
         since.querySelector('span:last-child').innerHTML = `<strong>Publicamos resultados diários públicos desde ${escapeHtml(fmtDateBR(data.public_since))}.</strong> Antes disso, mantínhamos no canal privado do Telegram para nossos membros pagos. Agora também publicamos aqui para máxima transparência.`;
       }
-      if (!data.posts || !data.posts.length) {
-        feed.innerHTML = `<div class="daily-empty">Os resultados de hoje são publicados ao longo do dia. Volte mais tarde, ou entre no Telegram para receber em tempo real.</div>`;
+      _allPosts = data.posts || [];
+      if (!_allPosts.length) {
+        feed.innerHTML = '';
+        document.getElementById('dailyTail').innerHTML = renderMoreSoonCard();
         return;
       }
-      updateTrackRecord(data.stats);
-      feed.innerHTML = data.posts.map(renderDailyCard).join('') + renderMoreSoonCard();
+      // First batch — mark the most-recent card as today/latest with glow
+      const firstBatch = _allPosts.slice(0, DAILY_BATCH);
+      feed.innerHTML = firstBatch.map((p, i) => renderDailyCard(p, i === 0)).join('');
+      _shown = firstBatch.length;
       feed.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-      renderDayStrip(data.posts, data.stats);
-      // Handle deep-link to a specific day (e.g. /br#day-2026-05-19)
-      if (location.hash && location.hash.startsWith('#day-')) {
-        const target = document.getElementById(location.hash.slice(1));
-        if (target) {
-          setTimeout(() => {
-            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            target.classList.add('highlight');
-            setTimeout(() => target.classList.remove('highlight'), 1800);
-          }, 200);
-        }
-      }
+      renderTail();
     } catch (e) {
       feed.innerHTML = `<div class="daily-empty">Não foi possível carregar os resultados agora. Tente atualizar a página.</div>`;
     }
