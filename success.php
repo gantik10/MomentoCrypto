@@ -226,6 +226,8 @@ fbq('track', 'Purchase', {
       sale: { package: <?= json_encode($package) ?>, order_id: <?= json_encode($orderId) ?>, amount: <?= json_encode($amount) ?>, currency: <?= json_encode($currency) ?>, locale: <?= json_encode($locale) ?> }
     });
   }
+  // Clear lost-redirect flag — user arrived successfully
+  try { localStorage.removeItem('mc_last_pay_attempt'); } catch {}
 
   function copyCode() {
     const code = document.getElementById('codeValue').textContent;

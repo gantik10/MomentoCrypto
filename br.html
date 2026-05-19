@@ -474,6 +474,70 @@
     padding-top: 32px;
     border-top: 1px solid rgba(57,255,20,0.15);
   }
+  .binance-trust {
+    margin-top: 36px;
+    padding: 16px 22px;
+    background: linear-gradient(90deg, rgba(240,185,11,0.10), rgba(255,69,0,0.06));
+    border: 1px solid rgba(240,185,11,0.35);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    max-width: 720px;
+  }
+  .binance-trust-logo {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: #f0b90b;
+    color: #1e2329;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .binance-trust-body { flex: 1; min-width: 0; }
+  .binance-trust-title {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    color: #f0b90b;
+    letter-spacing: 0.3px;
+    margin-bottom: 4px;
+  }
+  .binance-trust-text {
+    font-size: 13px;
+    color: rgba(245,245,245,0.85);
+    line-height: 1.4;
+  }
+  .binance-trust-text a {
+    color: var(--green);
+    text-decoration: underline;
+    font-weight: 600;
+  }
+  .binance-trust-text a:hover { color: #4fff2a; }
+  @media (max-width: 600px) {
+    .binance-trust { flex-direction: column; text-align: center; gap: 10px; padding: 14px 16px; }
+    .binance-trust-text { font-size: 12px; }
+  }
+
+  /* Lost-redirect popup */
+  .lr-popup-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.78); z-index: 10001; display: flex; align-items: center; justify-content: center; opacity: 0; visibility: hidden; transition: opacity 0.3s, visibility 0.3s; backdrop-filter: blur(6px); }
+  .lr-popup-overlay.show { opacity: 1; visibility: visible; }
+  .lr-popup { background: #0d0d0d; border: 1px solid rgba(50,188,173,0.4); border-radius: 16px; padding: 32px 28px; max-width: 440px; width: 92%; text-align: center; position: relative; box-shadow: 0 20px 60px rgba(0,0,0,0.6), 0 0 40px rgba(50,188,173,0.15); }
+  .lr-popup-close { position: absolute; top: 12px; right: 16px; background: none; border: none; color: rgba(255,255,255,0.4); font-size: 22px; cursor: pointer; line-height: 1; }
+  .lr-popup-close:hover { color: #fff; }
+  .lr-popup-icon { font-size: 44px; margin-bottom: 14px; }
+  .lr-popup h3 { color: #fff; font-size: 19px; font-weight: 700; margin-bottom: 10px; line-height: 1.3; }
+  .lr-popup p { color: rgba(255,255,255,0.7); font-size: 14px; line-height: 1.55; margin-bottom: 20px; }
+  .lr-order { background: rgba(255,255,255,0.05); padding: 10px 14px; border-radius: 8px; font-family: 'Space Mono', monospace; font-size: 12px; color: var(--green); margin-bottom: 18px; word-break: break-all; }
+  .lr-popup-btn { display: inline-flex; align-items: center; gap: 10px; padding: 14px 26px; background: var(--pix); color: #fff; border: none; border-radius: 10px; font-size: 14px; font-weight: 700; cursor: pointer; text-decoration: none; transition: background 0.2s; }
+  .lr-popup-btn:hover { background: var(--pix-dim); }
+  .lr-popup-skip { display: block; margin-top: 12px; font-size: 12px; color: rgba(255,255,255,0.4); cursor: pointer; background: none; border: none; font-family: inherit; }
+  .lr-popup-skip:hover { color: rgba(255,255,255,0.7); }
+
   .hero-packages {
     margin-top: 48px;
     padding: 40px 24px 32px;
@@ -739,20 +803,34 @@
     gap: 8px;
     width: 100%;
     font-family: 'DM Sans', sans-serif;
-    font-size: 14px;
+    font-size: 13.5px;
     font-weight: 600;
     text-decoration: none;
-    padding: 14px 16px;
+    padding: 13px 12px;
     border-radius: 10px;
     transition: all 0.2s;
     cursor: pointer;
     border: none;
+    white-space: nowrap;
+    overflow: hidden;
+    margin-bottom: 8px;
   }
-  /* PIX BUTTON (replaces card button on BR) */
+  .pkg-btn:last-child { margin-bottom: 0; }
+
+  /* Pix icon — official Pix mark clipped from full lockup PNG via CSS */
+  .pix-mark {
+    display: inline-block;
+    width: 22px;
+    height: 22px;
+    background: url('assets/icons/pix-logo.png') no-repeat left center;
+    background-size: auto 22px;
+    flex-shrink: 0;
+  }
+
+  /* PIX (primary) */
   .pkg-btn-pix {
     background: #fff;
     color: #0a3c36;
-    margin-bottom: 8px;
     border: 1.5px solid transparent;
     position: relative;
   }
@@ -761,25 +839,43 @@
     border-color: var(--pix);
     box-shadow: 0 0 18px var(--pix-glow);
   }
-  .pkg-btn-pix .pix-icon {
-    width: 22px;
-    height: 22px;
-    flex-shrink: 0;
-  }
-  .pkg-btn-pix .pkg-btn-price {
-    font-weight: 800;
-    color: #0a3c36;
-  }
+  .pkg-btn-pix .pkg-btn-price { font-weight: 800; color: #0a3c36; }
   .pkg-btn-pix .pkg-btn-tag {
     background: var(--pix);
     color: #fff;
     font-size: 10px;
     font-weight: 800;
-    padding: 2px 7px;
+    padding: 3px 8px;
     border-radius: 5px;
     letter-spacing: 0.5px;
+    text-transform: uppercase;
   }
 
+  /* CARD (secondary) */
+  .pkg-btn-card {
+    background: linear-gradient(180deg, #1c1c1c 0%, #0e0e0e 100%);
+    color: #f5f5f5;
+    border: 1px solid rgba(255,255,255,0.12);
+  }
+  .pkg-btn-card:hover {
+    border-color: rgba(255,255,255,0.3);
+    background: linear-gradient(180deg, #222 0%, #111 100%);
+  }
+  .pkg-btn-card .card-icons {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    flex-shrink: 0;
+  }
+  .pkg-btn-card .card-icons img {
+    height: 14px;
+    width: auto;
+    display: block;
+  }
+  .pkg-btn-card .pkg-btn-price { font-weight: 800; color: #fff; }
+  .pkg-btn-card .pkg-btn-sub { font-size: 11px; color: rgba(245,245,245,0.45); }
+
+  /* CRYPTO (tertiary, with discount) */
   .pkg-btn-crypto {
     background: var(--green);
     color: var(--black);
@@ -788,15 +884,16 @@
   .pkg-btn-crypto .pkg-btn-price { font-weight: 800; }
   .pkg-btn-discount {
     background: rgba(0,0,0,0.15);
-    padding: 2px 7px;
+    padding: 3px 7px;
     border-radius: 5px;
-    font-size: 11px;
+    font-size: 10px;
     font-weight: 800;
+    letter-spacing: 0.3px;
   }
   .pkg-btn-old {
     text-decoration: line-through;
-    opacity: 0.5;
-    font-size: 12px;
+    opacity: 0.55;
+    font-size: 11px;
     font-weight: 400;
   }
   .pkg-per-month {
@@ -805,6 +902,13 @@
     font-weight: 500;
     color: rgba(245,245,245,0.4);
     letter-spacing: 0;
+  }
+
+  /* Narrow buttons on smaller cards */
+  @media (max-width: 1024px) {
+    .pkg-btn { font-size: 12.5px; padding: 11px 8px; gap: 6px; }
+    .pkg-btn-pix .pkg-btn-tag { font-size: 9px; padding: 2px 6px; }
+    .pix-mark { width: 20px; height: 20px; background-size: auto 20px; }
   }
 
   /* Telegram popup */
@@ -1378,7 +1482,7 @@
   <a href="#reviews">Avaliações</a>
   <a href="#inside">O que tem</a>
   <a href="#faq">FAQ</a>
-  <a href="/" style="font-size:14px;letter-spacing:2px;color:var(--white-dim);">English version →</a>
+  <a href="/" style="font-size:14px;letter-spacing:2px;color:var(--white-dim);">🇺🇸 English version →</a>
   <a href="https://t.me/momentocrypto_support" target="_blank" rel="noopener">Suporte</a>
   <a href="#packages" class="tg-btn" style="margin-top:20px">
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12l-6.871 4.326-2.962-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.194 1.006.131.833.941z" fill="currentColor"/></svg>
@@ -1416,13 +1520,27 @@
       </div>
     </div>
 
+    <!-- BINANCE REDDIT TRUST BADGE -->
+    <div class="binance-trust">
+      <div class="binance-trust-logo">B</div>
+      <div class="binance-trust-body">
+        <div class="binance-trust-title">CONFIANÇA DA COMUNIDADE BINANCE</div>
+        <div class="binance-trust-text">
+          Eleito o <strong>melhor grupo de sinais de cripto</strong> pela comunidade r/BinanceTrading do Reddit.
+          <a href="https://www.reddit.com/r/BinanceTrading/comments/1snttzq/whats_the_best_crypto_signals_group_any/" target="_blank" rel="noopener">Ver discussão →</a>
+        </div>
+      </div>
+    </div>
+
     <!-- PACKAGES IN HERO -->
     <div class="hero-packages" id="packages">
       <div class="hero-packages-header">
         <h2 class="hero-pkg-title">Escolha seu Plano</h2>
         <div class="hero-pkg-payment-icons">
           <span class="hero-pkg-accepts">Aceitamos:</span>
-          <img src="assets/icons/pix.svg" alt="Pix" height="20">
+          <img src="assets/icons/pix-logo.png" alt="Pix · Powered by Banco Central" height="22" style="opacity:0.95;">
+          <img src="assets/icons/visa.svg" alt="Visa" height="14">
+          <img src="assets/icons/mastercard.svg" alt="Mastercard" height="18">
           <img src="assets/icons/btc.svg" alt="BTC" height="20">
           <img src="assets/icons/eth.svg" alt="ETH" height="20">
           <img src="assets/icons/usdt.svg" alt="USDT" height="20">
@@ -1433,7 +1551,7 @@
           <div class="pkg-duration">01 Mês</div>
           <div class="pkg-name">STARTER</div>
           <div class="pkg-price">R$149<span class="pkg-per-month">/mês</span></div>
-          <div class="pkg-price-sub"><span style="color:#39FF14;font-weight:600;">R$134/mês com cripto</span></div>
+          <div class="pkg-price-sub"><span style="color:#39FF14;font-weight:600;">R$134 com cripto</span></div>
           <ul class="pkg-features">
             <li>Acesso completo a todos os sinais</li>
             <li>Entrada, TP e SL definidos</li>
@@ -1441,10 +1559,23 @@
             <li>Comentários do analista</li>
           </ul>
           <button class="pkg-btn pkg-btn-pix" onclick="payPix('starter')">
-            <img src="assets/icons/pix.svg" alt="" class="pix-icon">
-            Pagar com Pix <span class="pkg-btn-price">R$149</span> <span class="pkg-btn-tag">INSTANTÂNEO</span>
+            <span class="pix-mark"></span>
+            <span>Pix</span>
+            <span class="pkg-btn-price">R$149</span>
+            <span class="pkg-btn-tag">Instantâneo</span>
           </button>
-          <button class="pkg-btn pkg-btn-crypto" onclick="payPackage('starter')">Pagar com Cripto <span class="pkg-btn-old">R$149</span> <span class="pkg-btn-price">R$134</span> <span class="pkg-btn-discount">-10%</span></button>
+          <button class="pkg-btn pkg-btn-card" onclick="payCard('starter')">
+            <span class="card-icons"><img src="assets/icons/visa.svg" alt="Visa"><img src="assets/icons/mastercard.svg" alt="Mastercard"></span>
+            <span>Cartão</span>
+            <span class="pkg-btn-price">€27</span>
+            <span class="pkg-btn-sub">≈ R$140</span>
+          </button>
+          <button class="pkg-btn pkg-btn-crypto" onclick="payPackage('starter')">
+            <span>Cripto</span>
+            <span class="pkg-btn-old">$30</span>
+            <span class="pkg-btn-price">$27</span>
+            <span class="pkg-btn-discount">-10%</span>
+          </button>
         </div>
         <div class="pkg-card featured">
           <div class="pkg-duration">03 Meses</div>
@@ -1458,10 +1589,23 @@
             <li>Comentários do analista</li>
           </ul>
           <button class="pkg-btn pkg-btn-pix" onclick="payPix('trader')">
-            <img src="assets/icons/pix.svg" alt="" class="pix-icon">
-            Pagar com Pix <span class="pkg-btn-price">R$399</span> <span class="pkg-btn-tag">INSTANTÂNEO</span>
+            <span class="pix-mark"></span>
+            <span>Pix</span>
+            <span class="pkg-btn-price">R$399</span>
+            <span class="pkg-btn-tag">Instantâneo</span>
           </button>
-          <button class="pkg-btn pkg-btn-crypto" onclick="payPackage('trader')">Pagar com Cripto <span class="pkg-btn-old">R$399</span> <span class="pkg-btn-price">R$359</span> <span class="pkg-btn-discount">-10%</span></button>
+          <button class="pkg-btn pkg-btn-card" onclick="payCard('trader')">
+            <span class="card-icons"><img src="assets/icons/visa.svg" alt="Visa"><img src="assets/icons/mastercard.svg" alt="Mastercard"></span>
+            <span>Cartão</span>
+            <span class="pkg-btn-price">€73</span>
+            <span class="pkg-btn-sub">≈ R$380</span>
+          </button>
+          <button class="pkg-btn pkg-btn-crypto" onclick="payPackage('trader')">
+            <span>Cripto</span>
+            <span class="pkg-btn-old">$80</span>
+            <span class="pkg-btn-price">$72</span>
+            <span class="pkg-btn-discount">-10%</span>
+          </button>
         </div>
         <div class="pkg-card">
           <div class="pkg-duration">06 Meses</div>
@@ -1475,10 +1619,23 @@
             <li>Comentários do analista</li>
           </ul>
           <button class="pkg-btn pkg-btn-pix" onclick="payPix('pro')">
-            <img src="assets/icons/pix.svg" alt="" class="pix-icon">
-            Pagar com Pix <span class="pkg-btn-price">R$699</span> <span class="pkg-btn-tag">INSTANTÂNEO</span>
+            <span class="pix-mark"></span>
+            <span>Pix</span>
+            <span class="pkg-btn-price">R$699</span>
+            <span class="pkg-btn-tag">Instantâneo</span>
           </button>
-          <button class="pkg-btn pkg-btn-crypto" onclick="payPackage('pro')">Pagar com Cripto <span class="pkg-btn-old">R$699</span> <span class="pkg-btn-price">R$629</span> <span class="pkg-btn-discount">-10%</span></button>
+          <button class="pkg-btn pkg-btn-card" onclick="payCard('pro')">
+            <span class="card-icons"><img src="assets/icons/visa.svg" alt="Visa"><img src="assets/icons/mastercard.svg" alt="Mastercard"></span>
+            <span>Cartão</span>
+            <span class="pkg-btn-price">€128</span>
+            <span class="pkg-btn-sub">≈ R$665</span>
+          </button>
+          <button class="pkg-btn pkg-btn-crypto" onclick="payPackage('pro')">
+            <span>Cripto</span>
+            <span class="pkg-btn-old">$140</span>
+            <span class="pkg-btn-price">$126</span>
+            <span class="pkg-btn-discount">-10%</span>
+          </button>
         </div>
       </div>
     </div>
@@ -1867,10 +2024,12 @@
   </div>
   <div class="payment-icons-row">
     <div class="payment-icon-group">
-      <span class="pix-trust-badge">
-        <img src="assets/icons/pix.svg" alt="Pix">
-        Pix · Pagamento instantâneo
-      </span>
+      <img src="assets/icons/pix-logo.png" alt="Pix · Powered by Banco Central" style="height:32px;width:auto;">
+    </div>
+    <span class="payment-divider"></span>
+    <div class="payment-icon-group">
+      <img src="assets/icons/visa.svg" alt="Visa" height="18">
+      <img src="assets/icons/mastercard.svg" alt="Mastercard" height="24">
     </div>
     <span class="payment-divider"></span>
     <div class="payment-icon-group">
@@ -2102,7 +2261,7 @@
       <div class="pkg-duration">01 Mês</div>
       <div class="pkg-name">STARTER</div>
       <div class="pkg-price">R$149<span class="pkg-per-month">/mês</span></div>
-      <div class="pkg-price-sub"><span style="color:#39FF14;font-weight:600;">R$134/mês com cripto</span></div>
+      <div class="pkg-price-sub"><span style="color:#39FF14;font-weight:600;">R$134 com cripto</span></div>
       <ul class="pkg-features">
         <li>Acesso completo a todos os sinais</li>
         <li>Entrada, TP e SL definidos</li>
@@ -2110,10 +2269,23 @@
         <li>Comentários do analista</li>
       </ul>
       <button class="pkg-btn pkg-btn-pix" onclick="payPix('starter')">
-        <img src="assets/icons/pix.svg" alt="" class="pix-icon">
-        Pagar com Pix <span class="pkg-btn-price">R$149</span> <span class="pkg-btn-tag">INSTANTÂNEO</span>
+        <span class="pix-mark"></span>
+        <span>Pix</span>
+        <span class="pkg-btn-price">R$149</span>
+        <span class="pkg-btn-tag">Instantâneo</span>
       </button>
-      <button class="pkg-btn pkg-btn-crypto" onclick="payPackage('starter')">Pagar com Cripto <span class="pkg-btn-old">R$149</span> <span class="pkg-btn-price">R$134</span> <span class="pkg-btn-discount">-10%</span></button>
+      <button class="pkg-btn pkg-btn-card" onclick="payCard('starter')">
+        <span class="card-icons"><img src="assets/icons/visa.svg" alt="Visa"><img src="assets/icons/mastercard.svg" alt="Mastercard"></span>
+        <span>Cartão</span>
+        <span class="pkg-btn-price">€27</span>
+        <span class="pkg-btn-sub">≈ R$140</span>
+      </button>
+      <button class="pkg-btn pkg-btn-crypto" onclick="payPackage('starter')">
+        <span>Cripto</span>
+        <span class="pkg-btn-old">$30</span>
+        <span class="pkg-btn-price">$27</span>
+        <span class="pkg-btn-discount">-10%</span>
+      </button>
     </div>
     <div class="pkg-card featured reveal">
       <div class="pkg-duration">03 Meses</div>
@@ -2127,10 +2299,23 @@
         <li>Comentários do analista</li>
       </ul>
       <button class="pkg-btn pkg-btn-pix" onclick="payPix('trader')">
-        <img src="assets/icons/pix.svg" alt="" class="pix-icon">
-        Pagar com Pix <span class="pkg-btn-price">R$399</span> <span class="pkg-btn-tag">INSTANTÂNEO</span>
+        <span class="pix-mark"></span>
+        <span>Pix</span>
+        <span class="pkg-btn-price">R$399</span>
+        <span class="pkg-btn-tag">Instantâneo</span>
       </button>
-      <button class="pkg-btn pkg-btn-crypto" onclick="payPackage('trader')">Pagar com Cripto <span class="pkg-btn-old">R$399</span> <span class="pkg-btn-price">R$359</span> <span class="pkg-btn-discount">-10%</span></button>
+      <button class="pkg-btn pkg-btn-card" onclick="payCard('trader')">
+        <span class="card-icons"><img src="assets/icons/visa.svg" alt="Visa"><img src="assets/icons/mastercard.svg" alt="Mastercard"></span>
+        <span>Cartão</span>
+        <span class="pkg-btn-price">€73</span>
+        <span class="pkg-btn-sub">≈ R$380</span>
+      </button>
+      <button class="pkg-btn pkg-btn-crypto" onclick="payPackage('trader')">
+        <span>Cripto</span>
+        <span class="pkg-btn-old">$80</span>
+        <span class="pkg-btn-price">$72</span>
+        <span class="pkg-btn-discount">-10%</span>
+      </button>
     </div>
     <div class="pkg-card reveal">
       <div class="pkg-duration">06 Meses</div>
@@ -2144,16 +2329,29 @@
         <li>Comentários do analista</li>
       </ul>
       <button class="pkg-btn pkg-btn-pix" onclick="payPix('pro')">
-        <img src="assets/icons/pix.svg" alt="" class="pix-icon">
-        Pagar com Pix <span class="pkg-btn-price">R$699</span> <span class="pkg-btn-tag">INSTANTÂNEO</span>
+        <span class="pix-mark"></span>
+        <span>Pix</span>
+        <span class="pkg-btn-price">R$699</span>
+        <span class="pkg-btn-tag">Instantâneo</span>
       </button>
-      <button class="pkg-btn pkg-btn-crypto" onclick="payPackage('pro')">Pagar com Cripto <span class="pkg-btn-old">R$699</span> <span class="pkg-btn-price">R$629</span> <span class="pkg-btn-discount">-10%</span></button>
+      <button class="pkg-btn pkg-btn-card" onclick="payCard('pro')">
+        <span class="card-icons"><img src="assets/icons/visa.svg" alt="Visa"><img src="assets/icons/mastercard.svg" alt="Mastercard"></span>
+        <span>Cartão</span>
+        <span class="pkg-btn-price">€128</span>
+        <span class="pkg-btn-sub">≈ R$665</span>
+      </button>
+      <button class="pkg-btn pkg-btn-crypto" onclick="payPackage('pro')">
+        <span>Cripto</span>
+        <span class="pkg-btn-old">$140</span>
+        <span class="pkg-btn-price">$126</span>
+        <span class="pkg-btn-discount">-10%</span>
+      </button>
     </div>
   </div>
   <div class="payment-trust reveal" style="margin-top:24px;">
     <div class="payment-icons-row">
       <div class="payment-icon-group">
-        <span class="pix-trust-badge"><img src="assets/icons/pix.svg" alt="Pix">Pix instantâneo</span>
+        <span class="pix-trust-badge"><img src="assets/icons/pix-logo.png" alt="Pix · Powered by Banco Central" style="height:24px;width:auto;">Pix instantâneo</span>
       </div>
       <span class="payment-divider"></span>
       <div class="payment-icon-group"><img src="assets/icons/btc.svg" alt="BTC" height="24"><img src="assets/icons/eth.svg" alt="ETH" height="24"><img src="assets/icons/usdt.svg" alt="USDT" height="24"></div>
@@ -2249,9 +2447,61 @@
   });
 
   // === PAYMENT ===
-  // BRL-equivalent values for pixel (must match landing-page display)
-  const PKG_VALUES_PIX = { starter: { brl: 149, usd: 27 }, trader: { brl: 399, usd: 72 }, pro: { brl: 699, usd: 126 } };
+  // Values for pixel (must match each gateway's actual charge currency)
+  const PKG_VALUES_PIX = { starter: { brl: 149 }, trader: { brl: 399 }, pro: { brl: 699 } };
+  const PKG_VALUES_CARD = { starter: { eur: 27 }, trader: { eur: 73 }, pro: { eur: 128 } };
   const PKG_VALUES_CRYPTO = { starter: { usd: 27 }, trader: { usd: 72 }, pro: { usd: 126 } };
+
+  // Track the last pay attempt so we can show the "did you pay?" popup
+  // if the user returns without being redirected to /success.php
+  function recordPayAttempt(method, pkg, orderId) {
+    try {
+      localStorage.setItem('mc_last_pay_attempt', JSON.stringify({
+        ts: Date.now(), method, package: pkg, order_id: orderId
+      }));
+    } catch{}
+  }
+  function clearPayAttempt() { try { localStorage.removeItem('mc_last_pay_attempt'); } catch{} }
+  function lrClose() { document.getElementById('lrPopupOverlay').classList.remove('show'); }
+  function checkLostRedirect() {
+    let last = null;
+    try { last = JSON.parse(localStorage.getItem('mc_last_pay_attempt') || 'null'); } catch{}
+    if (!last || !last.order_id) return;
+    // Only trigger for Payou methods (Pix or Card) — OxaPay crypto handles its own confirmation
+    if (last.method !== 'pix' && last.method !== 'card') return;
+    // Window: 2 min after click (avoids false positives) and within 45 min
+    const age = Date.now() - last.ts;
+    if (age < 2 * 60 * 1000 || age > 45 * 60 * 1000) return;
+    if (sessionStorage.getItem('mc_lr_shown_' + last.order_id)) return;
+    sessionStorage.setItem('mc_lr_shown_' + last.order_id, '1');
+    document.getElementById('lrOrderId').textContent = last.order_id;
+    document.getElementById('lrSupportLink').href = 'https://t.me/momentocrypto_support?text=' + encodeURIComponent('Olá, paguei mas não fui redirecionado. Pedido: ' + last.order_id);
+    document.getElementById('lrPopupOverlay').classList.add('show');
+  }
+  // Fire on every page load (covers normal navigation back + manual URL entry)
+  checkLostRedirect();
+  // Also fire on bfcache restore (back button from Payou)
+  window.addEventListener('pageshow', (e) => { if (e.persisted) checkLostRedirect(); });
+
+  // Card payment (Payou EUR — existing card processor, works internationally)
+  async function payCard(pkg) {
+    const btn = event.target.closest('button');
+    const originalHTML = btn.innerHTML;
+    btn.textContent = 'PROCESSANDO...'; btn.disabled = true;
+    const attribution = window.__mc_attribution ? window.__mc_attribution() : {};
+    const v = PKG_VALUES_CARD[pkg] || {};
+    if (window.__mc_sid) fetch('/api/analytics/event', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ sid: window.__mc_sid, type:'pay_click', ts:Date.now(), data:{ package: pkg, method: 'card', locale: 'pt-BR', attribution } }), keepalive:true });
+    if (window.__mc_pixel) window.__mc_pixel('InitiateCheckout', { content_ids: [pkg], content_type: 'product', value: v.eur, currency: 'EUR', num_items: 1 });
+    try {
+      const res = await fetch('/api/pay-payou.php', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ package: pkg, attribution }) });
+      const data = await res.json();
+      if (data.ok && data.redirect) {
+        if (window.__mc_pixel) window.__mc_pixel('AddPaymentInfo', { content_ids: [pkg], value: v.eur, currency: 'EUR' });
+        recordPayAttempt('card', pkg, data.order_id);
+        window.location.href = data.redirect;
+      } else { alert('Erro no pagamento. Tente novamente.'); btn.innerHTML = originalHTML; btn.disabled = false; }
+    } catch { alert('Erro de conexão. Tente novamente.'); btn.innerHTML = originalHTML; btn.disabled = false; }
+  }
 
   // Pix payment (Payou MoneyBRL_Sp)
   async function payPix(pkg) {
@@ -2268,6 +2518,7 @@
       const data = await res.json();
       if (data.ok && data.redirect) {
         if (window.__mc_pixel) window.__mc_pixel('AddPaymentInfo', { content_ids: [pkg], value: v.brl, currency: 'BRL' });
+        recordPayAttempt('pix', pkg, data.order_id);
         window.location.href = data.redirect;
       } else { alert('Erro no pagamento. Tente novamente.'); btn.innerHTML = originalHTML; btn.disabled = false; }
     } catch { alert('Erro de conexão. Tente novamente.'); btn.innerHTML = originalHTML; btn.disabled = false; }
@@ -2352,6 +2603,22 @@
 
   function closePopup() { document.getElementById('tgPopupOverlay').classList.remove('show'); }
 </script>
+
+<!-- Lost-redirect popup (shown when user paid via Payou but wasn't redirected to success) -->
+<div class="lr-popup-overlay" id="lrPopupOverlay">
+  <div class="lr-popup">
+    <button class="lr-popup-close" onclick="lrClose()">×</button>
+    <div class="lr-popup-icon">💸</div>
+    <h3>Você completou o pagamento?</h3>
+    <p>Notamos que você pode ter pago mas não foi redirecionado de volta. Se sua transação foi concluída, fale com nosso suporte com o número do pedido abaixo para verificar e liberar seu acesso.</p>
+    <div class="lr-order" id="lrOrderId">—</div>
+    <a id="lrSupportLink" href="https://t.me/momentocrypto_support" target="_blank" rel="noopener" class="lr-popup-btn">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12l-6.871 4.326-2.962-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.194 1.006.131.833.941z"/></svg>
+      Falar com Suporte
+    </a>
+    <button class="lr-popup-skip" onclick="lrClose()">Ainda não terminei o pagamento</button>
+  </div>
+</div>
 
 <div class="tg-popup-overlay" id="tgPopupOverlay">
   <div class="tg-popup">

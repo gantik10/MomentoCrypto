@@ -100,6 +100,7 @@ canvas { width: 100% !important; height: 200px !important; }
     <div class="nav-item" onclick="go('sessions')">Session Recordings</div>
     <div class="nav-item" onclick="go('heatmap')">Click Heatmap</div>
     <div class="nav-item" onclick="go('traffic')">Traffic Sources</div>
+    <div class="nav-item" onclick="go('fb')">FB & Affiliates</div>
     <div class="nav-item" onclick="go('devices')">Devices & Countries</div>
     <div class="nav-item" onclick="go('faq')">FAQ Engagement</div>
     <div class="nav-item" onclick="go('live')">Live Visitors</div>
@@ -144,6 +145,7 @@ function go(page) {
   else if (page === 'sessions') renderSessions(c);
   else if (page === 'heatmap') renderHeatmap(c);
   else if (page === 'traffic') renderTraffic(c);
+  else if (page === 'fb') renderFbAttribution(c);
   else if (page === 'devices') renderDevices(c);
   else if (page === 'faq') renderFaq(c);
   else if (page === 'live') renderLive(c);
@@ -425,6 +427,137 @@ async function renderLive(c) {
     setTimeout(() => { if (document.querySelector('.nav-item.active')?.textContent.includes('Live')) renderLive(c); }, 10000);
   } catch (e) { c.innerHTML = `<div class="stat-red">Failed: ${e.message}</div>`; }
 }
+
+async function renderFbAttribution(c) {
+  c.innerHTML = `<div class="section-title">Facebook & Affiliates</div><div class="section-sub">Loading…</div>`;
+  try {
+    const [salesData, cfg] = await Promise.all([
+      api('/api/analytics/sales'),
+      fetch('/api/config.php').then(r => r.json()).catch(() => ({})),
+    ]);
+    const sales = salesData.sales || [];
+    const pixelOk = !!cfg.meta_pixel_id;
+
+    // Aggregate
+    const fbAttributed = sales.filter(s => s.attribution && (s.attribution.fbclid || s.attribution.fbc || (s.attribution.utm_source || '').toLowerCase().match(/facebook|fb|meta|instagram|ig/)));
+    const totalRev = sales.reduce((a, s) => a + (Number(s.amount) || 0), 0);
+    const fbRev = fbAttributed.reduce((a, s) => a + (Number(s.amount) || 0), 0);
+    const attribCoverage = sales.length ? Math.round((sales.filter(s => s.attribution && Object.keys(s.attribution).length).length / sales.length) * 100) : 0;
+
+    // Per-affiliate (utm_source) breakdown
+    const bySource = {};
+    sales.forEach(s => {
+      const src = (s.attribution && s.attribution.utm_source) || '(direct/no utm)';
+      if (!bySource[src]) bySource[src] = { count: 0, revenue: 0, byCurrency: {} };
+      bySource[src].count++;
+      bySource[src].revenue += Number(s.amount) || 0;
+      const ccy = s.currency || 'USD';
+      bySource[src].byCurrency[ccy] = (bySource[src].byCurrency[ccy] || 0) + (Number(s.amount) || 0);
+    });
+    const sourceRows = Object.entries(bySource).sort((a, b) => b[1].revenue - a[1].revenue);
+
+    // Per-campaign breakdown
+    const byCampaign = {};
+    sales.forEach(s => {
+      const c = (s.attribution && s.attribution.utm_campaign) || '';
+      if (!c) return;
+      if (!byCampaign[c]) byCampaign[c] = { count: 0, revenue: 0 };
+      byCampaign[c].count++;
+      byCampaign[c].revenue += Number(s.amount) || 0;
+    });
+    const campaignRows = Object.entries(byCampaign).sort((a, b) => b[1].count - a[1].count);
+
+    // Recent attributed sales
+    const recent = [...fbAttributed].sort((a, b) => (b.ts || 0) - (a.ts || 0)).slice(0, 20);
+
+    c.innerHTML = `
+      <div class="section-title">Facebook & Affiliates</div>
+      <div class="section-sub">Server-side ground truth from sales.json — pay your affiliates from this data, not Meta's dashboard.</div>
+
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-label">Pixel Status</div>
+          <div class="stat-value ${pixelOk ? 'stat-green' : 'stat-red'}" style="font-size:18px;">${pixelOk ? '✓ Configured' : '✕ Not Set'}</div>
+          <div class="stat-sub">${pixelOk ? 'ID: ' + cfg.meta_pixel_id : 'Set META_PIXEL_ID + META_CAPI_TOKEN in .env'}</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">FB-Attributed Sales</div>
+          <div class="stat-value stat-green">${fbAttributed.length}</div>
+          <div class="stat-sub">of ${sales.length} total (${sales.length ? Math.round(fbAttributed.length/sales.length*100) : 0}%)</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">FB Revenue</div>
+          <div class="stat-value stat-green">$${fbRev.toFixed(2)}</div>
+          <div class="stat-sub">of $${totalRev.toFixed(2)} total</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Attribution Coverage</div>
+          <div class="stat-value">${attribCoverage}%</div>
+          <div class="stat-sub">% sales with any attribution data</div>
+        </div>
+      </div>
+
+      <div class="chart-wrap">
+        <div class="chart-title">Revenue by utm_source (affiliate payout)</div>
+        <div class="table-wrap"><table>
+          <thead><tr><th>UTM Source</th><th>Sales</th><th>Revenue (mixed ccy)</th><th>Breakdown</th></tr></thead>
+          <tbody>
+            ${sourceRows.map(([src, d]) => `
+              <tr>
+                <td><strong>${escapeHTML(src)}</strong></td>
+                <td>${d.count}</td>
+                <td><strong>${d.revenue.toFixed(2)}</strong></td>
+                <td style="font-size:11px;color:var(--muted);">${Object.entries(d.byCurrency).map(([c, v]) => `${c} ${v.toFixed(2)}`).join(' · ')}</td>
+              </tr>
+            `).join('') || '<tr><td colspan="4" style="color:var(--muted);text-align:center;padding:24px;">No sales yet</td></tr>'}
+          </tbody>
+        </table></div>
+      </div>
+
+      <div class="chart-wrap">
+        <div class="chart-title">Campaigns (utm_campaign)</div>
+        <div class="table-wrap"><table>
+          <thead><tr><th>Campaign</th><th>Sales</th><th>Revenue</th></tr></thead>
+          <tbody>
+            ${campaignRows.map(([c, d]) => `<tr><td>${escapeHTML(c)}</td><td>${d.count}</td><td>${d.revenue.toFixed(2)}</td></tr>`).join('') || '<tr><td colspan="3" style="color:var(--muted);text-align:center;padding:16px;">No campaign data yet</td></tr>'}
+          </tbody>
+        </table></div>
+      </div>
+
+      <div class="chart-wrap">
+        <div class="chart-title">Recent FB-attributed sales (latest 20)</div>
+        <div class="table-wrap"><table>
+          <thead><tr><th>Date</th><th>Order</th><th>Plan</th><th>Amount</th><th>Source</th><th>Campaign</th><th>FBclid</th></tr></thead>
+          <tbody>
+            ${recent.map(s => {
+              const a = s.attribution || {};
+              const fb = a.fbclid ? (a.fbclid.slice(0, 18) + '…') : '—';
+              return `<tr>
+                <td style="font-size:11px;">${(s.date || '').replace('T', ' ').slice(0, 16)}</td>
+                <td style="font-family:monospace;font-size:11px;">${escapeHTML((s.order_id || '').slice(0, 28))}</td>
+                <td>${s.package || ''}</td>
+                <td><strong>${s.currency || ''} ${Number(s.amount || 0).toFixed(2)}</strong></td>
+                <td>${escapeHTML(a.utm_source || '—')}</td>
+                <td style="font-size:11px;color:var(--muted);">${escapeHTML(a.utm_campaign || '—')}</td>
+                <td style="font-size:10px;font-family:monospace;color:var(--muted);">${escapeHTML(fb)}</td>
+              </tr>`;
+            }).join('') || '<tr><td colspan="7" style="color:var(--muted);text-align:center;padding:24px;">No FB-attributed sales yet</td></tr>'}
+          </tbody>
+        </table></div>
+      </div>
+
+      <div class="chart-wrap" style="font-size:12px;color:var(--muted);line-height:1.6;">
+        <div class="chart-title" style="color:var(--text);">How this works</div>
+        Sales are matched to Facebook traffic when the landing URL contains <code>fbclid=…</code> (auto-captured) or any <code>utm_source</code> tagged for FB.<br>
+        Server-side Conversions API fires on payment confirm (logged at <code>/root/MomentoCrypto/api/meta_capi.log</code>). To pay an affiliate, filter "Revenue by utm_source" above and multiply by their agreed %.<br>
+        <br>
+        To enable Meta Pixel + CAPI: add <code>META_PIXEL_ID</code> and <code>META_CAPI_TOKEN</code> to <code>/root/MomentoCrypto/.env</code> and run <code>pm2 restart momento-crypto</code>.
+      </div>
+    `;
+  } catch (e) { c.innerHTML = `<div class="section-title">Facebook & Affiliates</div><div class="stat-red">Failed: ${e.message}</div>`; }
+}
+
+function escapeHTML(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch])); }
 
 // Init
 if (TOKEN) { init(); } else { showAuth(); }
