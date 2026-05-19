@@ -56,7 +56,26 @@ if ($status === 'success') {
         'trader' => 'Trader (3 Months)',
         'pro' => 'Pro (6 Months)',
     ];
+    $packageNamesBR = [
+        'starter' => 'Starter (1 Mês)',
+        'trader' => 'Trader (3 Meses)',
+        'pro' => 'Pro (6 Meses)',
+    ];
     $amountFloat = floatval($amount);
+
+    // Look up order metadata from pending file — BR orders use BRL/Pix
+    $pendingFile = __DIR__ . '/payou_pending.json';
+    $pending = file_exists($pendingFile) ? json_decode(file_get_contents($pendingFile), true) ?: [] : [];
+    $currency = 'EUR';
+    $method = 'payou_card';
+    foreach ($pending as $p) {
+        if (($p['order_id'] ?? '') === $orderId) {
+            $currency = $p['currency'] ?? 'EUR';
+            $method = $p['method'] ?? 'payou_card';
+            break;
+        }
+    }
+    $isPix = ($method === 'payou_pix' || $currency === 'BRL');
 
     // Append to sales.json (prevent duplicates by intid)
     $sales = file_exists($salesFile) ? (json_decode(file_get_contents($salesFile), true) ?: []) : [];
@@ -72,25 +91,34 @@ if ($status === 'success') {
             'payment_id' => $intid,
             'package' => $package,
             'amount' => $amountFloat,
-            'currency' => 'USD',
-            'method' => 'payou_card',
+            'currency' => $currency,
+            'method' => $method,
         ];
         file_put_contents($salesFile, json_encode($sales, JSON_PRETTY_PRINT));
 
-        // Telegram notification
+        // Telegram notification — plain text (Markdown breaks on $, *, _)
         $token = $env['TELEGRAM_BOT_TOKEN'] ?? '';
         $chatId = $env['TELEGRAM_CHAT_ID'] ?? '';
         if ($token && $chatId) {
-            $name = $packageNames[$package] ?? $package;
-            $msg = "💳 *Card payment confirmed! (Payou)*\n\n"
-                . "📦 Plan: *{$name}*\n"
-                . "💵 Amount: *\${$amountFloat}*\n"
-                . "🆔 Order: `{$orderId}`\n"
-                . "🕐 " . date('Y-m-d H:i') . " UTC";
+            if ($isPix) {
+                $name = $packageNamesBR[$package] ?? $package;
+                $msg = "💸 Pagamento Pix confirmado! (Payou BR)\n\n"
+                    . "Plano: {$name}\n"
+                    . "Valor: R$ {$amountFloat}\n"
+                    . "Pedido: {$orderId}\n"
+                    . "Horário: " . date('Y-m-d H:i') . " UTC";
+            } else {
+                $name = $packageNames[$package] ?? $package;
+                $msg = "💳 Card payment confirmed! (Payou)\n\n"
+                    . "Plan: {$name}\n"
+                    . "Amount: {$currency} {$amountFloat}\n"
+                    . "Order: {$orderId}\n"
+                    . "Time: " . date('Y-m-d H:i') . " UTC";
+            }
             $ch = curl_init("https://api.telegram.org/bot{$token}/sendMessage");
             curl_setopt_array($ch, [
                 CURLOPT_POST => true,
-                CURLOPT_POSTFIELDS => http_build_query(['chat_id' => $chatId, 'text' => $msg, 'parse_mode' => 'Markdown']),
+                CURLOPT_POSTFIELDS => http_build_query(['chat_id' => $chatId, 'text' => $msg]),
                 CURLOPT_RETURNTRANSFER => true,
                 CURLOPT_TIMEOUT => 10,
             ]);

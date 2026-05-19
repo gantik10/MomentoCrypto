@@ -388,7 +388,10 @@ http.createServer(async (req, res) => {
     }
 
     // --- Static files ---
-    let filePath = pathname === "/" ? "/index.html" : pathname;
+    let filePath;
+    if (pathname === "/") filePath = "/index.html";
+    else if (pathname === "/br" || pathname === "/br/") filePath = "/br.html";
+    else filePath = pathname;
     filePath = path.join(__dirname, filePath);
     if (!filePath.startsWith(__dirname)) { res.writeHead(403); res.end(); return; }
     fs.readFile(filePath, (err, data) => {

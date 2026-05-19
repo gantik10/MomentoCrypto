@@ -59,6 +59,9 @@ foreach ($pending as $key => &$order) {
         $changed = true;
         $package = explode('_', $orderId)[0] ?? 'unknown';
         $amount = floatval($result['summ'] ?? $order['amount'] ?? 0);
+        $currency = $order['currency'] ?? 'EUR';
+        $method = $order['method'] ?? 'payou_card';
+        $isPix = ($method === 'payou_pix' || $currency === 'BRL');
 
         // Log to sales.json
         $sales = file_exists($salesFile) ? json_decode(file_get_contents($salesFile), true) ?: [] : [];
@@ -74,20 +77,28 @@ foreach ($pending as $key => &$order) {
                 'payment_id' => $result['id'] ?? '',
                 'package' => $package,
                 'amount' => $amount,
-                'currency' => 'EUR',
-                'method' => 'payou_card',
+                'currency' => $currency,
+                'method' => $method,
             ];
             file_put_contents($salesFile, json_encode($sales, JSON_PRETTY_PRINT));
         }
 
-        // Send TG notification
+        // Send TG notification (Pix or Card)
         if ($TG_TOKEN && $TG_CHAT) {
             $name = $packageNames[$package] ?? $package;
-            $msg = "💳 Card payment confirmed! (Payou)\n\n"
-                . "Plan: {$name}\n"
-                . "Amount: EUR {$amount}\n"
-                . "Order: {$orderId}\n"
-                . "Time: " . date('Y-m-d H:i') . " UTC";
+            if ($isPix) {
+                $msg = "💸 Pagamento Pix confirmado! (Payou BR)\n\n"
+                    . "Plano: {$name}\n"
+                    . "Valor: R$ {$amount}\n"
+                    . "Pedido: {$orderId}\n"
+                    . "Horário: " . date('Y-m-d H:i') . " UTC";
+            } else {
+                $msg = "💳 Card payment confirmed! (Payou)\n\n"
+                    . "Plan: {$name}\n"
+                    . "Amount: {$currency} {$amount}\n"
+                    . "Order: {$orderId}\n"
+                    . "Time: " . date('Y-m-d H:i') . " UTC";
+            }
             $tgCh = curl_init("https://api.telegram.org/bot{$TG_TOKEN}/sendMessage");
             curl_setopt_array($tgCh, [
                 CURLOPT_POST => true,
