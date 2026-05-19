@@ -2199,11 +2199,6 @@ document.addEventListener('DOMContentLoaded', () => {
   <div class="section-label reveal">Resultados verificados</div>
   <h2 class="reveal">RESULTADOS <span>DIÁRIOS.</span><br>PUBLICADOS AQUI.</h2>
   <p class="results-intro reveal">Resumo público de cada dia de operação: trades fechados, percentual ganho, e o print real do P&amp;L. Sem cherry-picking. Sem esconder perdas.</p>
-  <div class="results-since reveal" id="resultsSince">
-    <span class="dot"></span>
-    <span><strong>Publicamos resultados diários públicos desde 12 de Maio de 2026.</strong> Antes disso, mantínhamos no canal privado do Telegram para nossos membros pagos. Agora também publicamos aqui para máxima transparência.</span>
-  </div>
-
   <div class="daily-feed" id="dailyFeed">
     <div class="daily-empty">Carregando resultados…</div>
   </div>
@@ -2721,7 +2716,7 @@ document.addEventListener('DOMContentLoaded', () => {
         <div class="daily-card-body-text">${escapeHtml(body)}</div>
       </div>
       ${img}
-      <a href="https://t.me/momentocrypto_bot?start=tradefb" target="_blank" rel="noopener" class="daily-card-tg-link">VER TODOS NO TELEGRAM →</a>
+      <a href="#packages" class="daily-card-tg-link">QUERO ACESSO COMPLETO →</a>
     </article>`;
   }
 
@@ -2733,11 +2728,8 @@ document.addEventListener('DOMContentLoaded', () => {
     return `<div class="daily-more-soon reveal">
       <div class="daily-more-soon-icon">🚀</div>
       <div class="daily-more-soon-title">MAIS RESULTADOS EM BREVE</div>
-      <div class="daily-more-soon-text">Publicamos novos resultados todos os dias. Volte ${escapeHtml(nextLabel)}, ou entre no nosso Telegram para acompanhar cada operação <strong>em tempo real</strong>.</div>
-      <a href="https://t.me/momentocrypto_bot?start=tradefb" target="_blank" rel="noopener" class="daily-more-soon-btn">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12l-6.871 4.326-2.962-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.194 1.006.131.833.941z"/></svg>
-        Entrar no Telegram
-      </a>
+      <div class="daily-more-soon-text">Publicamos novos resultados todos os dias. Quer acompanhar <strong>cada sinal em tempo real</strong>, com entrada, TP e SL, antes de saírem aqui? Garanta acesso ao nosso canal privado.</div>
+      <a href="#packages" class="daily-more-soon-btn">⚡ QUERO ACESSO AGORA</a>
       <div class="daily-more-soon-countdown"><span class="pulse"></span> PRÓXIMO RESULTADO · ${escapeHtml(nextLabel.toUpperCase())}</div>
     </div>`;
   }
@@ -2990,14 +2982,11 @@ document.addEventListener('DOMContentLoaded', () => {
 <div class="tg-popup-overlay" id="tgPopupOverlay">
   <div class="tg-popup">
     <button class="tg-popup-close" onclick="closePopup()">×</button>
-    <div class="tg-popup-icon">📊</div>
-    <h3>Veja Nossos Resultados Primeiro</h3>
-    <p>Ainda não decidiu? Veja nosso histórico verificado de trades, P&L reais e estatísticas da comunidade antes de assinar. Entre no nosso bot grátis do Telegram — sem compromisso.</p>
-    <a href="https://t.me/momentocrypto_bot?start=popup_br" target="_blank" rel="noopener" class="tg-popup-btn">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12l-6.871 4.326-2.962-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.194 1.006.131.833.941z"/></svg>
-      Ver Estatísticas Grátis
-    </a>
-    <button class="tg-popup-skip" onclick="closePopup()">Vou decidir sozinho</button>
+    <div class="tg-popup-icon">⚡</div>
+    <h3>Espera! Não Perca os Próximos Sinais</h3>
+    <p>Nossos traders estão postando setups com entrada, TP e SL <strong>agora mesmo</strong>. Garanta acesso ao canal privado antes de sair — ainda dá tempo de pegar a próxima operação.</p>
+    <a href="#packages" onclick="closePopup()" class="tg-popup-btn" style="background:var(--green);color:var(--black);">⚡ QUERO ACESSO AGORA</a>
+    <button class="tg-popup-skip" onclick="closePopup()">Vou decidir mais tarde</button>
   </div>
 </div>
 

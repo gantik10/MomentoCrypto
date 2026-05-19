@@ -2116,11 +2116,6 @@
   <div class="section-label reveal">Verified results</div>
   <h2 class="reveal">DAILY <span>RESULTS.</span><br>PUBLISHED HERE.</h2>
   <p class="results-intro reveal">A public daily recap of every trading day: closed trades, % gained, and the real P&amp;L screenshot. No cherry-picking. No hiding losses.</p>
-  <div class="results-since reveal" id="resultsSince">
-    <span class="dot"></span>
-    <span><strong>We've been publishing daily results publicly since May 12, 2026.</strong> Before that, results stayed inside our private Telegram channel for paid members. Now we publish them here too for full public transparency.</span>
-  </div>
-
   <div class="daily-feed" id="dailyFeed">
     <div class="daily-empty">Loading results…</div>
   </div>
@@ -2536,7 +2531,7 @@
         <div class="daily-card-body-text">${escapeHtml(body)}</div>
       </div>
       ${img}
-      <a href="https://t.me/momentocrypto_bot?start=tradefb" target="_blank" rel="noopener" class="daily-card-tg-link">VIEW ALL ON TELEGRAM →</a>
+      <a href="#packages" class="daily-card-tg-link">GET FULL ACCESS →</a>
     </article>`;
   }
 
@@ -2548,11 +2543,8 @@
     return `<div class="daily-more-soon reveal">
       <div class="daily-more-soon-icon">🚀</div>
       <div class="daily-more-soon-title">MORE RESULTS COMING SOON</div>
-      <div class="daily-more-soon-text">We publish new results every day. Check back ${escapeHtml(nextLabel)}, or join our Telegram to follow every trade <strong>in real time</strong>.</div>
-      <a href="https://t.me/momentocrypto_bot?start=tradefb" target="_blank" rel="noopener" class="daily-more-soon-btn">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12l-6.871 4.326-2.962-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.194 1.006.131.833.941z"/></svg>
-        Join Telegram
-      </a>
+      <div class="daily-more-soon-text">We publish new results every day. Want to follow <strong>every signal in real time</strong>, with entry, TP, and SL — before they're published here? Lock in access to our private channel.</div>
+      <a href="#packages" class="daily-more-soon-btn">⚡ GET ACCESS NOW</a>
       <div class="daily-more-soon-countdown"><span class="pulse"></span> NEXT RESULT · ${escapeHtml(nextLabel.toUpperCase())}</div>
     </div>`;
   }
@@ -2719,14 +2711,11 @@
 <div class="tg-popup-overlay" id="tgPopupOverlay">
   <div class="tg-popup">
     <button class="tg-popup-close" onclick="closePopup()">×</button>
-    <div class="tg-popup-icon">📊</div>
-    <h3>Check Our Results First</h3>
-    <p>Not sure yet? See our verified trade history, real P&L results, and community stats before subscribing. Join our free Telegram bot — no commitment.</p>
-    <a href="https://t.me/momentocrypto_bot?start=popup" target="_blank" rel="noopener" class="tg-popup-btn">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12l-6.871 4.326-2.962-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.194 1.006.131.833.941z"/></svg>
-      View Free Stats
-    </a>
-    <button class="tg-popup-skip" onclick="closePopup()">I'll decide on my own</button>
+    <div class="tg-popup-icon">⚡</div>
+    <h3>Wait — Don't Miss the Next Signals</h3>
+    <p>Our traders are posting setups with entry, TP, and SL <strong>right now</strong>. Lock in access to the private channel before you go — you can still catch the next trade.</p>
+    <a href="#packages" onclick="closePopup()" class="tg-popup-btn" style="background:var(--green);color:var(--black);">⚡ GET ACCESS NOW</a>
+    <button class="tg-popup-skip" onclick="closePopup()">I'll decide later</button>
   </div>
 </div>
 
