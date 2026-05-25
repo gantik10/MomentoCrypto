@@ -32,11 +32,25 @@ if (empty($attribution['landing_url'])) {
 }
 
 // OxaPay charges in USD always — crypto-native users worldwide understand USD pricing
-$packages = [
+$basePackages = [
     'starter' => ['amount' => 27, 'name' => 'Starter — 1 Month'],
     'trader'  => ['amount' => 72, 'name' => 'Trader — 3 Months'],
     'pro'     => ['amount' => 126, 'name' => 'Pro — 6 Months'],
 ];
+
+// Apply BR 50% promo only when the visitor is on /br (locale=pt-BR) and promo is live
+$promoEnd = $_ENV['BR_PROMO_END'] ?? '';
+$promoDiscountPct = (int)($_ENV['BR_PROMO_DISCOUNT_PCT'] ?? 50);
+$promoActive = ($locale === 'pt-BR') && $promoEnd && strtotime($promoEnd) > time();
+$discountFactor = $promoActive ? (100 - $promoDiscountPct) / 100 : 1;
+
+$packages = [];
+foreach ($basePackages as $k => $v) {
+    $packages[$k] = [
+        'amount' => round($v['amount'] * $discountFactor, 2),
+        'name' => $v['name'] . ($promoActive ? " ({$promoDiscountPct}% OFF)" : ''),
+    ];
+}
 
 if (!isset($packages[$package])) {
     http_response_code(400);

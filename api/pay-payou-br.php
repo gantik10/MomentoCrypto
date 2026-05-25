@@ -30,12 +30,24 @@ $attribution['ip'] = trim(explode(',', $_SERVER['HTTP_X_FORWARDED_FOR'] ?? $_SER
 $attribution['user_agent'] = $_SERVER['HTTP_USER_AGENT'] ?? '';
 if (empty($attribution['landing_url'])) $attribution['landing_url'] = 'https://momentocrypto.com/br';
 
-// BRL amounts for Payou Pix payments
-$packages = [
+// BRL amounts for Payou Pix payments — 50% promo applies if BR_PROMO_END is set and in the future
+$promoEnd = $env['BR_PROMO_END'] ?? '';
+$promoDiscountPct = (int)($env['BR_PROMO_DISCOUNT_PCT'] ?? 50);
+$promoActive = $promoEnd && strtotime($promoEnd) > time();
+$discountFactor = $promoActive ? (100 - $promoDiscountPct) / 100 : 1;
+
+$basePackages = [
     'starter' => ['amount' => 149, 'name' => 'Starter — 1 Mês'],
     'trader'  => ['amount' => 399, 'name' => 'Trader — 3 Meses'],
     'pro'     => ['amount' => 699, 'name' => 'Pro — 6 Meses'],
 ];
+$packages = [];
+foreach ($basePackages as $k => $v) {
+    $packages[$k] = [
+        'amount' => round($v['amount'] * $discountFactor, 2),
+        'name' => $v['name'] . ($promoActive ? " ({$promoDiscountPct}% OFF)" : ''),
+    ];
+}
 
 if (!isset($packages[$package])) {
     http_response_code(400);

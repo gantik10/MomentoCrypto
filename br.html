@@ -59,12 +59,135 @@
   // 2) Initialize Meta Pixel (pixel_id loaded from /api/config.php — set META_PIXEL_ID in .env)
   !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
   fetch('/api/config.php').then(r=>r.json()).then(cfg => {
-    if (!cfg.meta_pixel_id) { console.warn('[MC] No META_PIXEL_ID configured; pixel disabled.'); return; }
-    window.__mc_meta_pixel_id = cfg.meta_pixel_id;
-    fbq('init', cfg.meta_pixel_id);
-    fbq('track', 'PageView');
-    // Pixel sets _fbp cookie now — re-fetch attribution will include it on next pay click
+    window.__mc_config = cfg;
+    if (cfg.meta_pixel_id) {
+      window.__mc_meta_pixel_id = cfg.meta_pixel_id;
+      fbq('init', cfg.meta_pixel_id);
+      fbq('track', 'PageView');
+    } else {
+      console.warn('[MC] No META_PIXEL_ID configured; pixel disabled.');
+    }
+    // BR promo — apply if active
+    if (cfg.br_promo_active && cfg.br_promo_end) {
+      applyBrPromo(cfg.br_promo_end, cfg.br_promo_discount_pct || 50);
+    }
   }).catch(e => console.warn('[MC] config.php fetch failed:', e));
+
+  // Apply the BR promo: show countdown banner + swap displayed prices to 50%-off versions
+  function applyBrPromo(endIso, discountPct) {
+    const endTs = new Date(endIso).getTime();
+    if (!endTs || endTs <= Date.now()) return; // safety: already expired client-side
+    const banner = document.getElementById('promoBanner');
+    if (banner) banner.style.display = '';
+
+    // Countdown tick
+    const elD = document.getElementById('promoDays');
+    const elH = document.getElementById('promoHours');
+    const elM = document.getElementById('promoMins');
+    const elS = document.getElementById('promoSecs');
+    function pad(n) { return String(n).padStart(2, '0'); }
+    function tick() {
+      let diff = Math.max(0, endTs - Date.now());
+      if (diff === 0) {
+        // Promo just ended — hide and reload prices
+        if (banner) banner.style.display = 'none';
+        location.reload();
+        return;
+      }
+      const d = Math.floor(diff / 86400000); diff -= d * 86400000;
+      const h = Math.floor(diff / 3600000);  diff -= h * 3600000;
+      const m = Math.floor(diff / 60000);    diff -= m * 60000;
+      const s = Math.floor(diff / 1000);
+      if (elD) elD.textContent = pad(d);
+      if (elH) elH.textContent = pad(h);
+      if (elM) elM.textContent = pad(m);
+      if (elS) elS.textContent = pad(s);
+    }
+    tick();
+    setInterval(tick, 1000);
+
+    // Price maps (regular → discounted)
+    const factor = (100 - discountPct) / 100; // 0.5 for 50%
+    const fmtBR = (n) => 'R$' + n.toFixed(2).replace('.', ',');
+    const fmtUSD = (n) => '$' + (Number.isInteger(n) ? n : n.toFixed(2));
+    const fmtEUR = (n) => '€' + (Number.isInteger(n) ? n : n.toFixed(2));
+
+    // Patch the hero stat tile "PRICE" rows on each package card
+    // Each .pkg-card contains:
+    //   .pkg-price            (big BRL price)
+    //   .pkg-price-sub        (crypto sub-line)
+    //   buttons w/ .pkg-btn-price (per-button price)
+    const PKG_BASE = {
+      starter: { brl: 149, eur: 27,  usd: 30 },
+      trader:  { brl: 399, eur: 73,  usd: 80 },
+      pro:     { brl: 699, eur: 128, usd: 140 },
+    };
+
+    document.querySelectorAll('.pkg-card').forEach(card => {
+      // Identify package by the button onclick (payPix('starter') etc.)
+      const btn = card.querySelector('.pkg-btn-pix');
+      const m = btn && btn.getAttribute('onclick')?.match(/'(\w+)'/);
+      const pkg = m && m[1];
+      if (!pkg || !PKG_BASE[pkg]) return;
+      const base = PKG_BASE[pkg];
+      const promo = {
+        brl: +(base.brl * factor).toFixed(2),
+        eur: +(base.eur * factor).toFixed(2),
+        usd: +(base.usd * factor).toFixed(2),
+      };
+
+      // Top BRL price block — show strikethrough + new
+      const priceEl = card.querySelector('.pkg-price');
+      if (priceEl) {
+        const perMonth = priceEl.querySelector('.pkg-per-month');
+        priceEl.innerHTML = `<span class="pkg-price-old-inline">${fmtBR(base.brl)}</span>${fmtBR(promo.brl)}` + (perMonth ? perMonth.outerHTML : '');
+      }
+
+      // Crypto sub-line — replace with new crypto promo price
+      const subEl = card.querySelector('.pkg-price-sub');
+      if (subEl) {
+        subEl.innerHTML = `<span style="color:#FF4500;font-weight:700;">${discountPct}% OFF · só hoje e amanhã</span>`;
+      }
+
+      // Pix button
+      const pixBtn = card.querySelector('.pkg-btn-pix');
+      if (pixBtn) {
+        const priceSpan = pixBtn.querySelector('.pkg-btn-price');
+        const tagSpan = pixBtn.querySelector('.pkg-btn-tag');
+        if (priceSpan) priceSpan.textContent = fmtBR(promo.brl);
+        if (tagSpan) { tagSpan.textContent = `-${discountPct}%`; tagSpan.style.background = '#FF4500'; }
+      }
+
+      // Card (Payou EUR) button
+      const cardBtn = card.querySelector('.pkg-btn-card');
+      if (cardBtn) {
+        const priceSpan = cardBtn.querySelector('.pkg-btn-price');
+        const subSpan = cardBtn.querySelector('.pkg-btn-sub');
+        if (priceSpan) priceSpan.textContent = fmtEUR(promo.eur);
+        if (subSpan) subSpan.textContent = `≈ ${fmtBR(promo.brl)}`;
+      }
+
+      // Crypto button — promo replaces the 10% discount label with 50% promo
+      const cryBtn = card.querySelector('.pkg-btn-crypto');
+      if (cryBtn) {
+        const old = cryBtn.querySelector('.pkg-btn-old');
+        const priceSpan = cryBtn.querySelector('.pkg-btn-price');
+        const disc = cryBtn.querySelector('.pkg-btn-discount');
+        if (old) old.textContent = fmtUSD(base.usd);
+        if (priceSpan) priceSpan.textContent = fmtUSD(promo.usd);
+        if (disc) { disc.textContent = `-${discountPct}%`; disc.style.background = '#FF4500'; disc.style.color = '#fff'; }
+      }
+    });
+
+    // Update pixel-tracking value maps so InitiateCheckout / AddPaymentInfo use promo values
+    if (typeof PKG_VALUES_PIX !== 'undefined') {
+      Object.keys(PKG_VALUES_PIX).forEach(k => {
+        if (PKG_BASE[k]) PKG_VALUES_PIX[k] = { brl: +(PKG_BASE[k].brl * factor).toFixed(2) };
+        if (typeof PKG_VALUES_CARD !== 'undefined' && PKG_BASE[k]) PKG_VALUES_CARD[k] = { eur: +(PKG_BASE[k].eur * factor).toFixed(2) };
+        if (typeof PKG_VALUES_CRYPTO !== 'undefined' && PKG_BASE[k]) PKG_VALUES_CRYPTO[k] = { usd: +(PKG_BASE[k].usd * factor).toFixed(2) };
+      });
+    }
+  }
 
   // Helper: fire pixel event safely
   window.__mc_pixel = function(eventName, params, eventId) {
@@ -682,6 +805,119 @@ document.addEventListener('DOMContentLoaded', () => {
   .lr-popup-btn:hover { background: var(--pix-dim); }
   .lr-popup-skip { display: block; margin-top: 12px; font-size: 12px; color: rgba(255,255,255,0.4); cursor: pointer; background: none; border: none; font-family: inherit; }
   .lr-popup-skip:hover { color: rgba(255,255,255,0.7); }
+
+  /* PROMO BANNER — 50% OFF countdown */
+  .promo-banner {
+    margin-top: 40px;
+    padding: 22px 24px;
+    background: linear-gradient(135deg, rgba(255,69,0,0.18), rgba(57,255,20,0.10));
+    border: 1.5px solid #FF4500;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    flex-wrap: wrap;
+    box-shadow: 0 0 40px rgba(255,69,0,0.18), inset 0 0 30px rgba(255,69,0,0.05);
+    animation: promoPulse 3s ease-in-out infinite;
+    max-width: 100%;
+  }
+  @keyframes promoPulse {
+    0%, 100% { box-shadow: 0 0 40px rgba(255,69,0,0.18), inset 0 0 30px rgba(255,69,0,0.05); }
+    50%      { box-shadow: 0 0 70px rgba(255,69,0,0.45), inset 0 0 40px rgba(255,69,0,0.10); }
+  }
+  .promo-banner-left { display: flex; align-items: center; gap: 16px; min-width: 0; flex: 1; }
+  .promo-flash-icon {
+    font-size: 36px;
+    line-height: 1;
+    animation: flashShake 1.6s ease-in-out infinite;
+    flex-shrink: 0;
+  }
+  @keyframes flashShake {
+    0%, 100% { transform: rotate(0); }
+    25% { transform: rotate(-10deg); }
+    75% { transform: rotate(10deg); }
+  }
+  .promo-titles { min-width: 0; }
+  .promo-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 30px;
+    letter-spacing: 1.5px;
+    color: #FF4500;
+    line-height: 1;
+    margin-bottom: 4px;
+    text-shadow: 0 0 18px rgba(255,69,0,0.5);
+  }
+  .promo-title .big { font-size: 38px; color: var(--green); text-shadow: 0 0 22px rgba(57,255,20,0.6); }
+  .promo-sub {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    color: rgba(245,245,245,0.85);
+    line-height: 1.4;
+  }
+  .promo-countdown-wrap {
+    display: flex;
+    align-items: stretch;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+  .promo-count-cell {
+    background: rgba(0,0,0,0.55);
+    border: 1px solid rgba(255,69,0,0.45);
+    border-radius: 10px;
+    padding: 10px 12px;
+    min-width: 64px;
+    text-align: center;
+  }
+  .promo-count-num {
+    font-family: 'Space Mono', monospace;
+    font-size: 26px;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1;
+  }
+  .promo-count-lbl {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 1.5px;
+    color: rgba(245,245,245,0.55);
+    text-transform: uppercase;
+    margin-top: 4px;
+  }
+  @media (max-width: 700px) {
+    .promo-banner { gap: 16px; padding: 18px 16px; }
+    .promo-title { font-size: 24px; }
+    .promo-title .big { font-size: 30px; }
+    .promo-sub { font-size: 12px; }
+    .promo-count-cell { min-width: 52px; padding: 8px 8px; }
+    .promo-count-num { font-size: 20px; }
+    .promo-flash-icon { font-size: 28px; }
+  }
+
+  /* Strikethrough original prices when promo is on */
+  .pkg-price-old-inline {
+    display: inline-block;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 24px;
+    color: rgba(245,245,245,0.4);
+    text-decoration: line-through;
+    margin-right: 10px;
+    vertical-align: middle;
+  }
+  .pkg-promo-badge {
+    display: inline-block;
+    background: #FF4500;
+    color: #fff;
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    padding: 3px 8px;
+    border-radius: 5px;
+    margin-left: 8px;
+    vertical-align: middle;
+    box-shadow: 0 0 10px rgba(255,69,0,0.5);
+  }
 
   .hero-packages {
     margin-top: 48px;
@@ -2011,6 +2247,23 @@ document.addEventListener('DOMContentLoaded', () => {
       <div class="stat">
         <div class="stat-num">3 ANOS</div>
         <div class="stat-label">Histórico</div>
+      </div>
+    </div>
+
+    <!-- PROMO BANNER (50% OFF + countdown — auto-shown if BR_PROMO_END is in the future) -->
+    <div class="promo-banner" id="promoBanner" style="display:none;">
+      <div class="promo-banner-left">
+        <div class="promo-flash-icon">🔥</div>
+        <div class="promo-titles">
+          <div class="promo-title">OFERTA RELÂMPAGO · <span class="big">50% OFF</span></div>
+          <div class="promo-sub">Termina em breve. Garanta seu acesso antes que o desconto expire.</div>
+        </div>
+      </div>
+      <div class="promo-countdown-wrap">
+        <div class="promo-count-cell"><div class="promo-count-num" id="promoDays">--</div><div class="promo-count-lbl">Dias</div></div>
+        <div class="promo-count-cell"><div class="promo-count-num" id="promoHours">--</div><div class="promo-count-lbl">Horas</div></div>
+        <div class="promo-count-cell"><div class="promo-count-num" id="promoMins">--</div><div class="promo-count-lbl">Min</div></div>
+        <div class="promo-count-cell"><div class="promo-count-num" id="promoSecs">--</div><div class="promo-count-lbl">Seg</div></div>
       </div>
     </div>
 
