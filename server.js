@@ -391,6 +391,7 @@ http.createServer(async (req, res) => {
     let filePath;
     if (pathname === "/") filePath = "/index.html";
     else if (pathname === "/br" || pathname === "/br/") filePath = "/br.html";
+    else if (pathname === "/in" || pathname === "/in/") filePath = "/in.html";
     else filePath = pathname;
     filePath = path.join(__dirname, filePath);
     if (!filePath.startsWith(__dirname)) { res.writeHead(403); res.end(); return; }
