@@ -2751,17 +2751,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Load daily results — paginated, image-below-text, click image to expand
   function escapeHtml(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch])); }
-  function fmtDateBR(dateStr) {
+  function fmtDateEN(dateStr) {
     if (!dateStr) return '';
     const [y, m, d] = dateStr.split('-');
-    const months = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
-    return `${parseInt(d, 10)} de ${months[parseInt(m, 10) - 1]} de ${y}`;
+    const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+    return `${months[parseInt(m, 10) - 1]} ${parseInt(d, 10)}, ${y}`;
   }
   function renderDailyCard(p, isLatest) {
-    const title = p.title_pt || p.title_en || p.title || '';
-    const body = p.body_pt || p.body_en || p.body || '';
+    const title = p.title_en || p.title_pt || p.title || '';
+    const body = p.body_en || p.body_pt || p.body || '';
     const today = new Date().toISOString().slice(0, 10);
-    const badgeText = (p.date === today) ? 'HOJE · AO VIVO' : 'MAIS RECENTE';
+    const badgeText = (p.date === today) ? 'TODAY · LIVE' : 'LATEST';
     const todayBadge = isLatest ? `<span class="daily-card-today-badge">${badgeText}</span>` : '';
     const img = p.image
       ? `<div class="daily-card-img" onclick="openLightbox('${escapeHtml(p.image).replace(/'/g, "\\'")}')"><img src="${escapeHtml(p.image)}" alt="${escapeHtml(title)}" loading="lazy"></div>`
@@ -2770,27 +2770,27 @@ document.addEventListener('DOMContentLoaded', () => {
       ${todayBadge}
       <div class="daily-card-body">
         <div class="daily-card-meta">
-          <span class="date">${escapeHtml(fmtDateBR(p.date))}</span>
+          <span class="date">${escapeHtml(fmtDateEN(p.date))}</span>
         </div>
         <div class="daily-card-title">${escapeHtml(title)}</div>
         <div class="daily-card-body-text">${escapeHtml(body)}</div>
       </div>
       ${img}
-      <a href="#packages" class="daily-card-tg-link">QUERO ACESSO COMPLETO →</a>
+      <a href="#packages" class="daily-card-tg-link">GET FULL ACCESS →</a>
     </article>`;
   }
 
   function renderMoreSoonCard() {
     const t = new Date();
     t.setDate(t.getDate() + 1);
-    const months = ['janeiro','fevereiro','março','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro'];
-    const nextLabel = `amanhã, ${t.getDate()} de ${months[t.getMonth()]}`;
+    const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+    const nextLabel = `tomorrow, ${months[t.getMonth()]} ${t.getDate()}`;
     return `<div class="daily-more-soon reveal">
       <div class="daily-more-soon-icon">🚀</div>
-      <div class="daily-more-soon-title">MAIS RESULTADOS EM BREVE</div>
-      <div class="daily-more-soon-text">Publicamos novos resultados todos os dias. Quer acompanhar <strong>cada sinal em tempo real</strong>, com entrada, TP e SL, antes de saírem aqui? Garanta acesso ao nosso canal privado.</div>
-      <a href="#packages" class="daily-more-soon-btn">⚡ QUERO ACESSO AGORA</a>
-      <div class="daily-more-soon-countdown"><span class="pulse"></span> PRÓXIMO RESULTADO · ${escapeHtml(nextLabel.toUpperCase())}</div>
+      <div class="daily-more-soon-title">MORE RESULTS COMING SOON</div>
+      <div class="daily-more-soon-text">We publish new results every day. Want to follow <strong>every signal in real time</strong>, with entry, TP, and SL — before they show up here? Lock in access to our private channel.</div>
+      <a href="#packages" class="daily-more-soon-btn">⚡ GET ACCESS NOW</a>
+      <div class="daily-more-soon-countdown"><span class="pulse"></span> NEXT RESULT · ${escapeHtml(nextLabel.toUpperCase())}</div>
     </div>`;
   }
 
@@ -2800,7 +2800,7 @@ document.addEventListener('DOMContentLoaded', () => {
       lb = document.createElement('div');
       lb.id = 'dailyLightbox';
       lb.className = 'daily-lightbox';
-      lb.innerHTML = '<button class="daily-lightbox-close" aria-label="Fechar">×</button><img alt="">';
+      lb.innerHTML = '<button class="daily-lightbox-close" aria-label="Close">×</button><img alt="">';
       lb.addEventListener('click', () => lb.classList.remove('show'));
       document.body.appendChild(lb);
     }
@@ -2820,7 +2820,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const tail = document.getElementById('dailyTail');
     if (!tail) return;
     if (_shown < _allPosts.length) {
-      tail.innerHTML = `<div class="daily-load-more-wrap"><button class="daily-load-more" id="dailyLoadMore">CARREGAR MAIS ↓</button></div>`;
+      tail.innerHTML = `<div class="daily-load-more-wrap"><button class="daily-load-more" id="dailyLoadMore">LOAD MORE ↓</button></div>`;
       document.getElementById('dailyLoadMore').addEventListener('click', loadMore);
     } else {
       tail.innerHTML = renderMoreSoonCard();
@@ -2843,9 +2843,7 @@ document.addEventListener('DOMContentLoaded', () => {
     try {
       const r = await fetch('/api/daily-results.php?limit=500');
       const data = await r.json();
-      if (data.public_since && since) {
-        since.querySelector('span:last-child').innerHTML = `<strong>Publicamos resultados diários públicos desde ${escapeHtml(fmtDateBR(data.public_since))}.</strong> Antes disso, mantínhamos no canal privado do Telegram para nossos membros pagos. Agora também publicamos aqui para máxima transparência.`;
-      }
+      // (no public-since banner on /in)
       _allPosts = data.posts || [];
       if (!_allPosts.length) {
         feed.innerHTML = '';
@@ -2871,13 +2869,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function renderReviewShot(r) {
     const src = escapeHtml(r.image || '').replace(/'/g, "\\'");
-    return `<a class="review-shot reveal" onclick="openLightbox('${src}'); return false;" href="${escapeHtml(r.image || '')}"><img src="${escapeHtml(r.image || '')}" alt="Avaliação no Telegram" loading="lazy"></a>`;
+    return `<a class="review-shot reveal" onclick="openLightbox('${src}'); return false;" href="${escapeHtml(r.image || '')}"><img src="${escapeHtml(r.image || '')}" alt="Telegram review" loading="lazy"></a>`;
   }
   function renderReviewsTail() {
     const tail = document.getElementById('reviewsTail');
     if (!tail) return;
     if (_shownReviews < _allReviews.length) {
-      tail.innerHTML = `<div class="daily-load-more-wrap"><button class="daily-load-more" id="reviewsLoadMore">CARREGAR MAIS ↓</button></div>`;
+      tail.innerHTML = `<div class="daily-load-more-wrap"><button class="daily-load-more" id="reviewsLoadMore">LOAD MORE ↓</button></div>`;
       document.getElementById('reviewsLoadMore').addEventListener('click', loadMoreReviews);
     } else {
       tail.innerHTML = '';
