@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="en-IN">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MomentoCrypto — Sinais Que Acertam</title>
-<meta name="description" content="Sinais profissionais de cripto com resultados verificados. Junte-se a milhares de traders brasileiros já vencendo com a comunidade premium da MomentoCrypto.">
-<meta property="og:title" content="MomentoCrypto — Sinais Que Acertam">
-<meta property="og:description" content="Sinais profissionais de cripto com resultados verificados. Junte-se a milhares de traders já vencendo.">
+<title>MomentoCrypto — Verified Crypto Signals for India</title>
+<meta name="description" content="Professional crypto signals with verified results. Join thousands of Indian traders already winning with the premium MomentoCrypto community — pay via UPI in INR.">
+<meta property="og:title" content="MomentoCrypto — Verified Crypto Signals for India">
+<meta property="og:description" content="Professional crypto signals with verified results. Join thousands of traders already winning. UPI payments accepted.">
 <meta property="og:type" content="website">
 <meta name="theme-color" content="#080808">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
@@ -23,7 +23,7 @@
   function getQueryParam(k) {
     return new URLSearchParams(location.search).get(k) || '';
   }
-  const KEY = 'mc_attribution_br';
+  const KEY = 'mc_attribution_in';
   const ATTR_TTL = 90 * 24 * 60 * 60 * 1000;
   let stored = {};
   try { stored = JSON.parse(localStorage.getItem(KEY) || '{}'); } catch{}
@@ -67,117 +67,7 @@
     } else {
       console.warn('[MC] No META_PIXEL_ID configured; pixel disabled.');
     }
-    // BR promo — apply if active
-    if (cfg.br_promo_active && cfg.br_promo_end) {
-      applyBrPromo(cfg.br_promo_end, cfg.br_promo_discount_pct || 50);
-    }
   }).catch(e => console.warn('[MC] config.php fetch failed:', e));
-
-  // Apply the BR promo: show countdown banner + swap displayed prices to 50%-off versions
-  function applyBrPromo(endIso, discountPct) {
-    const endTs = new Date(endIso).getTime();
-    if (!endTs || endTs <= Date.now()) return; // safety: already expired client-side
-    const banner = document.getElementById('promoBanner');
-    if (banner) banner.style.display = '';
-
-    // Countdown tick
-    const elD = document.getElementById('promoDays');
-    const elH = document.getElementById('promoHours');
-    const elM = document.getElementById('promoMins');
-    const elS = document.getElementById('promoSecs');
-    function pad(n) { return String(n).padStart(2, '0'); }
-    function tick() {
-      let diff = Math.max(0, endTs - Date.now());
-      if (diff === 0) {
-        // Promo just ended — hide and reload prices
-        if (banner) banner.style.display = 'none';
-        location.reload();
-        return;
-      }
-      const d = Math.floor(diff / 86400000); diff -= d * 86400000;
-      const h = Math.floor(diff / 3600000);  diff -= h * 3600000;
-      const m = Math.floor(diff / 60000);    diff -= m * 60000;
-      const s = Math.floor(diff / 1000);
-      if (elD) elD.textContent = pad(d);
-      if (elH) elH.textContent = pad(h);
-      if (elM) elM.textContent = pad(m);
-      if (elS) elS.textContent = pad(s);
-    }
-    tick();
-    setInterval(tick, 1000);
-
-    // Price maps (regular → discounted)
-    const factor = (100 - discountPct) / 100; // 0.5 for 50%
-    const fmtBR = (n) => 'R$' + n.toFixed(2).replace('.', ',');
-    const fmtUSD = (n) => '$' + (Number.isInteger(n) ? n : n.toFixed(2));
-    const fmtEUR = (n) => '€' + (Number.isInteger(n) ? n : n.toFixed(2));
-
-    // Patch the hero stat tile "PRICE" rows on each package card
-    // Each .pkg-card contains:
-    //   .pkg-price            (big BRL price)
-    //   .pkg-price-sub        (crypto sub-line)
-    //   buttons w/ .pkg-btn-price (per-button price)
-    const PKG_BASE = {
-      starter: { brl: 149, eur: 27,  usd: 30 },
-      trader:  { brl: 399, eur: 73,  usd: 80 },
-      pro:     { brl: 699, eur: 128, usd: 140 },
-    };
-
-    document.querySelectorAll('.pkg-card').forEach(card => {
-      // Identify package by the button onclick (payPix('starter') etc.)
-      const btn = card.querySelector('.pkg-btn-pix');
-      const m = btn && btn.getAttribute('onclick')?.match(/'(\w+)'/);
-      const pkg = m && m[1];
-      if (!pkg || !PKG_BASE[pkg]) return;
-      const base = PKG_BASE[pkg];
-      const promo = {
-        brl: +(base.brl * factor).toFixed(2),
-        eur: +(base.eur * factor).toFixed(2),
-        usd: +(base.usd * factor).toFixed(2),
-      };
-
-      // Top BRL price block — show strikethrough + new
-      const priceEl = card.querySelector('.pkg-price');
-      if (priceEl) {
-        const perMonth = priceEl.querySelector('.pkg-per-month');
-        priceEl.innerHTML = `<span class="pkg-price-old-inline">${fmtBR(base.brl)}</span>${fmtBR(promo.brl)}` + (perMonth ? perMonth.outerHTML : '');
-      }
-
-      // Crypto sub-line — replace with new crypto promo price
-      const subEl = card.querySelector('.pkg-price-sub');
-      if (subEl) {
-        subEl.innerHTML = `<span style="color:#FF4500;font-weight:700;">${discountPct}% OFF · só hoje e amanhã</span>`;
-      }
-
-      // Pix button
-      const pixBtn = card.querySelector('.pkg-btn-pix');
-      if (pixBtn) {
-        const priceSpan = pixBtn.querySelector('.pkg-btn-price');
-        const tagSpan = pixBtn.querySelector('.pkg-btn-tag');
-        if (priceSpan) priceSpan.textContent = fmtBR(promo.brl);
-        if (tagSpan) { tagSpan.textContent = `-${discountPct}%`; tagSpan.style.background = '#FF4500'; }
-      }
-
-      // Crypto button — promo replaces the 10% discount label with 50% promo
-      const cryBtn = card.querySelector('.pkg-btn-crypto');
-      if (cryBtn) {
-        const old = cryBtn.querySelector('.pkg-btn-old');
-        const priceSpan = cryBtn.querySelector('.pkg-btn-price');
-        const disc = cryBtn.querySelector('.pkg-btn-discount');
-        if (old) old.textContent = fmtUSD(base.usd);
-        if (priceSpan) priceSpan.textContent = fmtUSD(promo.usd);
-        if (disc) { disc.textContent = `-${discountPct}%`; disc.style.background = '#FF4500'; disc.style.color = '#fff'; }
-      }
-    });
-
-    // Update pixel-tracking value maps so InitiateCheckout / AddPaymentInfo use promo values
-    if (typeof PKG_VALUES_PIX !== 'undefined') {
-      Object.keys(PKG_VALUES_PIX).forEach(k => {
-        if (PKG_BASE[k]) PKG_VALUES_PIX[k] = { brl: +(PKG_BASE[k].brl * factor).toFixed(2) };
-        if (typeof PKG_VALUES_CRYPTO !== 'undefined' && PKG_BASE[k]) PKG_VALUES_CRYPTO[k] = { usd: +(PKG_BASE[k].usd * factor).toFixed(2) };
-      });
-    }
-  }
 
   // Helper: fire pixel event safely
   window.__mc_pixel = function(eventName, params, eventId) {
@@ -235,7 +125,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const params = new URLSearchParams(location.search);
   const utm = {}; ['utm_source','utm_medium','utm_campaign','utm_content','utm_term'].forEach(k => { if (params.get(k)) utm[k] = params.get(k); });
-  send('page_view', { path: location.pathname, locale: 'pt-BR', referrer: document.referrer, utm: Object.keys(utm).length ? utm : null, screen: screen.width+'x'+screen.height, vid: localStorage.getItem('mc_vid') });
+  send('page_view', { path: location.pathname, locale: 'en-IN', referrer: document.referrer, utm: Object.keys(utm).length ? utm : null, screen: screen.width+'x'+screen.height, vid: localStorage.getItem('mc_vid') });
 
   document.addEventListener('click', e => {
     const el = e.target.closest('a,button,.pkg-btn,.tg-btn,.nav-cta,.faq-item summary,.support-fab,.oxapay-badge') || e.target;
@@ -1498,17 +1388,53 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   .pkg-btn:last-child { margin-bottom: 0; }
 
-  /* Pix icon — official Pix mark clipped from full lockup PNG via CSS */
-  .pix-mark {
-    display: inline-block;
-    width: 22px;
+  /* UPI icon — rendered text-style mark (no asset dependency) */
+  .upi-mark {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 38px;
     height: 22px;
-    background: url('assets/icons/pix-logo.png') no-repeat left center;
-    background-size: auto 22px;
+    padding: 0 6px;
+    border-radius: 4px;
+    background: linear-gradient(180deg, #ed752e 0%, #097939 60%, #097939 100%);
+    color: #fff;
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.5px;
     flex-shrink: 0;
   }
+  .upi-mark::before { content: 'UPI'; }
+  .upi-mark-inline {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 3px 8px;
+    border-radius: 4px;
+    background: linear-gradient(180deg, #ed752e 0%, #097939 60%, #097939 100%);
+    color: #fff;
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    height: 22px;
+  }
+  .upi-trust-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 14px;
+    border-radius: 6px;
+    background: linear-gradient(180deg, #ed752e 0%, #097939 60%, #097939 100%);
+    color: #fff;
+    font-family: 'Space Mono', monospace;
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 1px;
+  }
 
-  /* PIX (primary) */
+  /* UPI (primary) — keeps .pkg-btn-pix selector for compatibility */
   .pkg-btn-pix {
     background: #fff;
     color: #0a3c36;
@@ -1517,12 +1443,12 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   .pkg-btn-pix:hover {
     background: #f5fffd;
-    border-color: var(--pix);
-    box-shadow: 0 0 18px var(--pix-glow);
+    border-color: #097939;
+    box-shadow: 0 0 18px rgba(9,121,57,0.35);
   }
   .pkg-btn-pix .pkg-btn-price { font-weight: 800; color: #0a3c36; }
   .pkg-btn-pix .pkg-btn-tag {
-    background: var(--pix);
+    background: #097939;
     color: #fff;
     font-size: 10px;
     font-weight: 800;
@@ -1565,7 +1491,7 @@ document.addEventListener('DOMContentLoaded', () => {
   @media (max-width: 1024px) {
     .pkg-btn { font-size: 12.5px; padding: 11px 8px; gap: 6px; }
     .pkg-btn-pix .pkg-btn-tag { font-size: 9px; padding: 2px 6px; }
-    .pix-mark { width: 20px; height: 20px; background-size: auto 20px; }
+    .upi-mark { min-width: 34px; height: 20px; font-size: 9px; }
   }
 
   /* Telegram popup */
@@ -2155,16 +2081,16 @@ document.addEventListener('DOMContentLoaded', () => {
 <nav>
   <a href="#hero" class="nav-logo">Momento<span>Crypto</span></a>
   <ul class="nav-links">
-    <li><a href="#how">Como funciona</a></li>
-    <li><a href="#results">Resultados</a></li>
-    <li><a href="#packages">Planos</a></li>
-    <li><a href="#reviews">Avaliações</a></li>
-    <li><a href="#inside">O que tem</a></li>
+    <li><a href="#how">How it works</a></li>
+    <li><a href="#results">Results</a></li>
+    <li><a href="#packages">Plans</a></li>
+    <li><a href="#reviews">Reviews</a></li>
+    <li><a href="#inside">What's inside</a></li>
     <li><a href="#faq">FAQ</a></li>
-    <li><a href="/" class="lang-toggle"><span>EN</span> · <span class="active">PT</span></a></li>
-    <li><a href="https://t.me/momentocrypto_support" target="_blank" rel="noopener" class="nav-support">Suporte</a></li>
+    <li><a href="/" class="lang-toggle"><span class="active">🇮🇳 IN</span> · <span>Global</span></a></li>
+    <li><a href="https://t.me/momentocrypto_support" target="_blank" rel="noopener" class="nav-support">Support</a></li>
   </ul>
-  <a href="#packages" class="nav-cta">Quero Acesso →</a>
+  <a href="#packages" class="nav-cta">Get Access →</a>
   <button class="burger" aria-label="Menu">
     <span></span><span></span><span></span>
   </button>
@@ -2172,17 +2098,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
 <!-- MOBILE NAV -->
 <div class="mobile-nav">
-  <a href="#how">Como funciona</a>
-  <a href="#results">Resultados</a>
-  <a href="#packages">Planos</a>
-  <a href="#reviews">Avaliações</a>
-  <a href="#inside">O que tem</a>
+  <a href="#how">How it works</a>
+  <a href="#results">Results</a>
+  <a href="#packages">Plans</a>
+  <a href="#reviews">Reviews</a>
+  <a href="#inside">What's inside</a>
   <a href="#faq">FAQ</a>
-  <a href="/" style="font-size:14px;letter-spacing:2px;color:var(--white-dim);">🇺🇸 English version →</a>
-  <a href="https://t.me/momentocrypto_support" target="_blank" rel="noopener">Suporte</a>
+  <a href="/" style="font-size:14px;letter-spacing:2px;color:var(--white-dim);">🌐 Global site →</a>
+  <a href="https://t.me/momentocrypto_support" target="_blank" rel="noopener">Support</a>
   <a href="#packages" class="tg-btn" style="margin-top:20px">
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12l-6.871 4.326-2.962-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.194 1.006.131.833.941z" fill="currentColor"/></svg>
-    QUERO ACESSO
+    GET ACCESS
   </a>
 </div>
 
@@ -2193,53 +2119,47 @@ document.addEventListener('DOMContentLoaded', () => {
   <div class="hero-inner">
     <div class="hero-ticker">
       <span class="ticker-dot"></span>
-      Sinais ao vivo · cobertura 24/7
+      Live signals · 24/7 coverage
     </div>
-    <h1>SINAIS QUE<br><span class="green">ACERTAM.</span></h1>
-    <p class="hero-sub">Sinais profissionais de cripto com resultados verificados. Junte-se a milhares de traders brasileiros já vencendo com a comunidade premium da MomentoCrypto.</p>
+    <h1>SIGNALS THAT<br><span class="green">DELIVER.</span></h1>
+    <p class="hero-sub">Professional crypto signals with verified results. Join thousands of Indian traders already winning with the premium MomentoCrypto community — pay instantly via UPI.</p>
     <div class="hero-stats">
       <div class="stat">
         <div class="stat-num" data-count="4200">0</div>
-        <div class="stat-label">Membros Ativos</div>
+        <div class="stat-label">Active Members</div>
       </div>
       <div class="stat">
         <div class="stat-num" data-count="87" data-suffix="%">0%</div>
-        <div class="stat-label">Taxa de Acerto</div>
+        <div class="stat-label">Win Rate</div>
       </div>
       <div class="stat">
         <div class="stat-num" data-count="340" data-suffix="%">0%</div>
-        <div class="stat-label">ROI Médio Mensal</div>
+        <div class="stat-label">Avg. Monthly ROI</div>
       </div>
       <div class="stat">
-        <div class="stat-num">3 ANOS</div>
-        <div class="stat-label">Histórico</div>
+        <div class="stat-num">3 YEARS</div>
+        <div class="stat-label">Track Record</div>
       </div>
     </div>
 
-    <!-- PROMO BANNER (50% OFF + countdown — auto-shown if BR_PROMO_END is in the future) -->
-    <div class="promo-banner" id="promoBanner" style="display:none;">
+    <!-- INDIA LAUNCH BANNER (static 50% OFF) -->
+    <div class="promo-banner">
       <div class="promo-banner-left">
-        <div class="promo-flash-icon">🔥</div>
+        <div class="promo-flash-icon">🇮🇳</div>
         <div class="promo-titles">
-          <div class="promo-title">OFERTA RELÂMPAGO · <span class="big">50% OFF</span></div>
-          <div class="promo-sub">Termina em breve. Garanta seu acesso antes que o desconto expire.</div>
+          <div class="promo-title">INDIA LAUNCH · <span class="big">50% OFF</span></div>
+          <div class="promo-sub">Special launch pricing for Indian traders. Pay in INR with UPI — instant access.</div>
         </div>
-      </div>
-      <div class="promo-countdown-wrap">
-        <div class="promo-count-cell"><div class="promo-count-num" id="promoDays">--</div><div class="promo-count-lbl">Dias</div></div>
-        <div class="promo-count-cell"><div class="promo-count-num" id="promoHours">--</div><div class="promo-count-lbl">Horas</div></div>
-        <div class="promo-count-cell"><div class="promo-count-num" id="promoMins">--</div><div class="promo-count-lbl">Min</div></div>
-        <div class="promo-count-cell"><div class="promo-count-num" id="promoSecs">--</div><div class="promo-count-lbl">Seg</div></div>
       </div>
     </div>
 
     <!-- PACKAGES IN HERO -->
     <div class="hero-packages" id="packages">
       <div class="hero-packages-header">
-        <h2 class="hero-pkg-title">Escolha seu Plano</h2>
+        <h2 class="hero-pkg-title">Choose Your Plan</h2>
         <div class="hero-pkg-payment-icons">
-          <span class="hero-pkg-accepts">Aceitamos:</span>
-          <img src="assets/icons/pix-logo.png" alt="Pix · Powered by Banco Central" height="22" style="opacity:0.95;">
+          <span class="hero-pkg-accepts">We accept:</span>
+          <span class="upi-mark-inline">UPI</span>
           <img src="assets/icons/btc.svg" alt="BTC" height="20">
           <img src="assets/icons/eth.svg" alt="ETH" height="20">
           <img src="assets/icons/usdt.svg" alt="USDT" height="20">
@@ -2247,72 +2167,72 @@ document.addEventListener('DOMContentLoaded', () => {
       </div>
       <div class="packages-grid">
         <div class="pkg-card">
-          <div class="pkg-duration">01 Mês</div>
+          <div class="pkg-duration">01 Month</div>
           <div class="pkg-name">STARTER</div>
-          <div class="pkg-price">R$149<span class="pkg-per-month">/mês</span></div>
-          <div class="pkg-price-sub"><span style="color:#39FF14;font-weight:600;">R$134 com cripto</span></div>
+          <div class="pkg-price"><span class="pkg-price-old-inline">₹2,800</span>₹1,400<span class="pkg-per-month">/mo</span></div>
+          <div class="pkg-price-sub"><span style="color:#39FF14;font-weight:600;">$27 with crypto · ~₹2,250</span></div>
           <ul class="pkg-features">
-            <li>Acesso completo a todos os sinais</li>
-            <li>Entrada, TP e SL definidos</li>
-            <li>Canal privado no Telegram</li>
-            <li>Comentários do analista</li>
+            <li>Full access to all signals</li>
+            <li>Entry, TP &amp; SL levels</li>
+            <li>Private Telegram channel</li>
+            <li>Analyst commentary</li>
           </ul>
-          <button class="pkg-btn pkg-btn-pix" onclick="payPix('starter')">
-            <span class="pix-mark"></span>
-            <span>Pix</span>
-            <span class="pkg-btn-price">R$149</span>
-            <span class="pkg-btn-tag">Instantâneo</span>
+          <button class="pkg-btn pkg-btn-pix" onclick="payUpi('starter')">
+            <span class="upi-mark"></span>
+            <span>UPI</span>
+            <span class="pkg-btn-price">₹1,400</span>
+            <span class="pkg-btn-tag">Instant</span>
           </button>
           <button class="pkg-btn pkg-btn-crypto" onclick="payPackage('starter')">
-            <span>Cripto</span>
+            <span>Crypto</span>
             <span class="pkg-btn-old">$30</span>
             <span class="pkg-btn-price">$27</span>
             <span class="pkg-btn-discount">-10%</span>
           </button>
         </div>
         <div class="pkg-card featured">
-          <div class="pkg-duration">03 Meses</div>
+          <div class="pkg-duration">03 Months</div>
           <div class="pkg-name">TRADER</div>
-          <div class="pkg-price">R$399<span class="pkg-per-month"> · R$133/mês</span></div>
-          <div class="pkg-price-sub"><span style="color:#39FF14;font-weight:600;">R$359 com cripto · economize R$40</span></div>
+          <div class="pkg-price"><span class="pkg-price-old-inline">₹7,600</span>₹3,800<span class="pkg-per-month"> · ₹1,267/mo</span></div>
+          <div class="pkg-price-sub"><span style="color:#39FF14;font-weight:600;">$72 with crypto · ~₹6,000</span></div>
           <ul class="pkg-features">
-            <li>Acesso completo a todos os sinais</li>
-            <li>Entrada, TP e SL definidos</li>
-            <li>Canal privado no Telegram</li>
-            <li>Comentários do analista</li>
+            <li>Full access to all signals</li>
+            <li>Entry, TP &amp; SL levels</li>
+            <li>Private Telegram channel</li>
+            <li>Analyst commentary</li>
           </ul>
-          <button class="pkg-btn pkg-btn-pix" onclick="payPix('trader')">
-            <span class="pix-mark"></span>
-            <span>Pix</span>
-            <span class="pkg-btn-price">R$399</span>
-            <span class="pkg-btn-tag">Instantâneo</span>
+          <button class="pkg-btn pkg-btn-pix" onclick="payUpi('trader')">
+            <span class="upi-mark"></span>
+            <span>UPI</span>
+            <span class="pkg-btn-price">₹3,800</span>
+            <span class="pkg-btn-tag">Instant</span>
           </button>
           <button class="pkg-btn pkg-btn-crypto" onclick="payPackage('trader')">
-            <span>Cripto</span>
+            <span>Crypto</span>
             <span class="pkg-btn-old">$80</span>
             <span class="pkg-btn-price">$72</span>
             <span class="pkg-btn-discount">-10%</span>
           </button>
         </div>
         <div class="pkg-card">
-          <div class="pkg-duration">06 Meses</div>
+          <div class="pkg-duration">06 Months</div>
           <div class="pkg-name">PRO</div>
-          <div class="pkg-price">R$699<span class="pkg-per-month"> · R$117/mês</span></div>
-          <div class="pkg-price-sub"><span style="color:#39FF14;font-weight:600;">R$629 com cripto · economize R$70</span></div>
+          <div class="pkg-price"><span class="pkg-price-old-inline">₹13,400</span>₹6,700<span class="pkg-per-month"> · ₹1,117/mo</span></div>
+          <div class="pkg-price-sub"><span style="color:#39FF14;font-weight:600;">$126 with crypto · ~₹10,500</span></div>
           <ul class="pkg-features">
-            <li>Acesso completo a todos os sinais</li>
-            <li>Entrada, TP e SL definidos</li>
-            <li>Canal privado no Telegram</li>
-            <li>Comentários do analista</li>
+            <li>Full access to all signals</li>
+            <li>Entry, TP &amp; SL levels</li>
+            <li>Private Telegram channel</li>
+            <li>Analyst commentary</li>
           </ul>
-          <button class="pkg-btn pkg-btn-pix" onclick="payPix('pro')">
-            <span class="pix-mark"></span>
-            <span>Pix</span>
-            <span class="pkg-btn-price">R$699</span>
-            <span class="pkg-btn-tag">Instantâneo</span>
+          <button class="pkg-btn pkg-btn-pix" onclick="payUpi('pro')">
+            <span class="upi-mark"></span>
+            <span>UPI</span>
+            <span class="pkg-btn-price">₹6,700</span>
+            <span class="pkg-btn-tag">Instant</span>
           </button>
           <button class="pkg-btn pkg-btn-crypto" onclick="payPackage('pro')">
-            <span>Cripto</span>
+            <span>Crypto</span>
             <span class="pkg-btn-old">$140</span>
             <span class="pkg-btn-price">$126</span>
             <span class="pkg-btn-discount">-10%</span>
@@ -2328,35 +2248,35 @@ document.addEventListener('DOMContentLoaded', () => {
 
 <!-- HOW IT WORKS -->
 <section id="how">
-  <div class="section-label reveal">Como funciona</div>
-  <h2 class="reveal">DO CADASTRO ÀS<br><span>OPERAÇÕES VENCEDORAS.</span></h2>
+  <div class="section-label reveal">How it works</div>
+  <h2 class="reveal">FROM SIGNUP TO<br><span>WINNING TRADES.</span></h2>
 
   <div class="how-grid-v2">
     <div class="how-card reveal">
       <div class="how-step-num">01</div>
       <div class="how-mock how-mock-plans">
         <div class="mock-plan">
-          <div class="mock-plan-label">01 Mês</div>
+          <div class="mock-plan-label">01 Month</div>
           <div class="mock-plan-name">STARTER</div>
-          <div class="mock-plan-price">R$149</div>
-          <div class="mock-plan-btn">→ Pagar</div>
+          <div class="mock-plan-price">₹1,400</div>
+          <div class="mock-plan-btn">→ Pay</div>
         </div>
         <div class="mock-plan featured">
-          <div class="mock-badge">MELHOR</div>
-          <div class="mock-plan-label">03 Meses</div>
+          <div class="mock-badge">BEST</div>
+          <div class="mock-plan-label">03 Months</div>
           <div class="mock-plan-name">TRADER</div>
-          <div class="mock-plan-price">R$399</div>
-          <div class="mock-plan-btn">→ Pagar</div>
+          <div class="mock-plan-price">₹3,800</div>
+          <div class="mock-plan-btn">→ Pay</div>
         </div>
         <div class="mock-plan">
-          <div class="mock-plan-label">06 Meses</div>
+          <div class="mock-plan-label">06 Months</div>
           <div class="mock-plan-name">PRO</div>
-          <div class="mock-plan-price">R$699</div>
-          <div class="mock-plan-btn">→ Pagar</div>
+          <div class="mock-plan-price">₹6,700</div>
+          <div class="mock-plan-btn">→ Pay</div>
         </div>
         <div class="mock-cursor"></div>
       </div>
-      <div class="how-card-title">ESCOLHA SEU PLANO</div>
+      <div class="how-card-title">CHOOSE YOUR PLAN</div>
     </div>
 
     <div class="how-card reveal">
@@ -2370,12 +2290,12 @@ document.addEventListener('DOMContentLoaded', () => {
           </div>
         </div>
         <div class="mock-bot-body">
-          <div class="mock-msg mock-msg-in">Bem-vindo! Envie seu código de ativação para entrar no canal.</div>
-          <div class="mock-msg mock-msg-out">seu-codigo-de-ativacao</div>
-          <div class="mock-msg mock-msg-in"><span class="mock-check">✓</span> Código aceito. Você foi adicionado ao canal.</div>
+          <div class="mock-msg mock-msg-in">Welcome! Send your activation code to join the channel.</div>
+          <div class="mock-msg mock-msg-out">your-activation-code</div>
+          <div class="mock-msg mock-msg-in"><span class="mock-check">✓</span> Code accepted. You're in the channel.</div>
         </div>
       </div>
-      <div class="how-card-title">ATIVE SEU BOT</div>
+      <div class="how-card-title">ACTIVATE YOUR BOT</div>
     </div>
 
     <div class="how-card reveal">
@@ -2386,10 +2306,10 @@ document.addEventListener('DOMContentLoaded', () => {
             <svg width="20" height="20" viewBox="0 0 24 24" fill="#fff"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12l-6.871 4.326-2.962-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.194 1.006.131.833.941z"/></svg>
           </div>
           <div class="mock-notif-body">
-            <div class="mock-notif-title">MomentoCrypto Sinais</div>
-            <div class="mock-notif-text">🚀 Trade aberto · SOLUSDT long<br>Entrada: 142.30 · TP: 156.00 · SL: 138.50</div>
+            <div class="mock-notif-title">MomentoCrypto Signals</div>
+            <div class="mock-notif-text">🚀 Trade open · SOLUSDT long<br>Entry: 142.30 · TP: 156.00 · SL: 138.50</div>
           </div>
-          <div class="mock-notif-time">agora</div>
+          <div class="mock-notif-time">now</div>
         </div>
         <div class="mock-chart">
           <svg viewBox="0 0 220 70" preserveAspectRatio="none">
@@ -2405,28 +2325,28 @@ document.addEventListener('DOMContentLoaded', () => {
           </svg>
         </div>
       </div>
-      <div class="how-card-title">RECEBA O ALERTA & OPERE</div>
+      <div class="how-card-title">GET THE ALERT & TRADE</div>
     </div>
 
     <div class="how-card reveal">
       <div class="how-step-num">04</div>
       <div class="how-mock how-mock-win">
         <div class="mock-pnl-card">
-          <div class="mock-pnl-header"><span class="mock-dot-blue"></span> Trade fechado</div>
+          <div class="mock-pnl-header"><span class="mock-dot-blue"></span> Trade closed</div>
           <div class="mock-pnl-pair">SOLUSDT long · 10×</div>
           <div class="mock-pnl-big">+42.18%</div>
           <div class="mock-pnl-usd">+210.90 USDT</div>
-          <div class="mock-pnl-meta">Entrada 142.30 → Saída 148.30</div>
+          <div class="mock-pnl-meta">Entry 142.30 → Exit 148.30</div>
         </div>
       </div>
-      <div class="how-card-title">VENÇA COM A MOMENTO</div>
+      <div class="how-card-title">WIN WITH MOMENTO</div>
     </div>
 
   </div>
 
   <div class="how-note reveal">
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-    <span>Mantenha as notificações do Telegram ATIVAS — os sinais chegam quando nossos traders identificam a entrada</span>
+    <span>Keep Telegram notifications ON — signals drop the moment our traders spot the entry</span>
   </div>
 </section>
 
@@ -2434,18 +2354,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
 <!-- RESULTS — daily public posts (admin-published, dynamic) -->
 <section id="results">
-  <div class="section-label reveal">Resultados verificados</div>
-  <h2 class="reveal">RESULTADOS <span>DIÁRIOS.</span><br>PUBLICADOS AQUI.</h2>
-  <p class="results-intro reveal">Resumo público de cada dia de operação: trades fechados, percentual ganho, e o print real do P&amp;L. Sem cherry-picking. Sem esconder perdas.</p>
+  <div class="section-label reveal">Verified results</div>
+  <h2 class="reveal">DAILY <span>RESULTS.</span><br>POSTED RIGHT HERE.</h2>
+  <p class="results-intro reveal">Public recap of every trading day: closed trades, % gained, and the real P&amp;L screenshot. No cherry-picking. No hiding losses.</p>
   <div class="daily-feed" id="dailyFeed">
-    <div class="daily-empty">Carregando resultados…</div>
+    <div class="daily-empty">Loading results…</div>
   </div>
   <div id="dailyTail"></div>
 
   <div class="results-cta reveal">
     <a href="#packages" class="tg-btn">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12l-6.871 4.326-2.962-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.194 1.006.131.833.941z" fill="currentColor"/></svg>
-      QUERO ESTES SINAIS AGORA
+      I WANT THESE SIGNALS NOW
     </a>
   </div>
 </section>
@@ -2454,11 +2374,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
 <!-- REDDIT COMMUNITY PROOF -->
 <section id="reddit-proof">
-  <div class="section-label reveal" style="color:#FF4500;">Comunidade Reddit</div>
-  <h2 class="reveal">A COMUNIDADE BINANCE<br>NOS ESCOLHEU NO <span class="orange">REDDIT.</span></h2>
+  <div class="section-label reveal" style="color:#FF4500;">Reddit community</div>
+  <h2 class="reveal">THE BINANCE COMMUNITY<br>PICKED US ON <span class="orange">REDDIT.</span></h2>
 
   <a href="https://www.reddit.com/r/BinanceTrading/comments/1snttzq/whats_the_best_crypto_signals_group_any/"
-     target="_blank" rel="noopener" class="reddit-card reveal" aria-label="Ver comentário no Reddit">
+     target="_blank" rel="noopener" class="reddit-card reveal" aria-label="See the Reddit comment">
     <div class="reddit-card-inner">
       <div class="reddit-vote-col">
         <div class="reddit-arrow up" aria-hidden="true">
@@ -2474,10 +2394,10 @@ document.addEventListener('DOMContentLoaded', () => {
           <span class="reddit-sub-icon">B</span>
           <span class="reddit-sub-name">r/BinanceTrading</span>
           <span class="reddit-meta-dot">·</span>
-          <span>Comentário de <strong style="color:#d7dadc;">u/Lifeisgettinghard7</strong></span>
+          <span>Comment by <strong style="color:#d7dadc;">u/Lifeisgettinghard7</strong></span>
           <span class="reddit-meta-dot">·</span>
-          <span>há ~1 mês</span>
-          <span class="reddit-flair">Melhor Resposta</span>
+          <span>~1 month ago</span>
+          <span class="reddit-flair">Top answer</span>
         </div>
         <div class="reddit-title">"What's the best crypto signals group? Any recommendations?"</div>
         <div class="reddit-snippet">
@@ -2486,17 +2406,17 @@ document.addEventListener('DOMContentLoaded', () => {
         <div class="reddit-actions">
           <span class="reddit-action">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
-            117 comentários no post
+            117 comments on post
           </span>
           <span class="reddit-action">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
-            Compartilhar
+            Share
           </span>
           <span class="reddit-action">
             <svg viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M12 .587l3.668 7.568L24 9.748l-6 5.852 1.42 8.4L12 19.771l-7.42 4.229L6 15.6 0 9.748l8.332-1.593z"/></svg>
-            Salvar
+            Save
           </span>
-          <span class="reddit-cta">Ler no Reddit →</span>
+          <span class="reddit-cta">Read on Reddit →</span>
         </div>
       </div>
     </div>
@@ -2508,11 +2428,11 @@ document.addEventListener('DOMContentLoaded', () => {
 <!-- PAYMENT TRUST -->
 <div class="payment-trust reveal">
   <div class="payment-row">
-    <span class="payment-label">Métodos de pagamento aceitos</span>
+    <span class="payment-label">Accepted payment methods</span>
   </div>
   <div class="payment-icons-row">
     <div class="payment-icon-group">
-      <img src="assets/icons/pix-logo.png" alt="Pix · Powered by Banco Central" style="height:32px;width:auto;">
+      <span class="upi-trust-badge">UPI · Instant ₹</span>
     </div>
     <span class="payment-divider"></span>
     <div class="payment-icon-group">
@@ -2532,7 +2452,7 @@ document.addEventListener('DOMContentLoaded', () => {
     <span class="coin-chip"><span class="coin-dot" style="background:#c2a633"></span>DOGE</span>
     <span class="coin-chip"><span class="coin-dot" style="background:#345d9d"></span>LTC</span>
     <span class="coin-chip"><span class="coin-dot" style="background:#8247e5"></span>MATIC</span>
-    <span class="coin-chip-more">+40 outras</span>
+    <span class="coin-chip-more">+40 more</span>
   </div>
 </div>
 
@@ -2540,11 +2460,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
 <!-- REVIEWS -->
 <section id="reviews">
-  <div class="section-label reveal">A comunidade fala</div>
-  <h2 class="reveal">O QUE NOSSOS<br><span>MEMBROS DIZEM.</span></h2>
+  <div class="section-label reveal">The community speaks</div>
+  <h2 class="reveal">WHAT OUR<br><span>MEMBERS SAY.</span></h2>
 
   <div class="reviews-gallery" id="reviewsGallery">
-    <div class="reviews-empty">Carregando avaliações…</div>
+    <div class="reviews-empty">Loading reviews…</div>
   </div>
   <div id="reviewsTail"></div>
 </section>
@@ -2553,41 +2473,41 @@ document.addEventListener('DOMContentLoaded', () => {
 
 <!-- INSIDE -->
 <section id="inside">
-  <div class="section-label reveal">O que você recebe</div>
-  <h2 class="reveal">DENTRO DA<br><span>COMUNIDADE.</span></h2>
-  <p class="inside-intro reveal">Tudo o que você precisa para operar com mais inteligência, proteger seu capital e crescer de forma consistente — tudo em um canal privado no Telegram.</p>
+  <div class="section-label reveal">What you get</div>
+  <h2 class="reveal">INSIDE THE<br><span>COMMUNITY.</span></h2>
+  <p class="inside-intro reveal">Everything you need to trade smarter, protect your capital, and grow consistently — all inside one private Telegram channel.</p>
 
   <div class="inside-grid">
     <div class="inside-card reveal">
       <div class="inside-number">01</div>
       <span class="inside-icon">⚡</span>
-      <div class="inside-title">SINAIS DE PRECISÃO</div>
-      <p class="inside-desc">Cada sinal inclui zona clara de entrada, múltiplos alvos de take profit e stop loss bem definido. Sem adivinhação. Apenas siga o plano e deixe o gráfico trabalhar.</p>
+      <div class="inside-title">PRECISION SIGNALS</div>
+      <p class="inside-desc">Every signal includes a clear entry zone, multiple take-profit targets, and a defined stop loss. No guesswork — just follow the plan and let the chart work.</p>
     </div>
     <div class="inside-card reveal">
       <div class="inside-number">02</div>
       <span class="inside-icon">📊</span>
-      <div class="inside-title">ANÁLISE DE MERCADO</div>
-      <p class="inside-desc">Análises diárias e semanais cobrindo tendências macro, dados on-chain e níveis técnicos. Saiba exatamente o que está movendo o mercado antes de todo mundo.</p>
+      <div class="inside-title">MARKET ANALYSIS</div>
+      <p class="inside-desc">Daily and weekly breakdowns covering macro trends, on-chain data, and technical levels. Know exactly what's moving the market before everyone else.</p>
     </div>
     <div class="inside-card reveal">
       <div class="inside-number">03</div>
       <span class="inside-icon">🏆</span>
-      <div class="inside-title">CANAL DE RESULTADOS</div>
-      <p class="inside-desc">Transparência total, sempre. Um canal dedicado com cada trade fechado, percentual de lucro e screenshot de P&L. Acompanhe nossa performance em tempo real, sem cherry-picking.</p>
+      <div class="inside-title">RESULTS CHANNEL</div>
+      <p class="inside-desc">Full transparency, always. A dedicated channel with every closed trade, % gained, and P&amp;L screenshot. Track our performance live — no cherry-picking.</p>
     </div>
     <div class="inside-card reveal">
       <div class="inside-number">04</div>
       <span class="inside-icon">🤝</span>
-      <div class="inside-title">COMUNIDADE ELITE</div>
-      <p class="inside-desc">Conecte-se com 4.200+ traders sérios em crescer o patrimônio. Compartilhe ideias, tire dúvidas e aprenda com pessoas que estão na trincheira com você todos os dias.</p>
+      <div class="inside-title">ELITE COMMUNITY</div>
+      <p class="inside-desc">Connect with 4,200+ traders serious about growing their portfolios. Share ideas, ask questions, and learn from people in the trenches with you every day.</p>
     </div>
   </div>
 
   <div class="inside-cta reveal">
     <a href="#packages" class="tg-btn">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12l-6.871 4.326-2.962-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.194 1.006.131.833.941z" fill="currentColor"/></svg>
-      DESBLOQUEAR ACESSO TOTAL
+      UNLOCK FULL ACCESS
     </a>
   </div>
 </section>
@@ -2596,142 +2516,142 @@ document.addEventListener('DOMContentLoaded', () => {
 
 <!-- FAQ -->
 <section id="faq">
-  <div class="section-label reveal">Perguntas frequentes</div>
-  <h2 class="reveal">TEM <span>DÚVIDAS?</span></h2>
+  <div class="section-label reveal">Frequently asked questions</div>
+  <h2 class="reveal">GOT <span>QUESTIONS?</span></h2>
 
   <div class="faq-list reveal">
     <details class="faq-item">
-      <summary>O que exatamente eu recebo ao entrar?</summary>
-      <p>Alertas de trade em tempo real pelo Telegram com entrada, stop loss, take profit e alavancagem — além de atualizações ao vivo conforme o trade evolui e um painel completo de performance. Tudo entregue direto no seu celular.</p>
+      <summary>What exactly do I get when I join?</summary>
+      <p>Real-time trade alerts on Telegram with entry, stop loss, take profit, and leverage — plus live updates as the trade plays out and a full performance dashboard. Everything delivered straight to your phone.</p>
     </details>
 
     <details class="faq-item">
-      <summary>Quantos sinais por dia posso esperar?</summary>
-      <p>Entre 2 e 6 setups de alta convicção por dia em média. Não fazemos spam — os sinais só saem quando nossos traders identificam um edge limpo. Qualidade acima de quantidade, sempre.</p>
+      <summary>How many signals per day can I expect?</summary>
+      <p>Between 2 and 6 high-conviction setups per day on average. No spam — signals only drop when our traders spot a clean edge. Quality over quantity, always.</p>
     </details>
 
     <details class="faq-item">
-      <summary>Qual é a taxa de acerto?</summary>
-      <p>Alta o suficiente para manter nossos membros lucrativos mês após mês. Não publicamos um número fixo porque varia com as condições de mercado — mas cada trade é rastreado com transparência total dentro do canal dos membros, então você pode verificar os resultados antes de se comprometer a longo prazo.</p>
+      <summary>What's the win rate?</summary>
+      <p>High enough to keep our members profitable month after month. We don't publish a fixed number because it varies with market conditions — but every trade is tracked with full transparency inside the members channel, so you can verify the results before committing long-term.</p>
     </details>
 
     <details class="faq-item">
-      <summary>Como funciona o pagamento via Pix?</summary>
-      <p>É o método mais rápido e popular do Brasil. Você clica em "Pagar com Pix", é redirecionado para a tela do gateway, copia o código Pix ou escaneia o QR Code no app do seu banco. A confirmação é instantânea e você recebe o código de ativação imediatamente.</p>
+      <summary>How does UPI payment work?</summary>
+      <p>It's the fastest and most popular payment method in India. You click "Pay with UPI", get redirected to the gateway, scan the QR code or open your UPI app (PhonePe, Paytm, GPay, BHIM, etc.) and approve. Confirmation is instant and you get your activation code right away.</p>
     </details>
 
     <details class="faq-item">
-      <summary>Por que oferecem desconto para cripto?</summary>
-      <p>Pagamentos em cripto têm taxas menores para nós e são processados instantaneamente sem chargebacks. Repassamos essa economia para você como 10% de desconto. Funciona em 150+ países e protege ambas as partes.</p>
+      <summary>Why is there a discount for crypto?</summary>
+      <p>Crypto payments have lower fees for us and settle instantly with no chargebacks. We pass that saving back to you as a 10% discount. Works in 150+ countries and protects both sides.</p>
     </details>
 
     <details class="faq-item">
-      <summary>O pagamento em cripto é seguro?</summary>
-      <p>Sim. Os pagamentos são processados pela OxaPay, um gateway de pagamentos cripto consolidado usado por milhares de empresas. Você paga da sua própria carteira — nunca temos acesso às suas chaves ou fundos.</p>
+      <summary>Is crypto payment safe?</summary>
+      <p>Yes. Payments are processed by OxaPay, an established crypto payment gateway used by thousands of businesses. You pay from your own wallet — we never touch your keys or funds.</p>
     </details>
 
     <details class="faq-item">
-      <summary>O que acontece logo após eu pagar?</summary>
-      <p>Você verá uma página de sucesso com um código de ativação único e descartável. Abra nosso bot do Telegram, cole o código, e em menos de um minuto você estará no canal privado.</p>
+      <summary>What happens right after I pay?</summary>
+      <p>You'll land on a success page with a unique, single-use activation code. Open our Telegram bot, paste the code, and within a minute you're inside the private channel.</p>
     </details>
 
     <details class="faq-item">
-      <summary>Preciso ser um trader experiente?</summary>
-      <p>Não. Cada sinal vem com zona clara de entrada, alvos de take profit e stop loss bem definido. Se você sabe colocar uma ordem a mercado ou limite na Binance, Bybit ou em qualquer corretora grande, consegue acompanhar.</p>
+      <summary>Do I need to be an experienced trader?</summary>
+      <p>No. Every signal comes with a clear entry zone, take-profit targets, and a defined stop loss. If you can place a market or limit order on Binance, Bybit, WazirX, or any major exchange, you can follow along.</p>
     </details>
 
     <details class="faq-item">
-      <summary>Posso cancelar ou pedir reembolso?</summary>
-      <p>Os planos não são reembolsáveis após o uso do código de ativação, já que ele concede acesso permanente pelo período pago. Se tiver problemas antes de ativar, mande mensagem para o suporte em até 24 horas e a gente resolve.</p>
+      <summary>Can I cancel or get a refund?</summary>
+      <p>Plans aren't refundable once the activation code has been used, since it grants permanent access for the period paid. If you hit any issue before activating, message support within 24 hours and we'll sort it out.</p>
     </details>
 
     <details class="faq-item">
-      <summary>Quais moedas vocês operam?</summary>
-      <p>Principalmente BTC, ETH, SOL e top-20 altcoins por volume. Ocasionalmente cobrimos meme coins de alto momentum (DOGE, PEPE, WIF) quando o setup está limpo. Sem shitcoins, sem pump-and-dumps.</p>
+      <summary>Which coins do you trade?</summary>
+      <p>Mostly BTC, ETH, SOL, and top-20 altcoins by volume. Occasionally we cover high-momentum meme coins (DOGE, PEPE, WIF) when the setup is clean. No shitcoins, no pump-and-dumps.</p>
     </details>
   </div>
 
   <div class="faq-cta reveal">
-    <p class="faq-still">Ainda tem dúvidas?</p>
+    <p class="faq-still">Still have questions?</p>
     <a href="https://t.me/momentocrypto_support" target="_blank" rel="noopener" class="tg-btn">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12l-6.871 4.326-2.962-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.194 1.006.131.833.941z" fill="currentColor"/></svg>
-      FALAR COM SUPORTE
+      CONTACT SUPPORT
     </a>
   </div>
 </section>
 
 <!-- BOTTOM PACKAGES -->
 <section class="bottom-packages">
-  <div class="section-label reveal">Pronto para começar?</div>
-  <h2 class="reveal">OBTENHA <span>ACESSO AGORA.</span></h2>
+  <div class="section-label reveal">Ready to start?</div>
+  <h2 class="reveal">GET <span>ACCESS NOW.</span></h2>
   <div class="packages-grid">
     <div class="pkg-card reveal">
-      <div class="pkg-duration">01 Mês</div>
+      <div class="pkg-duration">01 Month</div>
       <div class="pkg-name">STARTER</div>
-      <div class="pkg-price">R$149<span class="pkg-per-month">/mês</span></div>
-      <div class="pkg-price-sub"><span style="color:#39FF14;font-weight:600;">R$134 com cripto</span></div>
+      <div class="pkg-price"><span class="pkg-price-old-inline">₹2,800</span>₹1,400<span class="pkg-per-month">/mo</span></div>
+      <div class="pkg-price-sub"><span style="color:#39FF14;font-weight:600;">$27 with crypto · ~₹2,250</span></div>
       <ul class="pkg-features">
-        <li>Acesso completo a todos os sinais</li>
-        <li>Entrada, TP e SL definidos</li>
-        <li>Canal privado no Telegram</li>
-        <li>Comentários do analista</li>
+        <li>Full access to all signals</li>
+        <li>Entry, TP &amp; SL levels</li>
+        <li>Private Telegram channel</li>
+        <li>Analyst commentary</li>
       </ul>
-      <button class="pkg-btn pkg-btn-pix" onclick="payPix('starter')">
-        <span class="pix-mark"></span>
-        <span>Pix</span>
-        <span class="pkg-btn-price">R$149</span>
-        <span class="pkg-btn-tag">Instantâneo</span>
+      <button class="pkg-btn pkg-btn-pix" onclick="payUpi('starter')">
+        <span class="upi-mark"></span>
+        <span>UPI</span>
+        <span class="pkg-btn-price">₹1,400</span>
+        <span class="pkg-btn-tag">Instant</span>
       </button>
       <button class="pkg-btn pkg-btn-crypto" onclick="payPackage('starter')">
-        <span>Cripto</span>
+        <span>Crypto</span>
         <span class="pkg-btn-old">$30</span>
         <span class="pkg-btn-price">$27</span>
         <span class="pkg-btn-discount">-10%</span>
       </button>
     </div>
     <div class="pkg-card featured reveal">
-      <div class="pkg-duration">03 Meses</div>
+      <div class="pkg-duration">03 Months</div>
       <div class="pkg-name">TRADER</div>
-      <div class="pkg-price">R$399<span class="pkg-per-month"> · R$133/mês</span></div>
-      <div class="pkg-price-sub"><span style="color:#39FF14;font-weight:600;">R$359 com cripto · economize R$40</span></div>
+      <div class="pkg-price"><span class="pkg-price-old-inline">₹7,600</span>₹3,800<span class="pkg-per-month"> · ₹1,267/mo</span></div>
+      <div class="pkg-price-sub"><span style="color:#39FF14;font-weight:600;">$72 with crypto · ~₹6,000</span></div>
       <ul class="pkg-features">
-        <li>Acesso completo a todos os sinais</li>
-        <li>Entrada, TP e SL definidos</li>
-        <li>Canal privado no Telegram</li>
-        <li>Comentários do analista</li>
+        <li>Full access to all signals</li>
+        <li>Entry, TP &amp; SL levels</li>
+        <li>Private Telegram channel</li>
+        <li>Analyst commentary</li>
       </ul>
-      <button class="pkg-btn pkg-btn-pix" onclick="payPix('trader')">
-        <span class="pix-mark"></span>
-        <span>Pix</span>
-        <span class="pkg-btn-price">R$399</span>
-        <span class="pkg-btn-tag">Instantâneo</span>
+      <button class="pkg-btn pkg-btn-pix" onclick="payUpi('trader')">
+        <span class="upi-mark"></span>
+        <span>UPI</span>
+        <span class="pkg-btn-price">₹3,800</span>
+        <span class="pkg-btn-tag">Instant</span>
       </button>
       <button class="pkg-btn pkg-btn-crypto" onclick="payPackage('trader')">
-        <span>Cripto</span>
+        <span>Crypto</span>
         <span class="pkg-btn-old">$80</span>
         <span class="pkg-btn-price">$72</span>
         <span class="pkg-btn-discount">-10%</span>
       </button>
     </div>
     <div class="pkg-card reveal">
-      <div class="pkg-duration">06 Meses</div>
+      <div class="pkg-duration">06 Months</div>
       <div class="pkg-name">PRO</div>
-      <div class="pkg-price">R$699<span class="pkg-per-month"> · R$117/mês</span></div>
-      <div class="pkg-price-sub"><span style="color:#39FF14;font-weight:600;">R$629 com cripto · economize R$70</span></div>
+      <div class="pkg-price"><span class="pkg-price-old-inline">₹13,400</span>₹6,700<span class="pkg-per-month"> · ₹1,117/mo</span></div>
+      <div class="pkg-price-sub"><span style="color:#39FF14;font-weight:600;">$126 with crypto · ~₹10,500</span></div>
       <ul class="pkg-features">
-        <li>Acesso completo a todos os sinais</li>
-        <li>Entrada, TP e SL definidos</li>
-        <li>Canal privado no Telegram</li>
-        <li>Comentários do analista</li>
+        <li>Full access to all signals</li>
+        <li>Entry, TP &amp; SL levels</li>
+        <li>Private Telegram channel</li>
+        <li>Analyst commentary</li>
       </ul>
-      <button class="pkg-btn pkg-btn-pix" onclick="payPix('pro')">
-        <span class="pix-mark"></span>
-        <span>Pix</span>
-        <span class="pkg-btn-price">R$699</span>
-        <span class="pkg-btn-tag">Instantâneo</span>
+      <button class="pkg-btn pkg-btn-pix" onclick="payUpi('pro')">
+        <span class="upi-mark"></span>
+        <span>UPI</span>
+        <span class="pkg-btn-price">₹6,700</span>
+        <span class="pkg-btn-tag">Instant</span>
       </button>
       <button class="pkg-btn pkg-btn-crypto" onclick="payPackage('pro')">
-        <span>Cripto</span>
+        <span>Crypto</span>
         <span class="pkg-btn-old">$140</span>
         <span class="pkg-btn-price">$126</span>
         <span class="pkg-btn-discount">-10%</span>
@@ -2741,7 +2661,7 @@ document.addEventListener('DOMContentLoaded', () => {
   <div class="payment-trust reveal" style="margin-top:24px;">
     <div class="payment-icons-row">
       <div class="payment-icon-group">
-        <span class="pix-trust-badge"><img src="assets/icons/pix-logo.png" alt="Pix · Powered by Banco Central" style="height:24px;width:auto;">Pix instantâneo</span>
+        <span class="upi-trust-badge">UPI · Instant ₹</span>
       </div>
       <span class="payment-divider"></span>
       <div class="payment-icon-group"><img src="assets/icons/btc.svg" alt="BTC" height="24"><img src="assets/icons/eth.svg" alt="ETH" height="24"><img src="assets/icons/usdt.svg" alt="USDT" height="24"></div>
@@ -2752,10 +2672,10 @@ document.addEventListener('DOMContentLoaded', () => {
 <!-- SUPPORT FAB -->
 <div class="support-fab-wrap">
   <div class="support-bubble" id="supportBubble">
-    <span>Dúvidas? Fale com o suporte</span>
-    <button class="support-bubble-close" aria-label="Fechar" onclick="document.getElementById('supportBubble').classList.add('hidden')">×</button>
+    <span>Have questions? Chat with support</span>
+    <button class="support-bubble-close" aria-label="Close" onclick="document.getElementById('supportBubble').classList.add('hidden')">×</button>
   </div>
-  <a href="https://t.me/momentocrypto_support" target="_blank" rel="noopener" class="support-fab" aria-label="Falar com suporte">
+  <a href="https://t.me/momentocrypto_support" target="_blank" rel="noopener" class="support-fab" aria-label="Chat with support">
     <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12l-6.871 4.326-2.962-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.194 1.006.131.833.941z" fill="currentColor"/></svg>
     <span class="support-fab-pulse"></span>
   </a>
@@ -2765,8 +2685,8 @@ document.addEventListener('DOMContentLoaded', () => {
 <div class="divider"></div>
 <footer>
   <div class="footer-logo">Momento<span>Crypto</span></div>
-  <div class="footer-disclaimer">Operar criptomoedas envolve riscos significativos. Resultados passados não garantem resultados futuros. Opere com responsabilidade.</div>
-  <div class="footer-note">© 2026 MomentoCrypto<br>Todos os direitos reservados.</div>
+  <div class="footer-disclaimer">Trading cryptocurrency involves significant risk. Past performance is not indicative of future results. Always trade responsibly.</div>
+  <div class="footer-note">© 2026 MomentoCrypto<br>All rights reserved.</div>
 </footer>
 
 <script>
@@ -2819,7 +2739,7 @@ document.addEventListener('DOMContentLoaded', () => {
           const progress = Math.min(elapsed / duration, 1);
           const eased = 1 - Math.pow(1 - progress, 3);
           const current = Math.floor(eased * target);
-          el.textContent = target > 1000 ? current.toLocaleString('pt-BR') + '+' : current + suffix;
+          el.textContent = target > 1000 ? current.toLocaleString('en-IN') + '+' : current + suffix;
           if (progress < 1) requestAnimationFrame(update);
         }
         requestAnimationFrame(update);
@@ -2939,7 +2859,7 @@ document.addEventListener('DOMContentLoaded', () => {
       feed.querySelectorAll('.reveal').forEach(el => observer.observe(el));
       renderTail();
     } catch (e) {
-      feed.innerHTML = `<div class="daily-empty">Não foi possível carregar os resultados agora. Tente atualizar a página.</div>`;
+      feed.innerHTML = `<div class="daily-empty">Couldn't load results right now. Try refreshing the page.</div>`;
     }
   }
   loadDailyResults();
@@ -2988,14 +2908,14 @@ document.addEventListener('DOMContentLoaded', () => {
       gallery.querySelectorAll('.reveal').forEach(el => observer.observe(el));
       renderReviewsTail();
     } catch (e) {
-      gallery.innerHTML = `<div class="reviews-empty">Não foi possível carregar agora.</div>`;
+      gallery.innerHTML = `<div class="reviews-empty">Couldn't load right now.</div>`;
     }
   }
   loadReviews();
 
   // === PAYMENT ===
   // Values for pixel (must match each gateway's actual charge currency)
-  const PKG_VALUES_PIX = { starter: { brl: 149 }, trader: { brl: 399 }, pro: { brl: 699 } };
+  const PKG_VALUES_UPI = { starter: { inr: 1400 }, trader: { inr: 3800 }, pro: { inr: 6700 } };
   const PKG_VALUES_CRYPTO = { starter: { usd: 27 }, trader: { usd: 72 }, pro: { usd: 126 } };
 
   // Track the last pay attempt so we can show the "did you pay?" popup
@@ -3013,15 +2933,15 @@ document.addEventListener('DOMContentLoaded', () => {
     let last = null;
     try { last = JSON.parse(localStorage.getItem('mc_last_pay_attempt') || 'null'); } catch{}
     if (!last || !last.order_id) return;
-    // Only trigger for Payou methods (Pix) — OxaPay crypto handles its own confirmation
-    if (last.method !== 'pix') return;
+    // Only trigger for Payou methods (UPI) — OxaPay crypto handles its own confirmation
+    if (last.method !== 'upi') return;
     // Window: 2 min after click (avoids false positives) and within 45 min
     const age = Date.now() - last.ts;
     if (age < 2 * 60 * 1000 || age > 45 * 60 * 1000) return;
     if (sessionStorage.getItem('mc_lr_shown_' + last.order_id)) return;
     sessionStorage.setItem('mc_lr_shown_' + last.order_id, '1');
     document.getElementById('lrOrderId').textContent = last.order_id;
-    document.getElementById('lrSupportLink').href = 'https://t.me/momentocrypto_support?text=' + encodeURIComponent('Olá, paguei mas não fui redirecionado. Pedido: ' + last.order_id);
+    document.getElementById('lrSupportLink').href = 'https://t.me/momentocrypto_support?text=' + encodeURIComponent('Hi, I paid but was not redirected. Order: ' + last.order_id);
     document.getElementById('lrPopupOverlay').classList.add('show');
   }
   // Fire on every page load (covers normal navigation back + manual URL entry)
@@ -3029,51 +2949,51 @@ document.addEventListener('DOMContentLoaded', () => {
   // Also fire on bfcache restore (back button from Payou)
   window.addEventListener('pageshow', (e) => { if (e.persisted) checkLostRedirect(); });
 
-  // Pix payment (Payou MoneyBRL_Sp)
-  async function payPix(pkg) {
+  // UPI payment (Payou MoneyINR_Sp)
+  async function payUpi(pkg) {
     const btn = event.target.closest('button');
     const originalHTML = btn.innerHTML;
-    btn.textContent = 'PROCESSANDO...'; btn.disabled = true;
+    btn.textContent = 'PROCESSING...'; btn.disabled = true;
     const attribution = window.__mc_attribution ? window.__mc_attribution() : {};
-    const v = PKG_VALUES_PIX[pkg] || {};
-    if (window.__mc_sid) fetch('/api/analytics/event', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ sid: window.__mc_sid, type:'pay_click', ts:Date.now(), data:{ package: pkg, method: 'pix', locale: 'pt-BR', attribution } }), keepalive:true });
+    const v = PKG_VALUES_UPI[pkg] || {};
+    if (window.__mc_sid) fetch('/api/analytics/event', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ sid: window.__mc_sid, type:'pay_click', ts:Date.now(), data:{ package: pkg, method: 'upi', locale: 'en-IN', attribution } }), keepalive:true });
     // Meta Pixel: InitiateCheckout
-    if (window.__mc_pixel) window.__mc_pixel('InitiateCheckout', { content_ids: [pkg], content_type: 'product', value: v.brl, currency: 'BRL', num_items: 1 });
+    if (window.__mc_pixel) window.__mc_pixel('InitiateCheckout', { content_ids: [pkg], content_type: 'product', value: v.inr, currency: 'INR', num_items: 1 });
     try {
-      const res = await fetch('/api/pay-payou-br.php', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ package: pkg, attribution }) });
+      const res = await fetch('/api/pay-payou-in.php', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ package: pkg, attribution }) });
       const data = await res.json();
       if (data.ok && data.redirect) {
-        if (window.__mc_pixel) window.__mc_pixel('AddPaymentInfo', { content_ids: [pkg], value: v.brl, currency: 'BRL' });
-        recordPayAttempt('pix', pkg, data.order_id);
+        if (window.__mc_pixel) window.__mc_pixel('AddPaymentInfo', { content_ids: [pkg], value: v.inr, currency: 'INR' });
+        recordPayAttempt('upi', pkg, data.order_id);
         window.location.href = data.redirect;
-      } else { alert('Erro no pagamento. Tente novamente.'); btn.innerHTML = originalHTML; btn.disabled = false; }
-    } catch { alert('Erro de conexão. Tente novamente.'); btn.innerHTML = originalHTML; btn.disabled = false; }
+      } else { alert('Payment error. Please try again.'); btn.innerHTML = originalHTML; btn.disabled = false; }
+    } catch { alert('Connection error. Please try again.'); btn.innerHTML = originalHTML; btn.disabled = false; }
   }
 
   // Crypto payment (OxaPay — USD)
   async function payPackage(pkg) {
     const btn = event.target.closest('button');
     const originalHTML = btn.innerHTML;
-    btn.textContent = 'PROCESSANDO...'; btn.disabled = true;
+    btn.textContent = 'PROCESSING...'; btn.disabled = true;
     const attribution = window.__mc_attribution ? window.__mc_attribution() : {};
     const v = PKG_VALUES_CRYPTO[pkg] || {};
-    if (window.__mc_sid) fetch('/api/analytics/event', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ sid: window.__mc_sid, type:'pay_click', ts:Date.now(), data:{ package: pkg, method: 'crypto', locale: 'pt-BR', attribution } }), keepalive:true });
+    if (window.__mc_sid) fetch('/api/analytics/event', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ sid: window.__mc_sid, type:'pay_click', ts:Date.now(), data:{ package: pkg, method: 'crypto', locale: 'en-IN', attribution } }), keepalive:true });
     if (window.__mc_pixel) window.__mc_pixel('InitiateCheckout', { content_ids: [pkg], content_type: 'product', value: v.usd, currency: 'USD', num_items: 1 });
 
     try {
-      const res = await fetch('/api/pay.php', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ package: pkg, sid: window.__mc_sid || '', locale: 'pt-BR', attribution }) });
+      const res = await fetch('/api/pay.php', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ package: pkg, sid: window.__mc_sid || '', locale: 'en-IN', attribution }) });
       const data = await res.json();
       if (data.ok && data.payment_url) {
         if (window.__mc_sid) fetch('/api/analytics/event', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ sid: window.__mc_sid, type:'invoice_created', ts:Date.now(), data:{ package: pkg, order_id: data.order_id } }), keepalive:true });
         if (window.__mc_pixel) window.__mc_pixel('AddPaymentInfo', { content_ids: [pkg], value: v.usd, currency: 'USD' });
         window.location.href = data.payment_url;
       } else {
-        alert('Erro no pagamento. Tente novamente.');
+        alert('Payment error. Please try again.');
         btn.innerHTML = originalHTML;
         btn.disabled = false;
       }
     } catch (e) {
-      alert('Erro de conexão. Tente novamente.');
+      alert('Connection error. Please try again.');
       btn.innerHTML = originalHTML;
       btn.disabled = false;
     }
@@ -3135,14 +3055,14 @@ document.addEventListener('DOMContentLoaded', () => {
   <div class="lr-popup">
     <button class="lr-popup-close" onclick="lrClose()">×</button>
     <div class="lr-popup-icon">💸</div>
-    <h3>Você completou o pagamento?</h3>
-    <p>Notamos que você pode ter pago mas não foi redirecionado de volta. Se sua transação foi concluída, fale com nosso suporte com o número do pedido abaixo para verificar e liberar seu acesso.</p>
+    <h3>Did you complete the payment?</h3>
+    <p>We noticed you may have paid but weren't redirected back. If your transaction was completed, message our support with the order number below to verify and unlock your access.</p>
     <div class="lr-order" id="lrOrderId">—</div>
     <a id="lrSupportLink" href="https://t.me/momentocrypto_support" target="_blank" rel="noopener" class="lr-popup-btn">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12l-6.871 4.326-2.962-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.194 1.006.131.833.941z"/></svg>
-      Falar com Suporte
+      Contact Support
     </a>
-    <button class="lr-popup-skip" onclick="lrClose()">Ainda não terminei o pagamento</button>
+    <button class="lr-popup-skip" onclick="lrClose()">I haven't finished paying yet</button>
   </div>
 </div>
 
@@ -3150,10 +3070,10 @@ document.addEventListener('DOMContentLoaded', () => {
   <div class="tg-popup">
     <button class="tg-popup-close" onclick="closePopup()">×</button>
     <div class="tg-popup-icon">⚡</div>
-    <h3>Espera! Não Perca os Próximos Sinais</h3>
-    <p>Nossos traders estão postando setups com entrada, TP e SL <strong>agora mesmo</strong>. Garanta acesso ao canal privado antes de sair — ainda dá tempo de pegar a próxima operação.</p>
-    <a href="#packages" onclick="closePopup()" class="tg-popup-btn" style="background:var(--green);color:var(--black);">⚡ QUERO ACESSO AGORA</a>
-    <button class="tg-popup-skip" onclick="closePopup()">Vou decidir mais tarde</button>
+    <h3>Wait — Don't Miss the Next Signals</h3>
+    <p>Our traders are posting setups with entry, TP, and SL <strong>right now</strong>. Lock in access to the private channel before you go — you can still catch the next trade.</p>
+    <a href="#packages" onclick="closePopup()" class="tg-popup-btn" style="background:var(--green);color:var(--black);">⚡ GET ACCESS NOW</a>
+    <button class="tg-popup-skip" onclick="closePopup()">I'll decide later</button>
   </div>
 </div>
 

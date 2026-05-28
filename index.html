@@ -876,14 +876,6 @@
     cursor: pointer;
     border: none;
   }
-  .pkg-btn-card {
-    background: #fff;
-    color: #111;
-    margin-bottom: 8px;
-  }
-  .pkg-btn-card:hover { background: #f0f0f0; }
-  .pkg-btn-card .pkg-btn-price { font-weight: 800; color: #111; }
-
   .pkg-btn-crypto {
     background: var(--green);
     color: var(--black);
@@ -1975,8 +1967,6 @@
         <h2 class="hero-pkg-title">Choose Your Plan</h2>
         <div class="hero-pkg-payment-icons">
           <span class="hero-pkg-accepts">We accept:</span>
-          <img src="assets/icons/visa.svg" alt="Visa" height="14">
-          <img src="assets/icons/mastercard.svg" alt="Mastercard" height="18">
           <img src="assets/icons/btc.svg" alt="BTC" height="20">
           <img src="assets/icons/eth.svg" alt="ETH" height="20">
           <img src="assets/icons/usdt.svg" alt="USDT" height="20">
@@ -1994,7 +1984,6 @@
             <li>Private Telegram channel</li>
             <li>Analyst commentary</li>
           </ul>
-          <button class="pkg-btn pkg-btn-card" onclick="payCard('starter')" style="display:none;">Buy with Card <span class="pkg-btn-price">€27</span></button>
           <button class="pkg-btn pkg-btn-crypto" onclick="payPackage('starter')">Buy with Crypto <span class="pkg-btn-old">$30</span> <span class="pkg-btn-price">$27</span> <span class="pkg-btn-discount">SAVE 10%</span></button>
         </div>
         <div class="pkg-card featured">
@@ -2008,7 +1997,6 @@
             <li>Private Telegram channel</li>
             <li>Analyst commentary</li>
           </ul>
-          <button class="pkg-btn pkg-btn-card" onclick="payCard('trader')" style="display:none;">Buy with Card <span class="pkg-btn-price">€73</span></button>
           <button class="pkg-btn pkg-btn-crypto" onclick="payPackage('trader')">Buy with Crypto <span class="pkg-btn-old">$80</span> <span class="pkg-btn-price">$72</span> <span class="pkg-btn-discount">SAVE 10%</span></button>
         </div>
         <div class="pkg-card">
@@ -2022,7 +2010,6 @@
             <li>Private Telegram channel</li>
             <li>Analyst commentary</li>
           </ul>
-          <button class="pkg-btn pkg-btn-card" onclick="payCard('pro')" style="display:none;">Buy with Card <span class="pkg-btn-price">€128</span></button>
           <button class="pkg-btn pkg-btn-crypto" onclick="payPackage('pro')">Buy with Crypto <span class="pkg-btn-old">$140</span> <span class="pkg-btn-price">$126</span> <span class="pkg-btn-discount">SAVE 10%</span></button>
         </div>
       </div>
@@ -2172,11 +2159,6 @@
       <span class="payment-label">Accepted payment methods</span>
     </div>
     <div class="payment-icons-row">
-      <div class="payment-icon-group">
-        <img src="assets/icons/visa.svg" alt="Visa" height="16">
-        <img src="assets/icons/mastercard.svg" alt="Mastercard" height="22">
-      </div>
-      <span class="payment-divider"></span>
       <div class="payment-icon-group">
         <img src="assets/icons/btc.svg" alt="Bitcoin" height="24">
         <img src="assets/icons/eth.svg" alt="Ethereum" height="24">
@@ -2339,7 +2321,6 @@
         <li>Private Telegram channel</li>
         <li>Analyst commentary</li>
       </ul>
-      <button class="pkg-btn pkg-btn-card" onclick="payCard('starter')" style="display:none;">Buy with Card <span class="pkg-btn-price">€27</span></button>
       <button class="pkg-btn pkg-btn-crypto" onclick="payPackage('starter')">Buy with Crypto <span class="pkg-btn-old">$30</span> <span class="pkg-btn-price">$27</span> <span class="pkg-btn-discount">SAVE 10%</span></button>
     </div>
     <div class="pkg-card featured reveal">
@@ -2353,7 +2334,6 @@
         <li>Private Telegram channel</li>
         <li>Analyst commentary</li>
       </ul>
-      <button class="pkg-btn pkg-btn-card" onclick="payCard('trader')" style="display:none;">Buy with Card <span class="pkg-btn-price">€73</span></button>
       <button class="pkg-btn pkg-btn-crypto" onclick="payPackage('trader')">Buy with Crypto <span class="pkg-btn-old">$80</span> <span class="pkg-btn-price">$72</span> <span class="pkg-btn-discount">SAVE 10%</span></button>
     </div>
     <div class="pkg-card reveal">
@@ -2367,14 +2347,11 @@
         <li>Private Telegram channel</li>
         <li>Analyst commentary</li>
       </ul>
-      <button class="pkg-btn pkg-btn-card" onclick="payCard('pro')" style="display:none;">Buy with Card <span class="pkg-btn-price">€128</span></button>
       <button class="pkg-btn pkg-btn-crypto" onclick="payPackage('pro')">Buy with Crypto <span class="pkg-btn-old">$140</span> <span class="pkg-btn-price">$126</span> <span class="pkg-btn-discount">SAVE 10%</span></button>
     </div>
   </div>
   <div class="payment-trust reveal" style="margin-top:24px;">
     <div class="payment-icons-row">
-      <div class="payment-icon-group"><img src="assets/icons/visa.svg" alt="Visa" height="16"><img src="assets/icons/mastercard.svg" alt="Mastercard" height="22"></div>
-      <span class="payment-divider"></span>
       <div class="payment-icon-group"><img src="assets/icons/btc.svg" alt="BTC" height="24"><img src="assets/icons/eth.svg" alt="ETH" height="24"><img src="assets/icons/usdt.svg" alt="USDT" height="24"></div>
     </div>
   </div>
@@ -2401,9 +2378,6 @@
 </footer>
 
 <script>
-  // Show card buttons (24/7)
-  document.querySelectorAll('.pkg-btn-card').forEach(btn => { btn.style.display = 'block'; });
-
   // Auto-dismiss support bubble after 8s
   setTimeout(() => {
     const bubble = document.getElementById('supportBubble');
@@ -2630,19 +2604,6 @@
   // TEST MODE: set to true to skip payment and go to success page
   const PAYMENT_TEST_MODE = false;
 
-  // Pay with card (Payou)
-  async function payCard(pkg) {
-    const btn = event.target;
-    btn.textContent = 'PROCESSING...'; btn.disabled = true;
-    if (window.__mc_sid) fetch('/api/analytics/event', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ sid: window.__mc_sid, type:'pay_click', ts:Date.now(), data:{ package: pkg, method: 'card' } }), keepalive:true });
-    try {
-      const res = await fetch('/api/pay-payou.php', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ package: pkg }) });
-      const data = await res.json();
-      if (data.ok && data.redirect) { window.location.href = data.redirect; }
-      else { alert('Payment error. Please try again.'); btn.textContent = '💳 Buy with Card'; btn.disabled = false; }
-    } catch { alert('Connection error. Please try again.'); btn.textContent = '💳 Buy with Card'; btn.disabled = false; }
-  }
-
   // Pay with crypto (OxaPay)
   async function payPackage(pkg) {
     const btn = event.target;
@@ -2706,8 +2667,7 @@
     window.addEventListener('pageshow', function(e) {
       if (e.persisted) {
         showPopup();
-        document.querySelectorAll('.pkg-btn').forEach(btn => { btn.disabled = false; if (btn.classList.contains('pkg-btn-card')) btn.textContent = btn.textContent; });
-        document.querySelectorAll('.pkg-btn-crypto').forEach(btn => { btn.disabled = false; });
+        document.querySelectorAll('.pkg-btn').forEach(btn => { btn.disabled = false; });
       }
     });
   })();

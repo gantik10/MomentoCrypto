@@ -65,7 +65,7 @@ if ($status === 'success') {
     ];
     $amountFloat = floatval($amount);
 
-    // Look up order metadata from pending file — BR orders use BRL/Pix
+    // Look up order metadata from pending file — BR orders use BRL/Pix, IN orders use INR/UPI
     $pendingFile = __DIR__ . '/payou_pending.json';
     $pending = file_exists($pendingFile) ? json_decode(file_get_contents($pendingFile), true) ?: [] : [];
     $currency = 'EUR';
@@ -80,6 +80,7 @@ if ($status === 'success') {
         }
     }
     $isPix = ($method === 'payou_pix' || $currency === 'BRL');
+    $isUpi = ($method === 'payou_upi' || $currency === 'INR');
 
     // Append to sales.json (prevent duplicates by intid)
     $sales = file_exists($salesFile) ? (json_decode(file_get_contents($salesFile), true) ?: []) : [];
@@ -121,6 +122,13 @@ if ($status === 'success') {
                     . "Valor: R$ {$amountFloat}\n"
                     . "Pedido: {$orderId}\n"
                     . "Horário: " . date('Y-m-d H:i') . " UTC";
+            } elseif ($isUpi) {
+                $name = $packageNames[$package] ?? $package;
+                $msg = "💸 UPI payment confirmed! (Payou IN)\n\n"
+                    . "Plan: {$name}\n"
+                    . "Amount: ₹ {$amountFloat}\n"
+                    . "Order: {$orderId}\n"
+                    . "Time: " . date('Y-m-d H:i') . " UTC";
             } else {
                 $name = $packageNames[$package] ?? $package;
                 $msg = "💳 Card payment confirmed! (Payou)\n\n"

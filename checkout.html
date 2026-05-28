@@ -219,15 +219,7 @@ h1 { font-size: 26px; font-weight: 700; text-align: center; margin-bottom: 4px; 
   <!-- Payment method -->
   <div class="section-label">Payment Method</div>
   <div class="methods">
-    <div class="method-opt active" onclick="selectMethod('card')">
-      <div class="method-icons">
-        <img src="assets/icons/visa.svg" alt="Visa" height="14">
-        <img src="assets/icons/mastercard.svg" alt="Mastercard" height="20">
-      </div>
-      <div class="method-name">Card</div>
-      <div class="method-sub">Visa / Mastercard</div>
-    </div>
-    <div class="method-opt" onclick="selectMethod('crypto')" style="position:relative;">
+    <div class="method-opt active" onclick="selectMethod('crypto')" style="position:relative;">
       <div class="discount-badge">-10%</div>
       <div class="method-icons">
         <img src="assets/icons/btc.svg" alt="BTC" height="22">
@@ -248,7 +240,7 @@ h1 { font-size: 26px; font-weight: 700; text-align: center; margin-bottom: 4px; 
     </div>
     <div class="summary-row">
       <span class="s-label">Payment</span>
-      <span class="s-val" id="sumMethod">Card (Visa/MC)</span>
+      <span class="s-val" id="sumMethod">Crypto (BTC, ETH, USDT...)</span>
     </div>
     <div class="summary-row" id="discountRow" style="display:none;">
       <span class="s-label">Crypto Discount (10%)</span>
@@ -281,8 +273,6 @@ h1 { font-size: 26px; font-weight: 700; text-align: center; margin-bottom: 4px; 
       </div>
     </div>
     <div class="payment-icons">
-      <img src="assets/icons/visa.svg" alt="Visa">
-      <img src="assets/icons/mastercard.svg" alt="Mastercard">
       <img src="assets/icons/btc.svg" alt="BTC">
       <img src="assets/icons/eth.svg" alt="ETH">
       <img src="assets/icons/usdt.svg" alt="USDT">
@@ -303,7 +293,7 @@ const packages = {
   pro:     { name: 'Pro — 6 Months', eur: 128, usd: 140, cryptoUsd: 126 },
 };
 let selectedPkg = 'starter';
-let method = 'card';
+let method = 'crypto';
 
 const urlPkg = new URLSearchParams(location.search).get('pkg');
 if (urlPkg && packages[urlPkg]) selectedPkg = urlPkg;
@@ -346,7 +336,7 @@ function selectPkg(pkg) {
 
 function selectMethod(m) {
   method = m;
-  document.querySelectorAll('.method-opt').forEach((el, i) => el.classList.toggle('active', ['card','crypto'][i] === m));
+  document.querySelectorAll('.method-opt').forEach((el) => el.classList.toggle('active', m === 'crypto'));
   updateSummary();
 }
 
@@ -369,38 +359,18 @@ function updateUpsell() {
 
 function updateSummary() {
   const pkg = packages[selectedPkg];
-  const isCrypto = method === 'crypto';
   const note = document.getElementById('chargeNote');
 
-  if (isCrypto) {
-    // Crypto shows USD with 10% discount (pre-calculated)
-    const base = pkg.usd;
-    const total = pkg.cryptoUsd;
-    const discount = base - total;
-    document.getElementById('sumPlan').textContent = pkg.name;
-    document.getElementById('sumMethod').textContent = 'Crypto (BTC, ETH, USDT...)';
-    document.getElementById('discountRow').style.display = 'flex';
-    document.getElementById('sumDiscount').textContent = `-$${discount.toFixed(2)}`;
-    document.getElementById('sumTotal').innerHTML = `<span class="s-old">$${base.toFixed(2)}</span><span class="s-green">$${total.toFixed(2)}</span>`;
-    document.getElementById('payBtn').textContent = `Pay $${total.toFixed(2)}`;
-    note.style.display = 'none';
-  } else {
-    // Card: EU sees EUR, non-EU sees USD with EUR charge note
-    document.getElementById('sumPlan').textContent = pkg.name;
-    document.getElementById('sumMethod').textContent = 'Card (Visa/MC)';
-    document.getElementById('discountRow').style.display = 'none';
-
-    if (isEU) {
-      document.getElementById('sumTotal').innerHTML = `<span class="s-green">€${pkg.eur}.00</span>`;
-      document.getElementById('payBtn').textContent = `Pay €${pkg.eur}.00`;
-      note.style.display = 'none';
-    } else {
-      document.getElementById('sumTotal').innerHTML = `<span class="s-green">$${pkg.usd}.00</span>`;
-      document.getElementById('payBtn').textContent = `Pay $${pkg.usd}.00`;
-      note.innerHTML = `Your card will be charged <strong>€${pkg.eur}.00 EUR</strong> (≈ $${pkg.usd} USD)`;
-      note.style.display = 'block';
-    }
-  }
+  const base = pkg.usd;
+  const total = pkg.cryptoUsd;
+  const discount = base - total;
+  document.getElementById('sumPlan').textContent = pkg.name;
+  document.getElementById('sumMethod').textContent = 'Crypto (BTC, ETH, USDT...)';
+  document.getElementById('discountRow').style.display = 'flex';
+  document.getElementById('sumDiscount').textContent = `-$${discount.toFixed(2)}`;
+  document.getElementById('sumTotal').innerHTML = `<span class="s-old">$${base.toFixed(2)}</span><span class="s-green">$${total.toFixed(2)}</span>`;
+  document.getElementById('payBtn').textContent = `Pay $${total.toFixed(2)}`;
+  note.style.display = 'none';
   document.getElementById('errorMsg').style.display = 'none';
 }
 
@@ -409,17 +379,10 @@ async function pay() {
   btn.disabled = true; btn.textContent = 'Processing...';
   document.getElementById('errorMsg').style.display = 'none';
   try {
-    if (method === 'crypto') {
-      const res = await fetch('/api/pay.php', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ package: selectedPkg }) });
-      const data = await res.json();
-      if (data.ok && data.payment_url) { window.location.href = data.payment_url; }
-      else throw new Error(data.error || 'Payment failed');
-    } else {
-      const res = await fetch('/api/pay-payou.php', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ package: selectedPkg }) });
-      const data = await res.json();
-      if (data.ok && data.redirect) { window.location.href = data.redirect; }
-      else throw new Error(data.error || 'Payment failed');
-    }
+    const res = await fetch('/api/pay.php', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ package: selectedPkg }) });
+    const data = await res.json();
+    if (data.ok && data.payment_url) { window.location.href = data.payment_url; }
+    else throw new Error(data.error || 'Payment failed');
   } catch (e) {
     document.getElementById('errorMsg').textContent = e.message;
     document.getElementById('errorMsg').style.display = 'block';
