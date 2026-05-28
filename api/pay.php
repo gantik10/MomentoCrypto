@@ -38,17 +38,33 @@ $basePackages = [
     'pro'     => ['amount' => 126, 'name' => 'Pro — 6 Months'],
 ];
 
-// Apply BR 50% promo only when the visitor is on /br (locale=pt-BR) and promo is live
-$promoEnd = $_ENV['BR_PROMO_END'] ?? '';
-$promoDiscountPct = (int)($_ENV['BR_PROMO_DISCOUNT_PCT'] ?? 50);
-$promoActive = ($locale === 'pt-BR') && $promoEnd && strtotime($promoEnd) > time();
-$discountFactor = $promoActive ? (100 - $promoDiscountPct) / 100 : 1;
+// Per-locale discount factor
+//   BR (pt-BR): time-boxed 50% promo via BR_PROMO_END
+//   India (en-IN): permanent 50% launch discount on top of the standard 10% crypto baseline
+//                  ($27 → $13.50 / $72 → $36 / $126 → $63 = 55% off the $30/$80/$140 sticker)
+$discountFactor = 1;
+$promoTag = '';
+
+$brPromoEnd = $_ENV['BR_PROMO_END'] ?? '';
+$brPromoPct = (int)($_ENV['BR_PROMO_DISCOUNT_PCT'] ?? 50);
+$brPromoActive = ($locale === 'pt-BR') && $brPromoEnd && strtotime($brPromoEnd) > time();
+
+$inDiscountPct = (int)($_ENV['IN_DISCOUNT_PCT'] ?? 50);
+$inActive = ($locale === 'en-IN') && $inDiscountPct > 0 && $inDiscountPct < 100;
+
+if ($brPromoActive) {
+    $discountFactor = (100 - $brPromoPct) / 100;
+    $promoTag = " ({$brPromoPct}% OFF)";
+} elseif ($inActive) {
+    $discountFactor = (100 - $inDiscountPct) / 100;
+    $promoTag = " (India launch — {$inDiscountPct}% OFF)";
+}
 
 $packages = [];
 foreach ($basePackages as $k => $v) {
     $packages[$k] = [
         'amount' => round($v['amount'] * $discountFactor, 2),
-        'name' => $v['name'] . ($promoActive ? " ({$promoDiscountPct}% OFF)" : ''),
+        'name' => $v['name'] . $promoTag,
     ];
 }
 
