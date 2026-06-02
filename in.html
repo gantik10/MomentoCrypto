@@ -3,10 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MomentoCrypto — Verified Crypto Signals for India</title>
-<meta name="description" content="Professional crypto signals with verified results. Join thousands of Indian traders already winning with the premium MomentoCrypto community — pay via UPI in INR.">
-<meta property="og:title" content="MomentoCrypto — Verified Crypto Signals for India">
-<meta property="og:description" content="Professional crypto signals with verified results. Join thousands of traders already winning. UPI payments accepted.">
+<title>MomentoCrypto — Crypto Signals on Telegram (India)</title>
+<meta name="description" content="Professional crypto signals delivered direct to Telegram. Open the MomentoCrypto bot — see live signals, market analysis, and verified daily results. Free preview inside.">
+<meta property="og:title" content="MomentoCrypto — Crypto Signals on Telegram (India)">
+<meta property="og:description" content="Open the MomentoCrypto Telegram bot — live signals, market analysis, verified daily results. Join 4,200+ traders inside.">
 <meta property="og:type" content="website">
 <meta name="theme-color" content="#080808">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
@@ -86,17 +86,8 @@
   };
 })();
 
-// Rewrite the bot start param on FB visitors: all FB traffic → ?start=tradefb
-document.addEventListener('DOMContentLoaded', () => {
-  if (!window.__mc_is_fb_user || !window.__mc_is_fb_user()) return;
-  document.querySelectorAll('a[href*="t.me/momentocrypto_bot"]').forEach(a => {
-    try {
-      const u = new URL(a.href);
-      u.searchParams.set('start', 'tradefb');
-      a.href = u.toString();
-    } catch {}
-  });
-});
+// All India bot links already use ?start=fbads (matches FB ads campaign tag).
+// No client-side rewriting needed — links are hardcoded with the correct start param.
 </script>
 <!-- ============= END META PIXEL ============= -->
 
@@ -797,6 +788,97 @@ document.addEventListener('DOMContentLoaded', () => {
     margin-left: 8px;
     vertical-align: middle;
     box-shadow: 0 0 10px rgba(255,69,0,0.5);
+  }
+
+  /* HERO BOT CTA — replaces packages on India pre-landing */
+  .hero-bot-cta {
+    width: 100%;
+    max-width: 760px;
+    margin: 36px auto 0;
+    padding: 40px 32px;
+    background: linear-gradient(180deg, rgba(57,255,20,0.07) 0%, rgba(57,255,20,0.02) 100%);
+    border: 1.5px solid rgba(57,255,20,0.3);
+    border-radius: 18px;
+    box-shadow: 0 0 60px rgba(57,255,20,0.12), inset 0 0 80px rgba(57,255,20,0.04);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-bot-cta::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 50% 0%, rgba(57,255,20,0.18), transparent 60%);
+    pointer-events: none;
+  }
+  .hero-bot-cta-inner { position: relative; z-index: 1; }
+  .hero-bot-cta-badge {
+    display: inline-block;
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    color: var(--green);
+    background: rgba(57,255,20,0.08);
+    border: 1px solid rgba(57,255,20,0.35);
+    padding: 6px 14px;
+    border-radius: 999px;
+    margin-bottom: 18px;
+  }
+  .hero-bot-cta-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(34px, 5vw, 48px);
+    letter-spacing: 3px;
+    color: var(--white);
+    margin-bottom: 14px;
+    line-height: 1.05;
+  }
+  .hero-bot-cta-sub {
+    font-size: 15px;
+    color: var(--white-dim);
+    max-width: 540px;
+    margin: 0 auto 28px;
+    line-height: 1.55;
+  }
+  .hero-bot-cta-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    font-family: 'Space Mono', monospace;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-decoration: none;
+    color: var(--black);
+    background: var(--green);
+    padding: 20px 44px;
+    clip-path: polygon(14px 0%, 100% 0%, calc(100% - 14px) 100%, 0% 100%);
+    transition: all 0.25s;
+    animation: pulse-glow 2.5s ease-in-out infinite;
+  }
+  .hero-bot-cta-btn:hover {
+    transform: scale(1.04) translateY(-2px);
+    background: #4fff2a;
+    box-shadow: 0 0 50px rgba(57,255,20,0.7);
+  }
+  .hero-bot-cta-trust {
+    margin-top: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px 14px;
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: rgba(245,245,245,0.55);
+  }
+  .hero-bot-cta-dot { color: rgba(57,255,20,0.4); }
+  @media (max-width: 600px) {
+    .hero-bot-cta { padding: 30px 20px; margin-top: 24px; }
+    .hero-bot-cta-btn { font-size: 13px; padding: 18px 32px; letter-spacing: 1px; }
+    .hero-bot-cta-trust { font-size: 10px; letter-spacing: 1px; }
   }
 
   .hero-packages {
@@ -1911,6 +1993,11 @@ document.addEventListener('DOMContentLoaded', () => {
   .payment-icons-row { display: flex; align-items: center; justify-content: center; gap: 20px; margin-top: 12px; flex-wrap: wrap; }
   .payment-icon-group { display: flex; align-items: center; gap: 10px; }
   .payment-divider { width: 1px; height: 28px; background: rgba(57,255,20,0.15); }
+  .trust-stats-row { display: flex; align-items: center; justify-content: center; gap: 28px; margin-top: 16px; flex-wrap: wrap; }
+  .trust-stat { text-align: center; min-width: 90px; }
+  .trust-stat-num { font-family: 'Bebas Neue', sans-serif; font-size: 30px; letter-spacing: 2px; color: var(--green); text-shadow: 0 0 18px rgba(57,255,20,0.35); line-height: 1; }
+  .trust-stat-label { font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: rgba(245,245,245,0.5); margin-top: 6px; }
+  @media (max-width: 600px) { .trust-stats-row { gap: 16px; } .trust-stat-num { font-size: 24px; } .trust-stat-label { font-size: 9px; letter-spacing: 1.5px; } }
   .pix-trust-badge {
     display: inline-flex;
     align-items: center;
@@ -2083,14 +2170,13 @@ document.addEventListener('DOMContentLoaded', () => {
   <ul class="nav-links">
     <li><a href="#how">How it works</a></li>
     <li><a href="#results">Results</a></li>
-    <li><a href="#packages">Plans</a></li>
     <li><a href="#reviews">Reviews</a></li>
     <li><a href="#inside">What's inside</a></li>
     <li><a href="#faq">FAQ</a></li>
     <li><a href="/" class="lang-toggle"><span class="active">🇮🇳 IN</span> · <span>Global</span></a></li>
     <li><a href="https://t.me/momentocrypto_support" target="_blank" rel="noopener" class="nav-support">Support</a></li>
   </ul>
-  <a href="#packages" class="nav-cta">Get Access →</a>
+  <a href="https://t.me/momentocryptosignals_bot?start=fbads" target="_blank" rel="noopener" class="nav-cta">Open Bot →</a>
   <button class="burger" aria-label="Menu">
     <span></span><span></span><span></span>
   </button>
@@ -2100,15 +2186,14 @@ document.addEventListener('DOMContentLoaded', () => {
 <div class="mobile-nav">
   <a href="#how">How it works</a>
   <a href="#results">Results</a>
-  <a href="#packages">Plans</a>
   <a href="#reviews">Reviews</a>
   <a href="#inside">What's inside</a>
   <a href="#faq">FAQ</a>
   <a href="/" style="font-size:14px;letter-spacing:2px;color:var(--white-dim);">🌐 Global site →</a>
   <a href="https://t.me/momentocrypto_support" target="_blank" rel="noopener">Support</a>
-  <a href="#packages" class="tg-btn" style="margin-top:20px">
+  <a href="https://t.me/momentocryptosignals_bot?start=fbads" target="_blank" rel="noopener" class="tg-btn" style="margin-top:20px">
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12l-6.871 4.326-2.962-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.194 1.006.131.833.941z" fill="currentColor"/></svg>
-    GET ACCESS
+    OPEN THE BOT
   </a>
 </div>
 
@@ -2121,8 +2206,8 @@ document.addEventListener('DOMContentLoaded', () => {
       <span class="ticker-dot"></span>
       Live signals · 24/7 coverage
     </div>
-    <h1>SIGNALS THAT<br><span class="green">DELIVER.</span></h1>
-    <p class="hero-sub">Professional crypto signals with verified results. Join thousands of Indian traders already winning with the premium MomentoCrypto community — pay instantly via UPI.</p>
+    <h1>CRYPTO SIGNALS<br><span class="green">ON TELEGRAM.</span></h1>
+    <p class="hero-sub">Live trade alerts, daily market analysis, and verified results — delivered direct to your Telegram. Open the MomentoCrypto bot and see what 4,200+ Indian traders are getting every day.</p>
     <div class="hero-stats">
       <div class="stat">
         <div class="stat-num" data-count="4200">0</div>
@@ -2142,101 +2227,22 @@ document.addEventListener('DOMContentLoaded', () => {
       </div>
     </div>
 
-    <!-- INDIA LAUNCH BANNER (static 50% OFF) -->
-    <div class="promo-banner">
-      <div class="promo-banner-left">
-        <div class="promo-flash-icon">🇮🇳</div>
-        <div class="promo-titles">
-          <div class="promo-title">INDIA LAUNCH · <span class="big">50% OFF</span></div>
-          <div class="promo-sub">Special launch pricing for Indian traders. Pay in INR with UPI — instant access.</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- PACKAGES IN HERO -->
-    <div class="hero-packages" id="packages">
-      <div class="hero-packages-header">
-        <h2 class="hero-pkg-title">Choose Your Plan</h2>
-        <div class="hero-pkg-payment-icons">
-          <span class="hero-pkg-accepts">We accept:</span>
-          <span class="upi-mark-inline">UPI</span>
-          <img src="assets/icons/btc.svg" alt="BTC" height="20">
-          <img src="assets/icons/eth.svg" alt="ETH" height="20">
-          <img src="assets/icons/usdt.svg" alt="USDT" height="20">
-        </div>
-      </div>
-      <div class="packages-grid">
-        <div class="pkg-card">
-          <div class="pkg-duration">01 Month</div>
-          <div class="pkg-name">STARTER</div>
-          <div class="pkg-price"><span class="pkg-price-old-inline">₹2,800</span>₹1,400<span class="pkg-per-month">/mo</span></div>
-          <div class="pkg-price-sub"><span style="color:#39FF14;font-weight:600;">$13.50 with crypto · ~₹1,120</span></div>
-          <ul class="pkg-features">
-            <li>Full access to all signals</li>
-            <li>Entry, TP &amp; SL levels</li>
-            <li>Private Telegram channel</li>
-            <li>Analyst commentary</li>
-          </ul>
-          <button class="pkg-btn pkg-btn-pix" onclick="payUpi('starter')">
-            <span class="upi-mark"></span>
-            <span>UPI</span>
-            <span class="pkg-btn-price">₹1,400</span>
-            <span class="pkg-btn-tag">Instant</span>
-          </button>
-          <button class="pkg-btn pkg-btn-crypto" onclick="payPackage('starter')">
-            <span>Crypto</span>
-            <span class="pkg-btn-old">$30</span>
-            <span class="pkg-btn-price">$13.50</span>
-            <span class="pkg-btn-discount">-55%</span>
-          </button>
-        </div>
-        <div class="pkg-card featured">
-          <div class="pkg-duration">03 Months</div>
-          <div class="pkg-name">TRADER</div>
-          <div class="pkg-price"><span class="pkg-price-old-inline">₹7,600</span>₹3,800<span class="pkg-per-month"> · ₹1,267/mo</span></div>
-          <div class="pkg-price-sub"><span style="color:#39FF14;font-weight:600;">$36 with crypto · ~₹3,000</span></div>
-          <ul class="pkg-features">
-            <li>Full access to all signals</li>
-            <li>Entry, TP &amp; SL levels</li>
-            <li>Private Telegram channel</li>
-            <li>Analyst commentary</li>
-          </ul>
-          <button class="pkg-btn pkg-btn-pix" onclick="payUpi('trader')">
-            <span class="upi-mark"></span>
-            <span>UPI</span>
-            <span class="pkg-btn-price">₹3,800</span>
-            <span class="pkg-btn-tag">Instant</span>
-          </button>
-          <button class="pkg-btn pkg-btn-crypto" onclick="payPackage('trader')">
-            <span>Crypto</span>
-            <span class="pkg-btn-old">$80</span>
-            <span class="pkg-btn-price">$36</span>
-            <span class="pkg-btn-discount">-55%</span>
-          </button>
-        </div>
-        <div class="pkg-card">
-          <div class="pkg-duration">06 Months</div>
-          <div class="pkg-name">PRO</div>
-          <div class="pkg-price"><span class="pkg-price-old-inline">₹13,400</span>₹6,700<span class="pkg-per-month"> · ₹1,117/mo</span></div>
-          <div class="pkg-price-sub"><span style="color:#39FF14;font-weight:600;">$63 with crypto · ~₹5,250</span></div>
-          <ul class="pkg-features">
-            <li>Full access to all signals</li>
-            <li>Entry, TP &amp; SL levels</li>
-            <li>Private Telegram channel</li>
-            <li>Analyst commentary</li>
-          </ul>
-          <button class="pkg-btn pkg-btn-pix" onclick="payUpi('pro')">
-            <span class="upi-mark"></span>
-            <span>UPI</span>
-            <span class="pkg-btn-price">₹6,700</span>
-            <span class="pkg-btn-tag">Instant</span>
-          </button>
-          <button class="pkg-btn pkg-btn-crypto" onclick="payPackage('pro')">
-            <span>Crypto</span>
-            <span class="pkg-btn-old">$140</span>
-            <span class="pkg-btn-price">$63</span>
-            <span class="pkg-btn-discount">-55%</span>
-          </button>
+    <!-- HERO BOT CTA -->
+    <div class="hero-bot-cta" id="join">
+      <div class="hero-bot-cta-inner">
+        <div class="hero-bot-cta-badge">🇮🇳 INDIA · LIVE NOW</div>
+        <div class="hero-bot-cta-title">Get Signals Inside the Bot</div>
+        <p class="hero-bot-cta-sub">Open the MomentoCrypto Telegram bot and unlock live trade alerts, market analysis, and verified daily results — all in one place.</p>
+        <a href="https://t.me/momentocryptosignals_bot?start=fbads" target="_blank" rel="noopener" class="hero-bot-cta-btn">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12l-6.871 4.326-2.962-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.194 1.006.131.833.941z" fill="currentColor"/></svg>
+          OPEN TELEGRAM BOT
+        </a>
+        <div class="hero-bot-cta-trust">
+          <span>⚡ Instant access</span>
+          <span class="hero-bot-cta-dot">·</span>
+          <span>🔒 No card needed to start</span>
+          <span class="hero-bot-cta-dot">·</span>
+          <span>👥 4,200+ traders inside</span>
         </div>
       </div>
     </div>
@@ -2254,29 +2260,21 @@ document.addEventListener('DOMContentLoaded', () => {
   <div class="how-grid-v2">
     <div class="how-card reveal">
       <div class="how-step-num">01</div>
-      <div class="how-mock how-mock-plans">
-        <div class="mock-plan">
-          <div class="mock-plan-label">01 Month</div>
-          <div class="mock-plan-name">STARTER</div>
-          <div class="mock-plan-price">₹1,400</div>
-          <div class="mock-plan-btn">→ Pay</div>
+      <div class="how-mock how-mock-bot">
+        <div class="mock-bot-header">
+          <div class="mock-bot-avatar"><img src="assets/bot-avatar.jpg" alt="MomentoCrypto Bot"></div>
+          <div class="mock-bot-info">
+            <div class="mock-bot-name">MomentoCrypto Bot</div>
+            <div class="mock-bot-status">online</div>
+          </div>
         </div>
-        <div class="mock-plan featured">
-          <div class="mock-badge">BEST</div>
-          <div class="mock-plan-label">03 Months</div>
-          <div class="mock-plan-name">TRADER</div>
-          <div class="mock-plan-price">₹3,800</div>
-          <div class="mock-plan-btn">→ Pay</div>
+        <div class="mock-bot-body">
+          <div class="mock-msg mock-msg-in">Welcome! Tap /start to get your first signals + market overview.</div>
+          <div class="mock-msg mock-msg-out">/start</div>
+          <div class="mock-msg mock-msg-in"><span class="mock-check">✓</span> You're in. Latest signals below ↓</div>
         </div>
-        <div class="mock-plan">
-          <div class="mock-plan-label">06 Months</div>
-          <div class="mock-plan-name">PRO</div>
-          <div class="mock-plan-price">₹6,700</div>
-          <div class="mock-plan-btn">→ Pay</div>
-        </div>
-        <div class="mock-cursor"></div>
       </div>
-      <div class="how-card-title">CHOOSE YOUR PLAN</div>
+      <div class="how-card-title">OPEN THE BOT</div>
     </div>
 
     <div class="how-card reveal">
@@ -2290,12 +2288,12 @@ document.addEventListener('DOMContentLoaded', () => {
           </div>
         </div>
         <div class="mock-bot-body">
-          <div class="mock-msg mock-msg-in">Welcome! Send your activation code to join the channel.</div>
-          <div class="mock-msg mock-msg-out">your-activation-code</div>
-          <div class="mock-msg mock-msg-in"><span class="mock-check">✓</span> Code accepted. You're in the channel.</div>
+          <div class="mock-msg mock-msg-in">📊 Daily setup · BTCUSDT range break</div>
+          <div class="mock-msg mock-msg-in">⚡ New signal · SOLUSDT long</div>
+          <div class="mock-msg mock-msg-in"><span class="mock-check">✓</span> Trade closed +42% — recap inside</div>
         </div>
       </div>
-      <div class="how-card-title">ACTIVATE YOUR BOT</div>
+      <div class="how-card-title">EXPLORE FREE PREVIEWS</div>
     </div>
 
     <div class="how-card reveal">
@@ -2325,7 +2323,7 @@ document.addEventListener('DOMContentLoaded', () => {
           </svg>
         </div>
       </div>
-      <div class="how-card-title">GET THE ALERT & TRADE</div>
+      <div class="how-card-title">GET PUSH ALERTS</div>
     </div>
 
     <div class="how-card reveal">
@@ -2339,14 +2337,14 @@ document.addEventListener('DOMContentLoaded', () => {
           <div class="mock-pnl-meta">Entry 142.30 → Exit 148.30</div>
         </div>
       </div>
-      <div class="how-card-title">WIN WITH MOMENTO</div>
+      <div class="how-card-title">TRADE &amp; WIN</div>
     </div>
 
   </div>
 
   <div class="how-note reveal">
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-    <span>Keep Telegram notifications ON — signals drop the moment our traders spot the entry</span>
+    <span>Keep Telegram notifications ON — the bot pushes signals the moment our traders spot the entry</span>
   </div>
 </section>
 
@@ -2363,9 +2361,9 @@ document.addEventListener('DOMContentLoaded', () => {
   <div id="dailyTail"></div>
 
   <div class="results-cta reveal">
-    <a href="#packages" class="tg-btn">
+    <a href="https://t.me/momentocryptosignals_bot?start=fbads" target="_blank" rel="noopener" class="tg-btn">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12l-6.871 4.326-2.962-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.194 1.006.131.833.941z" fill="currentColor"/></svg>
-      I WANT THESE SIGNALS NOW
+      OPEN THE BOT
     </a>
   </div>
 </section>
@@ -2425,34 +2423,31 @@ document.addEventListener('DOMContentLoaded', () => {
 
 <div class="divider"></div>
 
-<!-- PAYMENT TRUST -->
+<!-- TRUST BAR -->
 <div class="payment-trust reveal">
   <div class="payment-row">
-    <span class="payment-label">Accepted payment methods</span>
+    <span class="payment-label">Trusted by traders worldwide</span>
   </div>
-  <div class="payment-icons-row">
-    <div class="payment-icon-group">
-      <span class="upi-trust-badge">UPI · Instant ₹</span>
+  <div class="trust-stats-row">
+    <div class="trust-stat">
+      <div class="trust-stat-num">4,200+</div>
+      <div class="trust-stat-label">Active members</div>
     </div>
     <span class="payment-divider"></span>
-    <div class="payment-icon-group">
-      <img src="assets/icons/btc.svg" alt="Bitcoin" height="24">
-      <img src="assets/icons/eth.svg" alt="Ethereum" height="24">
-      <img src="assets/icons/usdt.svg" alt="USDT" height="24">
+    <div class="trust-stat">
+      <div class="trust-stat-num">87%</div>
+      <div class="trust-stat-label">Win rate</div>
     </div>
-  </div>
-  <div class="coins-row" style="margin-top:16px;">
-    <span class="coin-chip"><span class="coin-dot" style="background:#f7931a"></span>BTC</span>
-    <span class="coin-chip"><span class="coin-dot" style="background:#627eea"></span>ETH</span>
-    <span class="coin-chip"><span class="coin-dot" style="background:#26a17b"></span>USDT</span>
-    <span class="coin-chip"><span class="coin-dot" style="background:#2775ca"></span>USDC</span>
-    <span class="coin-chip"><span class="coin-dot" style="background:#9945ff"></span>SOL</span>
-    <span class="coin-chip"><span class="coin-dot" style="background:#0033ad"></span>ADA</span>
-    <span class="coin-chip"><span class="coin-dot" style="background:#e84142"></span>AVAX</span>
-    <span class="coin-chip"><span class="coin-dot" style="background:#c2a633"></span>DOGE</span>
-    <span class="coin-chip"><span class="coin-dot" style="background:#345d9d"></span>LTC</span>
-    <span class="coin-chip"><span class="coin-dot" style="background:#8247e5"></span>MATIC</span>
-    <span class="coin-chip-more">+40 more</span>
+    <span class="payment-divider"></span>
+    <div class="trust-stat">
+      <div class="trust-stat-num">3 yrs</div>
+      <div class="trust-stat-label">Track record</div>
+    </div>
+    <span class="payment-divider"></span>
+    <div class="trust-stat">
+      <div class="trust-stat-num">24/7</div>
+      <div class="trust-stat-label">Signal coverage</div>
+    </div>
   </div>
 </div>
 
@@ -2505,9 +2500,9 @@ document.addEventListener('DOMContentLoaded', () => {
   </div>
 
   <div class="inside-cta reveal">
-    <a href="#packages" class="tg-btn">
+    <a href="https://t.me/momentocryptosignals_bot?start=fbads" target="_blank" rel="noopener" class="tg-btn">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12l-6.871 4.326-2.962-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.194 1.006.131.833.941z" fill="currentColor"/></svg>
-      UNLOCK FULL ACCESS
+      OPEN THE BOT
     </a>
   </div>
 </section>
@@ -2521,38 +2516,33 @@ document.addEventListener('DOMContentLoaded', () => {
 
   <div class="faq-list reveal">
     <details class="faq-item">
-      <summary>What exactly do I get when I join?</summary>
-      <p>Real-time trade alerts on Telegram with entry, stop loss, take profit, and leverage — plus live updates as the trade plays out and a full performance dashboard. Everything delivered straight to your phone.</p>
+      <summary>What is the MomentoCrypto bot?</summary>
+      <p>It's a Telegram bot that delivers live crypto signals, daily market analysis, and verified trade results — all in one place. Tap <strong>Start</strong> and the bot walks you through everything: preview signals, see live results, and pick a plan when you're ready.</p>
     </details>
 
     <details class="faq-item">
-      <summary>How many signals per day can I expect?</summary>
+      <summary>Is the bot free to start?</summary>
+      <p>Yes. Opening the bot and exploring is free — you'll see daily market analysis, recent setups, and verified results. Premium signals (with entry, TP, SL) are inside the paid channel, which you can subscribe to from inside the bot whenever you want.</p>
+    </details>
+
+    <details class="faq-item">
+      <summary>What exactly do I get in the paid channel?</summary>
+      <p>Real-time trade alerts with entry, stop loss, take profit, and leverage — plus live updates as the trade plays out, a daily P&amp;L recap, and a market-analysis feed. Everything pushed straight to your Telegram notifications.</p>
+    </details>
+
+    <details class="faq-item">
+      <summary>How many signals per day?</summary>
       <p>Between 2 and 6 high-conviction setups per day on average. No spam — signals only drop when our traders spot a clean edge. Quality over quantity, always.</p>
     </details>
 
     <details class="faq-item">
       <summary>What's the win rate?</summary>
-      <p>High enough to keep our members profitable month after month. We don't publish a fixed number because it varies with market conditions — but every trade is tracked with full transparency inside the members channel, so you can verify the results before committing long-term.</p>
+      <p>High enough to keep our members profitable month after month. We don't publish a fixed number because it varies with market conditions — but every trade is tracked with full transparency inside the bot, so you can verify the results yourself before committing.</p>
     </details>
 
     <details class="faq-item">
-      <summary>How does UPI payment work?</summary>
-      <p>It's the fastest and most popular payment method in India. You click "Pay with UPI", get redirected to the gateway, scan the QR code or open your UPI app (PhonePe, Paytm, GPay, BHIM, etc.) and approve. Confirmation is instant and you get your activation code right away.</p>
-    </details>
-
-    <details class="faq-item">
-      <summary>Why is there a discount for crypto?</summary>
-      <p>Crypto payments have lower fees for us and settle instantly with no chargebacks. We pass that saving back to you as a 10% discount. Works in 150+ countries and protects both sides.</p>
-    </details>
-
-    <details class="faq-item">
-      <summary>Is crypto payment safe?</summary>
-      <p>Yes. Payments are processed by OxaPay, an established crypto payment gateway used by thousands of businesses. You pay from your own wallet — we never touch your keys or funds.</p>
-    </details>
-
-    <details class="faq-item">
-      <summary>What happens right after I pay?</summary>
-      <p>You'll land on a success page with a unique, single-use activation code. Open our Telegram bot, paste the code, and within a minute you're inside the private channel.</p>
+      <summary>How do I pay if I want premium access?</summary>
+      <p>Everything is handled inside the bot — UPI (instant ₹), Crypto (10% discount), and other methods are surfaced when you tap the subscribe option. No card needed to start, and no checkout on the website.</p>
     </details>
 
     <details class="faq-item">
@@ -2561,13 +2551,13 @@ document.addEventListener('DOMContentLoaded', () => {
     </details>
 
     <details class="faq-item">
-      <summary>Can I cancel or get a refund?</summary>
-      <p>Plans aren't refundable once the activation code has been used, since it grants permanent access for the period paid. If you hit any issue before activating, message support within 24 hours and we'll sort it out.</p>
+      <summary>Which coins do you trade?</summary>
+      <p>Mostly BTC, ETH, SOL, and top-20 altcoins by volume. Occasionally we cover high-momentum meme coins (DOGE, PEPE, WIF) when the setup is clean. No shitcoins, no pump-and-dumps.</p>
     </details>
 
     <details class="faq-item">
-      <summary>Which coins do you trade?</summary>
-      <p>Mostly BTC, ETH, SOL, and top-20 altcoins by volume. Occasionally we cover high-momentum meme coins (DOGE, PEPE, WIF) when the setup is clean. No shitcoins, no pump-and-dumps.</p>
+      <summary>Can I unsubscribe?</summary>
+      <p>Yes — your access is for the period paid (no auto-renewal). You can also message support inside the bot any time if you need help with anything.</p>
     </details>
   </div>
 
@@ -2580,91 +2570,26 @@ document.addEventListener('DOMContentLoaded', () => {
   </div>
 </section>
 
-<!-- BOTTOM PACKAGES -->
+<!-- FINAL BOT CTA -->
 <section class="bottom-packages">
   <div class="section-label reveal">Ready to start?</div>
-  <h2 class="reveal">GET <span>ACCESS NOW.</span></h2>
-  <div class="packages-grid">
-    <div class="pkg-card reveal">
-      <div class="pkg-duration">01 Month</div>
-      <div class="pkg-name">STARTER</div>
-      <div class="pkg-price"><span class="pkg-price-old-inline">₹2,800</span>₹1,400<span class="pkg-per-month">/mo</span></div>
-      <div class="pkg-price-sub"><span style="color:#39FF14;font-weight:600;">$13.50 with crypto · ~₹1,120</span></div>
-      <ul class="pkg-features">
-        <li>Full access to all signals</li>
-        <li>Entry, TP &amp; SL levels</li>
-        <li>Private Telegram channel</li>
-        <li>Analyst commentary</li>
-      </ul>
-      <button class="pkg-btn pkg-btn-pix" onclick="payUpi('starter')">
-        <span class="upi-mark"></span>
-        <span>UPI</span>
-        <span class="pkg-btn-price">₹1,400</span>
-        <span class="pkg-btn-tag">Instant</span>
-      </button>
-      <button class="pkg-btn pkg-btn-crypto" onclick="payPackage('starter')">
-        <span>Crypto</span>
-        <span class="pkg-btn-old">$30</span>
-        <span class="pkg-btn-price">$13.50</span>
-        <span class="pkg-btn-discount">-55%</span>
-      </button>
-    </div>
-    <div class="pkg-card featured reveal">
-      <div class="pkg-duration">03 Months</div>
-      <div class="pkg-name">TRADER</div>
-      <div class="pkg-price"><span class="pkg-price-old-inline">₹7,600</span>₹3,800<span class="pkg-per-month"> · ₹1,267/mo</span></div>
-      <div class="pkg-price-sub"><span style="color:#39FF14;font-weight:600;">$36 with crypto · ~₹3,000</span></div>
-      <ul class="pkg-features">
-        <li>Full access to all signals</li>
-        <li>Entry, TP &amp; SL levels</li>
-        <li>Private Telegram channel</li>
-        <li>Analyst commentary</li>
-      </ul>
-      <button class="pkg-btn pkg-btn-pix" onclick="payUpi('trader')">
-        <span class="upi-mark"></span>
-        <span>UPI</span>
-        <span class="pkg-btn-price">₹3,800</span>
-        <span class="pkg-btn-tag">Instant</span>
-      </button>
-      <button class="pkg-btn pkg-btn-crypto" onclick="payPackage('trader')">
-        <span>Crypto</span>
-        <span class="pkg-btn-old">$80</span>
-        <span class="pkg-btn-price">$36</span>
-        <span class="pkg-btn-discount">-55%</span>
-      </button>
-    </div>
-    <div class="pkg-card reveal">
-      <div class="pkg-duration">06 Months</div>
-      <div class="pkg-name">PRO</div>
-      <div class="pkg-price"><span class="pkg-price-old-inline">₹13,400</span>₹6,700<span class="pkg-per-month"> · ₹1,117/mo</span></div>
-      <div class="pkg-price-sub"><span style="color:#39FF14;font-weight:600;">$63 with crypto · ~₹5,250</span></div>
-      <ul class="pkg-features">
-        <li>Full access to all signals</li>
-        <li>Entry, TP &amp; SL levels</li>
-        <li>Private Telegram channel</li>
-        <li>Analyst commentary</li>
-      </ul>
-      <button class="pkg-btn pkg-btn-pix" onclick="payUpi('pro')">
-        <span class="upi-mark"></span>
-        <span>UPI</span>
-        <span class="pkg-btn-price">₹6,700</span>
-        <span class="pkg-btn-tag">Instant</span>
-      </button>
-      <button class="pkg-btn pkg-btn-crypto" onclick="payPackage('pro')">
-        <span>Crypto</span>
-        <span class="pkg-btn-old">$140</span>
-        <span class="pkg-btn-price">$63</span>
-        <span class="pkg-btn-discount">-55%</span>
-      </button>
-    </div>
-  </div>
-  <div class="payment-trust reveal" style="margin-top:24px;">
-    <div class="payment-icons-row">
-      <div class="payment-icon-group">
-        <span class="upi-trust-badge">UPI · Instant ₹</span>
+  <h2 class="reveal">OPEN THE <span>BOT.</span></h2>
+  <div class="hero-bot-cta reveal" style="margin-top:32px;">
+    <div class="hero-bot-cta-inner">
+      <div class="hero-bot-cta-badge">🇮🇳 INDIA · LIVE NOW</div>
+      <div class="hero-bot-cta-title">Signals, Analysis, Results — All Inside</div>
+      <p class="hero-bot-cta-sub">Tap below to open MomentoCrypto on Telegram. Explore everything for free, then subscribe inside the bot whenever you're ready.</p>
+      <a href="https://t.me/momentocryptosignals_bot?start=fbads" target="_blank" rel="noopener" class="hero-bot-cta-btn">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12l-6.871 4.326-2.962-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.194 1.006.131.833.941z" fill="currentColor"/></svg>
+        OPEN TELEGRAM BOT
+      </a>
+      <div class="hero-bot-cta-trust">
+        <span>⚡ Instant access</span>
+        <span class="hero-bot-cta-dot">·</span>
+        <span>🔒 No card needed to start</span>
+        <span class="hero-bot-cta-dot">·</span>
+        <span>👥 4,200+ traders inside</span>
       </div>
-      <span class="payment-divider"></span>
-      <div class="payment-icon-group"><img src="assets/icons/btc.svg" alt="BTC" height="24"><img src="assets/icons/eth.svg" alt="ETH" height="24"><img src="assets/icons/usdt.svg" alt="USDT" height="24"></div>
     </div>
   </div>
 </section>
@@ -2761,7 +2686,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const title = p.title_en || p.title_pt || p.title || '';
     const body = p.body_en || p.body_pt || p.body || '';
     const today = new Date().toISOString().slice(0, 10);
-    const badgeText = (p.date === today) ? 'TODAY · LIVE' : 'LATEST';
+    const badgeText = (p.date === today) ? 'HOJE · AO VIVO' : 'MAIS RECENTE';
     const todayBadge = isLatest ? `<span class="daily-card-today-badge">${badgeText}</span>` : '';
     const img = p.image
       ? `<div class="daily-card-img" onclick="openLightbox('${escapeHtml(p.image).replace(/'/g, "\\'")}')"><img src="${escapeHtml(p.image)}" alt="${escapeHtml(title)}" loading="lazy"></div>`
@@ -2776,7 +2701,7 @@ document.addEventListener('DOMContentLoaded', () => {
         <div class="daily-card-body-text">${escapeHtml(body)}</div>
       </div>
       ${img}
-      <a href="#packages" class="daily-card-tg-link">GET FULL ACCESS →</a>
+      <a href="https://t.me/momentocryptosignals_bot?start=fbads" target="_blank" rel="noopener" class="daily-card-tg-link">SEE THIS LIVE IN THE BOT →</a>
     </article>`;
   }
 
@@ -2787,9 +2712,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const nextLabel = `tomorrow, ${months[t.getMonth()]} ${t.getDate()}`;
     return `<div class="daily-more-soon reveal">
       <div class="daily-more-soon-icon">🚀</div>
-      <div class="daily-more-soon-title">MORE RESULTS COMING SOON</div>
-      <div class="daily-more-soon-text">We publish new results every day. Want to follow <strong>every signal in real time</strong>, with entry, TP, and SL — before they show up here? Lock in access to our private channel.</div>
-      <a href="#packages" class="daily-more-soon-btn">⚡ GET ACCESS NOW</a>
+      <div class="daily-more-soon-title">MORE RESULTS COMING</div>
+      <div class="daily-more-soon-text">We publish new results every day. Want to follow <strong>every signal in real time</strong>, with entry, TP, and SL, before it shows up here? Open the bot.</div>
+      <a href="https://t.me/momentocryptosignals_bot?start=fbads" target="_blank" rel="noopener" class="daily-more-soon-btn">⚡ OPEN THE BOT</a>
       <div class="daily-more-soon-countdown"><span class="pulse"></span> NEXT RESULT · ${escapeHtml(nextLabel.toUpperCase())}</div>
     </div>`;
   }
@@ -2800,7 +2725,7 @@ document.addEventListener('DOMContentLoaded', () => {
       lb = document.createElement('div');
       lb.id = 'dailyLightbox';
       lb.className = 'daily-lightbox';
-      lb.innerHTML = '<button class="daily-lightbox-close" aria-label="Close">×</button><img alt="">';
+      lb.innerHTML = '<button class="daily-lightbox-close" aria-label="Fechar">×</button><img alt="">';
       lb.addEventListener('click', () => lb.classList.remove('show'));
       document.body.appendChild(lb);
     }
@@ -2820,7 +2745,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const tail = document.getElementById('dailyTail');
     if (!tail) return;
     if (_shown < _allPosts.length) {
-      tail.innerHTML = `<div class="daily-load-more-wrap"><button class="daily-load-more" id="dailyLoadMore">LOAD MORE ↓</button></div>`;
+      tail.innerHTML = `<div class="daily-load-more-wrap"><button class="daily-load-more" id="dailyLoadMore">CARREGAR MAIS ↓</button></div>`;
       document.getElementById('dailyLoadMore').addEventListener('click', loadMore);
     } else {
       tail.innerHTML = renderMoreSoonCard();
@@ -2843,7 +2768,9 @@ document.addEventListener('DOMContentLoaded', () => {
     try {
       const r = await fetch('/api/daily-results.php?limit=500');
       const data = await r.json();
-      // (no public-since banner on /in)
+      if (data.public_since && since) {
+        since.querySelector('span:last-child').innerHTML = `<strong>We've been posting daily public results since ${escapeHtml(fmtDateEN(data.public_since))}.</strong> Before that, we kept everything inside the private Telegram channel for paid members. We now publish here too for full transparency.`;
+      }
       _allPosts = data.posts || [];
       if (!_allPosts.length) {
         feed.innerHTML = '';
@@ -2869,13 +2796,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function renderReviewShot(r) {
     const src = escapeHtml(r.image || '').replace(/'/g, "\\'");
-    return `<a class="review-shot reveal" onclick="openLightbox('${src}'); return false;" href="${escapeHtml(r.image || '')}"><img src="${escapeHtml(r.image || '')}" alt="Telegram review" loading="lazy"></a>`;
+    return `<a class="review-shot reveal" onclick="openLightbox('${src}'); return false;" href="${escapeHtml(r.image || '')}"><img src="${escapeHtml(r.image || '')}" alt="Avaliação no Telegram" loading="lazy"></a>`;
   }
   function renderReviewsTail() {
     const tail = document.getElementById('reviewsTail');
     if (!tail) return;
     if (_shownReviews < _allReviews.length) {
-      tail.innerHTML = `<div class="daily-load-more-wrap"><button class="daily-load-more" id="reviewsLoadMore">LOAD MORE ↓</button></div>`;
+      tail.innerHTML = `<div class="daily-load-more-wrap"><button class="daily-load-more" id="reviewsLoadMore">CARREGAR MAIS ↓</button></div>`;
       document.getElementById('reviewsLoadMore').addEventListener('click', loadMoreReviews);
     } else {
       tail.innerHTML = '';
@@ -2911,114 +2838,37 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   loadReviews();
 
-  // === PAYMENT ===
-  // Values for pixel (must match each gateway's actual charge currency)
-  const PKG_VALUES_UPI = { starter: { inr: 1400 }, trader: { inr: 3800 }, pro: { inr: 6700 } };
-  const PKG_VALUES_CRYPTO = { starter: { usd: 13.5 }, trader: { usd: 36 }, pro: { usd: 63 } };
-
-  // Track the last pay attempt so we can show the "did you pay?" popup
-  // if the user returns without being redirected to /success.php
-  function recordPayAttempt(method, pkg, orderId) {
-    try {
-      localStorage.setItem('mc_last_pay_attempt', JSON.stringify({
-        ts: Date.now(), method, package: pkg, order_id: orderId
-      }));
-    } catch{}
-  }
-  function clearPayAttempt() { try { localStorage.removeItem('mc_last_pay_attempt'); } catch{} }
-  function lrClose() { document.getElementById('lrPopupOverlay').classList.remove('show'); }
-  function checkLostRedirect() {
-    let last = null;
-    try { last = JSON.parse(localStorage.getItem('mc_last_pay_attempt') || 'null'); } catch{}
-    if (!last || !last.order_id) return;
-    // Only trigger for Payou methods (UPI) — OxaPay crypto handles its own confirmation
-    if (last.method !== 'upi') return;
-    // Window: 2 min after click (avoids false positives) and within 45 min
-    const age = Date.now() - last.ts;
-    if (age < 2 * 60 * 1000 || age > 45 * 60 * 1000) return;
-    if (sessionStorage.getItem('mc_lr_shown_' + last.order_id)) return;
-    sessionStorage.setItem('mc_lr_shown_' + last.order_id, '1');
-    document.getElementById('lrOrderId').textContent = last.order_id;
-    document.getElementById('lrSupportLink').href = 'https://t.me/momentocrypto_support?text=' + encodeURIComponent('Hi, I paid but was not redirected. Order: ' + last.order_id);
-    document.getElementById('lrPopupOverlay').classList.add('show');
-  }
-  // Fire on every page load (covers normal navigation back + manual URL entry)
-  checkLostRedirect();
-  // Also fire on bfcache restore (back button from Payou)
-  window.addEventListener('pageshow', (e) => { if (e.persisted) checkLostRedirect(); });
-
-  // UPI payment (Payou MoneyINR_Sp)
-  async function payUpi(pkg) {
-    const btn = event.target.closest('button');
-    const originalHTML = btn.innerHTML;
-    btn.textContent = 'PROCESSING...'; btn.disabled = true;
-    const attribution = window.__mc_attribution ? window.__mc_attribution() : {};
-    const v = PKG_VALUES_UPI[pkg] || {};
-    if (window.__mc_sid) fetch('/api/analytics/event', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ sid: window.__mc_sid, type:'pay_click', ts:Date.now(), data:{ package: pkg, method: 'upi', locale: 'en-IN', attribution } }), keepalive:true });
-    // Meta Pixel: InitiateCheckout
-    if (window.__mc_pixel) window.__mc_pixel('InitiateCheckout', { content_ids: [pkg], content_type: 'product', value: v.inr, currency: 'INR', num_items: 1 });
-    try {
-      const res = await fetch('/api/pay-payou-in.php', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ package: pkg, attribution }) });
-      const data = await res.json();
-      if (data.ok && data.redirect) {
-        if (window.__mc_pixel) window.__mc_pixel('AddPaymentInfo', { content_ids: [pkg], value: v.inr, currency: 'INR' });
-        recordPayAttempt('upi', pkg, data.order_id);
-        window.location.href = data.redirect;
-      } else { alert('Payment error. Please try again.'); btn.innerHTML = originalHTML; btn.disabled = false; }
-    } catch { alert('Connection error. Please try again.'); btn.innerHTML = originalHTML; btn.disabled = false; }
-  }
-
-  // Crypto payment (OxaPay — USD)
-  async function payPackage(pkg) {
-    const btn = event.target.closest('button');
-    const originalHTML = btn.innerHTML;
-    btn.textContent = 'PROCESSING...'; btn.disabled = true;
-    const attribution = window.__mc_attribution ? window.__mc_attribution() : {};
-    const v = PKG_VALUES_CRYPTO[pkg] || {};
-    if (window.__mc_sid) fetch('/api/analytics/event', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ sid: window.__mc_sid, type:'pay_click', ts:Date.now(), data:{ package: pkg, method: 'crypto', locale: 'en-IN', attribution } }), keepalive:true });
-    if (window.__mc_pixel) window.__mc_pixel('InitiateCheckout', { content_ids: [pkg], content_type: 'product', value: v.usd, currency: 'USD', num_items: 1 });
-
-    try {
-      const res = await fetch('/api/pay.php', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ package: pkg, sid: window.__mc_sid || '', locale: 'en-IN', attribution }) });
-      const data = await res.json();
-      if (data.ok && data.payment_url) {
-        if (window.__mc_sid) fetch('/api/analytics/event', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ sid: window.__mc_sid, type:'invoice_created', ts:Date.now(), data:{ package: pkg, order_id: data.order_id } }), keepalive:true });
-        if (window.__mc_pixel) window.__mc_pixel('AddPaymentInfo', { content_ids: [pkg], value: v.usd, currency: 'USD' });
-        window.location.href = data.payment_url;
-      } else {
-        alert('Payment error. Please try again.');
-        btn.innerHTML = originalHTML;
-        btn.disabled = false;
-      }
-    } catch (e) {
-      alert('Connection error. Please try again.');
-      btn.innerHTML = originalHTML;
-      btn.disabled = false;
-    }
-  }
-
-  // Meta Pixel: ViewContent when packages section enters viewport
+  // === BOT FUNNEL ===
+  // Meta Pixel: ViewContent when hero CTA enters viewport (pre-landing engagement signal)
   (function() {
-    const pkgSection = document.getElementById('packages');
-    if (!pkgSection) return;
+    const ctaEl = document.getElementById('join');
+    if (!ctaEl) return;
     let fired = false;
     const obs = new IntersectionObserver((entries) => {
       entries.forEach(e => {
         if (e.isIntersecting && !fired) {
           fired = true;
-          if (window.__mc_pixel) window.__mc_pixel('ViewContent', { content_type: 'product_group', content_category: 'signals', content_ids: ['starter','trader','pro'] });
+          if (window.__mc_pixel) window.__mc_pixel('ViewContent', { content_type: 'product_group', content_category: 'bot_cta', content_ids: ['in_bot'] });
           obs.disconnect();
         }
       });
     }, { threshold: 0.4 });
-    obs.observe(pkgSection);
+    obs.observe(ctaEl);
   })();
 
-  // Meta Pixel: Lead when user clicks any Telegram bot/support link
+  // Meta Pixel: Lead on bot click (the funnel goal). Support clicks tagged separately.
   document.addEventListener('click', (e) => {
     const a = e.target.closest('a[href*="t.me/momentocrypto"]');
-    if (a && window.__mc_pixel) {
-      window.__mc_pixel('Lead', { content_name: 'telegram_click', content_category: a.href.includes('bot') ? 'bot' : 'support' });
+    if (!a) return;
+    const isBot = a.href.includes('momentocryptosignals_bot') || a.href.includes('_bot');
+    if (window.__mc_pixel) {
+      window.__mc_pixel(isBot ? 'Lead' : 'Contact', {
+        content_name: isBot ? 'bot_open' : 'support_click',
+        content_category: isBot ? 'bot' : 'support'
+      });
+    }
+    if (window.__mc_sid) {
+      fetch('/api/analytics/event', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ sid: window.__mc_sid, type:'bot_click', ts:Date.now(), data:{ href: a.href, locale: 'en-IN' } }), keepalive:true });
     }
   });
 
@@ -3048,29 +2898,13 @@ document.addEventListener('DOMContentLoaded', () => {
   function closePopup() { document.getElementById('tgPopupOverlay').classList.remove('show'); }
 </script>
 
-<!-- Lost-redirect popup (shown when user paid via Payou but wasn't redirected to success) -->
-<div class="lr-popup-overlay" id="lrPopupOverlay">
-  <div class="lr-popup">
-    <button class="lr-popup-close" onclick="lrClose()">×</button>
-    <div class="lr-popup-icon">💸</div>
-    <h3>Did you complete the payment?</h3>
-    <p>We noticed you may have paid but weren't redirected back. If your transaction was completed, message our support with the order number below to verify and unlock your access.</p>
-    <div class="lr-order" id="lrOrderId">—</div>
-    <a id="lrSupportLink" href="https://t.me/momentocrypto_support" target="_blank" rel="noopener" class="lr-popup-btn">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12l-6.871 4.326-2.962-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.194 1.006.131.833.941z"/></svg>
-      Contact Support
-    </a>
-    <button class="lr-popup-skip" onclick="lrClose()">I haven't finished paying yet</button>
-  </div>
-</div>
-
 <div class="tg-popup-overlay" id="tgPopupOverlay">
   <div class="tg-popup">
     <button class="tg-popup-close" onclick="closePopup()">×</button>
     <div class="tg-popup-icon">⚡</div>
     <h3>Wait — Don't Miss the Next Signals</h3>
-    <p>Our traders are posting setups with entry, TP, and SL <strong>right now</strong>. Lock in access to the private channel before you go — you can still catch the next trade.</p>
-    <a href="#packages" onclick="closePopup()" class="tg-popup-btn" style="background:var(--green);color:var(--black);">⚡ GET ACCESS NOW</a>
+    <p>Our traders are posting setups with entry, TP, and SL <strong>right now</strong>. Open the bot before you go — it's free to preview and you can still catch the next trade.</p>
+    <a href="https://t.me/momentocryptosignals_bot?start=fbads" target="_blank" rel="noopener" onclick="closePopup()" class="tg-popup-btn" style="background:var(--green);color:var(--black);">⚡ OPEN THE BOT</a>
     <button class="tg-popup-skip" onclick="closePopup()">I'll decide later</button>
   </div>
 </div>
