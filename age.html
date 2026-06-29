@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Age Verification — MomentoCrypto</title>
+<meta name="description" content="MomentoCrypto is a trading content platform for adults. Please confirm you are 18 or older to continue.">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#080808">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Bebas+Neue&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+
+<!-- ============= META PIXEL + ATTRIBUTION CAPTURE ============= -->
+<script>
+(function(){
+  // Capture attribution at landing (same localStorage key as /in so it persists through gate)
+  function readCookie(name) {
+    const m = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
+    return m ? decodeURIComponent(m[2]) : '';
+  }
+  function getQueryParam(k) {
+    return new URLSearchParams(location.search).get(k) || '';
+  }
+  const KEY = 'mc_attribution_in';
+  const ATTR_TTL = 90 * 24 * 60 * 60 * 1000;
+  let stored = {};
+  try { stored = JSON.parse(localStorage.getItem(KEY) || '{}'); } catch{}
+  const isExpired = !stored.ts || (Date.now() - stored.ts > ATTR_TTL);
+  const hasNewFbclid = !!getQueryParam('fbclid');
+  const hasNewUtm = !!getQueryParam('utm_source');
+  if (isExpired || hasNewFbclid || hasNewUtm || !stored.landing_url) {
+    const fbclid = getQueryParam('fbclid');
+    stored = {
+      ts: Date.now(),
+      landing_url: location.href,
+      referrer: document.referrer,
+      fbclid: fbclid,
+      fbc: fbclid ? ('fb.1.' + Date.now() + '.' + fbclid) : (readCookie('_fbc') || ''),
+      utm_source: getQueryParam('utm_source'),
+      utm_medium: getQueryParam('utm_medium'),
+      utm_campaign: getQueryParam('utm_campaign'),
+      utm_content: getQueryParam('utm_content'),
+      utm_term: getQueryParam('utm_term'),
+      affiliate_id: getQueryParam('aff') || getQueryParam('affiliate_id'),
+    };
+    localStorage.setItem(KEY, JSON.stringify(stored));
+  }
+
+  // Meta Pixel — fire PageView so FB sees the ad land here
+  !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
+  fetch('/api/config.php').then(r=>r.json()).then(cfg => {
+    window.__mc_meta_pixel_id = cfg.meta_pixel_id;
+    if (cfg.meta_pixel_id) {
+      fbq('init', cfg.meta_pixel_id);
+      fbq('track', 'PageView');
+    }
+  }).catch(()=>{});
+})();
+</script>
+<!-- ============= END META PIXEL ============= -->
+
+<style>
+  :root {
+    --green: #39FF14;
+    --green-glow: rgba(57,255,20,0.25);
+    --black: #080808;
+    --gray-dark: #111111;
+    --gray-mid: #1a1a1a;
+    --white: #f5f5f5;
+    --white-dim: rgba(245,245,245,0.65);
+    --red: #ff4757;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--black);
+    color: var(--white);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    overflow-x: hidden;
+  }
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(circle at 50% 0%, rgba(57,255,20,0.06), transparent 50%),
+      radial-gradient(circle at 80% 80%, rgba(57,255,20,0.04), transparent 50%);
+    pointer-events: none;
+    z-index: 0;
+  }
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.05'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0.4;
+  }
+  .gate {
+    position: relative;
+    z-index: 2;
+    max-width: 520px;
+    width: 100%;
+    background: var(--gray-dark);
+    border: 1px solid rgba(57,255,20,0.18);
+    border-radius: 18px;
+    padding: 48px 36px;
+    text-align: center;
+    box-shadow: 0 0 80px rgba(57,255,20,0.08), inset 0 0 60px rgba(57,255,20,0.02);
+  }
+  .logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 26px;
+    letter-spacing: 3px;
+    color: var(--green);
+    text-shadow: 0 0 18px var(--green-glow);
+    margin-bottom: 36px;
+  }
+  .logo span { color: var(--white); }
+  .icon {
+    width: 64px;
+    height: 64px;
+    margin: 0 auto 22px;
+    border: 2px solid var(--green);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 26px;
+    color: var(--green);
+    background: rgba(57,255,20,0.06);
+    box-shadow: 0 0 30px rgba(57,255,20,0.18);
+  }
+  h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(32px, 5vw, 42px);
+    letter-spacing: 3px;
+    line-height: 1.05;
+    margin-bottom: 14px;
+  }
+  h1 .accent { color: var(--green); }
+  .lead {
+    font-size: 15px;
+    color: var(--white-dim);
+    line-height: 1.55;
+    margin-bottom: 32px;
+  }
+  .buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .btn {
+    font-family: 'Space Mono', monospace;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    text-decoration: none;
+    padding: 18px 28px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+  }
+  .btn-primary {
+    background: var(--green);
+    color: var(--black);
+    clip-path: polygon(14px 0%, 100% 0%, calc(100% - 14px) 100%, 0% 100%);
+    animation: pulse-glow 2.5s ease-in-out infinite;
+  }
+  .btn-primary:hover {
+    background: #4fff2a;
+    transform: translateY(-2px);
+    box-shadow: 0 0 40px rgba(57,255,20,0.5);
+  }
+  .btn-secondary {
+    background: transparent;
+    color: var(--white-dim);
+    border: 1px solid rgba(245,245,245,0.18);
+    border-radius: 8px;
+  }
+  .btn-secondary:hover {
+    color: var(--white);
+    border-color: rgba(245,245,245,0.4);
+  }
+  @keyframes pulse-glow {
+    0%, 100% { box-shadow: 0 0 20px rgba(57,255,20,0.35), 0 0 40px rgba(57,255,20,0.1); }
+    50% { box-shadow: 0 0 35px rgba(57,255,20,0.65), 0 0 70px rgba(57,255,20,0.2); }
+  }
+  .disclaimer {
+    margin-top: 32px;
+    padding-top: 24px;
+    border-top: 1px solid rgba(255,255,255,0.06);
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.5px;
+    color: rgba(245,245,245,0.35);
+    line-height: 1.7;
+  }
+  .declined {
+    display: none;
+  }
+  .declined .icon {
+    border-color: var(--red);
+    color: var(--red);
+    background: rgba(255,71,87,0.06);
+    box-shadow: 0 0 30px rgba(255,71,87,0.18);
+  }
+  .declined h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    letter-spacing: 2px;
+    color: var(--red);
+    margin-bottom: 12px;
+  }
+  .declined p {
+    font-size: 14px;
+    color: var(--white-dim);
+    line-height: 1.55;
+  }
+  .show .gate-content { display: none; }
+  .show .declined { display: block; }
+  @media (max-width: 480px) {
+    .gate { padding: 36px 22px; }
+    h1 { font-size: 30px; letter-spacing: 2px; }
+    .lead { font-size: 14px; }
+    .btn { font-size: 12px; padding: 16px 22px; letter-spacing: 1.5px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="gate" id="gate">
+
+  <div class="gate-content">
+    <div class="logo">Momento<span>Crypto</span></div>
+    <div class="icon">18+</div>
+    <h1>AGE <span class="accent">VERIFICATION</span></h1>
+    <p class="lead">
+      MomentoCrypto provides cryptocurrency trading content and signals intended for adults only.
+      Please confirm you are <strong style="color:#fff;">18 years of age or older</strong> to continue.
+    </p>
+
+    <div class="buttons">
+      <button class="btn btn-primary" id="btn-yes">I am 18 or older — continue</button>
+      <button class="btn btn-secondary" id="btn-no">I am under 18</button>
+    </div>
+
+    <div class="disclaimer">
+      Trading cryptocurrency involves significant financial risk. Past performance does not guarantee future results.
+      You should only trade with capital you can afford to lose. This site is not intended for users under 18.
+    </div>
+  </div>
+
+  <div class="declined">
+    <div class="icon">✕</div>
+    <h2>ACCESS RESTRICTED</h2>
+    <p>
+      You must be 18 years of age or older to view this content.<br><br>
+      We're sorry, but you cannot continue. Please close this page.
+    </p>
+  </div>
+
+</div>
+
+<noscript>
+  <div style="position:fixed;inset:0;background:#080808;color:#f5f5f5;display:flex;align-items:center;justify-content:center;padding:24px;text-align:center;font-family:sans-serif;">
+    Please enable JavaScript to access this site.
+  </div>
+</noscript>
+
+<script>
+(function(){
+  const gate = document.getElementById('gate');
+  const yes = document.getElementById('btn-yes');
+  const no = document.getElementById('btn-no');
+
+  // If user already confirmed in this browser, skip the gate
+  try {
+    if (localStorage.getItem('mc_age_confirmed') === '1') {
+      window.location.replace('/in' + (location.search || ''));
+      return;
+    }
+  } catch {}
+
+  yes.addEventListener('click', function() {
+    try { localStorage.setItem('mc_age_confirmed', '1'); } catch {}
+    // Fire Pixel — meaningful action by qualified visitor
+    try { if (window.fbq && window.__mc_meta_pixel_id) fbq('trackCustom', 'AgeVerified'); } catch {}
+    // Redirect to /in preserving query string (fbclid, utm_*, …)
+    window.location.href = '/in' + (location.search || '');
+  });
+
+  no.addEventListener('click', function() {
+    gate.classList.add('show');
+    // Make sure they cannot bypass via back/forward
+    try { localStorage.removeItem('mc_age_confirmed'); } catch {}
+  });
+})();
+</script>
+
+</body>
+</html>

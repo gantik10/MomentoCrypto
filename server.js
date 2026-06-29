@@ -393,6 +393,7 @@ http.createServer(async (req, res) => {
     else if (pathname === "/br" || pathname === "/br/") filePath = "/br.html";
     else if (pathname === "/in" || pathname === "/in/") filePath = "/in.html";
     else if (pathname === "/go" || pathname === "/go/") filePath = "/go.html";
+    else if (pathname === "/age" || pathname === "/age/") filePath = "/age.html";
     else filePath = pathname;
     filePath = path.join(__dirname, filePath);
     if (!filePath.startsWith(__dirname)) { res.writeHead(403); res.end(); return; }
