@@ -32,11 +32,20 @@ if (empty($attribution['landing_url'])) {
 }
 
 // OxaPay charges in USD always — crypto-native users worldwide understand USD pricing
+// Default (global / en): new lower tier — $20/$50/$90 sticker → $18/$45/$81 with 10% crypto discount
 $basePackages = [
-    'starter' => ['amount' => 27, 'name' => 'Starter — 1 Month'],
-    'trader'  => ['amount' => 72, 'name' => 'Trader — 3 Months'],
-    'pro'     => ['amount' => 126, 'name' => 'Pro — 6 Months'],
+    'starter' => ['amount' => 18, 'name' => 'Starter — 1 Month'],
+    'trader'  => ['amount' => 45, 'name' => 'Trader — 3 Months'],
+    'pro'     => ['amount' => 81, 'name' => 'Pro — 6 Months'],
 ];
+// BR / IN keep the legacy $27/$72/$126 crypto pricing (still discounted via promo factor below)
+if ($locale === 'pt-BR' || $locale === 'en-IN') {
+    $basePackages = [
+        'starter' => ['amount' => 27, 'name' => 'Starter — 1 Month'],
+        'trader'  => ['amount' => 72, 'name' => 'Trader — 3 Months'],
+        'pro'     => ['amount' => 126, 'name' => 'Pro — 6 Months'],
+    ];
+}
 
 // Per-locale discount factor
 //   BR (pt-BR): time-boxed 50% promo via BR_PROMO_END

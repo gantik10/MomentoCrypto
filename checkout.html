@@ -177,10 +177,10 @@ h1 { font-size: 26px; font-weight: 700; text-align: center; margin-bottom: 4px; 
       <div class="pkg-info">
         <div class="pkg-title">Starter</div>
         <div class="pkg-detail">1 Month · Full access to all signals</div>
-        <div class="pkg-monthly">$30/mo</div>
+        <div class="pkg-monthly">$20/mo</div>
       </div>
       <div class="pkg-price-col">
-        <div class="pkg-price-eur">$30</div>
+        <div class="pkg-price-eur">$20</div>
         <div class="pkg-price-usd"></div>
       </div>
     </div>
@@ -190,10 +190,10 @@ h1 { font-size: 26px; font-weight: 700; text-align: center; margin-bottom: 4px; 
       <div class="pkg-info">
         <div class="pkg-title">Trader</div>
         <div class="pkg-detail">3 Months · Full access to all signals</div>
-        <div class="pkg-monthly">$26.67/mo · <span class="pkg-save">Save 11%</span></div>
+        <div class="pkg-monthly">$16.67/mo · <span class="pkg-save">Save 17%</span></div>
       </div>
       <div class="pkg-price-col">
-        <div class="pkg-price-eur">$80</div>
+        <div class="pkg-price-eur">$50</div>
         <div class="pkg-price-usd"></div>
       </div>
     </div>
@@ -203,10 +203,10 @@ h1 { font-size: 26px; font-weight: 700; text-align: center; margin-bottom: 4px; 
       <div class="pkg-info">
         <div class="pkg-title">Pro</div>
         <div class="pkg-detail">6 Months · Full access to all signals</div>
-        <div class="pkg-monthly">$23.33/mo · <span class="pkg-save">Save 22%</span></div>
+        <div class="pkg-monthly">$15/mo · <span class="pkg-save">Save 25%</span></div>
       </div>
       <div class="pkg-price-col">
-        <div class="pkg-price-eur">$140</div>
+        <div class="pkg-price-eur">$90</div>
         <div class="pkg-price-usd"></div>
       </div>
     </div>
@@ -288,9 +288,9 @@ const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || '';
 const isEU = tz.startsWith('Europe/');
 
 const packages = {
-  starter: { name: 'Starter — 1 Month', eur: 27, usd: 30, cryptoUsd: 27 },
-  trader:  { name: 'Trader — 3 Months', eur: 73, usd: 80, cryptoUsd: 72 },
-  pro:     { name: 'Pro — 6 Months', eur: 128, usd: 140, cryptoUsd: 126 },
+  starter: { name: 'Starter — 1 Month', eur: 18, usd: 20, cryptoUsd: 18 },
+  trader:  { name: 'Trader — 3 Months', eur: 45, usd: 50, cryptoUsd: 45 },
+  pro:     { name: 'Pro — 6 Months', eur: 81, usd: 90, cryptoUsd: 81 },
 };
 let selectedPkg = 'starter';
 let method = 'crypto';
@@ -316,9 +316,9 @@ function updatePkgCards() {
   // Update monthly prices
   const monthlyEls = document.querySelectorAll('.pkg-monthly');
   const monthlyData = [
-    { eur: '€27/mo', usd: '$30/mo', save: '' },
-    { eur: '€24.33/mo', usd: '$26.67/mo', save: 'Save 11%' },
-    { eur: '€21.33/mo', usd: '$23.33/mo', save: 'Save 22%' },
+    { eur: '€18/mo', usd: '$20/mo', save: '' },
+    { eur: '€15/mo', usd: '$16.67/mo', save: 'Save 17%' },
+    { eur: '€13.50/mo', usd: '$15/mo', save: 'Save 25%' },
   ];
   monthlyEls.forEach((el, i) => {
     const d = monthlyData[i];
@@ -344,13 +344,13 @@ function updateUpsell() {
   const u = document.getElementById('upsell');
   const c = isEU ? '€' : '$';
   if (selectedPkg === 'starter') {
-    const traderMonthly = isEU ? '€24.33' : '$26.67';
-    const starterMonthly = isEU ? '€27' : '$30';
-    u.innerHTML = `💡 Upgrade to <strong>Trader (3 months)</strong> and pay just ${traderMonthly}/mo instead of ${starterMonthly}/mo — <strong>save 20%</strong>`;
+    const traderMonthly = isEU ? '€15' : '$16.67';
+    const starterMonthly = isEU ? '€18' : '$20';
+    u.innerHTML = `💡 Upgrade to <strong>Trader (3 months)</strong> and pay just ${traderMonthly}/mo instead of ${starterMonthly}/mo — <strong>save 17%</strong>`;
     u.style.display = 'block';
   } else if (selectedPkg === 'trader') {
-    const proMonthly = isEU ? '€21.33' : '$23.33';
-    u.innerHTML = `💡 Go <strong>Pro (6 months)</strong> for only ${proMonthly}/mo — <strong>save 33%</strong> and lock in for 6 months`;
+    const proMonthly = isEU ? '€13.50' : '$15';
+    u.innerHTML = `💡 Go <strong>Pro (6 months)</strong> for only ${proMonthly}/mo — <strong>save 25%</strong> and lock in for 6 months`;
     u.style.display = 'block';
   } else {
     u.style.display = 'none';
@@ -379,7 +379,7 @@ async function pay() {
   btn.disabled = true; btn.textContent = 'Processing...';
   document.getElementById('errorMsg').style.display = 'none';
   try {
-    const res = await fetch('/api/pay.php', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ package: selectedPkg }) });
+    const res = await fetch('/api/pay.php', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ package: selectedPkg, locale: 'en' }) });
     const data = await res.json();
     if (data.ok && data.payment_url) { window.location.href = data.payment_url; }
     else throw new Error(data.error || 'Payment failed');
