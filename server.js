@@ -390,7 +390,6 @@ http.createServer(async (req, res) => {
     // --- Static files ---
     let filePath;
     if (pathname === "/") filePath = "/index.html";
-    else if (pathname === "/br" || pathname === "/br/") filePath = "/br.html";
     else if (pathname === "/in" || pathname === "/in/") filePath = "/in.html";
     else if (pathname === "/go" || pathname === "/go/") filePath = "/go.html";
     else if (pathname === "/age" || pathname === "/age/") filePath = "/age.html";

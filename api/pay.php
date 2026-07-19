@@ -28,7 +28,7 @@ $attribution = is_array($input['attribution'] ?? null) ? $input['attribution'] :
 $attribution['ip'] = trim(explode(',', $_SERVER['HTTP_X_FORWARDED_FOR'] ?? $_SERVER['HTTP_X_REAL_IP'] ?? $_SERVER['REMOTE_ADDR'] ?? '')[0]);
 $attribution['user_agent'] = $_SERVER['HTTP_USER_AGENT'] ?? '';
 if (empty($attribution['landing_url'])) {
-    $attribution['landing_url'] = $locale === 'pt-BR' ? 'https://momentocrypto.com/br' : 'https://momentocrypto.com/';
+    $attribution['landing_url'] = $locale === 'en-IN' ? 'https://momentocrypto.com/in' : 'https://momentocrypto.com/';
 }
 
 // OxaPay charges in USD always — crypto-native users worldwide understand USD pricing
@@ -38,8 +38,8 @@ $basePackages = [
     'trader'  => ['amount' => 45, 'name' => 'Trader — 3 Months'],
     'pro'     => ['amount' => 81, 'name' => 'Pro — 6 Months'],
 ];
-// BR / IN keep the legacy $27/$72/$126 crypto pricing (still discounted via promo factor below)
-if ($locale === 'pt-BR' || $locale === 'en-IN') {
+// India (en-IN) keeps the legacy $27/$72/$126 baseline for a permanent launch discount on top
+if ($locale === 'en-IN') {
     $basePackages = [
         'starter' => ['amount' => 27, 'name' => 'Starter — 1 Month'],
         'trader'  => ['amount' => 72, 'name' => 'Trader — 3 Months'],
@@ -47,24 +47,14 @@ if ($locale === 'pt-BR' || $locale === 'en-IN') {
     ];
 }
 
-// Per-locale discount factor
-//   BR (pt-BR): time-boxed 50% promo via BR_PROMO_END
-//   India (en-IN): permanent 50% launch discount on top of the standard 10% crypto baseline
-//                  ($27 → $13.50 / $72 → $36 / $126 → $63 = 55% off the $30/$80/$140 sticker)
+// India permanent launch discount: $27 → $13.50 / $72 → $36 / $126 → $63 (~55% off the $30/$80/$140 sticker)
 $discountFactor = 1;
 $promoTag = '';
-
-$brPromoEnd = $_ENV['BR_PROMO_END'] ?? '';
-$brPromoPct = (int)($_ENV['BR_PROMO_DISCOUNT_PCT'] ?? 50);
-$brPromoActive = ($locale === 'pt-BR') && $brPromoEnd && strtotime($brPromoEnd) > time();
 
 $inDiscountPct = (int)($_ENV['IN_DISCOUNT_PCT'] ?? 50);
 $inActive = ($locale === 'en-IN') && $inDiscountPct > 0 && $inDiscountPct < 100;
 
-if ($brPromoActive) {
-    $discountFactor = (100 - $brPromoPct) / 100;
-    $promoTag = " ({$brPromoPct}% OFF)";
-} elseif ($inActive) {
+if ($inActive) {
     $discountFactor = (100 - $inDiscountPct) / 100;
     $promoTag = " (India launch — {$inDiscountPct}% OFF)";
 }

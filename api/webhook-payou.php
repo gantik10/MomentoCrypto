@@ -58,14 +58,9 @@ if ($status === 'success') {
         'trader' => 'Trader (3 Months)',
         'pro' => 'Pro (6 Months)',
     ];
-    $packageNamesBR = [
-        'starter' => 'Starter (1 Mês)',
-        'trader' => 'Trader (3 Meses)',
-        'pro' => 'Pro (6 Meses)',
-    ];
     $amountFloat = floatval($amount);
 
-    // Look up order metadata from pending file — BR orders use BRL/Pix, IN orders use INR/UPI
+    // Look up order metadata from pending file — IN orders use INR/UPI
     $pendingFile = __DIR__ . '/payou_pending.json';
     $pending = file_exists($pendingFile) ? json_decode(file_get_contents($pendingFile), true) ?: [] : [];
     $currency = 'EUR';
@@ -79,7 +74,6 @@ if ($status === 'success') {
             break;
         }
     }
-    $isPix = ($method === 'payou_pix' || $currency === 'BRL');
     $isUpi = ($method === 'payou_upi' || $currency === 'INR');
 
     // Append to sales.json (prevent duplicates by intid)
@@ -115,22 +109,14 @@ if ($status === 'success') {
         $token = $env['TELEGRAM_BOT_TOKEN'] ?? '';
         $chatId = $env['TELEGRAM_CHAT_ID'] ?? '';
         if ($token && $chatId) {
-            if ($isPix) {
-                $name = $packageNamesBR[$package] ?? $package;
-                $msg = "💸 Pagamento Pix confirmado! (Payou BR)\n\n"
-                    . "Plano: {$name}\n"
-                    . "Valor: R$ {$amountFloat}\n"
-                    . "Pedido: {$orderId}\n"
-                    . "Horário: " . date('Y-m-d H:i') . " UTC";
-            } elseif ($isUpi) {
-                $name = $packageNames[$package] ?? $package;
+            $name = $packageNames[$package] ?? $package;
+            if ($isUpi) {
                 $msg = "💸 UPI payment confirmed! (Payou IN)\n\n"
                     . "Plan: {$name}\n"
                     . "Amount: ₹ {$amountFloat}\n"
                     . "Order: {$orderId}\n"
                     . "Time: " . date('Y-m-d H:i') . " UTC";
             } else {
-                $name = $packageNames[$package] ?? $package;
                 $msg = "💳 Card payment confirmed! (Payou)\n\n"
                     . "Plan: {$name}\n"
                     . "Amount: {$currency} {$amountFloat}\n"

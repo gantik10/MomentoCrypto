@@ -1904,7 +1904,6 @@
     <li><a href="#reviews">Reviews</a></li>
     <li><a href="#inside">Inside</a></li>
     <li><a href="#faq">FAQ</a></li>
-    <li><a href="/br" class="lang-toggle" title="Versão em Português"><span class="active">EN</span> · <span>PT</span></a></li>
     <li><a href="https://t.me/momentocrypto_support" target="_blank" rel="noopener" class="nav-support">Support</a></li>
   </ul>
   <a href="#packages" class="nav-cta">Get Access →</a>
@@ -1923,7 +1922,6 @@
   <a href="#reviews">Reviews</a>
   <a href="#inside">Inside</a>
   <a href="#faq">FAQ</a>
-  <a href="/br" style="font-size:14px;letter-spacing:2px;color:var(--white-dim);">🇧🇷 Versão em Português →</a>
   <a href="https://t.me/momentocrypto_support" target="_blank" rel="noopener">Support</a>
   <a href="#packages" class="tg-btn" style="margin-top:20px">
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12l-6.871 4.326-2.962-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.194 1.006.131.833.941z" fill="currentColor"/></svg>
@@ -1942,22 +1940,22 @@
     </div>
     <h1>SIGNALS<br>THAT <span class="green">HIT.</span></h1>
     <p class="hero-sub">Professional crypto signals with verified results. Join thousands of traders already winning with MomentoCrypto's premium community.</p>
-    <div class="hero-stats">
+    <div class="hero-stats" id="heroStats">
       <div class="stat">
         <div class="stat-num" data-count="4200">0</div>
         <div class="stat-label">Active Members</div>
       </div>
       <div class="stat">
-        <div class="stat-num" data-count="87" data-suffix="%">0%</div>
+        <div class="stat-num" id="heroWinRate" data-count="87" data-suffix="%">0%</div>
         <div class="stat-label">Win Rate</div>
       </div>
       <div class="stat">
-        <div class="stat-num" data-count="340" data-suffix="%">0%</div>
-        <div class="stat-label">Avg Monthly ROI</div>
+        <div class="stat-num" id="heroCumulative" data-count="340" data-suffix="%">0%</div>
+        <div class="stat-label">Cumulative PnL</div>
       </div>
       <div class="stat">
-        <div class="stat-num">3 YRS</div>
-        <div class="stat-label">Track Record</div>
+        <div class="stat-num" id="heroBestTrade" data-count="399" data-suffix="%">0%</div>
+        <div class="stat-label">Best Trade</div>
       </div>
     </div>
 
@@ -2500,29 +2498,19 @@
     if (e.key === 'Escape') document.getElementById('dailyLightbox')?.classList.remove('show');
   });
 
-  const DAILY_BATCH = 6;
-  let _allPosts = [];
-  let _shown = 0;
-
-  function renderTail() {
-    const tail = document.getElementById('dailyTail');
-    if (!tail) return;
-    if (_shown < _allPosts.length) {
-      tail.innerHTML = `<div class="daily-load-more-wrap"><button class="daily-load-more" id="dailyLoadMore">LOAD MORE ↓</button></div>`;
-      document.getElementById('dailyLoadMore').addEventListener('click', loadMore);
-    } else {
-      tail.innerHTML = renderMoreSoonCard();
-      tail.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-    }
-  }
-
-  function loadMore() {
-    const feed = document.getElementById('dailyFeed');
-    const batch = _allPosts.slice(_shown, _shown + DAILY_BATCH);
-    feed.insertAdjacentHTML('beforeend', batch.map(p => renderDailyCard(p, false)).join(''));
-    _shown += batch.length;
-    feed.querySelectorAll('.reveal:not(.visible)').forEach(el => observer.observe(el));
-    renderTail();
+  // Update hero stats from the /api/daily-results.php stats blob
+  function applyHeroStats(stats) {
+    if (!stats) return;
+    const set = (id, val, suffix) => {
+      const el = document.getElementById(id);
+      if (!el || val == null) return;
+      el.setAttribute('data-count', Math.round(val));
+      if (suffix) el.setAttribute('data-suffix', suffix);
+      el.textContent = (Math.round(val * 10) / 10) + (suffix || '');
+    };
+    if (stats.win_rate_pct != null) set('heroWinRate', stats.win_rate_pct, '%');
+    if (stats.cumulative_pct != null) set('heroCumulative', stats.cumulative_pct, '%');
+    if (stats.best_trade_pct != null) set('heroBestTrade', stats.best_trade_pct, '%');
   }
 
   async function loadDailyResults() {
@@ -2534,17 +2522,21 @@
       if (data.public_since && since) {
         since.querySelector('span:last-child').innerHTML = `<strong>We've been publishing daily results publicly since ${escapeHtml(fmtDateEN(data.public_since))}.</strong> Before that, results stayed inside our private Telegram channel for paid members. Now we publish them here too for full public transparency.`;
       }
-      _allPosts = data.posts || [];
-      if (!_allPosts.length) {
+      applyHeroStats(data.stats);
+      const posts = data.posts || [];
+      if (!posts.length) {
         feed.innerHTML = '';
         document.getElementById('dailyTail').innerHTML = renderMoreSoonCard();
         return;
       }
-      const firstBatch = _allPosts.slice(0, DAILY_BATCH);
-      feed.innerHTML = firstBatch.map((p, i) => renderDailyCard(p, i === 0)).join('');
-      _shown = firstBatch.length;
+      // Show every post at once — the feed is finite and conversion benefits from full transparency
+      feed.innerHTML = posts.map((p, i) => renderDailyCard(p, i === 0)).join('');
       feed.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-      renderTail();
+      const tail = document.getElementById('dailyTail');
+      if (tail) {
+        tail.innerHTML = renderMoreSoonCard();
+        tail.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+      }
     } catch (e) {
       feed.innerHTML = `<div class="daily-empty">Couldn't load results right now. Try refreshing the page.</div>`;
     }

@@ -34,38 +34,89 @@ function require_admin($adminPass) {
     }
 }
 
+// Parse trade metrics from body text on the fly — no denormalised fields required.
+// Body contains lines like "✅ BTC/USDT +42.18%" or "❌ SOL/USDT -8%"; we count wins/losses
+// and sum the percent values so admins can just paste their signal recap.
+function parse_body_stats(string $body): array {
+    $wins = 0;
+    $losses = 0;
+    $sumPct = 0.0;
+    $best = 0.0;
+    $worst = 0.0;
+    if ($body === '') {
+        return ['wins' => 0, 'losses' => 0, 'sum_pct' => 0.0, 'best' => 0.0, 'worst' => 0.0];
+    }
+    // Split into lines, look at each independently
+    $lines = preg_split('/\r?\n/', $body);
+    foreach ($lines as $line) {
+        $hasWin = strpos($line, '✅') !== false;
+        $hasLoss = strpos($line, '❌') !== false;
+        // Find any signed percent on the line: +42.18%, -8%, 63.53%
+        if (preg_match('/([+\-]?\d+(?:\.\d+)?)\s*%/', $line, $m)) {
+            $pct = (float)$m[1];
+            if ($hasWin) {
+                $wins++;
+                $sumPct += $pct;
+                if ($pct > $best) $best = $pct;
+            } elseif ($hasLoss) {
+                $losses++;
+                $sumPct += $pct;  // usually negative
+                if ($pct < $worst) $worst = $pct;
+            }
+        } else {
+            // No percent on the line — just count the emoji as a trade marker
+            if ($hasWin) $wins++;
+            elseif ($hasLoss) $losses++;
+        }
+    }
+    return [
+        'wins' => $wins,
+        'losses' => $losses,
+        'sum_pct' => round($sumPct, 2),
+        'best' => round($best, 2),
+        'worst' => round($worst, 2),
+    ];
+}
+
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     // Public — newest first
     usort($posts, fn($a, $b) => ($b['ts'] ?? 0) - ($a['ts'] ?? 0));
     $limit = isset($_GET['limit']) ? min(500, max(1, (int)$_GET['limit'])) : 200;
     $offset = isset($_GET['offset']) ? max(0, (int)$_GET['offset']) : 0;
 
-    // Track-record stats over ALL posts (not just paginated slice)
+    // Track-record stats over ALL posts — computed by parsing body text (no denormalised win_count fields)
     $totalPosts = count($posts);
+    $totalTrades = 0;
     $totalWins = 0;
     $totalLosses = 0;
-    $totalPnl = 0;
-    $pnlCount = 0;
+    $sumPct = 0.0;
+    $bestTrade = 0.0;
     foreach ($posts as $p) {
-        if (isset($p['win_count'])) $totalWins += (int)$p['win_count'];
-        if (isset($p['loss_count'])) $totalLosses += (int)$p['loss_count'];
-        if (isset($p['total_pnl_pct']) && $p['total_pnl_pct'] !== null) {
-            $totalPnl += (float)$p['total_pnl_pct'];
-            $pnlCount++;
-        }
+        $body = $p['body_en'] ?? $p['body'] ?? $p['body_pt'] ?? '';
+        $s = parse_body_stats($body);
+        $totalWins += $s['wins'];
+        $totalLosses += $s['losses'];
+        $totalTrades += $s['wins'] + $s['losses'];
+        $sumPct += $s['sum_pct'];
+        if ($s['best'] > $bestTrade) $bestTrade = $s['best'];
     }
+    $winRate = ($totalWins + $totalLosses) > 0
+        ? round($totalWins / ($totalWins + $totalLosses) * 100, 1)
+        : null;
+
     // Display floor — never show fewer than MIN_DISPLAYED_DAYS in the counter
-    // (Once real posts exceed this floor, the real number is shown verbatim — 51, 52, …)
     $minDisplayed = isset($env['MIN_DISPLAYED_DAYS']) ? (int)$env['MIN_DISPLAYED_DAYS'] : 50;
+
     $stats = [
         'days_published' => $totalPosts,
         'displayed_days_published' => max($totalPosts, $minDisplayed),
         'min_displayed_days' => $minDisplayed,
+        'total_trades' => $totalTrades,
         'total_wins' => $totalWins,
         'total_losses' => $totalLosses,
-        'win_rate_pct' => ($totalWins + $totalLosses) > 0 ? round($totalWins / ($totalWins + $totalLosses) * 100, 1) : null,
-        'avg_daily_pnl_pct' => $pnlCount > 0 ? round($totalPnl / $pnlCount, 1) : null,
-        'sum_pnl_pct' => $pnlCount > 0 ? round($totalPnl, 1) : null,
+        'win_rate_pct' => $winRate,
+        'cumulative_pct' => round($sumPct, 1),
+        'best_trade_pct' => round($bestTrade, 1),
     ];
 
     echo json_encode([
@@ -111,26 +162,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $post = [
         'id' => $id,
         'date' => $date,
-        // Bilingual fields — both required
-        'title_pt' => trim($input['title_pt'] ?? ''),
-        'title_en' => trim($input['title_en'] ?? ''),
-        'body_pt'  => trim($input['body_pt'] ?? ''),
-        'body_en'  => trim($input['body_en'] ?? ''),
+        // English only — BR site retired. Legacy _pt fields on existing posts are still returned as fallback.
+        'title_en' => trim($input['title_en'] ?? $input['title'] ?? ''),
+        'body_en'  => trim($input['body_en']  ?? $input['body']  ?? ''),
         'image' => trim($input['image'] ?? ''),
-        'win_count' => isset($input['win_count']) && $input['win_count'] !== '' ? (int)$input['win_count'] : null,
-        'loss_count' => isset($input['loss_count']) && $input['loss_count'] !== '' ? (int)$input['loss_count'] : null,
-        'total_pnl_pct' => isset($input['total_pnl_pct']) && $input['total_pnl_pct'] !== '' ? (float)$input['total_pnl_pct'] : null,
         'ts' => strtotime($date) ?: time(),
         'updated_at' => time(),
     ];
 
-    if (!$post['title_pt'] || !$post['body_pt'] || !$post['title_en'] || !$post['body_en']) {
+    if (!$post['title_en'] || !$post['body_en']) {
         http_response_code(400);
-        echo json_encode(['error' => 'Both languages required: title_pt, body_pt, title_en, body_en']);
+        echo json_encode(['error' => 'title_en and body_en are required']);
         exit;
     }
 
-    // Upsert: remove existing with same id, then add
+    // Upsert: remove existing with same id, then add (preserving legacy _pt fields if present)
+    $existing = null;
+    foreach ($posts as $p) {
+        if (($p['id'] ?? '') === $id) { $existing = $p; break; }
+    }
+    if ($existing) {
+        // Preserve legacy fields so old BR-era posts still render on IN pre-landing fallback
+        if (!empty($existing['title_pt'])) $post['title_pt'] = $existing['title_pt'];
+        if (!empty($existing['body_pt']))  $post['body_pt']  = $existing['body_pt'];
+    }
     $posts = array_values(array_filter($posts, fn($p) => ($p['id'] ?? '') !== $id));
     $posts[] = $post;
     file_put_contents($file, json_encode($posts, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));

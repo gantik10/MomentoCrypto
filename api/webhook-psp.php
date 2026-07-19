@@ -58,14 +58,9 @@ if ($status === 'success') {
         'trader' => 'Trader (3 Months)',
         'pro' => 'Pro (6 Months)',
     ];
-    $packageNamesBR = [
-        'starter' => 'Starter (1 Mês)',
-        'trader' => 'Trader (3 Meses)',
-        'pro' => 'Pro (6 Meses)',
-    ];
     $amountFloat = floatval($amount);
 
-    // Look up order metadata from pending file — BR orders use BRL/Pix
+    // Look up order metadata from pending file
     $pendingFile = __DIR__ . '/payou_pending.json';
     $pending = file_exists($pendingFile) ? json_decode(file_get_contents($pendingFile), true) ?: [] : [];
     $currency = 'EUR';
@@ -79,7 +74,6 @@ if ($status === 'success') {
             break;
         }
     }
-    $isPix = ($method === 'payou_pix' || $currency === 'BRL');
 
     // Append to sales.json (prevent duplicates by intid)
     $sales = file_exists($salesFile) ? (json_decode(file_get_contents($salesFile), true) ?: []) : [];
@@ -114,21 +108,12 @@ if ($status === 'success') {
         $token = $env['TELEGRAM_BOT_TOKEN'] ?? '';
         $chatId = $env['TELEGRAM_CHAT_ID'] ?? '';
         if ($token && $chatId) {
-            if ($isPix) {
-                $name = $packageNamesBR[$package] ?? $package;
-                $msg = "💸 Pagamento Pix confirmado! (Payou BR)\n\n"
-                    . "Plano: {$name}\n"
-                    . "Valor: R$ {$amountFloat}\n"
-                    . "Pedido: {$orderId}\n"
-                    . "Horário: " . date('Y-m-d H:i') . " UTC";
-            } else {
-                $name = $packageNames[$package] ?? $package;
-                $msg = "💳 Card payment confirmed! (Payou)\n\n"
-                    . "Plan: {$name}\n"
-                    . "Amount: {$currency} {$amountFloat}\n"
-                    . "Order: {$orderId}\n"
-                    . "Time: " . date('Y-m-d H:i') . " UTC";
-            }
+            $name = $packageNames[$package] ?? $package;
+            $msg = "💳 Card payment confirmed! (Payou)\n\n"
+                . "Plan: {$name}\n"
+                . "Amount: {$currency} {$amountFloat}\n"
+                . "Order: {$orderId}\n"
+                . "Time: " . date('Y-m-d H:i') . " UTC";
             $ch = curl_init("https://api.telegram.org/bot{$token}/sendMessage");
             curl_setopt_array($ch, [
                 CURLOPT_POST => true,

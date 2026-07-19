@@ -58,28 +58,10 @@ if (!$token || strlen($token) !== 64) {
     }
 }
 
-$isBR = ($locale === 'pt-BR');
 $isIN = ($locale === 'en-IN');
 
-// Localized strings
-$t = $isBR ? [
-    'title_ok' => 'Pagamento Confirmado',
-    'title_err' => 'Link Expirado',
-    'subtitle_ok' => 'Seu pagamento foi confirmado. Use o código de ativação abaixo para iniciar sua assinatura.',
-    'subtitle_err' => 'Este link de ativação já foi usado ou é inválido. Cada link só pode ser aberto uma vez. Se você acredita que isso é um erro, fale com o suporte.',
-    'code_label' => 'Seu Código de Ativação',
-    'copy' => 'COPIAR CÓDIGO',
-    'copied' => 'COPIADO!',
-    'steps_title' => 'COMO ATIVAR',
-    'step1' => 'Abra nosso bot do Telegram clicando no botão abaixo',
-    'step2_pre' => 'Pressione', 'step2_strong' => 'Iniciar', 'step2_mid' => 'ou envie', 'step2_cmd' => '/start', 'step2_post' => 'para o bot',
-    'step3' => 'Envie seu código de ativação (mostrado acima) ao bot',
-    'step4_pre' => 'Pronto! Você terá acesso instantâneo ao', 'step4_strong' => 'canal privado de sinais',
-    'open_bot' => 'ABRIR BOT NO TELEGRAM',
-    'support' => 'FALAR COM SUPORTE',
-    'back' => '← Voltar para MomentoCrypto',
-    'footer_note' => 'Este link é único e descartável. Salve seu código agora. Em caso de dúvidas, fale com o suporte pelo bot.',
-] : [
+// Localized strings — English only (BR site retired)
+$t = [
     'title_ok' => 'PAYMENT SUCCESSFUL',
     'title_err' => 'LINK EXPIRED',
     'subtitle_ok' => 'Your payment has been confirmed. Use the activation code below to start your subscription.',
@@ -113,10 +95,10 @@ if ($isFbUser) {
 }
 $tgBotLink = 'https://t.me/momentocrypto_bot?start=' . urlencode($tgStart);
 
-$currencySymbol = $currency === 'BRL' ? 'R$' : ($currency === 'EUR' ? '€' : ($currency === 'INR' ? '₹' : '$'));
+$currencySymbol = $currency === 'EUR' ? '€' : ($currency === 'INR' ? '₹' : '$');
 ?>
 <!DOCTYPE html>
-<html lang="<?= $isBR ? 'pt-BR' : 'en' ?>">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -197,7 +179,7 @@ fbq('track', 'Purchase', {
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12l-6.871 4.326-2.962-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.194 1.006.131.833.941z" fill="currentColor"/></svg>
     <?= $t['support'] ?>
   </a>
-  <br><a href="<?= $isBR ? '/br' : ($isIN ? '/in' : '/') ?>" class="back-btn"><?= $t['back'] ?></a>
+  <br><a href="<?= $isIN ? '/in' : '/' ?>" class="back-btn"><?= $t['back'] ?></a>
 </div>
 
 <?php else: ?>

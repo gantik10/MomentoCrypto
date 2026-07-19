@@ -39,7 +39,7 @@ function mc_send_meta_purchase($order) {
     ]);
 
     $customData = [
-        'currency' => $order['currency'] ?? 'BRL',
+        'currency' => $order['currency'] ?? 'USD',
         'value' => floatval($order['amount']),
         'content_type' => 'product',
         'content_ids' => [$order['package'] ?? 'unknown'],

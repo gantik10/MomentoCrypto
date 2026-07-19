@@ -721,31 +721,16 @@ async function renderDailyAdmin(c) {
     <div class="chart-wrap">
       <div class="chart-title">New / Edit post</div>
       <form id="dailyForm" onsubmit="return saveDaily(event)" style="display:grid;gap:12px;">
-        <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:10px;">
-          <label style="font-size:11px;color:var(--muted);">Date<br><input name="date" type="date" required value="${today}" style="width:100%;padding:8px 10px;background:var(--bg);border:1px solid var(--border);border-radius:6px;color:var(--text);"></label>
-          <label style="font-size:11px;color:var(--muted);">Wins<br><input name="win_count" type="number" min="0" placeholder="e.g. 5" style="width:100%;padding:8px 10px;background:var(--bg);border:1px solid var(--border);border-radius:6px;color:var(--text);"></label>
-          <label style="font-size:11px;color:var(--muted);">Losses<br><input name="loss_count" type="number" min="0" placeholder="e.g. 1" style="width:100%;padding:8px 10px;background:var(--bg);border:1px solid var(--border);border-radius:6px;color:var(--text);"></label>
-          <label style="font-size:11px;color:var(--muted);">Total PnL %<br><input name="total_pnl_pct" type="number" step="0.1" placeholder="e.g. 18.2" style="width:100%;padding:8px 10px;background:var(--bg);border:1px solid var(--border);border-radius:6px;color:var(--text);"></label>
-        </div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
-          <div>
-            <div style="font-size:11px;color:var(--green);font-weight:700;letter-spacing:1px;margin-bottom:6px;">🇧🇷 PORTUGUÊS (BR)</div>
-            <label style="font-size:11px;color:var(--muted);display:block;margin-bottom:8px;">Title<br>
-              <input name="title_pt" type="text" required placeholder="ex. Resultados de 19 de Maio · 5 trades · +18.2%" style="width:100%;padding:10px 12px;background:var(--bg);border:1px solid var(--border);border-radius:6px;color:var(--text);font-size:14px;">
-            </label>
-            <label style="font-size:11px;color:var(--muted);">Body (com parágrafos e emojis)<br>
-              <textarea name="body_pt" required rows="10" placeholder="📊 Dia espetacular!&#10;&#10;✅ BTC long fechou em +6.3%&#10;✅ ETH long fechou em +4.1%&#10;..." style="width:100%;padding:10px 12px;background:var(--bg);border:1px solid var(--border);border-radius:6px;color:var(--text);font-family:inherit;font-size:14px;resize:vertical;"></textarea>
-            </label>
-          </div>
-          <div>
-            <div style="font-size:11px;color:var(--blue);font-weight:700;letter-spacing:1px;margin-bottom:6px;">🇺🇸 ENGLISH</div>
-            <label style="font-size:11px;color:var(--muted);display:block;margin-bottom:8px;">Title<br>
-              <input name="title_en" type="text" required placeholder="e.g. Results · May 19 · 5 trades · +18.2%" style="width:100%;padding:10px 12px;background:var(--bg);border:1px solid var(--border);border-radius:6px;color:var(--text);font-size:14px;">
-            </label>
-            <label style="font-size:11px;color:var(--muted);">Body (paragraphs + emojis)<br>
-              <textarea name="body_en" required rows="10" placeholder="📊 Massive day!&#10;&#10;✅ BTC long closed +6.3%&#10;✅ ETH long closed +4.1%&#10;..." style="width:100%;padding:10px 12px;background:var(--bg);border:1px solid var(--border);border-radius:6px;color:var(--text);font-family:inherit;font-size:14px;resize:vertical;"></textarea>
-            </label>
-          </div>
+        <label style="font-size:11px;color:var(--muted);max-width:220px;">Date<br><input name="date" type="date" required value="${today}" style="width:100%;padding:8px 10px;background:var(--bg);border:1px solid var(--border);border-radius:6px;color:var(--text);"></label>
+        <div>
+          <div style="font-size:11px;color:var(--blue);font-weight:700;letter-spacing:1px;margin-bottom:6px;">POST</div>
+          <label style="font-size:11px;color:var(--muted);display:block;margin-bottom:8px;">Title<br>
+            <input name="title_en" type="text" required placeholder="e.g. Results · July 19 · 6 trades · +865%" style="width:100%;padding:10px 12px;background:var(--bg);border:1px solid var(--border);border-radius:6px;color:var(--text);font-size:14px;">
+          </label>
+          <label style="font-size:11px;color:var(--muted);">Body (paragraphs + emojis)<br>
+            <textarea name="body_en" required rows="10" placeholder="✅ BTC long closed +6.3%&#10;✅ ETH long closed +4.1%&#10;❌ SOL long stopped -2.1%&#10;..." style="width:100%;padding:10px 12px;background:var(--bg);border:1px solid var(--border);border-radius:6px;color:var(--text);font-family:inherit;font-size:14px;resize:vertical;"></textarea>
+          </label>
+          <div style="font-size:11px;color:var(--muted);margin-top:4px;">💡 Track-record stats (wins / losses / cumulative %) are computed automatically by parsing ✅ / ❌ and any <code>+X%</code> / <code>-X%</code> on each line — no separate fields.</div>
         </div>
         <label style="font-size:11px;color:var(--muted);">Image (PNG/JPG/WebP, max 8MB) — <strong style="color:var(--green);">paste from clipboard with ⌘V / Ctrl+V anywhere on this form</strong>, or choose a file<br>
           <div id="pasteZone" tabindex="0" style="margin-top:6px;padding:14px;border:1.5px dashed rgba(57,255,20,0.35);border-radius:8px;background:rgba(57,255,20,0.03);color:var(--muted);font-size:12px;text-align:center;cursor:pointer;outline:none;transition:all 0.2s;">
@@ -766,28 +751,23 @@ async function renderDailyAdmin(c) {
     <div class="chart-wrap">
       <div class="chart-title">Published posts (${posts.length})</div>
       <div class="table-wrap"><table>
-        <thead><tr><th>Date</th><th>Title (PT / EN)</th><th>W/L</th><th>PnL %</th><th>Image</th><th></th></tr></thead>
+        <thead><tr><th>Date</th><th>Title</th><th>Image</th><th></th></tr></thead>
         <tbody>
           ${posts.map(p => `<tr>
             <td>${escapeHTML(p.date || '')}</td>
-            <td style="max-width:360px;font-size:12px;line-height:1.5;">
-              <div>🇧🇷 ${escapeHTML((p.title_pt || p.title || '').slice(0, 70))}</div>
-              <div style="color:var(--muted);">🇺🇸 ${escapeHTML((p.title_en || '').slice(0, 70))}</div>
-            </td>
-            <td>${p.win_count != null ? p.win_count + 'W' : '—'} / ${p.loss_count != null ? p.loss_count + 'L' : '—'}</td>
-            <td><strong>${p.total_pnl_pct != null ? (p.total_pnl_pct >= 0 ? '+' : '') + p.total_pnl_pct.toFixed(1) + '%' : '—'}</strong></td>
+            <td style="max-width:520px;font-size:13px;line-height:1.5;">${escapeHTML((p.title_en || p.title || p.title_pt || '').slice(0, 100))}</td>
             <td>${p.image ? `<a href="${escapeHTML(p.image)}" target="_blank">view</a>` : '—'}</td>
             <td><button onclick="editDaily(${JSON.stringify(p).replace(/"/g, '&quot;')})" style="padding:4px 10px;background:var(--card);border:1px solid var(--border);color:var(--text);border-radius:4px;cursor:pointer;font-size:11px;">Edit</button>
                 <button onclick="deleteDaily('${escapeHTML(p.id)}')" style="padding:4px 10px;background:rgba(255,71,87,0.15);border:1px solid rgba(255,71,87,0.4);color:var(--red);border-radius:4px;cursor:pointer;font-size:11px;margin-left:4px;">Delete</button></td>
-          </tr>`).join('') || '<tr><td colspan="6" style="color:var(--muted);text-align:center;padding:32px;">No posts yet — publish your first daily result above.</td></tr>'}
+          </tr>`).join('') || '<tr><td colspan="4" style="color:var(--muted);text-align:center;padding:32px;">No posts yet — publish your first daily result above.</td></tr>'}
         </tbody>
       </table></div>
     </div>
 
     <div class="chart-wrap" style="font-size:12px;color:var(--muted);line-height:1.6;">
       <div class="chart-title" style="color:var(--text);">Backfill tip</div>
-      To seed the feed with your last 7-8 days, just publish them one by one above with the correct date. The site sorts by date automatically.<br>
-      The "Publicamos desde…" cover line on /br defaults to <code>2026-05-12</code> — change it by setting <code>DAILY_RESULTS_PUBLIC_SINCE=YYYY-MM-DD</code> in <code>/root/MomentoCrypto/.env</code>.
+      To seed the feed with your last few days, publish them one by one above with the correct date. The site sorts by date automatically.<br>
+      The "Publishing daily results since…" cover line defaults to <code>2026-05-12</code> — change it by setting <code>DAILY_RESULTS_PUBLIC_SINCE=YYYY-MM-DD</code> in <code>/root/MomentoCrypto/.env</code>.
     </div>
   `;
 
@@ -871,14 +851,9 @@ window.saveDaily = async function(ev) {
   const f = ev.target;
   const body = {
     date: f.date.value,
-    title_pt: f.title_pt.value.trim(),
     title_en: f.title_en.value.trim(),
-    body_pt: f.body_pt.value.trim(),
     body_en: f.body_en.value.trim(),
     image: f.image.value,
-    win_count: f.win_count.value === '' ? null : parseInt(f.win_count.value, 10),
-    loss_count: f.loss_count.value === '' ? null : parseInt(f.loss_count.value, 10),
-    total_pnl_pct: f.total_pnl_pct.value === '' ? null : parseFloat(f.total_pnl_pct.value),
   };
   document.getElementById('saveMsg').textContent = 'Saving…';
   try {
@@ -901,14 +876,9 @@ window.saveDaily = async function(ev) {
 window.editDaily = function(p) {
   const f = document.getElementById('dailyForm');
   f.date.value = p.date || '';
-  f.title_pt.value = p.title_pt || p.title || '';
-  f.title_en.value = p.title_en || '';
-  f.body_pt.value = p.body_pt || p.body || '';
-  f.body_en.value = p.body_en || '';
+  f.title_en.value = p.title_en || p.title || p.title_pt || '';
+  f.body_en.value = p.body_en || p.body || p.body_pt || '';
   f.image.value = p.image || '';
-  f.win_count.value = p.win_count == null ? '' : p.win_count;
-  f.loss_count.value = p.loss_count == null ? '' : p.loss_count;
-  f.total_pnl_pct.value = p.total_pnl_pct == null ? '' : p.total_pnl_pct;
   if (p.image) document.getElementById('imgPreview').innerHTML = `<img src="${p.image}" style="max-height:120px;border-radius:6px;">`;
   window.scrollTo({ top: 0, behavior: 'smooth' });
 };

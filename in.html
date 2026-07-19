@@ -2208,22 +2208,22 @@
     </div>
     <h1>CRYPTO SIGNALS<br><span class="green">ON TELEGRAM.</span></h1>
     <p class="hero-sub">Live trade alerts, daily market analysis, and verified results — delivered direct to your Telegram. Open the MomentoCrypto bot and see what 4,200+ Indian traders are getting every day.</p>
-    <div class="hero-stats">
+    <div class="hero-stats" id="heroStats">
       <div class="stat">
         <div class="stat-num" data-count="4200">0</div>
         <div class="stat-label">Active Members</div>
       </div>
       <div class="stat">
-        <div class="stat-num" data-count="87" data-suffix="%">0%</div>
+        <div class="stat-num" id="heroWinRate" data-count="87" data-suffix="%">0%</div>
         <div class="stat-label">Win Rate</div>
       </div>
       <div class="stat">
-        <div class="stat-num" data-count="340" data-suffix="%">0%</div>
-        <div class="stat-label">Avg. Monthly ROI</div>
+        <div class="stat-num" id="heroCumulative" data-count="340" data-suffix="%">0%</div>
+        <div class="stat-label">Cumulative PnL</div>
       </div>
       <div class="stat">
-        <div class="stat-num">3 YEARS</div>
-        <div class="stat-label">Track Record</div>
+        <div class="stat-num" id="heroBestTrade" data-count="399" data-suffix="%">0%</div>
+        <div class="stat-label">Best Trade</div>
       </div>
     </div>
 
@@ -2736,30 +2736,19 @@
     if (e.key === 'Escape') document.getElementById('dailyLightbox')?.classList.remove('show');
   });
 
-  // Pagination: load 6 at a time. "Load more" until none left → swap for "More results to come"
-  const DAILY_BATCH = 6;
-  let _allPosts = [];
-  let _shown = 0;
-
-  function renderTail() {
-    const tail = document.getElementById('dailyTail');
-    if (!tail) return;
-    if (_shown < _allPosts.length) {
-      tail.innerHTML = `<div class="daily-load-more-wrap"><button class="daily-load-more" id="dailyLoadMore">CARREGAR MAIS ↓</button></div>`;
-      document.getElementById('dailyLoadMore').addEventListener('click', loadMore);
-    } else {
-      tail.innerHTML = renderMoreSoonCard();
-      tail.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-    }
-  }
-
-  function loadMore() {
-    const feed = document.getElementById('dailyFeed');
-    const batch = _allPosts.slice(_shown, _shown + DAILY_BATCH);
-    feed.insertAdjacentHTML('beforeend', batch.map(p => renderDailyCard(p, false)).join(''));
-    _shown += batch.length;
-    feed.querySelectorAll('.reveal:not(.visible)').forEach(el => observer.observe(el));
-    renderTail();
+  // Update hero stats from the /api/daily-results.php stats blob
+  function applyHeroStats(stats) {
+    if (!stats) return;
+    const set = (id, val, suffix) => {
+      const el = document.getElementById(id);
+      if (!el || val == null) return;
+      el.setAttribute('data-count', Math.round(val));
+      if (suffix) el.setAttribute('data-suffix', suffix);
+      el.textContent = (Math.round(val * 10) / 10) + (suffix || '');
+    };
+    if (stats.win_rate_pct != null) set('heroWinRate', stats.win_rate_pct, '%');
+    if (stats.cumulative_pct != null) set('heroCumulative', stats.cumulative_pct, '%');
+    if (stats.best_trade_pct != null) set('heroBestTrade', stats.best_trade_pct, '%');
   }
 
   async function loadDailyResults() {
@@ -2771,18 +2760,21 @@
       if (data.public_since && since) {
         since.querySelector('span:last-child').innerHTML = `<strong>We've been posting daily public results since ${escapeHtml(fmtDateEN(data.public_since))}.</strong> Before that, we kept everything inside the private Telegram channel for paid members. We now publish here too for full transparency.`;
       }
-      _allPosts = data.posts || [];
-      if (!_allPosts.length) {
+      applyHeroStats(data.stats);
+      const posts = data.posts || [];
+      if (!posts.length) {
         feed.innerHTML = '';
         document.getElementById('dailyTail').innerHTML = renderMoreSoonCard();
         return;
       }
-      // First batch — mark the most-recent card as today/latest with glow
-      const firstBatch = _allPosts.slice(0, DAILY_BATCH);
-      feed.innerHTML = firstBatch.map((p, i) => renderDailyCard(p, i === 0)).join('');
-      _shown = firstBatch.length;
+      // Show every post at once — feed is finite and full transparency helps bot-conversion trust
+      feed.innerHTML = posts.map((p, i) => renderDailyCard(p, i === 0)).join('');
       feed.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-      renderTail();
+      const tail = document.getElementById('dailyTail');
+      if (tail) {
+        tail.innerHTML = renderMoreSoonCard();
+        tail.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+      }
     } catch (e) {
       feed.innerHTML = `<div class="daily-empty">Couldn't load results right now. Try refreshing the page.</div>`;
     }
