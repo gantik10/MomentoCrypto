@@ -1946,8 +1946,8 @@
         <div class="stat-label">Active Members</div>
       </div>
       <div class="stat">
-        <div class="stat-num" id="heroWinRate" data-count="87" data-suffix="%">0%</div>
-        <div class="stat-label">Win Rate</div>
+        <div class="stat-num" id="heroSignals" data-count="100">0</div>
+        <div class="stat-label">Signals Delivered</div>
       </div>
       <div class="stat">
         <div class="stat-num" id="heroCumulative" data-count="340" data-suffix="%">0%</div>
@@ -2508,7 +2508,7 @@
       if (suffix) el.setAttribute('data-suffix', suffix);
       el.textContent = (Math.round(val * 10) / 10) + (suffix || '');
     };
-    if (stats.win_rate_pct != null) set('heroWinRate', stats.win_rate_pct, '%');
+    if (stats.total_trades != null) set('heroSignals', stats.total_trades, '');
     if (stats.cumulative_pct != null) set('heroCumulative', stats.cumulative_pct, '%');
     if (stats.best_trade_pct != null) set('heroBestTrade', stats.best_trade_pct, '%');
   }
