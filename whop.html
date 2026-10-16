@@ -1910,44 +1910,6 @@
   .hero-pkg-payment-icons { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
   .hero-pkg-accepts { font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: rgba(245,245,245,0.45); }
 
-  .hero-top { display: grid; grid-template-columns: minmax(0, 1fr); gap: 40px; align-items: center; }
-  @media (min-width: 1100px) { .hero-top { grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr); } }
-  .hero-sub { margin-bottom: 30px; }
-  .hero-cta-row { display: flex; gap: 14px; flex-wrap: wrap; align-items: center; }
-  .hero-cta-primary {
-    display: inline-flex; align-items: center; gap: 10px;
-    background: var(--green); color: var(--black); text-decoration: none;
-    font-family: 'DM Sans', sans-serif; font-weight: 700; font-size: 16px;
-    padding: 17px 30px; border-radius: 12px;
-    box-shadow: 0 0 0 1px rgba(57,255,20,0.6), 0 10px 40px rgba(57,255,20,0.25);
-    transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
-  }
-  .hero-cta-primary span { transition: transform 0.2s; }
-  .hero-cta-primary:hover { background: #4fff2a; transform: translateY(-2px); box-shadow: 0 0 0 1px #4fff2a, 0 14px 50px rgba(57,255,20,0.4); }
-  .hero-cta-primary:hover span { transform: translateX(3px); }
-  .hero-cta-secondary {
-    color: var(--white); text-decoration: none; font-size: 15px; font-weight: 500;
-    padding: 16px 22px; border-radius: 12px; border: 1px solid rgba(245,245,245,0.18);
-    transition: border-color 0.2s, background 0.2s;
-  }
-  .hero-cta-secondary:hover { border-color: rgba(57,255,20,0.5); background: rgba(57,255,20,0.05); }
-  .hero-trust-line { display: flex; flex-wrap: wrap; gap: 8px 22px; margin-top: 20px; font-size: 13px; color: rgba(245,245,245,0.6); }
-
-  .hero-proof {
-    background: linear-gradient(180deg, rgba(57,255,20,0.06), rgba(17,17,17,0.9));
-    border: 1px solid rgba(57,255,20,0.25); border-radius: 18px; padding: 18px;
-    box-shadow: 0 20px 70px rgba(0,0,0,0.5), 0 0 60px rgba(57,255,20,0.08);
-  }
-  .hero-proof[hidden] { display: none; }
-  .hero-proof-head { display: flex; align-items: center; gap: 8px; font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 2px; color: var(--green); margin-bottom: 8px; }
-  .hero-proof-live { width: 8px; height: 8px; border-radius: 50%; background: var(--green); box-shadow: 0 0 10px var(--green); animation: blink 1.4s step-end infinite; }
-  .hero-proof-title { font-family: 'Bebas Neue', sans-serif; font-size: 24px; letter-spacing: 1px; color: var(--white); margin-bottom: 12px; line-height: 1.1; }
-  .hero-proof-img { border-radius: 10px; overflow: hidden; cursor: zoom-in; border: 1px solid rgba(245,245,245,0.08); max-height: 300px; }
-  .hero-proof-img img { display: block; width: 100%; height: 100%; max-height: 300px; object-fit: cover; object-position: top; }
-  .hero-proof-link { display: inline-block; margin-top: 12px; font-size: 13px; font-weight: 600; color: var(--green); text-decoration: none; }
-  .hero-proof-link:hover { text-decoration: underline; }
-  @media (max-width: 1099px) { .hero-proof { display: none; } }
-
   .pkg-card.value::before {
     content: 'BEST VALUE'; position: absolute; top: -14px; left: 50%; transform: translateX(-50%);
     background: var(--white); color: var(--black); font-family: 'Space Mono', monospace;
@@ -1967,58 +1929,8 @@
 
   .payment-trust-notes { display: flex; justify-content: center; flex-wrap: wrap; gap: 8px 24px; margin-top: 18px; font-size: 13px; color: rgba(245,245,245,0.6); }
 
-  .daily-carousel { position: relative; }
-  #dailyFeed.daily-feed {
-    display: flex; gap: 20px; overflow-x: auto; scroll-snap-type: x mandatory;
-    padding: 6px 2px 18px; scrollbar-width: thin; scrollbar-color: rgba(57,255,20,0.35) transparent;
-  }
-  #dailyFeed.daily-feed::-webkit-scrollbar { height: 6px; }
-  #dailyFeed.daily-feed::-webkit-scrollbar-thumb { background: rgba(57,255,20,0.35); border-radius: 3px; }
-  #dailyFeed .daily-card { flex: 0 0 340px; scroll-snap-align: start; display: flex; flex-direction: column; }
-  #dailyFeed .daily-card-body-text {
-    max-height: 250px; overflow: hidden;
-    -webkit-mask-image: linear-gradient(180deg, #000 75%, transparent); mask-image: linear-gradient(180deg, #000 75%, transparent);
-  }
-  #dailyFeed .daily-card-img img { max-height: 320px; object-fit: cover; object-position: top; }
-  #dailyFeed .daily-card-tg-link { margin-top: auto; }
-  .daily-nav {
-    position: absolute; top: 40%; z-index: 3; width: 46px; height: 46px; border-radius: 50%;
-    background: rgba(8,8,8,0.9); border: 1px solid rgba(57,255,20,0.45); color: var(--green);
-    font-size: 28px; line-height: 1; cursor: pointer; display: flex; align-items: center; justify-content: center;
-    box-shadow: 0 8px 30px rgba(0,0,0,0.6); transition: background 0.2s;
-  }
-  .daily-nav:hover { background: rgba(57,255,20,0.15); }
-  .daily-nav.prev { left: -23px; }
-  .daily-nav.next { right: -23px; }
-  .daily-swipe-hint { text-align: center; margin-top: 6px; font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: rgba(245,245,245,0.4); }
-  @media (max-width: 900px) {
-    .daily-nav { display: none; }
-    #dailyFeed .daily-card { flex-basis: 84vw; }
-  }
-
   .whop-assure { font-size: 12px; color: rgba(245,245,245,0.55); margin: -8px 0 14px; }
 
-  .sticky-cta {
-    position: fixed; left: 12px; right: 12px; bottom: 12px; z-index: 10003;
-    display: none; align-items: center; justify-content: space-between; gap: 12px;
-    background: rgba(17,17,17,0.96); border: 1px solid rgba(57,255,20,0.4); border-radius: 14px;
-    padding: 10px 10px 10px 16px; backdrop-filter: blur(10px);
-    box-shadow: 0 10px 40px rgba(0,0,0,0.6);
-    transform: translateY(140%); transition: transform 0.3s ease;
-  }
-  .sticky-cta-text { display: flex; flex-direction: column; line-height: 1.25; }
-  .sticky-cta-text strong { color: var(--white); font-size: 15px; }
-  .sticky-cta-text span { color: rgba(245,245,245,0.55); font-size: 12px; }
-  .sticky-cta-btn { background: var(--green); color: var(--black); font-weight: 700; font-size: 15px; text-decoration: none; padding: 12px 18px; border-radius: 10px; white-space: nowrap; }
-  @media (max-width: 900px) {
-    .sticky-cta { display: flex; }
-    body.sticky-cta-on .sticky-cta { transform: translateY(0); }
-    body.sticky-cta-on .support-fab-wrap { bottom: 86px; }
-    body.sticky-cta-on .test-pay-btn { bottom: 86px !important; }
-    .hero-cta-primary { width: 100%; justify-content: center; }
-    .hero-cta-secondary { width: 100%; text-align: center; }
-    .hero-trust-line { font-size: 12px; gap: 6px 14px; }
-  }
 </style>
 </head>
 <body>
@@ -2063,24 +1975,12 @@
   <div class="hero-bg"></div>
   <div class="hero-grid"></div>
   <div class="hero-inner">
-    <div class="hero-top">
-    <div class="hero-copy">
     <div class="hero-ticker">
       <span class="ticker-dot"></span>
       Live signals · 24/7 coverage
     </div>
     <h1>SIGNALS<br>THAT <span class="green">HIT.</span></h1>
     <p class="hero-sub">Professional crypto signals with verified results. Join thousands of traders already winning with MomentoCrypto's premium community.</p>
-    <div class="hero-cta-row">
-      <a href="#packages" class="hero-cta-primary">See plans &mdash; from $20 <span>&rarr;</span></a>
-      <a href="#results" class="hero-cta-secondary">View daily results</a>
-    </div>
-    <div class="hero-trust-line">
-      <span>&#128274; Secure checkout</span><span>&#9889; Instant Telegram access</span><span>&#10003; One-time payment, no subscription</span>
-    </div>
-    </div>
-    <aside class="hero-proof" id="heroProof" hidden></aside>
-    </div>
     <div class="hero-stats" id="heroStats">
       <div class="stat">
         <div class="stat-num" data-count="4200">0</div>
@@ -2266,14 +2166,9 @@
   <div class="section-label reveal">Verified results</div>
   <h2 class="reveal">DAILY <span>RESULTS.</span><br>PUBLISHED HERE.</h2>
   <p class="results-intro reveal">A public daily recap of every trading day: closed trades, % gained, and the real P&amp;L screenshot. No cherry-picking. No hiding losses.</p>
-  <div class="daily-carousel">
-    <button class="daily-nav prev" aria-label="Previous results" onclick="scrollDaily(-1)">&lsaquo;</button>
-    <div class="daily-feed" id="dailyFeed">
-      <div class="daily-empty">Loading results…</div>
-    </div>
-    <button class="daily-nav next" aria-label="More results" onclick="scrollDaily(1)">&rsaquo;</button>
+  <div class="daily-feed" id="dailyFeed">
+    <div class="daily-empty">Loading results…</div>
   </div>
-  <div class="daily-swipe-hint" id="dailySwipeHint">Swipe through every published day &rarr;</div>
   <div id="dailyTail"></div>
 
   <div class="results-cta reveal">
@@ -2612,28 +2507,6 @@
     if (e.key === 'Escape') document.getElementById('dailyLightbox')?.classList.remove('show');
   });
 
-  // Above-the-fold proof: the latest published recap, image-first
-  function renderHeroProof(posts, stats) {
-    const box = document.getElementById('heroProof');
-    const p = posts && posts[0];
-    if (!box || !p || !p.image) return;
-    const title = p.title_en || p.title || '';
-    const days = stats && stats.displayed_days_published ? stats.displayed_days_published : posts.length;
-    box.innerHTML = `
-      <div class="hero-proof-head"><span class="hero-proof-live"></span>LATEST RESULTS &middot; ${escapeHtml(fmtDateEN(p.date))}</div>
-      <div class="hero-proof-title">${escapeHtml(title)}</div>
-      <div class="hero-proof-img" onclick="openLightbox('${escapeHtml(p.image).replace(/'/g, "\\'")}')"><img src="${escapeHtml(p.image)}" alt="${escapeHtml(title)}"></div>
-      <a href="#results" class="hero-proof-link">See all ${days}+ days of public results &rarr;</a>`;
-    box.hidden = false;
-  }
-
-  window.scrollDaily = function(dir) {
-    const feed = document.getElementById('dailyFeed');
-    const card = feed && feed.querySelector('.daily-card');
-    if (!card) return;
-    feed.scrollBy({ left: dir * (card.getBoundingClientRect().width + 20) * (window.innerWidth > 900 ? 2 : 1), behavior: 'smooth' });
-  };
-
   // Update hero stats from the /api/daily-results.php stats blob
   function applyHeroStats(stats) {
     if (!stats) return;
@@ -2661,7 +2534,6 @@
       }
       applyHeroStats(data.stats);
       const posts = data.posts || [];
-      renderHeroProof(posts, data.stats);
       if (!posts.length) {
         feed.innerHTML = '';
         document.getElementById('dailyTail').innerHTML = renderMoreSoonCard();
@@ -2851,29 +2723,8 @@
   </div>
 </div>
 
-<!-- Sticky mobile CTA (shown when no pricing grid is on screen) -->
-<div class="sticky-cta" id="stickyCta">
-  <div class="sticky-cta-text"><strong>From $20</strong><span>One-time &middot; instant access</span></div>
-  <a href="#packages" class="sticky-cta-btn">Get access &rarr;</a>
-</div>
-<script>
-(function(){
-  const bar = document.getElementById('stickyCta');
-  const watched = [document.getElementById('packages'), document.querySelector('.bottom-packages')].filter(Boolean);
-  const visible = new Set();
-  let pastHero = false;
-  function update() { document.body.classList.toggle('sticky-cta-on', pastHero && visible.size === 0); }
-  const io = new IntersectionObserver((entries) => {
-    entries.forEach(e => e.isIntersecting ? visible.add(e.target) : visible.delete(e.target));
-    update();
-  }, { threshold: 0.15 });
-  watched.forEach(el => io.observe(el));
-  window.addEventListener('scroll', () => { pastHero = window.scrollY > window.innerHeight * 0.9; update(); }, { passive: true });
-})();
-</script>
-
 <!-- Test payment button (fixed, test page only) -->
-<button class="test-pay-btn" onclick="openWhopCheckout('test')" style="position:fixed;bottom:16px;left:16px;z-index:10004;font-family:'Space Mono',monospace;font-size:11px;font-weight:700;letter-spacing:1px;padding:10px 16px;background:#ff9f43;color:#000;border:none;border-radius:8px;cursor:pointer;box-shadow:0 4px 16px rgba(255,159,67,0.4);">🧪 TEST PAYMENT $1</button>
+<button onclick="openWhopCheckout('test')" style="position:fixed;bottom:16px;left:16px;z-index:10004;font-family:'Space Mono',monospace;font-size:11px;font-weight:700;letter-spacing:1px;padding:10px 16px;background:#ff9f43;color:#000;border:none;border-radius:8px;cursor:pointer;box-shadow:0 4px 16px rgba(255,159,67,0.4);">🧪 TEST PAYMENT $1</button>
 
 <!-- Whop embedded checkout modal -->
 <style>
