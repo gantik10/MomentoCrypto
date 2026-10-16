@@ -2605,6 +2605,15 @@
   .tm-badge-pill .hx-live { width: 8px; height: 8px; }
   @media (max-width: 600px) { .tm-badge-pill { font-size: 9.5px; letter-spacing: 0.6px; padding: 7px 11px; gap: 7px; } }
   .tm-story-text { margin-bottom: 30px; }
+
+  /* How-it-works rail: float it through the icon centres, clear of the card tops */
+  @media (min-width: 1025px) {
+    .hw-orb { margin-bottom: -24px; }
+    .hw-card { padding-top: 44px; }
+    .hw-grid::before { top: 51px; left: calc((100% - 60px) / 8); right: calc((100% - 60px) / 8); }
+    .hw-grid::after { top: 48px; }
+    @keyframes hwPulse { 0% { left: calc((100% - 60px) / 8); opacity: 0; } 10%, 90% { opacity: 1; } 100% { left: calc(100% - (100% - 60px) / 8 - 70px); opacity: 0; } }
+  }
 </style>
 </head>
 <body>
