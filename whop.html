@@ -2623,6 +2623,22 @@
     .tm-card .tm-role { font-size: 7.5px; letter-spacing: 0.6px; margin-top: 3px; line-height: 1.3; }
     .tm-photo::after { background: linear-gradient(180deg, rgba(8,8,8,0) 50%, rgba(8,8,8,0.92) 100%); }
   }
+
+  /* signal-count stat removed: 3-up stat rows */
+  .hx-stats { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .rx-strip { grid-template-columns: repeat(3, minmax(0,1fr)); }
+  @media (max-width: 900px) {
+    .hx-stats { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+    .rx-strip { grid-template-columns: repeat(3, minmax(0,1fr)); gap: 8px; }
+  }
+  @media (max-width: 600px) {
+    .hx-stats .stat { padding: 14px 12px; }
+    .hx-stats .stat-num { font-size: 30px; }
+    .hx-stats .stat-label { font-size: 8.5px; letter-spacing: 1.2px; }
+    .rx-chip { padding: 14px 10px; min-width: 0; }
+    .rx-chip-num { font-size: 24px; white-space: nowrap; }
+    .rx-chip-label { font-size: 8.5px; letter-spacing: 1.2px; }
+  }
 </style>
 </head>
 <body>
@@ -2684,10 +2700,6 @@
       <div class="stat">
         <div class="stat-num" data-count="4200">0</div>
         <div class="stat-label">Members</div>
-      </div>
-      <div class="stat">
-        <div class="stat-num" id="heroSignals" data-count="100">0</div>
-        <div class="stat-label">Signals posted</div>
       </div>
       <div class="stat">
         <div class="stat-num" id="heroCumulative" data-count="340" data-suffix="%">0%</div>
@@ -2953,7 +2965,6 @@
   <h2 class="reveal">CLOSED TRADES.<br><span>PUBLIC RECAPS.</span></h2>
   <p class="results-intro reveal">We publish recaps from time to time: wins and losses, percentage results and real P&amp;L screenshots from closed trades.</p>
   <div class="rx-strip reveal" id="rxStrip" hidden>
-    <div class="rx-chip"><span class="rx-chip-num" id="rxTrades">&mdash;</span><span class="rx-chip-label">Signals published</span></div>
     <div class="rx-chip"><span class="rx-chip-num" id="rxCum">&mdash;</span><span class="rx-chip-label">Cumulative PnL</span></div>
     <div class="rx-chip"><span class="rx-chip-num" id="rxBest">&mdash;</span><span class="rx-chip-label">Best single trade</span></div>
     <div class="rx-chip"><span class="rx-chip-num" id="rxDays">&mdash;</span><span class="rx-chip-label">Recaps posted</span></div>
