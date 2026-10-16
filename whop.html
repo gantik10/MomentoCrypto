@@ -2636,15 +2636,21 @@
 
     _whopGroup = window.WhopElements().checkout.create({
       plan: cfg.plan,
-      returnUrl: location.origin + '/whop?paid=' + pkg,
+      // Off-site steps (3DS etc.) round-trip through the claim endpoint:
+      // Whop appends ?payment=pay_X&status=succeeded|failed|canceled
+      returnUrl: location.origin + '/api/whop-claim.php',
       appearance: {
         theme: { appearance: 'dark', accentColor: 'green' },
       },
       onComplete: (result) => {
-        if (window.fbq) fbq('track', 'Purchase', { content_ids: [pkg], content_type: 'product', value: cfg.usd, currency: 'USD', num_items: 1 }, { eventID: (result && result.paymentId) || undefined });
         if (window.__mc_sid) fetch('/api/analytics/event', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ sid: window.__mc_sid, type:'payment_complete', ts:Date.now(), data:{ sale: { package: pkg, order_id: (result && result.paymentId) || '', amount: cfg.usd, currency: 'USD', locale: 'en', method: 'whop' } } }), keepalive:true });
+        // Hand off to the server-side claim: verifies payment with Whop, issues the
+        // one-time token, lands on /success.php with the Telegram activation code.
+        // (Pixel Purchase fires on success.php with eventID = payment id.)
+        const payId = (result && result.paymentId) || '';
         document.getElementById('whopSuccess').style.display = 'block';
         document.getElementById('whopMount').style.display = 'none';
+        window.location.href = '/api/whop-claim.php?payment=' + encodeURIComponent(payId);
       },
     });
     _whopElement = _whopGroup.create('checkout');
@@ -2752,7 +2758,7 @@
     <div class="whop-success" id="whopSuccess">
       <div class="icon">✓</div>
       <h3>PAYMENT SUCCESSFUL</h3>
-      <p>Your access is active on Whop.<br>Check your email for the receipt and access details.</p>
+      <p>Taking you to your activation code…</p>
     </div>
   </div>
 </div>
