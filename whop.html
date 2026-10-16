@@ -485,7 +485,7 @@
   }
 
   /* SECTION TITLES */
-  #results h2, #packages h2, #reviews h2, #inside h2 {
+  #results h2, #packages h2, #reviews h2, #inside h2, #how h2, #team h2 {
     font-family: 'Bebas Neue', sans-serif;
     font-size: clamp(44px, 6vw, 80px);
     color: var(--white);
@@ -493,7 +493,7 @@
     margin-bottom: 16px;
     line-height: 1;
   }
-  #results h2 span, #packages h2 span, #reviews h2 span, #inside h2 span {
+  #results h2 span, #packages h2 span, #reviews h2 span, #inside h2 span, #how h2 span, #team h2 span {
     color: var(--green);
     text-shadow: 0 0 30px rgba(57,255,20,0.4);
   }
@@ -2094,6 +2094,159 @@
     #hero .hero-bg::after, .hx-live-ring, .hx-cta::after { animation: none; }
     .hx-cta::after { display: none; }
   }
+
+  /* HOW IT WORKS v3 — 3D icon orbs + connected steps */
+  .hw-sub { color: var(--white-dim); font-size: 16px; max-width: 560px; line-height: 1.7; margin-top: 14px; }
+  .hw-sub b { color: var(--green); font-weight: 600; }
+  .hw-grid { position: relative; display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; max-width: 1200px; margin: 64px auto 0; }
+  .hw-grid::before {
+    content: ''; position: absolute; top: 51px; left: 12.5%; right: 12.5%; height: 2px; z-index: 0;
+    background: linear-gradient(90deg, rgba(57,255,20,0.12), rgba(57,255,20,0.5) 50%, rgba(57,255,20,0.12));
+  }
+  .hw-grid::after {
+    content: ''; position: absolute; top: 48px; left: 12.5%; width: 70px; height: 8px; border-radius: 8px; z-index: 0;
+    background: radial-gradient(closest-side, rgba(120,255,90,0.95), rgba(57,255,20,0));
+    animation: hwPulse 4.2s cubic-bezier(.45,0,.55,1) infinite;
+  }
+  @keyframes hwPulse { 0% { left: 12.5%; opacity: 0; } 10%, 90% { opacity: 1; } 100% { left: calc(87.5% - 70px); opacity: 0; } }
+  .hw-step { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; }
+  .hw-orb {
+    position: relative; z-index: 2; width: 104px; height: 104px; margin-bottom: -52px; border-radius: 50%;
+    display: grid; place-items: center;
+    background: radial-gradient(circle at 50% 30%, #17240f 0%, #0c0c0c 68%);
+    border: 1px solid rgba(57,255,20,0.35);
+    box-shadow: 0 0 0 7px var(--black), 0 0 34px rgba(57,255,20,0.2), inset 0 1px 0 rgba(255,255,255,0.08);
+    transition: transform 0.35s ease, box-shadow 0.35s ease;
+  }
+  .hw-orb img { width: 74px; height: 74px; object-fit: contain; filter: drop-shadow(0 8px 14px rgba(57,255,20,0.3)); animation: hwFloat 5s ease-in-out infinite; }
+  .hw-step:nth-child(2) .hw-orb img { animation-delay: -1.25s; }
+  .hw-step:nth-child(3) .hw-orb img { animation-delay: -2.5s; }
+  .hw-step:nth-child(4) .hw-orb img { animation-delay: -3.75s; }
+  @keyframes hwFloat { 0%, 100% { transform: translateY(2px) rotate(-2deg); } 50% { transform: translateY(-4px) rotate(2deg); } }
+  .hw-num {
+    position: absolute; right: -4px; bottom: -2px; min-width: 30px; height: 30px; padding: 0 7px; border-radius: 999px;
+    display: grid; place-items: center;
+    font-family: 'Bebas Neue', sans-serif; font-size: 16px; letter-spacing: 1px; line-height: 1; color: #061a02;
+    background: linear-gradient(180deg, #6bff4f 0%, #39FF14 55%, #2ad80c 100%);
+    box-shadow: 0 0 0 3px var(--black), 0 6px 16px rgba(57,255,20,0.35), inset 0 1px 0 rgba(255,255,255,0.55);
+  }
+  .hw-card {
+    position: relative; width: 100%; flex: 1; display: flex; flex-direction: column; overflow: hidden;
+    padding: 70px 20px 20px; border-radius: 18px;
+    background: linear-gradient(180deg, #111 0%, #0a0a0a 100%);
+    border: 1px solid rgba(57,255,20,0.14);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.05), 0 20px 40px rgba(0,0,0,0.45);
+    transition: transform 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease;
+  }
+  .hw-card::before {
+    content: ''; position: absolute; left: 0; right: 0; top: 0; height: 140px; pointer-events: none;
+    background: radial-gradient(60% 100% at 50% 0%, rgba(57,255,20,0.1), transparent 70%);
+  }
+  .hw-step:hover .hw-card { transform: translateY(-6px); border-color: rgba(57,255,20,0.42); box-shadow: inset 0 1px 0 rgba(255,255,255,0.06), 0 26px 60px rgba(0,0,0,0.6), 0 0 40px rgba(57,255,20,0.1); }
+  .hw-step:hover .hw-orb { transform: translateY(-6px); box-shadow: 0 0 0 7px var(--black), 0 0 48px rgba(57,255,20,0.35), inset 0 1px 0 rgba(255,255,255,0.1); }
+  .hw-step:hover .mock-plan.featured { transform: rotateY(0deg) translateY(-10px) scale(1.12); }
+  .hw-step.is-final .hw-card { border-color: rgba(57,255,20,0.3); background: linear-gradient(180deg, #0f1a0b 0%, #0a0a0a 65%); }
+  .hw-meta { display: flex; justify-content: center; gap: 8px; margin-bottom: 14px; }
+  .hw-chip, .hw-time {
+    display: inline-flex; align-items: center; gap: 5px; padding: 6px 10px; border-radius: 999px;
+    font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; line-height: 1;
+  }
+  .hw-chip { color: var(--green); background: rgba(57,255,20,0.08); border: 1px solid rgba(57,255,20,0.24); }
+  .hw-time { color: rgba(245,245,245,0.75); background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); }
+  .hw-title { font-family: 'Bebas Neue', sans-serif; font-weight: 400; font-size: 25px; letter-spacing: 1.5px; line-height: 1.1; color: var(--white); text-align: center; margin-bottom: 8px; }
+  .hw-desc { font-size: 13.5px; line-height: 1.6; color: rgba(245,245,245,0.62); text-align: center; min-height: 6.4em; margin-bottom: 16px; }
+  .hw-screen { margin-top: auto; border-radius: 14px; background: #070707; border: 1px solid rgba(255,255,255,0.06); box-shadow: inset 0 2px 12px rgba(0,0,0,0.6); }
+  .hw-screen .how-mock { height: 190px; }
+  .hw-cta { display: flex; flex-direction: column; align-items: center; gap: 12px; margin-top: 48px; }
+  .hw-cta-sub { font-size: 12.5px; color: rgba(245,245,245,0.55); letter-spacing: 0.3px; text-align: center; }
+  #how .how-note { margin-top: 28px; }
+  @media (max-width: 1024px) {
+    .hw-grid { grid-template-columns: repeat(2, 1fr); row-gap: 44px; max-width: 720px; }
+    .hw-grid::before, .hw-grid::after { display: none; }
+  }
+  @media (max-width: 600px) {
+    .hw-grid { grid-template-columns: 1fr; max-width: 400px; row-gap: 40px; margin-top: 48px; }
+    .hw-grid::before { display: block; top: 52px; bottom: 40px; left: 50%; right: auto; width: 2px; height: auto; transform: translateX(-1px); background: linear-gradient(180deg, rgba(57,255,20,0.5), rgba(57,255,20,0.15)); }
+    .hw-desc { min-height: 0; }
+    .hw-cta .hx-cta { width: 100%; justify-content: center; }
+  }
+
+  /* TEAM VIDEO (placeholder until the video is ready) */
+  .tm-wrap { display: grid; grid-template-columns: minmax(0, 1.65fr) minmax(0, 1fr); gap: 22px; margin-top: 48px; align-items: start; }
+  .tm-video { width: 100%; }
+  .tm-video {
+    position: relative; aspect-ratio: 16 / 9; border-radius: 20px; overflow: hidden; background: #0b0b0b;
+    border: 1px solid rgba(57,255,20,0.22);
+    box-shadow: 0 30px 70px rgba(0,0,0,0.6), 0 0 50px rgba(57,255,20,0.08), inset 0 1px 0 rgba(255,255,255,0.06);
+  }
+  .tm-poster { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transform: scale(1.02); transition: transform 0.8s ease, filter 0.4s ease; }
+  .tm-video:hover .tm-poster { transform: scale(1.06); }
+  .tm-shade { position: absolute; inset: 0; pointer-events: none; background: linear-gradient(180deg, rgba(8,8,8,0.15) 0%, rgba(8,8,8,0.05) 45%, rgba(8,8,8,0.88) 100%), radial-gradient(60% 60% at 50% 50%, transparent, rgba(8,8,8,0.35)); }
+  .tm-badge {
+    position: absolute; top: 16px; left: 16px; display: inline-flex; align-items: center; gap: 10px; padding: 8px 14px 8px 12px; border-radius: 999px;
+    font-family: 'Space Mono', monospace; font-size: 10.5px; letter-spacing: 2px; text-transform: uppercase; color: var(--white);
+    background: rgba(8,8,8,0.6); border: 1px solid rgba(57,255,20,0.3); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+  }
+  .tm-play {
+    position: absolute; left: 50%; top: 50%; width: 86px; height: 86px; margin: -43px 0 0 -43px; border-radius: 50%; border: 0; cursor: pointer;
+    display: grid; place-items: center; color: #061a02; padding-left: 4px;
+    background: linear-gradient(180deg, #6bff4f 0%, #39FF14 55%, #2ad80c 100%);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.55), inset 0 -3px 0 rgba(0,0,0,0.16), 0 14px 40px rgba(57,255,20,0.45);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  .tm-play::before, .tm-play::after { content: ''; position: absolute; inset: -10px; border-radius: 50%; border: 2px solid rgba(57,255,20,0.5); animation: tmRing 2.4s ease-out infinite; pointer-events: none; }
+  .tm-play::after { animation-delay: 1.2s; }
+  @keyframes tmRing { 0% { transform: scale(0.85); opacity: 0.9; } 100% { transform: scale(1.45); opacity: 0; } }
+  .tm-play:hover { transform: scale(1.06); box-shadow: inset 0 1px 0 rgba(255,255,255,0.6), 0 18px 50px rgba(57,255,20,0.6); }
+  .tm-play:active { transform: scale(0.98); }
+  .tm-play:focus-visible { outline: 3px solid #fff; outline-offset: 4px; }
+  .tm-caption { position: absolute; left: 20px; right: 20px; bottom: 18px; display: flex; align-items: flex-end; justify-content: space-between; gap: 12px; }
+  .tm-cap-title { font-family: 'Bebas Neue', sans-serif; font-size: 28px; letter-spacing: 1.5px; line-height: 1; color: var(--white); }
+  .tm-cap-sub { font-size: 13px; color: rgba(245,245,245,0.7); margin-top: 4px; }
+  .tm-soon {
+    flex-shrink: 0; padding: 7px 12px; border-radius: 999px; font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase;
+    color: var(--green); background: rgba(57,255,20,0.1); border: 1px solid rgba(57,255,20,0.35); transition: transform 0.2s ease, background 0.2s ease;
+  }
+  .tm-soon.flash { transform: scale(1.08); background: rgba(57,255,20,0.25); }
+  .tm-video.is-playing .tm-shade, .tm-video.is-playing .tm-badge, .tm-video.is-playing .tm-play, .tm-video.is-playing .tm-caption, .tm-video.is-playing .tm-poster { display: none; }
+  .tm-video video, .tm-video iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; background: #000; }
+  .tm-people { display: flex; flex-direction: column; gap: 14px; }
+  .tm-person {
+    flex: 1; display: flex; align-items: center; gap: 16px; padding: 18px; border-radius: 16px;
+    background: linear-gradient(180deg, #111 0%, #0a0a0a 100%); border: 1px solid rgba(57,255,20,0.14);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.05);
+    transition: transform 0.3s ease, border-color 0.3s ease;
+  }
+  .tm-person:hover { transform: translateX(4px); border-color: rgba(57,255,20,0.38); }
+  .tm-avatar {
+    position: relative; flex-shrink: 0; width: 64px; height: 64px; border-radius: 50%; overflow: hidden;
+    display: grid; place-items: end center; color: rgba(57,255,20,0.35);
+    background: radial-gradient(circle at 50% 30%, #17240f, #0c0c0c 70%);
+    box-shadow: 0 0 0 2px var(--black), 0 0 0 3.5px rgba(57,255,20,0.55), 0 0 20px rgba(57,255,20,0.2);
+  }
+  .tm-avatar svg { width: 52px; height: 52px; }
+  .tm-avatar img { width: 100%; height: 100%; object-fit: cover; }
+  .tm-name { font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: 1.2px; line-height: 1; color: var(--white); }
+  .tm-role { font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 1.8px; text-transform: uppercase; color: var(--green); margin-top: 6px; }
+  .tm-bio { font-size: 13px; line-height: 1.5; color: rgba(245,245,245,0.6); margin-top: 6px; }
+  @media (max-width: 900px) {
+    .tm-wrap { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 600px) {
+    .tm-video { aspect-ratio: 4 / 3; }
+    .tm-play { width: 68px; height: 68px; margin: -34px 0 0 -34px; }
+    .tm-play svg { width: 24px; height: 24px; }
+    .tm-caption { left: 14px; right: 14px; bottom: 12px; }
+    .tm-cap-title { font-size: 21px; }
+    .tm-cap-sub { display: none; }
+    .tm-badge { top: 12px; left: 12px; }
+    .tm-person { padding: 14px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hw-grid::after, .hw-orb img, .tm-play::before, .tm-play::after { animation: none; }
+    .hw-grid::after { display: none; }
+  }
 </style>
 </head>
 <body>
@@ -2219,16 +2372,72 @@
 
 <div class="divider"></div>
 
+<!-- TEAM VIDEO — PLACEHOLDER: set data-video-src on #teamVideo (mp4/webm URL or YouTube/Vimeo embed URL), replace names/roles/photos -->
+<section id="team">
+  <div class="section-label reveal">Meet the team</div>
+  <h2 class="reveal">REAL TRADERS.<br><span>REAL FACES.</span></h2>
+  <p class="hw-sub reveal">Hear it from the people who call every trade &mdash; how we pick setups, manage risk and publish our results.</p>
+
+  <div class="tm-wrap">
+    <div class="tm-video reveal" id="teamVideo" data-video-src="">
+      <img class="tm-poster" src="assets/img/video-poster.webp" alt="" width="1440" height="960" loading="lazy">
+      <div class="tm-shade"></div>
+      <span class="tm-badge"><span class="hx-live"><span class="hx-live-ring"></span><span class="hx-live-dot"></span></span>Team intro</span>
+      <button class="tm-play" type="button" aria-label="Play team video"><svg width="30" height="30" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.52.85l10.4-6.5a1 1 0 0 0 0-1.7L9.52 4.65A1 1 0 0 0 8 5.5z" fill="currentColor"/></svg></button>
+      <div class="tm-caption">
+        <div>
+          <div class="tm-cap-title">Inside MomentoCrypto</div>
+          <div class="tm-cap-sub">A short walkthrough from our team</div>
+        </div>
+        <span class="tm-soon">Video coming soon</span>
+      </div>
+    </div>
+
+    <div class="tm-people">
+      <div class="tm-person reveal">
+        <div class="tm-avatar"><svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="18" r="9" fill="currentColor"/><path d="M6 46c1.5-10 9-15 18-15s16.5 5 18 15z" fill="currentColor"/></svg></div>
+        <div class="tm-person-body">
+          <div class="tm-name">Teammate name</div>
+          <div class="tm-role">Lead Trader</div>
+          <div class="tm-bio">Calls the setups and manages every open position.</div>
+        </div>
+      </div>
+      <div class="tm-person reveal">
+        <div class="tm-avatar"><svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="18" r="9" fill="currentColor"/><path d="M6 46c1.5-10 9-15 18-15s16.5 5 18 15z" fill="currentColor"/></svg></div>
+        <div class="tm-person-body">
+          <div class="tm-name">Teammate name</div>
+          <div class="tm-role">Market Analyst</div>
+          <div class="tm-bio">Scans the market daily and prepares the trade ideas.</div>
+        </div>
+      </div>
+      <div class="tm-person reveal">
+        <div class="tm-avatar"><svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="18" r="9" fill="currentColor"/><path d="M6 46c1.5-10 9-15 18-15s16.5 5 18 15z" fill="currentColor"/></svg></div>
+        <div class="tm-person-body">
+          <div class="tm-name">Teammate name</div>
+          <div class="tm-role">Community Manager</div>
+          <div class="tm-bio">Answers your questions inside the Telegram channel.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
 <!-- HOW IT WORKS -->
 <section id="how">
   <div class="section-label reveal">How it works</div>
   <h2 class="reveal">FROM SIGNUP TO<br><span>WINNING TRADES.</span></h2>
+  <p class="hw-sub reveal">Four steps. About <b>2 minutes</b> from checkout to your first signal.</p>
 
-  <div class="how-grid-v2">
-
-    <!-- STEP 1: SELECT YOUR PLAN -->
-    <div class="how-card reveal">
-      <div class="how-step-num">01</div>
+  <div class="hw-grid">
+    <article class="hw-step reveal">
+      <div class="hw-orb"><img src="assets/img/step1-pass.webp" alt="" width="74" height="74" loading="lazy"><span class="hw-num">01</span></div>
+      <div class="hw-card">
+        <div class="hw-meta"><span class="hw-chip">Step 01</span><span class="hw-time"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>1 min</span></div>
+        <h3 class="hw-title">Pick your plan</h3>
+        <p class="hw-desc">Choose 1, 3 or 6 months. One-time payment by card, Apple&nbsp;Pay, Google&nbsp;Pay or PayPal &mdash; no subscription.</p>
+        <div class="hw-screen">
       <div class="how-mock how-mock-plans">
         <div class="mock-plan">
           <div class="mock-plan-label">01 Month</div>
@@ -2251,12 +2460,16 @@
         </div>
         <div class="mock-cursor"></div>
       </div>
-      <div class="how-card-title">SELECT YOUR PLAN</div>
-    </div>
-
-    <!-- STEP 2: ACTIVATE YOUR BOT -->
-    <div class="how-card reveal">
-      <div class="how-step-num">02</div>
+        </div>
+      </div>
+    </article>
+    <article class="hw-step reveal">
+      <div class="hw-orb"><img src="assets/img/step2-plane.webp" alt="" width="74" height="74" loading="lazy"><span class="hw-num">02</span></div>
+      <div class="hw-card">
+        <div class="hw-meta"><span class="hw-chip">Step 02</span><span class="hw-time"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>30 sec</span></div>
+        <h3 class="hw-title">Activate in Telegram</h3>
+        <p class="hw-desc">Your activation code appears instantly. Send it to our bot and you&rsquo;re added to the private signals channel.</p>
+        <div class="hw-screen">
       <div class="how-mock how-mock-bot">
         <div class="mock-bot-header">
           <div class="mock-bot-avatar"><img src="assets/bot-avatar.jpg" alt="MomentoCrypto Bot"></div>
@@ -2271,12 +2484,16 @@
           <div class="mock-msg mock-msg-in"><span class="mock-check">✓</span> Code accepted. You've been added to the channel.</div>
         </div>
       </div>
-      <div class="how-card-title">ACTIVATE YOUR BOT</div>
-    </div>
-
-    <!-- STEP 3: GET ALERT AND TRADE -->
-    <div class="how-card reveal">
-      <div class="how-step-num">03</div>
+        </div>
+      </div>
+    </article>
+    <article class="hw-step reveal">
+      <div class="hw-orb"><img src="assets/img/step3-bell.webp" alt="" width="74" height="74" loading="lazy"><span class="hw-num">03</span></div>
+      <div class="hw-card">
+        <div class="hw-meta"><span class="hw-chip">Step 03</span><span class="hw-time"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Live</span></div>
+        <h3 class="hw-title">Get the alert &amp; trade</h3>
+        <p class="hw-desc">Every signal comes with entry, take-profit and stop-loss. Copy it into your exchange in seconds.</p>
+        <div class="hw-screen">
       <div class="how-mock how-mock-alert">
         <div class="mock-notif">
           <div class="mock-notif-icon">
@@ -2302,12 +2519,16 @@
           </svg>
         </div>
       </div>
-      <div class="how-card-title">GET ALERT & TRADE</div>
-    </div>
-
-    <!-- STEP 4: WIN TOGETHER -->
-    <div class="how-card reveal">
-      <div class="how-step-num">04</div>
+        </div>
+      </div>
+    </article>
+    <article class="hw-step is-final reveal">
+      <div class="hw-orb"><img src="assets/img/step4-trophy.webp" alt="" width="74" height="74" loading="lazy"><span class="hw-num">04</span></div>
+      <div class="hw-card">
+        <div class="hw-meta"><span class="hw-chip">Step 04</span><span class="hw-time"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Daily</span></div>
+        <h3 class="hw-title">Take profit with us</h3>
+        <p class="hw-desc">Follow our updates until the trade closes. Every result is published here daily &mdash; wins and losses.</p>
+        <div class="hw-screen">
       <div class="how-mock how-mock-win">
         <div class="mock-pnl-card">
           <div class="mock-pnl-header">
@@ -2319,9 +2540,14 @@
           <div class="mock-pnl-meta">Entry 142.30 → Exit 148.30</div>
         </div>
       </div>
-      <div class="how-card-title">WIN WITH MOMENTO</div>
-    </div>
+        </div>
+      </div>
+    </article>
+  </div>
 
+  <div class="hw-cta reveal">
+    <a href="#packages" class="pkg-btn pkg-cta hx-cta"><svg class="pkg-cta-lock" width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="4" y="10" width="16" height="11" rx="2.5" fill="currentColor"/><path d="M8 10V7a4 4 0 0 1 8 0v3" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg><span class="pkg-cta-label">Start with step 01</span><span class="pkg-cta-arrow">&rarr;</span></a>
+    <div class="hw-cta-sub">Instant access &middot; One-time payment &middot; Secure checkout</div>
   </div>
 
   <div class="how-note reveal">
@@ -2965,5 +3191,35 @@
   </div>
 </div>
 
+
+<script>
+// Team video: drop a URL into data-video-src on #teamVideo (mp4/webm, or a YouTube/Vimeo embed URL)
+(function () {
+  const box = document.getElementById('teamVideo');
+  if (!box) return;
+  const btn = box.querySelector('.tm-play');
+  btn.addEventListener('click', () => {
+    const src = (box.dataset.videoSrc || '').trim();
+    if (!src) {
+      const soon = box.querySelector('.tm-soon');
+      soon.classList.add('flash');
+      setTimeout(() => soon.classList.remove('flash'), 600);
+      return;
+    }
+    let el;
+    if (/\.(mp4|webm|mov)(\?|$)/i.test(src)) {
+      el = document.createElement('video');
+      el.src = src; el.controls = true; el.autoplay = true; el.playsInline = true;
+    } else {
+      el = document.createElement('iframe');
+      el.src = src + (src.includes('?') ? '&' : '?') + 'autoplay=1';
+      el.allow = 'autoplay; fullscreen; picture-in-picture';
+      el.allowFullscreen = true;
+    }
+    box.appendChild(el);
+    box.classList.add('is-playing');
+  });
+})();
+</script>
 </body>
 </html>
