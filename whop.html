@@ -12,7 +12,7 @@
 <meta name="robots" content="noindex, nofollow">
 <!-- Whop Elements — embedded checkout -->
 <script src="https://cdn.whop.com/elements/amber/elements.js" data-whop-elements></script>
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+<link rel="icon" type="image/svg+xml" href="assets/img/logo-mark.svg">
 <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Bebas+Neue&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <!-- MC Analytics + rrweb Session Recording -->
 <script>
@@ -2263,7 +2263,7 @@
     .hx-art { top: 112px; right: 10px; width: 250px; }
   }
   @media (max-width: 600px) {
-    .hx-art { top: 140px; right: -24px; width: 172px; }
+    .hx-art { top: 160px; right: -22px; width: 150px; }
     .hx-art::before { inset: 0; }
   }
 
@@ -2286,43 +2286,188 @@
   .tg-popup-icon img { width: 64px; height: 64px; object-fit: contain; filter: drop-shadow(0 8px 18px rgba(57,255,20,0.35)); }
 
   @media (prefers-reduced-motion: reduce) { .hx-art { animation: none; } }
+
+  /* ===== LOGO ===== */
+  .lg { display: inline-flex; align-items: center; gap: 11px; text-decoration: none; flex-shrink: 0; }
+  .lg-mark { width: 38px; height: 38px; flex-shrink: 0; overflow: visible; transition: transform 0.35s ease; filter: drop-shadow(0 4px 14px rgba(95,216,74,0.18)); }
+  .lg:hover .lg-mark { transform: rotate(-8deg) scale(1.05); }
+  .lg-text { display: flex; flex-direction: column; line-height: 1; }
+  .lg-word { font-family: 'Bebas Neue', sans-serif; font-size: 25px; letter-spacing: 2.4px; color: var(--white); white-space: nowrap; }
+  .lg-word b { font-weight: 400; color: var(--green); }
+  .lg-sub {
+    display: flex; align-items: center; gap: 7px; margin-top: 3px;
+    font-family: 'Space Mono', monospace; font-size: 8.5px; font-weight: 700; letter-spacing: 4.2px; text-transform: uppercase;
+    color: rgba(245,245,245,0.5); padding-left: 4px;
+  }
+  .lg-sub::before, .lg-sub::after { content: ''; flex: 1; height: 1px; background: linear-gradient(90deg, transparent, rgba(95,216,74,0.55)); }
+  .lg-sub::after { background: linear-gradient(90deg, rgba(95,216,74,0.55), transparent); }
+  .lg-footer .lg-mark { width: 34px; height: 34px; }
+  .lg-footer .lg-word { font-size: 22px; }
+
+  /* ===== HEADER ===== */
+  nav.hd {
+    padding: 14px 40px; gap: 20px;
+    background: rgba(8,8,8,0.6);
+    backdrop-filter: blur(16px) saturate(140%); -webkit-backdrop-filter: blur(16px) saturate(140%);
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    transition: padding 0.25s ease, background 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+  }
+  nav.hd.scrolled { padding-top: 10px; padding-bottom: 10px; background: rgba(8,8,8,0.88); border-bottom-color: rgba(95,216,74,0.14); box-shadow: 0 12px 34px rgba(0,0,0,0.45); }
+  nav.hd .nav-links {
+    gap: 2px; padding: 4px; border-radius: 999px;
+    background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07);
+  }
+  nav.hd .nav-links a {
+    position: relative; display: block; padding: 8px 15px; border-radius: 999px;
+    font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500; letter-spacing: 0; text-transform: none;
+    color: rgba(245,245,245,0.66); transition: color 0.2s ease, background 0.2s ease;
+  }
+  nav.hd .nav-links a:hover { color: var(--white); background: rgba(255,255,255,0.05); }
+  nav.hd .nav-links a.active { color: var(--white); background: rgba(255,255,255,0.07); }
+  nav.hd .nav-links a.active::after {
+    content: ''; position: absolute; left: 50%; bottom: 3px; width: 4px; height: 4px; margin-left: -2px; border-radius: 50%;
+    background: var(--green);
+  }
+  .hd-actions { display: flex; align-items: center; gap: 10px; }
+  .hd-support {
+    display: inline-flex; align-items: center; gap: 7px; height: 42px; padding: 0 16px; border-radius: 12px;
+    font-size: 14px; font-weight: 500; color: rgba(245,245,245,0.75); text-decoration: none;
+    border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.02);
+    transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+  }
+  .hd-support:hover { color: var(--white); border-color: rgba(95,216,74,0.45); background: rgba(95,216,74,0.06); }
+  .hd-support svg { color: var(--green); }
+  nav.hd .hd-cta {
+    width: auto; min-height: 42px; height: 42px; padding: 0 18px; gap: 8px; border-radius: 12px;
+    font-family: 'DM Sans', sans-serif; font-size: 14.5px; font-weight: 700; letter-spacing: 0; text-transform: none;
+    clip-path: none; transform: none;
+  }
+  nav.hd .hd-cta .pkg-cta-arrow { font-size: 16px; }
+  nav.hd .burger {
+    width: 42px; height: 42px; padding: 0; gap: 5px; align-items: center; justify-content: center;
+    border-radius: 12px; border: 1px solid rgba(255,255,255,0.12); background: rgba(255,255,255,0.03);
+  }
+  nav.hd .burger span { width: 18px; height: 2px; border-radius: 2px; background: var(--white); }
+  nav.hd .burger.active span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  nav.hd .burger.active span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+  @media (max-width: 1180px) {
+    nav.hd { padding-left: 28px; padding-right: 28px; }
+    nav.hd .nav-links a { padding: 8px 11px; font-size: 13.5px; }
+    .hd-support { width: 42px; padding: 0; justify-content: center; }
+    .hd-support span { display: none; }
+  }
+  @media (max-width: 900px) {
+    nav.hd { padding: 12px 20px; }
+    nav.hd.scrolled { padding-top: 9px; padding-bottom: 9px; }
+    .hd-support { display: none; }
+  }
+  @media (max-width: 600px) {
+    nav.hd { padding: 10px 14px; gap: 8px; }
+    .hd-actions { gap: 8px; }
+    .lg { gap: 8px; }
+    .lg-mark { width: 32px; height: 32px; }
+    .lg-word { font-size: 20px; letter-spacing: 1.6px; }
+    .lg-sub { font-size: 7px; letter-spacing: 3.2px; margin-top: 2px; }
+    nav.hd .hd-cta { height: 38px; min-height: 38px; padding: 0 13px; font-size: 13.5px; border-radius: 10px; }
+    nav.hd .hd-cta .pkg-cta-lock { display: none; }
+    nav.hd .burger { width: 38px; height: 38px; border-radius: 10px; }
+  }
+  @media (max-width: 370px) {
+    .lg-text { display: none; }
+  }
+
+  /* mobile menu */
+  .mobile-nav { justify-content: flex-start; align-items: stretch; gap: 0; padding: 92px 24px 32px; overflow-y: auto; }
+  .mobile-nav a.mn-link {
+    display: flex; align-items: center; justify-content: space-between; padding: 16px 4px;
+    font-family: 'Bebas Neue', sans-serif; font-size: 32px; letter-spacing: 2px; color: var(--white);
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+  }
+  .mobile-nav a.mn-link:hover { color: var(--green); }
+  .mn-num { font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 2px; color: rgba(95,216,74,0.7); }
+  .mobile-nav a.mn-cta { color: #041a00; margin-top: 28px; font-family: 'DM Sans', sans-serif; font-size: 16px; letter-spacing: 0; min-height: 56px; }
+  .mobile-nav a.mn-support {
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px; margin-top: 12px; min-height: 50px; border-radius: 12px;
+    font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 600; letter-spacing: 0; color: rgba(245,245,245,0.8);
+    border: 1px solid rgba(255,255,255,0.12);
+  }
+  .mn-support svg { color: var(--green); }
+
+  /* ===== COLOUR HIERARCHY: soft green for accents, full neon only on buy buttons ===== */
+  :root { --green: #5fd84a; --green-dim: #47b334; --green-glow: rgba(95,216,74,0.14); }
+  h2 span { text-shadow: none !important; }
+  .hx-title .hx-green {
+    background: linear-gradient(180deg, #a3eb90 0%, #5fd84a 55%, #3faa2d 100%);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+    filter: drop-shadow(0 0 22px rgba(95,216,74,0.16));
+  }
+  .hx-stats .stat-num { background: linear-gradient(180deg, #ffffff 0%, #cdd9c9 100%); -webkit-background-clip: text; background-clip: text; filter: none; }
+  .hx-stats .stat::before { background: linear-gradient(90deg, transparent, rgba(95,216,74,0.55), transparent); }
+  .daily-card.today { animation: none; border-color: rgba(95,216,74,0.45); background: linear-gradient(180deg, rgba(95,216,74,0.05) 0%, #101010 45%); box-shadow: inset 0 1px 0 rgba(255,255,255,0.08), 0 0 0 1px rgba(95,216,74,0.25); }
+  .daily-card-today-badge::before { background: var(--green); }
+  .daily-card-today-badge { background: rgba(95,216,74,0.14); color: var(--green); border: 1px solid rgba(95,216,74,0.4); box-shadow: none; }
+  .rx-gain { color: #b3e6a5; background: rgba(95,216,74,0.1); border-color: rgba(95,216,74,0.24); }
+  .rx-card-cta {
+    color: #dff5d8; background: rgba(95,216,74,0.07); border: 1px solid rgba(95,216,74,0.32); box-shadow: none;
+  }
+  .rx-card-cta:hover { color: #041a00; background: linear-gradient(180deg, #6bff4f 0%, #39FF14 55%, #2ad80c 100%); border-color: transparent; filter: none; }
+  .hw-num { color: var(--green); background: #0f0f0f; border: 1px solid rgba(95,216,74,0.5); box-shadow: 0 0 0 3px var(--black); }
+  .tm-play { color: #080808; background: linear-gradient(180deg, #ffffff, #dcdcdc); box-shadow: inset 0 1px 0 #fff, 0 14px 40px rgba(0,0,0,0.55); }
+  .tm-play::before, .tm-play::after { border-color: rgba(255,255,255,0.35); }
+  .tm-play:hover { box-shadow: inset 0 1px 0 #fff, 0 18px 50px rgba(0,0,0,0.6); }
+  .support-fab { background: #121212; color: var(--green); box-shadow: 0 10px 30px rgba(0,0,0,0.55), 0 0 0 1px rgba(95,216,74,0.4); }
+  .support-fab svg, .support-fab svg path { fill: currentColor; }
+
+  /* every remaining buy button shares the one neon CTA look */
+  .tg-btn, .daily-more-soon-btn {
+    clip-path: none; animation: none; border-radius: 12px; min-height: 56px; padding: 0 30px;
+    font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 700; letter-spacing: 0.5px; color: #041a00;
+    background: linear-gradient(180deg, #6bff4f 0%, #39FF14 55%, #2ad80c 100%);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.5), inset 0 -2px 0 rgba(0,0,0,0.16), 0 10px 28px rgba(57,255,20,0.25);
+  }
+  .tg-btn::before { display: none; }
+  .tg-btn:hover, .daily-more-soon-btn:hover { transform: translateY(-2px); background: linear-gradient(180deg, #7dff63 0%, #45ff22 55%, #30e011 100%); box-shadow: inset 0 1px 0 rgba(255,255,255,0.55), 0 14px 36px rgba(57,255,20,0.38); }
+  .daily-more-soon-btn { min-height: 48px; font-size: 13px; }
+  /* support is not a purchase: keep it quiet */
+  .tg-btn[href*="t.me"] { color: var(--white); background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.14); box-shadow: none; }
+  .tg-btn[href*="t.me"]:hover { background: rgba(95,216,74,0.08); border-color: rgba(95,216,74,0.45); box-shadow: none; }
+  .tg-btn[href*="t.me"] svg { color: var(--green); }
 </style>
 </head>
 <body>
 
 <!-- NAV -->
-<nav>
-  <a href="#hero" class="nav-logo">Momento<span>Crypto</span></a>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><linearGradient id="mcBg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1d1d1d"/><stop offset="1" stop-color="#0a0a0a"/></linearGradient><linearGradient id="mcGl" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#3fc22a"/><stop offset="1" stop-color="#b4ff9c"/></linearGradient></defs></svg>
+<nav class="hd">
+  <a href="#hero" class="lg" aria-label="MomentoCrypto Community — home"><svg class="lg-mark" viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="19.3" fill="url(#mcBg)" stroke="rgba(95,216,74,0.42)"/><path d="M9.5 28.5V15l8 8.5 5-5" fill="none" stroke="#f5f5f5" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M26 15L34.5 5.5M27 5.5h7.5V13" fill="none" stroke="#080808" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/><path d="M22.5 18.5L34.5 5.5M27 5.5h7.5V13" fill="none" stroke="url(#mcGl)" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="lg-text"><span class="lg-word">MOMENTO<b>CRYPTO</b></span><span class="lg-sub">Community</span></span></a>
   <ul class="nav-links">
     <li><a href="#how">How it works</a></li>
     <li><a href="#results">Results</a></li>
-    <li><a href="#packages">Packages</a></li>
+    <li><a href="#packages">Pricing</a></li>
     <li><a href="#reviews">Reviews</a></li>
-    <li><a href="#inside">Inside</a></li>
     <li><a href="#faq">FAQ</a></li>
-    <li><a href="https://t.me/momentocrypto_support" target="_blank" rel="noopener" class="nav-support">Support</a></li>
   </ul>
-  <a href="#packages" class="nav-cta">Get Access →</a>
-  <button class="burger" aria-label="Menu">
-    <span></span>
-    <span></span>
-    <span></span>
-  </button>
+  <div class="hd-actions">
+    <a href="https://t.me/momentocrypto_support" target="_blank" rel="noopener" class="hd-support" aria-label="Support on Telegram"><svg width="15" height="15" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M21.94 4.6 18.9 19.04c-.23 1.02-.83 1.27-1.69.79l-4.66-3.43-2.25 2.16c-.25.25-.46.46-.94.46l.33-4.74 8.63-7.8c.38-.33-.08-.52-.58-.19l-10.67 6.72-4.6-1.44c-1-.31-1.02-1 .21-1.48l17.98-6.93c.83-.31 1.56.19 1.28 1.44z"/></svg><span>Support</span></a>
+    <a href="#packages" class="pkg-btn pkg-cta nav-cta hd-cta"><svg class="pkg-cta-lock" width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="4" y="10" width="16" height="11" rx="2.5" fill="currentColor"/><path d="M8 10V7a4 4 0 0 1 8 0v3" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg><span class="pkg-cta-label">Get access</span><span class="pkg-cta-arrow">&rarr;</span></a>
+    <button class="burger" aria-label="Menu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+  </div>
 </nav>
 
 <!-- MOBILE NAV -->
 <div class="mobile-nav">
-  <a href="#how">How it works</a>
-  <a href="#results">Results</a>
-  <a href="#packages">Packages</a>
-  <a href="#reviews">Reviews</a>
-  <a href="#inside">Inside</a>
-  <a href="#faq">FAQ</a>
-  <a href="https://t.me/momentocrypto_support" target="_blank" rel="noopener">Support</a>
-  <a href="#packages" class="tg-btn" style="margin-top:20px">
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12l-6.871 4.326-2.962-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.194 1.006.131.833.941z" fill="currentColor"/></svg>
-    GET ACCESS
-  </a>
+  <a href="#how" class="mn-link"><span>How it works</span><span class="mn-num">01</span></a>
+  <a href="#results" class="mn-link"><span>Results</span><span class="mn-num">02</span></a>
+  <a href="#packages" class="mn-link"><span>Pricing</span><span class="mn-num">03</span></a>
+  <a href="#reviews" class="mn-link"><span>Reviews</span><span class="mn-num">04</span></a>
+  <a href="#team" class="mn-link"><span>Team</span><span class="mn-num">05</span></a>
+  <a href="#faq" class="mn-link"><span>FAQ</span><span class="mn-num">06</span></a>
+  <a href="#packages" class="pkg-btn pkg-cta mn-cta"><svg class="pkg-cta-lock" width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="4" y="10" width="16" height="11" rx="2.5" fill="currentColor"/><path d="M8 10V7a4 4 0 0 1 8 0v3" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg><span class="pkg-cta-label">Get access &mdash; from $20</span><span class="pkg-cta-arrow">&rarr;</span></a>
+  <a href="https://t.me/momentocrypto_support" target="_blank" rel="noopener" class="mn-support"><svg width="15" height="15" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M21.94 4.6 18.9 19.04c-.23 1.02-.83 1.27-1.69.79l-4.66-3.43-2.25 2.16c-.25.25-.46.46-.94.46l.33-4.74 8.63-7.8c.38-.33-.08-.52-.58-.19l-10.67 6.72-4.6-1.44c-1-.31-1.02-1 .21-1.48l17.98-6.93c.83-.31 1.56.19 1.28 1.44z"/></svg>Message support</a>
 </div>
 
 <!-- HERO -->
@@ -2818,7 +2963,7 @@
 <!-- FOOTER -->
 <div class="divider"></div>
 <footer>
-  <div class="footer-logo">Momento<span>Crypto</span></div>
+  <a href="#hero" class="lg lg-footer" aria-label="MomentoCrypto Community"><svg class="lg-mark" viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="19.3" fill="url(#mcBg)" stroke="rgba(95,216,74,0.42)"/><path d="M9.5 28.5V15l8 8.5 5-5" fill="none" stroke="#f5f5f5" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M26 15L34.5 5.5M27 5.5h7.5V13" fill="none" stroke="#080808" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/><path d="M22.5 18.5L34.5 5.5M27 5.5h7.5V13" fill="none" stroke="url(#mcGl)" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="lg-text"><span class="lg-word">MOMENTO<b>CRYPTO</b></span><span class="lg-sub">Community</span></span></a>
   <div class="footer-disclaimer">Trading cryptocurrency involves significant risk. Past performance is not indicative of future results. Always trade responsibly.</div>
   <div class="footer-note">© 2026 MomentoCrypto<br>All rights reserved.</div>
 </footer>
@@ -2841,9 +2986,19 @@
   }, { threshold: 0.1 });
   reveals.forEach(el => observer.observe(el));
 
-  window.addEventListener('scroll', () => {
-    document.querySelector('nav').style.borderBottomColor = window.scrollY > 50 ? 'rgba(57,255,20,0.2)' : 'rgba(57,255,20,0.12)';
-  });
+  const hdNav = document.querySelector('nav');
+  const hdState = () => hdNav.classList.toggle('scrolled', window.scrollY > 30);
+  window.addEventListener('scroll', hdState, { passive: true });
+  hdState();
+  // Highlight the nav link of the section in view
+  const spyLinks = [...document.querySelectorAll('.nav-links a[href^="#"]')];
+  const spyObs = new IntersectionObserver(entries => {
+    entries.forEach(en => {
+      if (!en.isIntersecting) return;
+      spyLinks.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + en.target.id));
+    });
+  }, { rootMargin: '-45% 0px -50% 0px' });
+  document.querySelectorAll('section[id]:not(#hero), #packages').forEach(t => spyObs.observe(t));
 
   const burger = document.querySelector('.burger');
   const mobileNav = document.querySelector('.mobile-nav');
