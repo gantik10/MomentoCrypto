@@ -2600,6 +2600,7 @@
     starter: { plan: 'plan_wK02ujxaHuVbX', name: 'Starter — 1 Month',  usd: 20 },
     trader:  { plan: 'plan_ExxqOfZ011XoL', name: 'Trader — 3 Months',  usd: 50 },
     pro:     { plan: 'plan_EJRrxW0ltWGn9', name: 'Pro — 6 Months',     usd: 90 },
+    test:    { plan: 'plan_P7tsi5OA98zr7', name: 'TEST — $1 (1 day)',  usd: 1  },
   };
   let _whopGroup = null;        // current Whop element group (destroy before re-mount)
   let _whopElement = null;
@@ -2714,6 +2715,9 @@
     <button class="tg-popup-skip" onclick="closePopup()">I'll decide later</button>
   </div>
 </div>
+
+<!-- Test payment button (fixed, test page only) -->
+<button onclick="openWhopCheckout('test')" style="position:fixed;bottom:16px;left:16px;z-index:10004;font-family:'Space Mono',monospace;font-size:11px;font-weight:700;letter-spacing:1px;padding:10px 16px;background:#ff9f43;color:#000;border:none;border-radius:8px;cursor:pointer;box-shadow:0 4px 16px rgba(255,159,67,0.4);">🧪 TEST PAYMENT $1</button>
 
 <!-- Whop embedded checkout modal -->
 <style>

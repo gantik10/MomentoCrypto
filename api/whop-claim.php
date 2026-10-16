@@ -30,6 +30,7 @@ $PLAN_MAP = [
     'plan_wK02ujxaHuVbX' => ['package' => 'starter', 'name' => 'Starter (1 Month)'],
     'plan_ExxqOfZ011XoL' => ['package' => 'trader',  'name' => 'Trader (3 Months)'],
     'plan_EJRrxW0ltWGn9' => ['package' => 'pro',     'name' => 'Pro (6 Months)'],
+    'plan_P7tsi5OA98zr7' => ['package' => 'starter', 'name' => 'TEST $1 (flow check)'],  // $1 test plan — issues the starter code
 ];
 
 function bail_to_landing(string $reason): void {
