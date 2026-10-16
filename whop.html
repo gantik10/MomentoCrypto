@@ -2339,7 +2339,7 @@
     <p class="hero-sub">Professional crypto signals with verified results. Join thousands of traders already winning with MomentoCrypto's premium community.</p>
     <div class="hx-cta-row">
       <a href="#packages" class="pkg-btn pkg-cta hx-cta"><svg class="pkg-cta-lock" width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="4" y="10" width="16" height="11" rx="2.5" fill="currentColor"/><path d="M8 10V7a4 4 0 0 1 8 0v3" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg><span class="pkg-cta-label">See plans &mdash; from $20</span><span class="pkg-cta-arrow">&rarr;</span></a>
-      <a href="#results" class="hx-ghost">View daily results</a>
+      <a href="#results" class="hx-ghost">View our results</a>
     </div>
     <div class="hx-trust">
       <div class="hx-trust-pay"><img src="assets/icons/pay/visa.svg" alt="Visa" loading="lazy"><img src="assets/icons/pay/mastercard.svg" alt="Mastercard" loading="lazy"><img src="assets/icons/pay/amex.svg" alt="Amex" loading="lazy"><img src="assets/icons/pay/applepay.svg" alt="Apple Pay" loading="lazy"><img src="assets/icons/pay/googlepay.svg" alt="Google Pay" loading="lazy"><img src="assets/icons/pay/paypal.svg" alt="PayPal" loading="lazy"></div>
@@ -2565,9 +2565,9 @@
     <article class="hw-step is-final reveal">
       <div class="hw-orb"><img src="assets/img/step4-trophy.webp" alt="" width="74" height="74" loading="lazy"><span class="hw-num">04</span></div>
       <div class="hw-card">
-        <div class="hw-meta"><span class="hw-chip">Step 04</span><span class="hw-time"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Daily</span></div>
+        <div class="hw-meta"><span class="hw-chip">Step 04</span><span class="hw-time"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Recap</span></div>
         <h3 class="hw-title">Take profit with us</h3>
-        <p class="hw-desc">Follow our updates until the trade closes. Every result is published here daily &mdash; wins and losses.</p>
+        <p class="hw-desc">Follow our updates until the trade closes. We post result recaps here &mdash; wins and losses.</p>
         <div class="hw-screen">
       <div class="how-mock how-mock-win">
         <div class="mock-pnl-card">
@@ -2601,13 +2601,13 @@
 <!-- RESULTS — daily public posts (admin-published, dynamic) -->
 <section id="results">
   <div class="section-label reveal">Verified results</div>
-  <h2 class="reveal">DAILY <span>RESULTS.</span><br>PUBLISHED HERE.</h2>
-  <p class="results-intro reveal">A public daily recap of every trading day: closed trades, % gained, and the real P&amp;L screenshot. No cherry-picking. No hiding losses.</p>
+  <h2 class="reveal">REAL <span>RESULTS.</span><br>PUBLISHED HERE.</h2>
+  <p class="results-intro reveal">Public recaps of our closed trades: the % gained and the real P&amp;L screenshot. No cherry-picking. No hiding losses.</p>
   <div class="rx-strip reveal" id="rxStrip" hidden>
     <div class="rx-chip"><span class="rx-chip-num" id="rxTrades">&mdash;</span><span class="rx-chip-label">Signals published</span></div>
     <div class="rx-chip"><span class="rx-chip-num" id="rxCum">&mdash;</span><span class="rx-chip-label">Cumulative PnL</span></div>
     <div class="rx-chip"><span class="rx-chip-num" id="rxBest">&mdash;</span><span class="rx-chip-label">Best single trade</span></div>
-    <div class="rx-chip"><span class="rx-chip-num" id="rxDays">&mdash;</span><span class="rx-chip-label">Days reported</span></div>
+    <div class="rx-chip"><span class="rx-chip-num" id="rxDays">&mdash;</span><span class="rx-chip-label">Recaps posted</span></div>
   </div>
   <div class="daily-feed" id="dailyFeed">
     <div class="daily-empty">Loading results…</div>
@@ -2920,16 +2920,12 @@
   }
 
   function renderMoreSoonCard() {
-    const t = new Date();
-    t.setDate(t.getDate() + 1);
-    const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
-    const nextLabel = `tomorrow, ${months[t.getMonth()]} ${t.getDate()}`;
     return `<div class="daily-more-soon reveal">
-      <div class="daily-more-soon-icon">🚀</div>
+      <div class="daily-more-soon-icon"><img src="assets/img/plan-trader.webp" alt="" width="64" height="64" loading="lazy" style="width:64px;height:64px;object-fit:contain;filter:drop-shadow(0 8px 18px rgba(57,255,20,0.35))"></div>
       <div class="daily-more-soon-title">MORE RESULTS COMING SOON</div>
-      <div class="daily-more-soon-text">We publish new results every day. Want to follow <strong>every signal in real time</strong>, with entry, TP, and SL — before they're published here? Lock in access to our private channel.</div>
+      <div class="daily-more-soon-text">New recaps are posted regularly. Want to follow <strong>every signal in real time</strong>, with entry, TP, and SL — before they're published here? Lock in access to our private channel.</div>
       <a href="#packages" class="daily-more-soon-btn">⚡ GET ACCESS NOW</a>
-      <div class="daily-more-soon-countdown"><span class="pulse"></span> NEXT RESULT · ${escapeHtml(nextLabel.toUpperCase())}</div>
+      <div class="daily-more-soon-countdown"><span class="pulse"></span> SIGNALS GO LIVE IN THE CHANNEL FIRST</div>
     </div>`;
   }
 
@@ -2989,7 +2985,7 @@
       const r = await fetch('/api/daily-results.php?limit=500');
       const data = await r.json();
       if (data.public_since && since) {
-        since.querySelector('span:last-child').innerHTML = `<strong>We've been publishing daily results publicly since ${escapeHtml(fmtDateEN(data.public_since))}.</strong> Before that, results stayed inside our private Telegram channel for paid members. Now we publish them here too for full public transparency.`;
+        since.querySelector('span:last-child').innerHTML = `<strong>We've been publishing our results publicly since ${escapeHtml(fmtDateEN(data.public_since))}.</strong> Before that, results stayed inside our private Telegram channel for paid members. Now we publish them here too for full public transparency.`;
       }
       applyHeroStats(data.stats);
       fillResultsStrip(data.stats, data.posts || []);
