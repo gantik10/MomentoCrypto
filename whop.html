@@ -485,7 +485,7 @@
   }
 
   /* SECTION TITLES */
-  #results h2, #packages h2, #reviews h2, #inside h2, #how h2, #team h2 {
+  #results h2, #packages h2, #reviews h2, #inside h2, #how h2, #team h2, #faq h2, .bottom-packages h2 {
     font-family: 'Bebas Neue', sans-serif;
     font-size: clamp(44px, 6vw, 80px);
     color: var(--white);
@@ -493,7 +493,7 @@
     margin-bottom: 16px;
     line-height: 1;
   }
-  #results h2 span, #packages h2 span, #reviews h2 span, #inside h2 span, #how h2 span, #team h2 span {
+  #results h2 span, #packages h2 span, #reviews h2 span, #inside h2 span, #how h2 span, #team h2 span, #faq h2 span, .bottom-packages h2 span {
     color: var(--green);
     text-shadow: 0 0 30px rgba(57,255,20,0.4);
   }
@@ -2247,6 +2247,45 @@
     .hw-grid::after, .hw-orb img, .tm-play::before, .tm-play::after { animation: none; }
     .hw-grid::after { display: none; }
   }
+
+  /* GENERATED ART — hero illustration + 3D icons */
+  .hx-art {
+    position: absolute; z-index: -1; top: 120px; right: -10px; width: min(470px, 38vw); pointer-events: none;
+    animation: hxArtFloat 7s ease-in-out infinite;
+  }
+  .hx-art::before {
+    content: ''; position: absolute; inset: 12% 8%; border-radius: 50%; z-index: -1;
+    background: radial-gradient(closest-side, rgba(57,255,20,0.22), rgba(57,255,20,0) 70%); filter: blur(20px);
+  }
+  .hx-art img { width: 100%; height: auto; display: block; filter: drop-shadow(0 30px 60px rgba(0,0,0,0.6)); }
+  @keyframes hxArtFloat { 0%, 100% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(-14px) rotate(1.5deg); } }
+  @media (max-width: 1024px) {
+    .hx-art { top: 112px; right: 10px; width: 250px; }
+  }
+  @media (max-width: 600px) {
+    .hx-art { top: 140px; right: -24px; width: 172px; }
+    .hx-art::before { inset: 0; }
+  }
+
+  .pkg-ico {
+    position: absolute; top: 26px; right: 24px; width: 64px; height: 64px; object-fit: contain; pointer-events: none;
+    filter: drop-shadow(0 8px 16px rgba(57,255,20,0.25)); transition: transform 0.35s ease;
+  }
+  .pkg-card:hover .pkg-ico { transform: translateY(-4px) rotate(-4deg) scale(1.05); }
+
+  .inside-icon { width: 72px; height: 72px; position: relative; }
+  .inside-icon::before {
+    content: ''; position: absolute; inset: 8px; border-radius: 50%; z-index: 0;
+    background: radial-gradient(closest-side, rgba(57,255,20,0.2), rgba(57,255,20,0)); filter: blur(8px);
+  }
+  .inside-icon img { position: relative; width: 72px; height: 72px; object-fit: contain; filter: drop-shadow(0 8px 16px rgba(57,255,20,0.25)); transition: transform 0.35s ease; }
+  .inside-card:hover .inside-icon img { transform: translateY(-4px) rotate(-3deg) scale(1.06); }
+
+  .payment-trust-notes span { display: inline-flex; align-items: center; gap: 7px; }
+  .ptn-ico { width: 22px; height: 22px; object-fit: contain; filter: drop-shadow(0 0 6px rgba(57,255,20,0.3)); }
+  .tg-popup-icon img { width: 64px; height: 64px; object-fit: contain; filter: drop-shadow(0 8px 18px rgba(57,255,20,0.35)); }
+
+  @media (prefers-reduced-motion: reduce) { .hx-art { animation: none; } }
 </style>
 </head>
 <body>
@@ -2291,6 +2330,7 @@
   <div class="hero-bg"></div>
   <div class="hero-grid"></div>
   <div class="hero-inner">
+    <div class="hx-art" aria-hidden="true"><img src="assets/img/hero-target.webp" alt="" width="620" height="640" decoding="async" fetchpriority="low"></div>
     <div class="hero-ticker hx-pill">
       <span class="hx-live"><span class="hx-live-ring"></span><span class="hx-live-dot"></span></span>
       Live signals · 24/7 coverage
@@ -2336,7 +2376,7 @@
       <div class="packages-grid">
         <div class="pkg-card">
           <div class="pkg-duration">01 Month access</div>
-          <div class="pkg-name">STARTER</div>
+          <img class="pkg-ico" src="assets/img/plan-starter.webp" alt="" width="64" height="64" loading="lazy"><div class="pkg-name">STARTER</div>
           <div class="pkg-price-row"><span class="pkg-price">$20</span><span class="pkg-price-note">one-time</span></div>
           <div class="pkg-permo">Billed once &middot; 30 days</div>
           <ul class="pkg-features"><li>Full access to all signals</li><li>Entry, TP &amp; SL levels</li><li>Private Telegram channel</li><li>Analyst commentary</li></ul>
@@ -2346,7 +2386,7 @@
         </div>
         <div class="pkg-card featured">
           <div class="pkg-duration">03 Months access</div>
-          <div class="pkg-name">TRADER</div>
+          <img class="pkg-ico" src="assets/img/plan-trader.webp" alt="" width="64" height="64" loading="lazy"><div class="pkg-name">TRADER</div>
           <div class="pkg-price-row"><span class="pkg-price">$50</span><span class="pkg-price-note">one-time</span></div>
           <div class="pkg-permo">Just $16.67/mo <span class="pkg-save">SAVE 17%</span></div>
           <ul class="pkg-features"><li>Full access to all signals</li><li>Entry, TP &amp; SL levels</li><li>Private Telegram channel</li><li>Analyst commentary</li></ul>
@@ -2356,7 +2396,7 @@
         </div>
         <div class="pkg-card value">
           <div class="pkg-duration">06 Months access</div>
-          <div class="pkg-name">PRO</div>
+          <img class="pkg-ico" src="assets/img/plan-pro.webp" alt="" width="64" height="64" loading="lazy"><div class="pkg-name">PRO</div>
           <div class="pkg-price-row"><span class="pkg-price">$90</span><span class="pkg-price-note">one-time</span></div>
           <div class="pkg-permo">Just $15/mo <span class="pkg-save">SAVE 25%</span></div>
           <ul class="pkg-features"><li>Full access to all signals</li><li>Entry, TP &amp; SL levels</li><li>Private Telegram channel</li><li>Analyst commentary</li></ul>
@@ -2587,9 +2627,9 @@
   <div class="payment-row"><span class="payment-label">Pay your way &mdash; secure checkout</span></div>
   <div class="pay-methods pay-md"><img src="assets/icons/pay/visa.svg" alt="Visa" title="Visa" loading="lazy"><img src="assets/icons/pay/mastercard.svg" alt="Mastercard" title="Mastercard" loading="lazy"><img src="assets/icons/pay/amex.svg" alt="American Express" title="American Express" loading="lazy"><img src="assets/icons/pay/discover.svg" alt="Discover" title="Discover" loading="lazy"><img src="assets/icons/pay/applepay.svg" alt="Apple Pay" title="Apple Pay" loading="lazy"><img src="assets/icons/pay/googlepay.svg" alt="Google Pay" title="Google Pay" loading="lazy"><img src="assets/icons/pay/paypal.svg" alt="PayPal" title="PayPal" loading="lazy"><span class="pay-crypto" title="Crypto"><img src="assets/icons/btc.svg" alt="Bitcoin" loading="lazy"><img src="assets/icons/eth.svg" alt="Ethereum" loading="lazy"></span></div>
   <div class="payment-trust-notes">
-    <span>&#128274; Card details never touch our servers</span>
-    <span>&#127758; Prices shown in your local currency</span>
-    <span>&#9889; Activation code right after payment</span>
+    <span><img class="ptn-ico" src="assets/img/tr-lock.webp" alt="" width="22" height="22" loading="lazy">Card details never touch our servers</span>
+    <span><img class="ptn-ico" src="assets/img/tr-globe.webp" alt="" width="22" height="22" loading="lazy">Prices shown in your local currency</span>
+    <span><img class="ptn-ico" src="assets/img/tr-bolt.webp" alt="" width="22" height="22" loading="lazy">Activation code right after payment</span>
   </div>
 </div>
 
@@ -2617,25 +2657,25 @@
   <div class="inside-grid">
     <div class="inside-card reveal">
       <div class="inside-number">01</div>
-      <span class="inside-icon">⚡</span>
+      <span class="inside-icon"><img src="assets/img/in-signals.webp" alt="" width="72" height="72" loading="lazy"></span>
       <div class="inside-title">PRECISION SIGNALS</div>
       <p class="inside-desc">Every signal includes a clear entry zone, multiple take profit targets, and a hard stop loss. No guessing. Just follow the plan and let the chart do its work.</p>
     </div>
     <div class="inside-card reveal">
       <div class="inside-number">02</div>
-      <span class="inside-icon">📊</span>
+      <span class="inside-icon"><img src="assets/img/in-analysis.webp" alt="" width="72" height="72" loading="lazy"></span>
       <div class="inside-title">MARKET ANALYSIS</div>
       <p class="inside-desc">Daily and weekly market breakdowns covering macro trends, on-chain data, and technical levels. Know exactly what's moving the market before everyone else does.</p>
     </div>
     <div class="inside-card reveal">
       <div class="inside-number">03</div>
-      <span class="inside-icon">🏆</span>
+      <span class="inside-icon"><img src="assets/img/in-results.webp" alt="" width="72" height="72" loading="lazy"></span>
       <div class="inside-title">RESULTS CHANNEL</div>
       <p class="inside-desc">Full transparency, always. A dedicated results log with every closed trade, profit percentage, and P&L screenshot. Track our performance in real time, no cherry-picking.</p>
     </div>
     <div class="inside-card reveal">
       <div class="inside-number">04</div>
-      <span class="inside-icon">🤝</span>
+      <span class="inside-icon"><img src="assets/img/in-community.webp" alt="" width="72" height="72" loading="lazy"></span>
       <div class="inside-title">ELITE COMMUNITY</div>
       <p class="inside-desc">Connect with 4,200+ traders who are serious about growing their wealth. Share ideas, ask questions, and learn from people who are in the trenches with you daily.</p>
     </div>
@@ -2729,7 +2769,7 @@
   <div class="packages-grid">
         <div class="pkg-card reveal">
           <div class="pkg-duration">01 Month access</div>
-          <div class="pkg-name">STARTER</div>
+          <img class="pkg-ico" src="assets/img/plan-starter.webp" alt="" width="64" height="64" loading="lazy"><div class="pkg-name">STARTER</div>
           <div class="pkg-price-row"><span class="pkg-price">$20</span><span class="pkg-price-note">one-time</span></div>
           <div class="pkg-permo">Billed once &middot; 30 days</div>
           <ul class="pkg-features"><li>Full access to all signals</li><li>Entry, TP &amp; SL levels</li><li>Private Telegram channel</li><li>Analyst commentary</li></ul>
@@ -2739,7 +2779,7 @@
         </div>
         <div class="pkg-card featured reveal">
           <div class="pkg-duration">03 Months access</div>
-          <div class="pkg-name">TRADER</div>
+          <img class="pkg-ico" src="assets/img/plan-trader.webp" alt="" width="64" height="64" loading="lazy"><div class="pkg-name">TRADER</div>
           <div class="pkg-price-row"><span class="pkg-price">$50</span><span class="pkg-price-note">one-time</span></div>
           <div class="pkg-permo">Just $16.67/mo <span class="pkg-save">SAVE 17%</span></div>
           <ul class="pkg-features"><li>Full access to all signals</li><li>Entry, TP &amp; SL levels</li><li>Private Telegram channel</li><li>Analyst commentary</li></ul>
@@ -2749,7 +2789,7 @@
         </div>
         <div class="pkg-card value reveal">
           <div class="pkg-duration">06 Months access</div>
-          <div class="pkg-name">PRO</div>
+          <img class="pkg-ico" src="assets/img/plan-pro.webp" alt="" width="64" height="64" loading="lazy"><div class="pkg-name">PRO</div>
           <div class="pkg-price-row"><span class="pkg-price">$90</span><span class="pkg-price-note">one-time</span></div>
           <div class="pkg-permo">Just $15/mo <span class="pkg-save">SAVE 25%</span></div>
           <ul class="pkg-features"><li>Full access to all signals</li><li>Entry, TP &amp; SL levels</li><li>Private Telegram channel</li><li>Analyst commentary</li></ul>
@@ -3134,7 +3174,7 @@
 <div class="tg-popup-overlay" id="tgPopupOverlay">
   <div class="tg-popup">
     <button class="tg-popup-close" onclick="closePopup()">×</button>
-    <div class="tg-popup-icon">⚡</div>
+    <div class="tg-popup-icon"><img src="assets/img/tr-bolt.webp" alt="" width="64" height="64" loading="lazy"></div>
     <h3>Wait — Don't Miss the Next Signals</h3>
     <p>Our traders are posting setups with entry, TP, and SL <strong>right now</strong>. Lock in access to the private channel before you go — you can still catch the next trade.</p>
     <a href="#packages" onclick="closePopup()" class="tg-popup-btn" style="background:var(--green);color:var(--black);">⚡ GET ACCESS NOW</a>
