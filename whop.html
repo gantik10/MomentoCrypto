@@ -2639,6 +2639,34 @@
     .rx-chip-num { font-size: 24px; white-space: nowrap; }
     .rx-chip-label { font-size: 8.5px; letter-spacing: 1.2px; }
   }
+
+  /* Mobile sticky "Skip results" */
+  .rx-skip {
+    position: fixed; left: 16px; bottom: calc(22px + env(safe-area-inset-bottom)); z-index: 9998;
+    display: inline-flex; align-items: center; gap: 8px; height: 50px; padding: 0 18px 0 20px; border-radius: 999px; cursor: pointer;
+    font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 700; color: var(--white);
+    background: rgba(18,18,18,0.88); border: 1px solid rgba(var(--acc),0.45);
+    backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.07);
+    opacity: 0; transform: translateY(24px); pointer-events: none;
+    transition: opacity 0.25s ease, transform 0.25s ease;
+  }
+  .rx-skip.show { opacity: 1; transform: translateY(0); pointer-events: auto; }
+  .rx-skip svg { color: var(--green); animation: rxSkipNudge 1.6s ease-in-out infinite; }
+  .rx-skip:active { transform: scale(0.97); }
+  .rx-skip-joke {
+    position: absolute; left: 10px; bottom: calc(100% + 8px); white-space: nowrap; pointer-events: none;
+    font-family: 'Space Mono', monospace; font-size: 10px; font-weight: 400; letter-spacing: 0.4px; color: #0d1a08;
+    background: var(--green); padding: 4px 9px; border-radius: 8px;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.45);
+    transform: rotate(-4deg); transform-origin: left bottom;
+    animation: rxJokeBob 2.8s ease-in-out infinite;
+  }
+  .rx-skip-joke::after { content: ''; position: absolute; left: 18px; top: 100%; border: 5px solid transparent; border-top-color: var(--green); }
+  @keyframes rxSkipNudge { 0%, 100% { transform: translateY(-1px); } 50% { transform: translateY(3px); } }
+  @keyframes rxJokeBob { 0%, 100% { transform: rotate(-4deg) translateY(0); } 50% { transform: rotate(-2deg) translateY(-3px); } }
+  @media (min-width: 901px) { .rx-skip { display: none; } }
+  @media (prefers-reduced-motion: reduce) { .rx-skip svg, .rx-skip-joke { animation: none; } }
 </style>
 </head>
 <body>
@@ -3624,6 +3652,49 @@
     }
     box.appendChild(el);
     box.classList.add('is-playing');
+  });
+})();
+</script>
+
+<!-- Mobile: sticky "skip results" while scrolling the long results feed -->
+<button class="rx-skip" id="rxSkip" type="button" aria-label="Skip past the results">
+  <span class="rx-skip-joke" aria-hidden="true">(there&rsquo;s way too much to scroll)</span>
+  <span class="rx-skip-label">Skip results</span>
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 6l5 5 5-5"/><path d="M7 13l5 5 5-5"/></svg>
+</button>
+
+<script>
+// Show "Skip results" only while the results feed fills the screen (mobile), jump to what comes after
+(function () {
+  const btn = document.getElementById('rxSkip');
+  const res = document.getElementById('results');
+  if (!btn || !res) return;
+  const mq = window.matchMedia('(max-width: 900px)');
+  const update = () => {
+    if (!mq.matches) { btn.classList.remove('show'); return; }
+    const r = res.getBoundingClientRect();
+    const vh = window.innerHeight;
+    btn.classList.toggle('show', r.top < vh * 0.35 && r.bottom > vh * 1.4);
+  };
+  window.addEventListener('scroll', update, { passive: true });
+  window.addEventListener('resize', update);
+  update();
+  btn.addEventListener('click', () => {
+    // Instant jump: a smooth scroll lazy-loads every recap image on the way and the target keeps moving
+    const next = res.nextElementSibling && res.nextElementSibling.offsetHeight ? res.nextElementSibling : document.getElementById('reviews');
+    const nav = document.querySelector('nav');
+    const go = () => window.scrollTo({ top: next.getBoundingClientRect().top + window.scrollY - (nav ? nav.offsetHeight : 0) - 12, behavior: 'instant' });
+    go();
+    // Recap images near the landing spot load after the jump and push the target down: keep it pinned
+    // for a moment, unless the user starts scrolling themselves
+    let stop = false;
+    const cancel = () => { stop = true; };
+    window.addEventListener('touchstart', cancel, { once: true, passive: true });
+    window.addEventListener('wheel', cancel, { once: true, passive: true });
+    const ro = new ResizeObserver(() => { if (!stop) go(); });
+    ro.observe(res);
+    setTimeout(() => { ro.disconnect(); stop = true; }, 2500);
+    if (window.__mc_send) window.__mc_send('click', { tag: 'BUTTON', text: 'Skip results', section: 'results', id: 'rxSkip' });
   });
 })();
 </script>
