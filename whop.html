@@ -2638,12 +2638,7 @@
       plan: cfg.plan,
       returnUrl: location.origin + '/whop?paid=' + pkg,
       appearance: {
-        theme: 'dark',
-        variables: {
-          colorPrimary: '#39FF14',
-          colorBackground: '#111111',
-          colorText: '#f5f5f5',
-        },
+        theme: { appearance: 'dark', accentColor: 'green' },
       },
       onComplete: (result) => {
         if (window.fbq) fbq('track', 'Purchase', { content_ids: [pkg], content_type: 'product', value: cfg.usd, currency: 'USD', num_items: 1 }, { eventID: (result && result.paymentId) || undefined });
