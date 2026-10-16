@@ -2394,7 +2394,7 @@
   .mn-support svg { color: var(--green); }
 
   /* ===== COLOUR HIERARCHY: soft green for accents, full neon only on buy buttons ===== */
-  :root { --acc: 167,209,150; --green: #a7d196; --green-dim: #86b874; --green-glow: rgba(167,209,150,0.12); }
+  :root { --acc: 128,222,104; --green: #80de68; --green-dim: #62c24c; --green-glow: rgba(128,222,104,0.14); }
   h2 span { text-shadow: none !important; }
   .hx-title .hx-green {
     background: linear-gradient(180deg, #a3eb90 0%, #5fd84a 55%, #3faa2d 100%);
@@ -2435,16 +2435,16 @@
 
   /* ===== SAGE PALETTE PASS: neon only on the key buy buttons ===== */
   .hx-title .hx-green {
-    background: linear-gradient(180deg, #e2f2da 0%, #b9dcaa 50%, #8fbf7d 100%);
+    background: linear-gradient(180deg, #d8fbc9 0%, #8fe678 50%, #5cc544 100%);
     -webkit-background-clip: text; background-clip: text; color: transparent; filter: none;
   }
-  #hero .hero-bg::after { opacity: 0.55; }
+  #hero .hero-bg::after { opacity: 0.8; }
   /* 3D illustrations: calmer, greyer green so they don't outshine the CTA */
-  .hx-art img { filter: saturate(0.5) brightness(0.92) drop-shadow(0 30px 60px rgba(0,0,0,0.6)); }
-  .hw-orb img { filter: saturate(0.5) brightness(0.95) drop-shadow(0 8px 14px rgba(0,0,0,0.4)); }
-  .inside-icon img { filter: saturate(0.5) brightness(0.95) drop-shadow(0 8px 16px rgba(0,0,0,0.4)); }
-  .ptn-ico, .tg-popup-icon img, .daily-more-soon-icon img { filter: saturate(0.5) brightness(0.95) !important; }
-  .tm-poster { filter: saturate(0.6); }
+  .hx-art img { filter: saturate(0.82) brightness(0.96) drop-shadow(0 30px 60px rgba(0,0,0,0.6)); }
+  .hw-orb img { filter: saturate(0.8) brightness(0.98) drop-shadow(0 8px 14px rgba(0,0,0,0.4)); }
+  .inside-icon img { filter: saturate(0.8) brightness(0.98) drop-shadow(0 8px 16px rgba(0,0,0,0.4)); }
+  .ptn-ico, .tg-popup-icon img, .daily-more-soon-icon img { filter: saturate(0.8) !important; }
+  .tm-poster { filter: saturate(0.85); }
 
   /* primary buy buttons keep the neon + a neon glow */
   .pkg-cta, .hx-cta, .tg-btn, .daily-more-soon-btn {
@@ -2458,19 +2458,19 @@
   /* secondary buttons: same solid button shape, soft sage instead of neon */
   .rx-card-cta {
     color: #0f1d0a; border: 0;
-    background: linear-gradient(180deg, #cfe6c4 0%, #a7d196 55%, #8dbd7b 100%);
+    background: linear-gradient(180deg, #c4f0b3 0%, #8fdc78 55%, #6cc556 100%);
     box-shadow: inset 0 1px 0 rgba(255,255,255,0.55), inset 0 -2px 0 rgba(0,0,0,0.14), 0 8px 20px rgba(0,0,0,0.35);
   }
   .rx-card-cta:hover {
     color: #0f1d0a; border: 0; filter: brightness(1.06);
-    background: linear-gradient(180deg, #d9edcf 0%, #b3d8a3 55%, #97c585 100%);
+    background: linear-gradient(180deg, #cff5c0 0%, #9be585 55%, #78cf61 100%);
     box-shadow: inset 0 1px 0 rgba(255,255,255,0.6), 0 12px 26px rgba(0,0,0,0.45);
   }
 
   /* result % chips: little buttons in muted sage */
   .rx-gain {
     padding: 1px 8px; border-radius: 6px; color: #eef8e9;
-    background: linear-gradient(180deg, #557a49 0%, #41603a 100%);
+    background: linear-gradient(180deg, #4f8a3d 0%, #3a6b2d 100%);
     border: 1px solid rgba(var(--acc),0.35);
     box-shadow: inset 0 1px 0 rgba(255,255,255,0.14), 0 2px 6px rgba(0,0,0,0.35);
   }
@@ -2516,6 +2516,47 @@
 
   /* logo without the mark */
   .lg-text { align-items: stretch; }
+
+  /* TEAM: wide video + portrait photo cards */
+  .tm-wrap { grid-template-columns: 1fr; }
+  .tm-video { aspect-ratio: 21 / 9; }
+  .tm-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; margin-top: 22px; }
+  .tm-card {
+    position: relative; overflow: hidden; border-radius: 18px; aspect-ratio: 4 / 5;
+    background: #0f0f0f; border: 1px solid rgba(var(--acc),0.18);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.05), 0 20px 44px rgba(0,0,0,0.45);
+    transition: transform 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease;
+  }
+  .tm-card:hover { transform: translateY(-6px); border-color: rgba(var(--acc),0.45); box-shadow: 0 26px 60px rgba(0,0,0,0.6), 0 0 40px rgba(var(--acc),0.1); }
+  .tm-photo { position: absolute; inset: 0; }
+  .tm-photo img { width: 100%; height: 100%; object-fit: cover; object-position: center 25%; transition: transform 0.8s ease; }
+  .tm-card:hover .tm-photo img { transform: scale(1.05); }
+  .tm-photo::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(8,8,8,0) 45%, rgba(8,8,8,0.55) 70%, rgba(8,8,8,0.95) 100%); }
+  .tm-photo-empty { display: grid; place-items: end center; color: rgba(var(--acc),0.16); background: radial-gradient(70% 60% at 50% 35%, #16200f, #0b0b0b 75%); }
+  .tm-photo-empty svg { width: 72%; height: auto; margin-bottom: -2%; }
+  .tm-card-body { position: absolute; left: 20px; right: 20px; bottom: 18px; z-index: 1; }
+  .tm-card .tm-name { font-size: 30px; letter-spacing: 1.5px; }
+  .tm-card .tm-role { margin-top: 7px; }
+  .tm-tag {
+    display: inline-block; margin-bottom: 10px; padding: 5px 10px; border-radius: 999px;
+    font-family: 'Space Mono', monospace; font-size: 9.5px; letter-spacing: 1.6px; text-transform: uppercase;
+    color: rgba(245,245,245,0.7); background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.12);
+  }
+  .tm-card.is-soon .tm-name { color: rgba(245,245,245,0.55); }
+  @media (max-width: 900px) {
+    .tm-video { aspect-ratio: 16 / 9; }
+    .tm-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+  @media (max-width: 600px) {
+    .tm-video { aspect-ratio: 4 / 3; }
+    .tm-grid {
+      display: flex; overflow-x: auto; scroll-snap-type: x mandatory; gap: 14px;
+      margin: 18px -20px 0; padding: 0 20px 6px; scroll-padding: 0 20px; scrollbar-width: none;
+    }
+    .tm-grid::-webkit-scrollbar { display: none; }
+    .tm-card { flex: 0 0 74%; scroll-snap-align: start; }
+    .tm-card .tm-name { font-size: 26px; }
+  }
 </style>
 </head>
 <body>
@@ -2660,33 +2701,33 @@
         <span class="tm-soon">Video coming soon</span>
       </div>
     </div>
+  </div>
 
-    <div class="tm-people">
-      <div class="tm-person reveal">
-        <div class="tm-avatar"><svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="18" r="9" fill="currentColor"/><path d="M6 46c1.5-10 9-15 18-15s16.5 5 18 15z" fill="currentColor"/></svg></div>
-        <div class="tm-person-body">
-          <div class="tm-name">Teammate name</div>
-          <div class="tm-role">Lead Trader</div>
-          <div class="tm-bio">Calls the setups and manages every open position.</div>
-        </div>
+  <!-- TEAM CARDS: one <article class="tm-card"> per teammate; photo 720x900 (4:5) in assets/img/team/ -->
+  <div class="tm-grid">
+    <article class="tm-card reveal">
+      <div class="tm-photo"><img src="assets/img/team/max.webp" alt="Max, MomentoCrypto team" width="720" height="900" loading="lazy"></div>
+      <div class="tm-card-body">
+        <div class="tm-name">Max</div>
+        <div class="tm-role">MomentoCrypto team</div>
       </div>
-      <div class="tm-person reveal">
-        <div class="tm-avatar"><svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="18" r="9" fill="currentColor"/><path d="M6 46c1.5-10 9-15 18-15s16.5 5 18 15z" fill="currentColor"/></svg></div>
-        <div class="tm-person-body">
-          <div class="tm-name">Teammate name</div>
-          <div class="tm-role">Market Analyst</div>
-          <div class="tm-bio">Scans the market daily and prepares the trade ideas.</div>
-        </div>
+    </article>
+    <article class="tm-card is-soon reveal">
+      <div class="tm-photo tm-photo-empty"><svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="18" r="9" fill="currentColor"/><path d="M6 46c1.5-10 9-15 18-15s16.5 5 18 15z" fill="currentColor"/></svg></div>
+      <div class="tm-card-body">
+        <span class="tm-tag">Coming soon</span>
+        <div class="tm-name">Teammate name</div>
+        <div class="tm-role">Market Analyst</div>
       </div>
-      <div class="tm-person reveal">
-        <div class="tm-avatar"><svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="18" r="9" fill="currentColor"/><path d="M6 46c1.5-10 9-15 18-15s16.5 5 18 15z" fill="currentColor"/></svg></div>
-        <div class="tm-person-body">
-          <div class="tm-name">Teammate name</div>
-          <div class="tm-role">Community Manager</div>
-          <div class="tm-bio">Answers your questions inside the Telegram channel.</div>
-        </div>
+    </article>
+    <article class="tm-card is-soon reveal">
+      <div class="tm-photo tm-photo-empty"><svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="18" r="9" fill="currentColor"/><path d="M6 46c1.5-10 9-15 18-15s16.5 5 18 15z" fill="currentColor"/></svg></div>
+      <div class="tm-card-body">
+        <span class="tm-tag">Coming soon</span>
+        <div class="tm-name">Teammate name</div>
+        <div class="tm-role">Community Manager</div>
       </div>
-    </div>
+    </article>
   </div>
 </section>
 
@@ -2777,13 +2818,13 @@
           <svg viewBox="0 0 220 70" preserveAspectRatio="none">
             <defs>
               <linearGradient id="chartGrad" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stop-color="#a7d196" stop-opacity="0.5"/>
-                <stop offset="100%" stop-color="#a7d196" stop-opacity="0"/>
+                <stop offset="0%" stop-color="#80de68" stop-opacity="0.5"/>
+                <stop offset="100%" stop-color="#80de68" stop-opacity="0"/>
               </linearGradient>
             </defs>
             <path d="M0 55 L20 52 L40 58 L60 50 L80 48 L100 42 L120 38 L140 32 L160 28 L180 20 L200 14 L220 8 L220 70 L0 70 Z" fill="url(#chartGrad)"/>
-            <path d="M0 55 L20 52 L40 58 L60 50 L80 48 L100 42 L120 38 L140 32 L160 28 L180 20 L200 14 L220 8" stroke="#a7d196" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-            <circle cx="220" cy="8" r="3" fill="#a7d196"/>
+            <path d="M0 55 L20 52 L40 58 L60 50 L80 48 L100 42 L120 38 L140 32 L160 28 L180 20 L200 14 L220 8" stroke="#80de68" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+            <circle cx="220" cy="8" r="3" fill="#80de68"/>
           </svg>
         </div>
       </div>
