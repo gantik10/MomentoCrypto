@@ -30,6 +30,10 @@ $PLAN_MAP = [
     'plan_wK02ujxaHuVbX' => ['package' => 'starter', 'name' => 'Starter (1 Month)'],
     'plan_ExxqOfZ011XoL' => ['package' => 'trader',  'name' => 'Trader (3 Months)'],
     'plan_EJRrxW0ltWGn9' => ['package' => 'pro',     'name' => 'Pro (6 Months)'],
+    // Recurring versions (whop.html): first payment issues the same activation code
+    'plan_o4pZx6sSsYnpR' => ['package' => 'starter', 'name' => 'Starter (1 Month, recurring)'],
+    'plan_qjAl1ZXSspoA8' => ['package' => 'trader',  'name' => 'Trader (3 Months, recurring)'],
+    'plan_jqaoTVAwb4TNK' => ['package' => 'pro',     'name' => 'Pro (6 Months, recurring)'],
 ];
 
 function bail_to_landing(string $reason): void {
