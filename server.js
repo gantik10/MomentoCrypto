@@ -388,12 +388,12 @@ http.createServer(async (req, res) => {
     }
 
     // --- Static files ---
+    if (pathname === "/whop" || pathname === "/whop/" || pathname === "/whop.html") { res.writeHead(301, { Location: "/" + url.search }); res.end(); return; }
     let filePath;
     if (pathname === "/") filePath = "/index.html";
     else if (pathname === "/in" || pathname === "/in/") filePath = "/in.html";
     else if (pathname === "/go" || pathname === "/go/") filePath = "/go.html";
     else if (pathname === "/age" || pathname === "/age/") filePath = "/age.html";
-    else if (pathname === "/whop" || pathname === "/whop/") filePath = "/whop.html";
     else filePath = pathname;
     filePath = path.join(__dirname, filePath);
     if (!filePath.startsWith(__dirname)) { res.writeHead(403); res.end(); return; }

@@ -4,7 +4,7 @@
 // redirects the buyer to /success.php?t=... (activation code → Telegram bot).
 //
 // Entry points:
-//   - whop.html onComplete  → /api/whop-claim.php?payment=pay_XXX
+//   - index.html onComplete  → /api/whop-claim.php?payment=pay_XXX
 //   - Whop checkout returnUrl (off-site steps) → ?payment=pay_XXX&status=succeeded|failed|canceled
 //
 // Idempotent per payment: repeat visits reuse the same token (success.php
@@ -30,13 +30,12 @@ $PLAN_MAP = [
     'plan_wK02ujxaHuVbX' => ['package' => 'starter', 'name' => 'Starter (1 Month)'],
     'plan_ExxqOfZ011XoL' => ['package' => 'trader',  'name' => 'Trader (3 Months)'],
     'plan_EJRrxW0ltWGn9' => ['package' => 'pro',     'name' => 'Pro (6 Months)'],
-    'plan_P7tsi5OA98zr7' => ['package' => 'starter', 'name' => 'TEST $1 (flow check)'],  // $1 test plan — issues the starter code
 ];
 
 function bail_to_landing(string $reason): void {
     file_put_contents(__DIR__ . '/whop_claim.log',
         date('Y-m-d H:i:s') . " | BAIL | {$reason} | qs=" . ($_SERVER['QUERY_STRING'] ?? '') . "\n", FILE_APPEND);
-    header('Location: /whop');
+    header('Location: /');
     exit;
 }
 
@@ -83,7 +82,7 @@ $currency = strtoupper($pay['currency'] ?? 'USD');
 $attribution = [
     'ip' => trim(explode(',', $_SERVER['HTTP_X_FORWARDED_FOR'] ?? $_SERVER['HTTP_X_REAL_IP'] ?? $_SERVER['REMOTE_ADDR'] ?? '')[0]),
     'user_agent' => $_SERVER['HTTP_USER_AGENT'] ?? '',
-    'landing_url' => 'https://momentocrypto.com/whop',
+    'landing_url' => 'https://momentocrypto.com/',
 ];
 
 // Issue the one-time success token (same shape as pay.php / pay-payou-*.php)
