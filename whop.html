@@ -4,9 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>MomentoCrypto — Signals That Hit</title>
-<meta name="description" content="Professional crypto signals with verified results. Join 4,200+ traders winning with MomentoCrypto's premium Telegram community.">
+<meta name="description" content="Crypto trading signals in a private Telegram channel. Entry, take-profit and stop-loss on every signal. Live since 2019. Plans from $20.">
 <meta property="og:title" content="MomentoCrypto — Signals That Hit">
-<meta property="og:description" content="Professional crypto signals with verified results. Join thousands of traders already winning.">
+<meta property="og:description" content="Live crypto signals. Entry, take-profit and stop-loss. Trading through bull and bear markets since 2019.">
 <meta property="og:type" content="website">
 <meta name="theme-color" content="#080808">
 <meta name="robots" content="noindex, nofollow">
@@ -2614,6 +2614,15 @@
     .hw-grid::after { top: 48px; }
     @keyframes hwPulse { 0% { left: calc((100% - 60px) / 8); opacity: 0; } 10%, 90% { opacity: 1; } 100% { left: calc(100% - (100% - 60px) / 8 - 70px); opacity: 0; } }
   }
+
+  @media (max-width: 600px) {
+    .tm-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; overflow: visible; margin: 14px 0 0; padding: 0; scroll-snap-type: none; }
+    .tm-card { flex: none; border-radius: 12px; }
+    .tm-card-body { left: 8px; right: 8px; bottom: 8px; }
+    .tm-card .tm-name { font-size: 19px; letter-spacing: 0.8px; }
+    .tm-card .tm-role { font-size: 7.5px; letter-spacing: 0.6px; margin-top: 3px; line-height: 1.3; }
+    .tm-photo::after { background: linear-gradient(180deg, rgba(8,8,8,0) 50%, rgba(8,8,8,0.92) 100%); }
+  }
 </style>
 </head>
 <body>
@@ -2659,41 +2668,41 @@
     <div class="hx-art" aria-hidden="true"><img src="assets/img/hero-target.webp" alt="" width="620" height="640" decoding="async" fetchpriority="low"></div>
     <div class="hero-ticker hx-pill">
       <span class="hx-live"><span class="hx-live-ring"></span><span class="hx-live-dot"></span></span>
-      Live signals · 24/7 coverage
+      LIVE SIGNALS · SINCE 2019
     </div>
     <h1 class="hx-title"><span class="hx-white">SIGNALS<br>THAT</span> <span class="green hx-green">HIT.</span></h1>
-    <p class="hero-sub">Professional crypto signals with verified results. Join thousands of traders already winning with MomentoCrypto's premium community.</p>
+    <p class="hero-sub">Crypto trading signals in a private Telegram channel, with entry, take-profit and stop-loss. We&rsquo;ve stayed profitable through bull and bear markets since 2019.</p>
     <div class="hx-cta-row">
-      <a href="#packages" class="pkg-btn pkg-cta hx-cta"><svg class="pkg-cta-lock" width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="4" y="10" width="16" height="11" rx="2.5" fill="currentColor"/><path d="M8 10V7a4 4 0 0 1 8 0v3" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg><span class="pkg-cta-label">See plans &mdash; from $20</span><span class="pkg-cta-arrow">&rarr;</span></a>
-      <a href="#results" class="hx-ghost">View our results</a>
+      <a href="#packages" class="pkg-btn pkg-cta hx-cta"><svg class="pkg-cta-lock" width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="4" y="10" width="16" height="11" rx="2.5" fill="currentColor"/><path d="M8 10V7a4 4 0 0 1 8 0v3" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg><span class="pkg-cta-label">See plans from $20</span><span class="pkg-cta-arrow">&rarr;</span></a>
+      <a href="#results" class="hx-ghost">View recaps</a>
     </div>
     <div class="hx-trust">
       <div class="hx-trust-pay"><img src="assets/icons/pay/visa.svg" alt="Visa" loading="lazy"><img src="assets/icons/pay/mastercard.svg" alt="Mastercard" loading="lazy"><img src="assets/icons/pay/amex.svg" alt="Amex" loading="lazy"><img src="assets/icons/pay/applepay.svg" alt="Apple Pay" loading="lazy"><img src="assets/icons/pay/googlepay.svg" alt="Google Pay" loading="lazy"><img src="assets/icons/pay/paypal.svg" alt="PayPal" loading="lazy"></div>
-      <span>One-time payment &middot; Instant Telegram access</span>
+      <span>One-time payment &middot; No auto-renewal</span>
     </div>
     <div class="hero-stats hx-stats" id="heroStats">
       <div class="stat">
         <div class="stat-num" data-count="4200">0</div>
-        <div class="stat-label">Active Members</div>
+        <div class="stat-label">Members</div>
       </div>
       <div class="stat">
         <div class="stat-num" id="heroSignals" data-count="100">0</div>
-        <div class="stat-label">Signals Delivered</div>
+        <div class="stat-label">Signals posted</div>
       </div>
       <div class="stat">
         <div class="stat-num" id="heroCumulative" data-count="340" data-suffix="%">0%</div>
-        <div class="stat-label">Cumulative PnL</div>
+        <div class="stat-label">Cumulative P&amp;L</div>
       </div>
       <div class="stat">
         <div class="stat-num" id="heroBestTrade" data-count="399" data-suffix="%">0%</div>
-        <div class="stat-label">Best Trade</div>
+        <div class="stat-label">Best trade</div>
       </div>
     </div>
 
     <!-- PACKAGES IN HERO -->
     <div class="hero-packages" id="packages">
       <div class="hero-packages-header">
-        <h2 class="hero-pkg-title">Choose Your Plan</h2>
+        <h2 class="hero-pkg-title">CHOOSE YOUR PLAN</h2>
         <div class="hero-pkg-payment-icons">
           <span class="hero-pkg-accepts">Pay with</span>
           <div class="pay-methods pay-sm"><img src="assets/icons/pay/visa.svg" alt="Visa" title="Visa" loading="lazy"><img src="assets/icons/pay/mastercard.svg" alt="Mastercard" title="Mastercard" loading="lazy"><img src="assets/icons/pay/amex.svg" alt="American Express" title="American Express" loading="lazy"><img src="assets/icons/pay/discover.svg" alt="Discover" title="Discover" loading="lazy"><img src="assets/icons/pay/applepay.svg" alt="Apple Pay" title="Apple Pay" loading="lazy"><img src="assets/icons/pay/googlepay.svg" alt="Google Pay" title="Google Pay" loading="lazy"><img src="assets/icons/pay/paypal.svg" alt="PayPal" title="PayPal" loading="lazy"><span class="pay-crypto" title="Crypto"><img src="assets/icons/btc.svg" alt="Bitcoin" loading="lazy"><img src="assets/icons/eth.svg" alt="Ethereum" loading="lazy"></span></div>
@@ -2704,8 +2713,8 @@
           <div class="pkg-duration">01 Month access</div>
           <img class="pkg-ico" src="assets/img/plan-starter-orange.webp" alt="" width="64" height="64" loading="lazy"><div class="pkg-name">STARTER</div>
           <div class="pkg-price-row"><span class="pkg-price">$20</span><span class="pkg-price-note">one-time</span></div>
-          <div class="pkg-permo">Billed once &middot; 30 days</div>
-          <ul class="pkg-features"><li>Full access to all signals</li><li>Entry, TP &amp; SL levels</li><li>Private Telegram channel</li><li>Analyst commentary</li></ul>
+          <div class="pkg-permo">One-time payment &middot; 30 days</div>
+          <ul class="pkg-features"><li>Access to all signals</li><li>Entry, TP &amp; SL</li><li>Private Telegram channel</li><li>Analyst commentary</li></ul>
           <button class="pkg-btn pkg-btn-crypto pkg-cta" onclick="openWhopCheckout('starter')"><svg class="pkg-cta-lock" width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="4" y="10" width="16" height="11" rx="2.5" fill="currentColor"/><path d="M8 10V7a4 4 0 0 1 8 0v3" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg><span class="pkg-cta-label">Get Starter Access</span><span class="pkg-cta-arrow">&rarr;</span></button>
           <div class="pkg-assure">&#128274; Secure checkout &middot; No auto-renewal</div>
           <div class="pay-methods pay-xs"><img src="assets/icons/pay/visa.svg" alt="Visa" title="Visa" loading="lazy"><img src="assets/icons/pay/mastercard.svg" alt="Mastercard" title="Mastercard" loading="lazy"><img src="assets/icons/pay/amex.svg" alt="American Express" title="American Express" loading="lazy"><img src="assets/icons/pay/discover.svg" alt="Discover" title="Discover" loading="lazy"><img src="assets/icons/pay/applepay.svg" alt="Apple Pay" title="Apple Pay" loading="lazy"><img src="assets/icons/pay/googlepay.svg" alt="Google Pay" title="Google Pay" loading="lazy"><img src="assets/icons/pay/paypal.svg" alt="PayPal" title="PayPal" loading="lazy"><span class="pay-crypto" title="Crypto"><img src="assets/icons/btc.svg" alt="Bitcoin" loading="lazy"><img src="assets/icons/eth.svg" alt="Ethereum" loading="lazy"></span></div>
@@ -2715,7 +2724,7 @@
           <img class="pkg-ico" src="assets/img/plan-trader.webp" alt="" width="64" height="64" loading="lazy"><div class="pkg-name">TRADER</div>
           <div class="pkg-price-row"><span class="pkg-price">$50</span><span class="pkg-price-note">one-time</span></div>
           <div class="pkg-permo">Just $16.67/mo <span class="pkg-save">SAVE 17%</span></div>
-          <ul class="pkg-features"><li>Full access to all signals</li><li>Entry, TP &amp; SL levels</li><li>Private Telegram channel</li><li>Analyst commentary</li></ul>
+          <ul class="pkg-features"><li>Access to all signals</li><li>Entry, TP &amp; SL</li><li>Private Telegram channel</li><li>Analyst commentary</li></ul>
           <button class="pkg-btn pkg-btn-crypto pkg-cta" onclick="openWhopCheckout('trader')"><svg class="pkg-cta-lock" width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="4" y="10" width="16" height="11" rx="2.5" fill="currentColor"/><path d="M8 10V7a4 4 0 0 1 8 0v3" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg><span class="pkg-cta-label">Get Trader Access</span><span class="pkg-cta-arrow">&rarr;</span></button>
           <div class="pkg-assure">&#128274; Secure checkout &middot; No auto-renewal</div>
           <div class="pay-methods pay-xs"><img src="assets/icons/pay/visa.svg" alt="Visa" title="Visa" loading="lazy"><img src="assets/icons/pay/mastercard.svg" alt="Mastercard" title="Mastercard" loading="lazy"><img src="assets/icons/pay/amex.svg" alt="American Express" title="American Express" loading="lazy"><img src="assets/icons/pay/discover.svg" alt="Discover" title="Discover" loading="lazy"><img src="assets/icons/pay/applepay.svg" alt="Apple Pay" title="Apple Pay" loading="lazy"><img src="assets/icons/pay/googlepay.svg" alt="Google Pay" title="Google Pay" loading="lazy"><img src="assets/icons/pay/paypal.svg" alt="PayPal" title="PayPal" loading="lazy"><span class="pay-crypto" title="Crypto"><img src="assets/icons/btc.svg" alt="Bitcoin" loading="lazy"><img src="assets/icons/eth.svg" alt="Ethereum" loading="lazy"></span></div>
@@ -2725,7 +2734,7 @@
           <img class="pkg-ico" src="assets/img/plan-pro-blue.webp" alt="" width="64" height="64" loading="lazy"><div class="pkg-name">PRO</div>
           <div class="pkg-price-row"><span class="pkg-price">$90</span><span class="pkg-price-note">one-time</span></div>
           <div class="pkg-permo">Just $15/mo <span class="pkg-save">SAVE 25%</span></div>
-          <ul class="pkg-features"><li>Full access to all signals</li><li>Entry, TP &amp; SL levels</li><li>Private Telegram channel</li><li>Analyst commentary</li></ul>
+          <ul class="pkg-features"><li>Access to all signals</li><li>Entry, TP &amp; SL</li><li>Private Telegram channel</li><li>Analyst commentary</li></ul>
           <button class="pkg-btn pkg-btn-crypto pkg-cta" onclick="openWhopCheckout('pro')"><svg class="pkg-cta-lock" width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="4" y="10" width="16" height="11" rx="2.5" fill="currentColor"/><path d="M8 10V7a4 4 0 0 1 8 0v3" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg><span class="pkg-cta-label">Get Pro Access</span><span class="pkg-cta-arrow">&rarr;</span></button>
           <div class="pkg-assure">&#128274; Secure checkout &middot; No auto-renewal</div>
           <div class="pay-methods pay-xs"><img src="assets/icons/pay/visa.svg" alt="Visa" title="Visa" loading="lazy"><img src="assets/icons/pay/mastercard.svg" alt="Mastercard" title="Mastercard" loading="lazy"><img src="assets/icons/pay/amex.svg" alt="American Express" title="American Express" loading="lazy"><img src="assets/icons/pay/discover.svg" alt="Discover" title="Discover" loading="lazy"><img src="assets/icons/pay/applepay.svg" alt="Apple Pay" title="Apple Pay" loading="lazy"><img src="assets/icons/pay/googlepay.svg" alt="Google Pay" title="Google Pay" loading="lazy"><img src="assets/icons/pay/paypal.svg" alt="PayPal" title="PayPal" loading="lazy"><span class="pay-crypto" title="Crypto"><img src="assets/icons/btc.svg" alt="Bitcoin" loading="lazy"><img src="assets/icons/eth.svg" alt="Ethereum" loading="lazy"></span></div>
@@ -2740,9 +2749,9 @@
 
 <!-- TEAM SECTION. Video block below is hidden until the video is ready: remove `hidden` from .tm-wrap and set data-video-src on #teamVideo -->
 <section id="team">
-  <div class="section-label reveal">Meet the team</div>
+  <div class="section-label reveal">Our team</div>
   <h2 class="reveal">REAL TRADERS.<br><span>REAL FACES.</span></h2>
-  <p class="hw-sub reveal">The people behind every signal &mdash; calling the setups, managing risk and keeping the community running.</p>
+  <p class="hw-sub reveal">We trade, analyse the market and keep the community running, with support when you need it.</p>
 
   <div class="tm-hero">
     <figure class="tm-group reveal">
@@ -2755,7 +2764,7 @@
         <span class="tm-badge-pill"><span class="hx-live"><span class="hx-live-ring"></span><span class="hx-live-dot"></span></span>Live &middot; Est. 2019</span>
         <span class="tm-badge-pill"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/></svg>Profitable through bull &amp; bear markets</span>
       </div>
-      <p class="tm-story-text">Max founded MomentoCrypto, and Alex trades and analyses the market. We post every signal in our private Telegram channel. Mily runs our community and handles member support, so you have someone to turn to.</p>
+      <p class="tm-story-text">Alex trades and analyses the market. Mily runs our community and member support. We post signals live in our private Telegram channel, with updates on each trade until it closes.</p>
       <a href="#packages" class="pkg-btn pkg-cta hx-cta tm-cta"><svg class="pkg-cta-lock" width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="4" y="10" width="16" height="11" rx="2.5" fill="currentColor"/><path d="M8 10V7a4 4 0 0 1 8 0v3" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg><span class="pkg-cta-label">Join our channel</span><span class="pkg-cta-arrow">&rarr;</span></a>
     </div>
   </div>
@@ -2807,8 +2816,8 @@
 <!-- HOW IT WORKS -->
 <section id="how">
   <div class="section-label reveal">How it works</div>
-  <h2 class="reveal">FROM SIGNUP TO<br><span>WINNING TRADES.</span></h2>
-  <p class="hw-sub reveal">Four steps. About <b>2 minutes</b> from checkout to your first signal.</p>
+  <h2 class="reveal">FROM CHECKOUT<br><span>TO FIRST SIGNAL.</span></h2>
+  <p class="hw-sub reveal">Four steps. About <b>2 minutes</b> from checkout to our private Telegram channel.</p>
 
   <div class="hw-grid">
     <article class="hw-step reveal">
@@ -2816,7 +2825,7 @@
       <div class="hw-card">
         <div class="hw-meta"><span class="hw-chip">Step 01</span><span class="hw-time"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>1 min</span></div>
         <h3 class="hw-title">Pick your plan</h3>
-        <p class="hw-desc">Choose 1, 3 or 6 months. One-time payment by card, Apple&nbsp;Pay, Google&nbsp;Pay or PayPal &mdash; no subscription.</p>
+        <p class="hw-desc">Choose 1, 3 or 6 months. One-time payment: card, Apple&nbsp;Pay, Google&nbsp;Pay or PayPal. No subscription.</p>
         <div class="hw-screen">
       <div class="how-mock how-mock-plans">
         <div class="mock-plan">
@@ -2848,7 +2857,7 @@
       <div class="hw-card">
         <div class="hw-meta"><span class="hw-chip">Step 02</span><span class="hw-time"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>30 sec</span></div>
         <h3 class="hw-title">Activate in Telegram</h3>
-        <p class="hw-desc">Your activation code appears instantly. Send it to our bot and you&rsquo;re added to the private signals channel.</p>
+        <p class="hw-desc">Your code appears instantly after payment. Send it to our Telegram bot and you&rsquo;re in the private channel.</p>
         <div class="hw-screen">
       <div class="how-mock how-mock-bot">
         <div class="mock-bot-header">
@@ -2871,8 +2880,8 @@
       <div class="hw-orb"><img src="assets/img/step3-bell.webp" alt="" width="74" height="74" loading="lazy"><span class="hw-num">03</span></div>
       <div class="hw-card">
         <div class="hw-meta"><span class="hw-chip">Step 03</span><span class="hw-time"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Live</span></div>
-        <h3 class="hw-title">Get the alert &amp; trade</h3>
-        <p class="hw-desc">Every signal comes with entry, take-profit and stop-loss. Copy it into your exchange in seconds.</p>
+        <h3 class="hw-title">Get alerts. Trade.</h3>
+        <p class="hw-desc">Every signal includes entry, take-profit and stop-loss. Set the levels on your exchange in seconds.</p>
         <div class="hw-screen">
       <div class="how-mock how-mock-alert">
         <div class="mock-notif">
@@ -2906,8 +2915,8 @@
       <div class="hw-orb"><img src="assets/img/step4-trophy.webp" alt="" width="74" height="74" loading="lazy"><span class="hw-num">04</span></div>
       <div class="hw-card">
         <div class="hw-meta"><span class="hw-chip">Step 04</span><span class="hw-time"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Recap</span></div>
-        <h3 class="hw-title">Take profit with us</h3>
-        <p class="hw-desc">Follow our updates until the trade closes. We post result recaps here &mdash; wins and losses.</p>
+        <h3 class="hw-title">Follow trade updates</h3>
+        <p class="hw-desc">We post updates until the trade closes. Recaps appear on this site from time to time, covering wins and losses.</p>
         <div class="hw-screen">
       <div class="how-mock how-mock-win">
         <div class="mock-pnl-card">
@@ -2926,13 +2935,13 @@
   </div>
 
   <div class="hw-cta reveal">
-    <a href="#packages" class="pkg-btn pkg-cta hx-cta"><svg class="pkg-cta-lock" width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="4" y="10" width="16" height="11" rx="2.5" fill="currentColor"/><path d="M8 10V7a4 4 0 0 1 8 0v3" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg><span class="pkg-cta-label">Start with step 01</span><span class="pkg-cta-arrow">&rarr;</span></a>
-    <div class="hw-cta-sub">Instant access &middot; One-time payment &middot; Secure checkout</div>
+    <a href="#packages" class="pkg-btn pkg-cta hx-cta"><svg class="pkg-cta-lock" width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="4" y="10" width="16" height="11" rx="2.5" fill="currentColor"/><path d="M8 10V7a4 4 0 0 1 8 0v3" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg><span class="pkg-cta-label">Get started</span><span class="pkg-cta-arrow">&rarr;</span></a>
+    <div class="hw-cta-sub">Whop checkout &middot; One-time payment &middot; No auto-renewal</div>
   </div>
 
   <div class="how-note reveal">
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-    <span>Keep Telegram notifications ON — signals drop when our traders spot the setup</span>
+    <span>Turn Telegram notifications on. Signals are time-sensitive, and alerts keep you close to the action.</span>
   </div>
 </section>
 
@@ -2940,9 +2949,9 @@
 
 <!-- RESULTS — daily public posts (admin-published, dynamic) -->
 <section id="results">
-  <div class="section-label reveal">Verified results</div>
-  <h2 class="reveal">REAL <span>RESULTS.</span><br>PUBLISHED HERE.</h2>
-  <p class="results-intro reveal">Public recaps of our closed trades: the % gained and the real P&amp;L screenshot. No cherry-picking. No hiding losses.</p>
+  <div class="section-label reveal">Trade recaps</div>
+  <h2 class="reveal">CLOSED TRADES.<br><span>PUBLIC RECAPS.</span></h2>
+  <p class="results-intro reveal">We publish recaps from time to time: wins and losses, percentage results and real P&amp;L screenshots from closed trades.</p>
   <div class="rx-strip reveal" id="rxStrip" hidden>
     <div class="rx-chip"><span class="rx-chip-num" id="rxTrades">&mdash;</span><span class="rx-chip-label">Signals published</span></div>
     <div class="rx-chip"><span class="rx-chip-num" id="rxCum">&mdash;</span><span class="rx-chip-label">Cumulative PnL</span></div>
@@ -2957,18 +2966,18 @@
   <div class="results-cta reveal">
     <a href="#packages" class="tg-btn">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12l-6.871 4.326-2.962-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.194 1.006.131.833.941z" fill="currentColor"/></svg>
-      GET THESE SIGNALS NOW
+      GET THE SIGNALS
     </a>
   </div>
 </section>
 
 <div class="divider"></div>
 <div class="payment-trust reveal">
-  <div class="payment-row"><span class="payment-label">Pay your way &mdash; secure checkout</span></div>
+  <div class="payment-row"><span class="payment-label">PAY THROUGH WHOP</span></div>
   <div class="pay-methods pay-md"><img src="assets/icons/pay/visa.svg" alt="Visa" title="Visa" loading="lazy"><img src="assets/icons/pay/mastercard.svg" alt="Mastercard" title="Mastercard" loading="lazy"><img src="assets/icons/pay/amex.svg" alt="American Express" title="American Express" loading="lazy"><img src="assets/icons/pay/discover.svg" alt="Discover" title="Discover" loading="lazy"><img src="assets/icons/pay/applepay.svg" alt="Apple Pay" title="Apple Pay" loading="lazy"><img src="assets/icons/pay/googlepay.svg" alt="Google Pay" title="Google Pay" loading="lazy"><img src="assets/icons/pay/paypal.svg" alt="PayPal" title="PayPal" loading="lazy"><span class="pay-crypto" title="Crypto"><img src="assets/icons/btc.svg" alt="Bitcoin" loading="lazy"><img src="assets/icons/eth.svg" alt="Ethereum" loading="lazy"></span></div>
   <div class="payment-trust-notes">
-    <span><img class="ptn-ico" src="assets/img/tr-lock.webp" alt="" width="22" height="22" loading="lazy">Card details never touch our servers</span>
-    <span><img class="ptn-ico" src="assets/img/tr-globe.webp" alt="" width="22" height="22" loading="lazy">Prices shown in your local currency</span>
+    <span><img class="ptn-ico" src="assets/img/tr-lock.webp" alt="" width="22" height="22" loading="lazy">Card details: Whop checkout, never our servers</span>
+    <span><img class="ptn-ico" src="assets/img/tr-globe.webp" alt="" width="22" height="22" loading="lazy">Prices in your local currency</span>
     <span><img class="ptn-ico" src="assets/img/tr-bolt.webp" alt="" width="22" height="22" loading="lazy">Activation code right after payment</span>
   </div>
 </div>
@@ -2977,8 +2986,8 @@
 
 <!-- REVIEWS -->
 <section id="reviews">
-  <div class="section-label reveal">Community speaks</div>
-  <h2 class="reveal">WHAT OUR<br><span>MEMBERS SAY.</span></h2>
+  <div class="section-label reveal">Member feedback</div>
+  <h2 class="reveal">FROM OUR<br><span>MEMBERS.</span></h2>
 
   <div class="reviews-gallery" id="reviewsGallery">
     <div class="reviews-empty">Loading reviews…</div>
@@ -2991,40 +3000,40 @@
 <!-- INSIDE -->
 <section id="inside">
   <div class="section-label reveal">What you get</div>
-  <h2 class="reveal">INSIDE THE<br><span>COMMUNITY.</span></h2>
-  <p class="inside-intro reveal">Everything you need to trade smarter, protect your capital, and consistently grow — all in one private Telegram channel.</p>
+  <h2 class="reveal">INSIDE OUR<br><span>PRIVATE CHANNEL.</span></h2>
+  <p class="inside-intro reveal">Live signals, market analysis and trade updates in our private Telegram channel. Clear levels, with the thinking behind each setup.</p>
 
   <div class="inside-grid">
     <div class="inside-card reveal">
       <div class="inside-number">01</div>
       <span class="inside-icon"><img src="assets/img/in-signals.webp" alt="" width="72" height="72" loading="lazy"></span>
-      <div class="inside-title">PRECISION SIGNALS</div>
-      <p class="inside-desc">Every signal includes a clear entry zone, multiple take profit targets, and a hard stop loss. No guessing. Just follow the plan and let the chart do its work.</p>
+      <div class="inside-title">CLEAR SIGNALS</div>
+      <p class="inside-desc">Every signal includes an entry zone, multiple take-profit targets and a hard stop-loss. Clear levels from the start, with updates until the trade closes.</p>
     </div>
     <div class="inside-card reveal">
       <div class="inside-number">02</div>
       <span class="inside-icon"><img src="assets/img/in-analysis.webp" alt="" width="72" height="72" loading="lazy"></span>
       <div class="inside-title">MARKET ANALYSIS</div>
-      <p class="inside-desc">Daily and weekly market breakdowns covering macro trends, on-chain data, and technical levels. Know exactly what's moving the market before everyone else does.</p>
+      <p class="inside-desc">We break down macro trends, on-chain data and technical levels. Context for the setups we share, so you can see the thinking behind our signals.</p>
     </div>
     <div class="inside-card reveal">
       <div class="inside-number">03</div>
       <span class="inside-icon"><img src="assets/img/in-results.webp" alt="" width="72" height="72" loading="lazy"></span>
-      <div class="inside-title">RESULTS CHANNEL</div>
-      <p class="inside-desc">Full transparency, always. A dedicated results log with every closed trade, profit percentage, and P&L screenshot. Track our performance in real time, no cherry-picking.</p>
+      <div class="inside-title">TRADE RECAPS</div>
+      <p class="inside-desc">Inside our private Telegram channel, members can review a results log of closed trades, with percentage results and P&amp;L screenshots showing wins and losses.</p>
     </div>
     <div class="inside-card reveal">
       <div class="inside-number">04</div>
       <span class="inside-icon"><img src="assets/img/in-community.webp" alt="" width="72" height="72" loading="lazy"></span>
-      <div class="inside-title">ELITE COMMUNITY</div>
-      <p class="inside-desc">Connect with 4,200+ traders who are serious about growing their wealth. Share ideas, ask questions, and learn from people who are in the trenches with you daily.</p>
+      <div class="inside-title">OUR COMMUNITY</div>
+      <p class="inside-desc">Join 4,200+ traders to share ideas and ask questions. Talk through the signals, compare market views and stay connected with the crew.</p>
     </div>
   </div>
 
   <div class="inside-cta reveal">
     <a href="#packages" class="tg-btn">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12l-6.871 4.326-2.962-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.194 1.006.131.833.941z" fill="currentColor"/></svg>
-      UNLOCK FULL ACCESS NOW
+      JOIN OUR CHANNEL
     </a>
   </div>
 </section>
@@ -3033,68 +3042,68 @@
 
 <!-- FAQ -->
 <section id="faq">
-  <div class="section-label reveal">Frequently asked</div>
+  <div class="section-label reveal">Common questions</div>
   <h2 class="reveal">GOT <span>QUESTIONS?</span></h2>
 
   <div class="faq-list reveal">
     <details class="faq-item">
-      <summary>What exactly do I get when I join?</summary>
-      <p>Real-time trade alerts via Telegram with entry, stop loss, take profit, and leverage — plus live updates as trades develop and a full performance dashboard. Everything delivered straight to your phone.</p>
+      <summary>What do I get when I join?</summary>
+      <p>You get live signals in our private Telegram channel, with entry, take-profit and stop-loss, plus leverage details. We post updates as trades develop. A full performance dashboard is included, and everything reaches your phone through Telegram.</p>
     </details>
 
     <details class="faq-item">
       <summary>How many signals per day should I expect?</summary>
-      <p>Between 2 and 6 high-conviction setups per day on average. We don't spam — signals only drop when our traders spot a clean edge. Quality over quantity, always.</p>
+      <p>Expect 2–6 signals a day on average. We post high-conviction setups when our traders see a clear edge, not to fill a quota. Quality comes before quantity.</p>
     </details>
 
     <details class="faq-item">
-      <summary>What's the win rate?</summary>
-      <p>High enough to keep our members profitable month after month. We don't publish a fixed number because it shifts with market conditions — but every trade is tracked with full transparency inside the members' channel, so you can verify the results yourself before committing long-term.</p>
+      <summary>What is your win rate?</summary>
+      <p>Win rate shifts with market conditions, so we don&rsquo;t publish a fixed number. We&rsquo;ve stayed profitable through bull and bear markets, but your results aren&rsquo;t promised. Every trade is tracked in our private Telegram channel for members to review before committing longer-term.</p>
     </details>
 
     <details class="faq-item">
       <summary>Which payment methods do you accept?</summary>
-      <p>Visa, Mastercard, American Express, Discover, Apple Pay, Google Pay, PayPal and crypto. Checkout shows prices in your local currency, so there are no surprise conversion fees.</p>
+      <p>We accept Visa, Mastercard, American Express, Discover, Apple Pay, Google Pay, PayPal and crypto through Whop. Checkout shows prices in your local currency, with no surprise conversion fees.</p>
     </details>
 
     <details class="faq-item">
       <summary>Is this a subscription? Will I be charged again?</summary>
-      <p>No. Every plan is a single one-time payment for the period you choose. There is no auto-renewal and no hidden charges. When your access ends, you decide whether to continue.</p>
+      <p>No. You pay once for your chosen period. There&rsquo;s no auto-renewal and no hidden charges. When your access ends, you decide whether to buy another plan.</p>
     </details>
 
     <details class="faq-item">
       <summary>Is checkout secure?</summary>
-      <p>Yes. Payments are processed by Whop, a payments platform used by thousands of online businesses. Your card details are entered directly into Whop's secure checkout and never touch our servers.</p>
+      <p>Yes. Whop processes payments for thousands of online businesses. You enter your card details directly into Whop&rsquo;s secure checkout. They never touch our servers.</p>
     </details>
 
     <details class="faq-item">
       <summary>What happens right after I pay?</summary>
-      <p>You'll see a success page with a unique one-time activation code. Open our Telegram bot, paste the code, and you'll be added to the private channel in under a minute.</p>
+      <p>Your payment success page shows a unique, one-time activation code. Open our Telegram bot and paste it there. You&rsquo;ll be added to our private Telegram channel in under a minute.</p>
     </details>
 
     <details class="faq-item">
-      <summary>Do I need to be an experienced trader?</summary>
-      <p>No. Every signal comes with a clear entry zone, take profit targets, and a hard stop loss. If you know how to place a market or limit order on Binance, Bybit, or any major exchange, you can follow along.</p>
+      <summary>Do I need trading experience?</summary>
+      <p>No. Every signal includes an entry zone, take-profit targets and a hard stop-loss. If you can place a market or limit order on Binance, Bybit or any major exchange, you can follow along.</p>
     </details>
 
     <details class="faq-item">
       <summary>What if I miss a signal?</summary>
-      <p>Turn on Telegram notifications for our channel — signals are time-sensitive. We pin every active trade so you can still catch late entries, but real-time alerts are what separate winners from watchers.</p>
+      <p>Turn on notifications for our private Telegram channel. Signals are time-sensitive. We pin every active trade so you can check for late entries, but review the setup rather than chase a move.</p>
     </details>
 
     <details class="faq-item">
       <summary>Can I cancel or get a refund?</summary>
-      <p>Plans are non-refundable once the activation code is used, since that grants permanent access for the paid period. If you have issues before activating, message support within 24 hours and we'll sort it out.</p>
+      <p>Plans are non-refundable once you use the activation code, which grants access for the full paid period. If you have an issue before activation, message support within 24 hours and we&rsquo;ll help resolve it.</p>
     </details>
 
     <details class="faq-item">
       <summary>What coins do you trade?</summary>
-      <p>Mainly BTC, ETH, SOL, and top-20 altcoins by volume. We occasionally cover high-momentum meme coins (DOGE, PEPE, WIF) when the setup is clean. No shitcoins, no pump-and-dumps.</p>
+      <p>Mainly BTC, ETH, SOL and top-20 altcoins by volume. We occasionally trade high-momentum meme coins, including DOGE, PEPE and WIF, when the setup is clear. No shitcoins or pump-and-dumps.</p>
     </details>
   </div>
 
   <div class="faq-cta reveal">
-    <p class="faq-still">Still have questions?</p>
+    <p class="faq-still">Need anything else?</p>
     <a href="https://t.me/momentocrypto_support" target="_blank" rel="noopener" class="tg-btn">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12l-6.871 4.326-2.962-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.194 1.006.131.833.941z" fill="currentColor"/></svg>
       MESSAGE SUPPORT
@@ -3104,15 +3113,15 @@
 
 <!-- BOTTOM PACKAGES CTA -->
 <section class="bottom-packages">
-  <div class="section-label reveal">Ready to start?</div>
-  <h2 class="reveal">GET <span>ACCESS NOW.</span></h2>
+  <div class="section-label reveal">Ready to join?</div>
+  <h2 class="reveal">GET <span>YOUR ACCESS.</span></h2>
   <div class="packages-grid">
         <div class="pkg-card plan-starter reveal">
           <div class="pkg-duration">01 Month access</div>
           <img class="pkg-ico" src="assets/img/plan-starter-orange.webp" alt="" width="64" height="64" loading="lazy"><div class="pkg-name">STARTER</div>
           <div class="pkg-price-row"><span class="pkg-price">$20</span><span class="pkg-price-note">one-time</span></div>
-          <div class="pkg-permo">Billed once &middot; 30 days</div>
-          <ul class="pkg-features"><li>Full access to all signals</li><li>Entry, TP &amp; SL levels</li><li>Private Telegram channel</li><li>Analyst commentary</li></ul>
+          <div class="pkg-permo">One-time payment &middot; 30 days</div>
+          <ul class="pkg-features"><li>Access to all signals</li><li>Entry, TP &amp; SL</li><li>Private Telegram channel</li><li>Analyst commentary</li></ul>
           <button class="pkg-btn pkg-btn-crypto pkg-cta" onclick="openWhopCheckout('starter')"><svg class="pkg-cta-lock" width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="4" y="10" width="16" height="11" rx="2.5" fill="currentColor"/><path d="M8 10V7a4 4 0 0 1 8 0v3" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg><span class="pkg-cta-label">Get Starter Access</span><span class="pkg-cta-arrow">&rarr;</span></button>
           <div class="pkg-assure">&#128274; Secure checkout &middot; No auto-renewal</div>
           <div class="pay-methods pay-xs"><img src="assets/icons/pay/visa.svg" alt="Visa" title="Visa" loading="lazy"><img src="assets/icons/pay/mastercard.svg" alt="Mastercard" title="Mastercard" loading="lazy"><img src="assets/icons/pay/amex.svg" alt="American Express" title="American Express" loading="lazy"><img src="assets/icons/pay/discover.svg" alt="Discover" title="Discover" loading="lazy"><img src="assets/icons/pay/applepay.svg" alt="Apple Pay" title="Apple Pay" loading="lazy"><img src="assets/icons/pay/googlepay.svg" alt="Google Pay" title="Google Pay" loading="lazy"><img src="assets/icons/pay/paypal.svg" alt="PayPal" title="PayPal" loading="lazy"><span class="pay-crypto" title="Crypto"><img src="assets/icons/btc.svg" alt="Bitcoin" loading="lazy"><img src="assets/icons/eth.svg" alt="Ethereum" loading="lazy"></span></div>
@@ -3122,7 +3131,7 @@
           <img class="pkg-ico" src="assets/img/plan-trader.webp" alt="" width="64" height="64" loading="lazy"><div class="pkg-name">TRADER</div>
           <div class="pkg-price-row"><span class="pkg-price">$50</span><span class="pkg-price-note">one-time</span></div>
           <div class="pkg-permo">Just $16.67/mo <span class="pkg-save">SAVE 17%</span></div>
-          <ul class="pkg-features"><li>Full access to all signals</li><li>Entry, TP &amp; SL levels</li><li>Private Telegram channel</li><li>Analyst commentary</li></ul>
+          <ul class="pkg-features"><li>Access to all signals</li><li>Entry, TP &amp; SL</li><li>Private Telegram channel</li><li>Analyst commentary</li></ul>
           <button class="pkg-btn pkg-btn-crypto pkg-cta" onclick="openWhopCheckout('trader')"><svg class="pkg-cta-lock" width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="4" y="10" width="16" height="11" rx="2.5" fill="currentColor"/><path d="M8 10V7a4 4 0 0 1 8 0v3" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg><span class="pkg-cta-label">Get Trader Access</span><span class="pkg-cta-arrow">&rarr;</span></button>
           <div class="pkg-assure">&#128274; Secure checkout &middot; No auto-renewal</div>
           <div class="pay-methods pay-xs"><img src="assets/icons/pay/visa.svg" alt="Visa" title="Visa" loading="lazy"><img src="assets/icons/pay/mastercard.svg" alt="Mastercard" title="Mastercard" loading="lazy"><img src="assets/icons/pay/amex.svg" alt="American Express" title="American Express" loading="lazy"><img src="assets/icons/pay/discover.svg" alt="Discover" title="Discover" loading="lazy"><img src="assets/icons/pay/applepay.svg" alt="Apple Pay" title="Apple Pay" loading="lazy"><img src="assets/icons/pay/googlepay.svg" alt="Google Pay" title="Google Pay" loading="lazy"><img src="assets/icons/pay/paypal.svg" alt="PayPal" title="PayPal" loading="lazy"><span class="pay-crypto" title="Crypto"><img src="assets/icons/btc.svg" alt="Bitcoin" loading="lazy"><img src="assets/icons/eth.svg" alt="Ethereum" loading="lazy"></span></div>
@@ -3132,7 +3141,7 @@
           <img class="pkg-ico" src="assets/img/plan-pro-blue.webp" alt="" width="64" height="64" loading="lazy"><div class="pkg-name">PRO</div>
           <div class="pkg-price-row"><span class="pkg-price">$90</span><span class="pkg-price-note">one-time</span></div>
           <div class="pkg-permo">Just $15/mo <span class="pkg-save">SAVE 25%</span></div>
-          <ul class="pkg-features"><li>Full access to all signals</li><li>Entry, TP &amp; SL levels</li><li>Private Telegram channel</li><li>Analyst commentary</li></ul>
+          <ul class="pkg-features"><li>Access to all signals</li><li>Entry, TP &amp; SL</li><li>Private Telegram channel</li><li>Analyst commentary</li></ul>
           <button class="pkg-btn pkg-btn-crypto pkg-cta" onclick="openWhopCheckout('pro')"><svg class="pkg-cta-lock" width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="4" y="10" width="16" height="11" rx="2.5" fill="currentColor"/><path d="M8 10V7a4 4 0 0 1 8 0v3" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg><span class="pkg-cta-label">Get Pro Access</span><span class="pkg-cta-arrow">&rarr;</span></button>
           <div class="pkg-assure">&#128274; Secure checkout &middot; No auto-renewal</div>
           <div class="pay-methods pay-xs"><img src="assets/icons/pay/visa.svg" alt="Visa" title="Visa" loading="lazy"><img src="assets/icons/pay/mastercard.svg" alt="Mastercard" title="Mastercard" loading="lazy"><img src="assets/icons/pay/amex.svg" alt="American Express" title="American Express" loading="lazy"><img src="assets/icons/pay/discover.svg" alt="Discover" title="Discover" loading="lazy"><img src="assets/icons/pay/applepay.svg" alt="Apple Pay" title="Apple Pay" loading="lazy"><img src="assets/icons/pay/googlepay.svg" alt="Google Pay" title="Google Pay" loading="lazy"><img src="assets/icons/pay/paypal.svg" alt="PayPal" title="PayPal" loading="lazy"><span class="pay-crypto" title="Crypto"><img src="assets/icons/btc.svg" alt="Bitcoin" loading="lazy"><img src="assets/icons/eth.svg" alt="Ethereum" loading="lazy"></span></div>
@@ -3146,7 +3155,7 @@
 <!-- FLOATING SUPPORT BUTTON -->
 <div class="support-fab-wrap">
   <div class="support-bubble" id="supportBubble">
-    <span>Have questions? Chat with support</span>
+    <span>Ask our support team</span>
     <button class="support-bubble-close" aria-label="Close" onclick="document.getElementById('supportBubble').classList.add('hidden')">×</button>
   </div>
   <a href="https://t.me/momentocrypto_support" target="_blank" rel="noopener" class="support-fab" aria-label="Chat with support">
@@ -3265,16 +3274,16 @@
         <div class="daily-card-body-text">${highlightGains(escapeHtml(body))}</div>
       </div>
       ${img}
-      <div class="rx-card-foot"><a href="#packages" class="rx-card-cta">Get these signals live <span>&rarr;</span></a></div>
+      <div class="rx-card-foot"><a href="#packages" class="rx-card-cta">Get the signals <span>&rarr;</span></a></div>
     </article>`;
   }
 
   function renderMoreSoonCard() {
     return `<div class="daily-more-soon reveal">
       <div class="daily-more-soon-icon"><img src="assets/img/plan-trader.webp" alt="" width="64" height="64" loading="lazy" style="width:64px;height:64px;object-fit:contain;filter:drop-shadow(0 8px 18px rgba(57,255,20,0.35))"></div>
-      <div class="daily-more-soon-title">MORE RESULTS COMING SOON</div>
-      <div class="daily-more-soon-text">New recaps are posted regularly. Want to follow <strong>every signal in real time</strong>, with entry, TP, and SL — before they're published here? Lock in access to our private channel.</div>
-      <a href="#packages" class="daily-more-soon-btn">⚡ GET ACCESS NOW</a>
+      <div class="daily-more-soon-title">CHECK BACK FOR RECAPS</div>
+      <div class="daily-more-soon-text">We post new recaps from time to time. Members get <strong>every signal live</strong> in our private Telegram channel, with entry, TP &amp; SL, before any recap appears here.</div>
+      <a href="#packages" class="daily-more-soon-btn">⚡ GET SIGNALS</a>
       <div class="daily-more-soon-countdown"><span class="pulse"></span> SIGNALS GO LIVE IN THE CHANNEL FIRST</div>
     </div>`;
   }
@@ -3335,7 +3344,7 @@
       const r = await fetch('/api/daily-results.php?limit=500');
       const data = await r.json();
       if (data.public_since && since) {
-        since.querySelector('span:last-child').innerHTML = `<strong>We've been publishing our results publicly since ${escapeHtml(fmtDateEN(data.public_since))}.</strong> Before that, results stayed inside our private Telegram channel for paid members. Now we publish them here too for full public transparency.`;
+        since.querySelector('span:last-child').innerHTML = `<strong>We&rsquo;ve published public recaps since ${escapeHtml(fmtDateEN(data.public_since))}.</strong> Before that, results stayed in our private Telegram channel for paid members. We now share recaps here from time to time, covering wins and losses.`;
       }
       applyHeroStats(data.stats);
       fillResultsStrip(data.stats, data.posts || []);
@@ -3521,10 +3530,10 @@
   <div class="tg-popup">
     <button class="tg-popup-close" onclick="closePopup()">×</button>
     <div class="tg-popup-icon"><img src="assets/img/tr-bolt.webp" alt="" width="64" height="64" loading="lazy"></div>
-    <h3>Wait — Don't Miss the Next Signals</h3>
-    <p>Our traders are posting setups with entry, TP, and SL <strong>right now</strong>. Lock in access to the private channel before you go — you can still catch the next trade.</p>
-    <a href="#packages" onclick="closePopup()" class="tg-popup-btn" style="background:var(--green);color:var(--black);">⚡ GET ACCESS NOW</a>
-    <button class="tg-popup-skip" onclick="closePopup()">I'll decide later</button>
+    <h3>Get the signals as they land</h3>
+    <p>We post signals <strong>live in our private Telegram channel</strong>, with entry, take-profit and stop-loss. Take a look at the plans before you decide.</p>
+    <a href="#packages" onclick="closePopup()" class="tg-popup-btn" style="background:var(--green);color:var(--black);">⚡ GET SIGNALS</a>
+    <button class="tg-popup-skip" onclick="closePopup()">Maybe later</button>
   </div>
 </div>
 
