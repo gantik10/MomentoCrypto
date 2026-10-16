@@ -2557,6 +2557,43 @@
     .tm-card { flex: 0 0 74%; scroll-snap-align: start; }
     .tm-card .tm-name { font-size: 26px; }
   }
+
+  /* TEAM: group photo + story */
+  .tm-wrap[hidden] { display: none !important; }
+  .tm-hero { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 22px; margin-top: 48px; align-items: stretch; }
+  .tm-group {
+    position: relative; margin: 0; overflow: hidden; border-radius: 20px; aspect-ratio: 4 / 5;
+    border: 1px solid rgba(var(--acc),0.22);
+    box-shadow: 0 30px 70px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.06);
+  }
+  .tm-group img { width: 100%; height: 100%; object-fit: cover; object-position: center top; display: block; transition: transform 0.8s ease; }
+  .tm-group:hover img { transform: scale(1.03); }
+  .tm-group::after { content: ''; position: absolute; inset: 0; pointer-events: none; background: linear-gradient(180deg, rgba(8,8,8,0) 70%, rgba(8,8,8,0.75) 100%); }
+  .tm-group figcaption {
+    position: absolute; left: 18px; bottom: 16px; z-index: 1; padding: 7px 13px; border-radius: 999px;
+    font-family: 'Space Mono', monospace; font-size: 10.5px; letter-spacing: 2px; text-transform: uppercase; color: var(--white);
+    background: rgba(8,8,8,0.6); border: 1px solid rgba(255,255,255,0.14); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+  }
+  .tm-story {
+    display: flex; flex-direction: column; justify-content: center; padding: 40px 36px; border-radius: 20px;
+    background: linear-gradient(180deg, rgba(var(--acc),0.06) 0%, rgba(255,255,255,0.015) 50%), #0f0f0f;
+    border: 1px solid rgba(var(--acc),0.16); box-shadow: inset 0 1px 0 rgba(255,255,255,0.05);
+  }
+  .tm-kicker { font-family: 'Space Mono', monospace; font-size: 10.5px; letter-spacing: 3px; text-transform: uppercase; color: var(--green); }
+  .tm-story-title { font-family: 'Bebas Neue', sans-serif; font-weight: 400; font-size: clamp(40px, 4.4vw, 60px); line-height: 0.98; letter-spacing: 1.5px; color: var(--white); margin: 14px 0 16px; }
+  .tm-story-title span { color: var(--green); }
+  .tm-story-text { font-size: 15.5px; line-height: 1.7; color: var(--white-dim); max-width: 460px; }
+  .tm-facts { list-style: none; margin: 26px 0 30px; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+  .tm-facts li { display: flex; align-items: center; gap: 14px; padding: 10px 14px 10px 10px; border-radius: 14px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07); }
+  .tm-facts img { width: 44px; height: 44px; border-radius: 50%; object-fit: cover; box-shadow: 0 0 0 2px var(--black), 0 0 0 3px rgba(var(--acc),0.5); }
+  .tm-facts span { display: flex; flex-direction: column; font-size: 13px; color: rgba(245,245,245,0.6); }
+  .tm-facts b { font-family: 'Bebas Neue', sans-serif; font-weight: 400; font-size: 21px; letter-spacing: 1px; color: var(--white); line-height: 1.05; }
+  .tm-cta { align-self: flex-start; }
+  @media (max-width: 900px) {
+    .tm-hero { grid-template-columns: 1fr; }
+    .tm-story { padding: 28px 22px; }
+    .tm-cta { align-self: stretch; justify-content: center; }
+  }
 </style>
 </head>
 <body>
@@ -2681,13 +2718,31 @@
 
 <div class="divider"></div>
 
-<!-- TEAM VIDEO — PLACEHOLDER: set data-video-src on #teamVideo (mp4/webm URL or YouTube/Vimeo embed URL), replace names/roles/photos -->
+<!-- TEAM SECTION. Video block below is hidden until the video is ready: remove `hidden` from .tm-wrap and set data-video-src on #teamVideo -->
 <section id="team">
   <div class="section-label reveal">Meet the team</div>
   <h2 class="reveal">REAL TRADERS.<br><span>REAL FACES.</span></h2>
-  <p class="hw-sub reveal">Hear it from the people who call every trade &mdash; how we pick setups, manage risk and publish our results.</p>
+  <p class="hw-sub reveal">The people behind every signal &mdash; calling the setups, managing risk and keeping the community running.</p>
 
-  <div class="tm-wrap">
+  <div class="tm-hero">
+    <figure class="tm-group reveal">
+      <img src="assets/img/team/team.webp" alt="The MomentoCrypto team: Alex, Mily and Max" width="1084" height="1355" loading="lazy">
+      <figcaption>Alex &middot; Mily &middot; Max</figcaption>
+    </figure>
+    <div class="tm-story reveal">
+      <div class="tm-kicker">Who&rsquo;s behind MomentoCrypto</div>
+      <h3 class="tm-story-title">ONE TEAM.<br><span>ONE CHANNEL.</span></h3>
+      <p class="tm-story-text">Max founded MomentoCrypto. Alex trades and analyses the market behind every signal, and Mily manages the community so every member gets set up and supported.</p>
+      <ul class="tm-facts">
+        <li><img src="assets/img/team/max-face.webp" alt="" width="44" height="44" loading="lazy"><span><b>Max</b>Founder</span></li>
+        <li><img src="assets/img/team/alex-face.webp" alt="" width="44" height="44" loading="lazy"><span><b>Alex</b>Trader &amp; Analyst</span></li>
+        <li><img src="assets/img/team/mily-face.webp" alt="" width="44" height="44" loading="lazy"><span><b>Mily</b>Momento Manager</span></li>
+      </ul>
+      <a href="#packages" class="pkg-btn pkg-cta hx-cta tm-cta"><svg class="pkg-cta-lock" width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="4" y="10" width="16" height="11" rx="2.5" fill="currentColor"/><path d="M8 10V7a4 4 0 0 1 8 0v3" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg><span class="pkg-cta-label">Join the channel</span><span class="pkg-cta-arrow">&rarr;</span></a>
+    </div>
+  </div>
+
+  <div class="tm-wrap" hidden>
     <div class="tm-video reveal" id="teamVideo" data-video-src="">
       <img class="tm-poster" src="assets/img/video-poster.webp" alt="" width="1440" height="960" loading="lazy">
       <div class="tm-shade"></div>
