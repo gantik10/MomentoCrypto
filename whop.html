@@ -15,7 +15,6 @@
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
 <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Bebas+Neue&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <!-- MC Analytics + rrweb Session Recording -->
-<script src="https://cdn.jsdelivr.net/npm/rrweb@2.0.0-alpha.17/dist/record/rrweb-record.min.js" crossorigin="anonymous" defer></script>
 <script>
 (function(){
   const API = '/api/analytics';
@@ -1893,6 +1892,133 @@
     .nav-logo { font-size: 22px; }
     .nav-cta { font-size: 9px; padding: 7px 12px; }
   }
+
+  /* ===== Conversion redesign (whop test page) ===== */
+  .pay-methods { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; }
+  .pay-methods img { display: block; width: auto; border-radius: 4px; }
+  .pay-methods .pay-crypto { display: inline-flex; align-items: center; gap: 4px; margin-left: 4px; padding-left: 8px; border-left: 1px solid rgba(245,245,245,0.15); }
+  .pay-methods .pay-crypto img { border-radius: 50%; }
+  .pay-xs { justify-content: center; margin-top: 10px; gap: 4px; }
+  .pay-xs img { height: 18px; }
+  .pay-xs .pay-crypto img { height: 16px; }
+  .pay-sm img { height: 24px; }
+  @media (max-width: 600px) { .pay-methods .pay-crypto { border-left: 0; padding-left: 0; margin-left: 2px; } }
+  .pay-sm .pay-crypto img { height: 20px; }
+  .pay-md { justify-content: center; gap: 8px; margin-top: 14px; }
+  .pay-md img { height: 34px; }
+  .pay-md .pay-crypto img { height: 28px; }
+  .hero-pkg-payment-icons { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .hero-pkg-accepts { font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: rgba(245,245,245,0.45); }
+
+  .hero-top { display: grid; grid-template-columns: minmax(0, 1fr); gap: 40px; align-items: center; }
+  @media (min-width: 1100px) { .hero-top { grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr); } }
+  .hero-sub { margin-bottom: 30px; }
+  .hero-cta-row { display: flex; gap: 14px; flex-wrap: wrap; align-items: center; }
+  .hero-cta-primary {
+    display: inline-flex; align-items: center; gap: 10px;
+    background: var(--green); color: var(--black); text-decoration: none;
+    font-family: 'DM Sans', sans-serif; font-weight: 700; font-size: 16px;
+    padding: 17px 30px; border-radius: 12px;
+    box-shadow: 0 0 0 1px rgba(57,255,20,0.6), 0 10px 40px rgba(57,255,20,0.25);
+    transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
+  }
+  .hero-cta-primary span { transition: transform 0.2s; }
+  .hero-cta-primary:hover { background: #4fff2a; transform: translateY(-2px); box-shadow: 0 0 0 1px #4fff2a, 0 14px 50px rgba(57,255,20,0.4); }
+  .hero-cta-primary:hover span { transform: translateX(3px); }
+  .hero-cta-secondary {
+    color: var(--white); text-decoration: none; font-size: 15px; font-weight: 500;
+    padding: 16px 22px; border-radius: 12px; border: 1px solid rgba(245,245,245,0.18);
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .hero-cta-secondary:hover { border-color: rgba(57,255,20,0.5); background: rgba(57,255,20,0.05); }
+  .hero-trust-line { display: flex; flex-wrap: wrap; gap: 8px 22px; margin-top: 20px; font-size: 13px; color: rgba(245,245,245,0.6); }
+
+  .hero-proof {
+    background: linear-gradient(180deg, rgba(57,255,20,0.06), rgba(17,17,17,0.9));
+    border: 1px solid rgba(57,255,20,0.25); border-radius: 18px; padding: 18px;
+    box-shadow: 0 20px 70px rgba(0,0,0,0.5), 0 0 60px rgba(57,255,20,0.08);
+  }
+  .hero-proof[hidden] { display: none; }
+  .hero-proof-head { display: flex; align-items: center; gap: 8px; font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 2px; color: var(--green); margin-bottom: 8px; }
+  .hero-proof-live { width: 8px; height: 8px; border-radius: 50%; background: var(--green); box-shadow: 0 0 10px var(--green); animation: blink 1.4s step-end infinite; }
+  .hero-proof-title { font-family: 'Bebas Neue', sans-serif; font-size: 24px; letter-spacing: 1px; color: var(--white); margin-bottom: 12px; line-height: 1.1; }
+  .hero-proof-img { border-radius: 10px; overflow: hidden; cursor: zoom-in; border: 1px solid rgba(245,245,245,0.08); max-height: 300px; }
+  .hero-proof-img img { display: block; width: 100%; height: 100%; max-height: 300px; object-fit: cover; object-position: top; }
+  .hero-proof-link { display: inline-block; margin-top: 12px; font-size: 13px; font-weight: 600; color: var(--green); text-decoration: none; }
+  .hero-proof-link:hover { text-decoration: underline; }
+  @media (max-width: 1099px) { .hero-proof { display: none; } }
+
+  .pkg-card.value::before {
+    content: 'BEST VALUE'; position: absolute; top: -14px; left: 50%; transform: translateX(-50%);
+    background: var(--white); color: var(--black); font-family: 'Space Mono', monospace;
+    font-size: 9px; font-weight: 700; letter-spacing: 2px; padding: 4px 14px; white-space: nowrap;
+  }
+  .pkg-price-row { display: flex; align-items: baseline; gap: 10px; margin-bottom: 6px; }
+  .pkg-price-row .pkg-price { margin-bottom: 0; font-size: 46px; }
+  .pkg-price-note { font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: rgba(245,245,245,0.45); }
+  .pkg-permo { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; font-size: 14px; color: var(--white); font-weight: 500; margin-bottom: 22px; min-height: 22px; }
+  .pkg-save { background: rgba(57,255,20,0.12); color: var(--green); border: 1px solid rgba(57,255,20,0.35); font-family: 'Space Mono', monospace; font-size: 10px; font-weight: 700; letter-spacing: 1px; padding: 3px 8px; border-radius: 6px; }
+  .pkg-features { margin-bottom: 28px; }
+  .pkg-cta { font-size: 16px; font-weight: 700; padding: 16px; border-radius: 12px; box-shadow: 0 8px 30px rgba(57,255,20,0.18); }
+  .pkg-cta .pkg-cta-arrow { transition: transform 0.2s; }
+  .pkg-cta:hover { transform: translateY(-1px); box-shadow: 0 12px 40px rgba(57,255,20,0.35); }
+  .pkg-cta:hover .pkg-cta-arrow { transform: translateX(3px); }
+  .pkg-assure { text-align: center; margin-top: 12px; font-size: 12px; color: rgba(245,245,245,0.55); }
+
+  .payment-trust-notes { display: flex; justify-content: center; flex-wrap: wrap; gap: 8px 24px; margin-top: 18px; font-size: 13px; color: rgba(245,245,245,0.6); }
+
+  .daily-carousel { position: relative; }
+  #dailyFeed.daily-feed {
+    display: flex; gap: 20px; overflow-x: auto; scroll-snap-type: x mandatory;
+    padding: 6px 2px 18px; scrollbar-width: thin; scrollbar-color: rgba(57,255,20,0.35) transparent;
+  }
+  #dailyFeed.daily-feed::-webkit-scrollbar { height: 6px; }
+  #dailyFeed.daily-feed::-webkit-scrollbar-thumb { background: rgba(57,255,20,0.35); border-radius: 3px; }
+  #dailyFeed .daily-card { flex: 0 0 340px; scroll-snap-align: start; display: flex; flex-direction: column; }
+  #dailyFeed .daily-card-body-text {
+    max-height: 250px; overflow: hidden;
+    -webkit-mask-image: linear-gradient(180deg, #000 75%, transparent); mask-image: linear-gradient(180deg, #000 75%, transparent);
+  }
+  #dailyFeed .daily-card-img img { max-height: 320px; object-fit: cover; object-position: top; }
+  #dailyFeed .daily-card-tg-link { margin-top: auto; }
+  .daily-nav {
+    position: absolute; top: 40%; z-index: 3; width: 46px; height: 46px; border-radius: 50%;
+    background: rgba(8,8,8,0.9); border: 1px solid rgba(57,255,20,0.45); color: var(--green);
+    font-size: 28px; line-height: 1; cursor: pointer; display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.6); transition: background 0.2s;
+  }
+  .daily-nav:hover { background: rgba(57,255,20,0.15); }
+  .daily-nav.prev { left: -23px; }
+  .daily-nav.next { right: -23px; }
+  .daily-swipe-hint { text-align: center; margin-top: 6px; font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: rgba(245,245,245,0.4); }
+  @media (max-width: 900px) {
+    .daily-nav { display: none; }
+    #dailyFeed .daily-card { flex-basis: 84vw; }
+  }
+
+  .whop-assure { font-size: 12px; color: rgba(245,245,245,0.55); margin: -8px 0 14px; }
+
+  .sticky-cta {
+    position: fixed; left: 12px; right: 12px; bottom: 12px; z-index: 10003;
+    display: none; align-items: center; justify-content: space-between; gap: 12px;
+    background: rgba(17,17,17,0.96); border: 1px solid rgba(57,255,20,0.4); border-radius: 14px;
+    padding: 10px 10px 10px 16px; backdrop-filter: blur(10px);
+    box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+    transform: translateY(140%); transition: transform 0.3s ease;
+  }
+  .sticky-cta-text { display: flex; flex-direction: column; line-height: 1.25; }
+  .sticky-cta-text strong { color: var(--white); font-size: 15px; }
+  .sticky-cta-text span { color: rgba(245,245,245,0.55); font-size: 12px; }
+  .sticky-cta-btn { background: var(--green); color: var(--black); font-weight: 700; font-size: 15px; text-decoration: none; padding: 12px 18px; border-radius: 10px; white-space: nowrap; }
+  @media (max-width: 900px) {
+    .sticky-cta { display: flex; }
+    body.sticky-cta-on .sticky-cta { transform: translateY(0); }
+    body.sticky-cta-on .support-fab-wrap { bottom: 86px; }
+    body.sticky-cta-on .test-pay-btn { bottom: 86px !important; }
+    .hero-cta-primary { width: 100%; justify-content: center; }
+    .hero-cta-secondary { width: 100%; text-align: center; }
+    .hero-trust-line { font-size: 12px; gap: 6px 14px; }
+  }
 </style>
 </head>
 <body>
@@ -1937,12 +2063,24 @@
   <div class="hero-bg"></div>
   <div class="hero-grid"></div>
   <div class="hero-inner">
+    <div class="hero-top">
+    <div class="hero-copy">
     <div class="hero-ticker">
       <span class="ticker-dot"></span>
       Live signals · 24/7 coverage
     </div>
     <h1>SIGNALS<br>THAT <span class="green">HIT.</span></h1>
     <p class="hero-sub">Professional crypto signals with verified results. Join thousands of traders already winning with MomentoCrypto's premium community.</p>
+    <div class="hero-cta-row">
+      <a href="#packages" class="hero-cta-primary">See plans &mdash; from $20 <span>&rarr;</span></a>
+      <a href="#results" class="hero-cta-secondary">View daily results</a>
+    </div>
+    <div class="hero-trust-line">
+      <span>&#128274; Secure checkout</span><span>&#9889; Instant Telegram access</span><span>&#10003; One-time payment, no subscription</span>
+    </div>
+    </div>
+    <aside class="hero-proof" id="heroProof" hidden></aside>
+    </div>
     <div class="hero-stats" id="heroStats">
       <div class="stat">
         <div class="stat-num" data-count="4200">0</div>
@@ -1967,51 +2105,40 @@
       <div class="hero-packages-header">
         <h2 class="hero-pkg-title">Choose Your Plan</h2>
         <div class="hero-pkg-payment-icons">
-          <span class="hero-pkg-accepts">We accept:</span>
-          <img src="assets/icons/btc.svg" alt="BTC" height="20">
-          <img src="assets/icons/eth.svg" alt="ETH" height="20">
-          <img src="assets/icons/usdt.svg" alt="USDT" height="20">
+          <span class="hero-pkg-accepts">Pay with</span>
+          <div class="pay-methods pay-sm"><img src="assets/icons/pay/visa.svg" alt="Visa" title="Visa" loading="lazy"><img src="assets/icons/pay/mastercard.svg" alt="Mastercard" title="Mastercard" loading="lazy"><img src="assets/icons/pay/amex.svg" alt="American Express" title="American Express" loading="lazy"><img src="assets/icons/pay/discover.svg" alt="Discover" title="Discover" loading="lazy"><img src="assets/icons/pay/applepay.svg" alt="Apple Pay" title="Apple Pay" loading="lazy"><img src="assets/icons/pay/googlepay.svg" alt="Google Pay" title="Google Pay" loading="lazy"><img src="assets/icons/pay/paypal.svg" alt="PayPal" title="PayPal" loading="lazy"><span class="pay-crypto" title="Crypto"><img src="assets/icons/btc.svg" alt="Bitcoin" loading="lazy"><img src="assets/icons/eth.svg" alt="Ethereum" loading="lazy"></span></div>
         </div>
       </div>
       <div class="packages-grid">
         <div class="pkg-card">
-          <div class="pkg-duration">01 Month</div>
+          <div class="pkg-duration">01 Month access</div>
           <div class="pkg-name">STARTER</div>
-          <div class="pkg-price">$20<span class="pkg-per-month">/mo</span></div>
-          <div class="pkg-price-sub"><span style="color:#39FF14;font-weight:600;">Instant access after payment</span></div>
-          <ul class="pkg-features">
-            <li>Full access to all signals</li>
-            <li>Entry, TP & SL levels</li>
-            <li>Private Telegram channel</li>
-            <li>Analyst commentary</li>
-          </ul>
-          <button class="pkg-btn pkg-btn-crypto" onclick="openWhopCheckout('starter')">Buy Now <span class="pkg-btn-price">$20</span> <span class="pkg-btn-discount">CARD · APPLE PAY</span></button>
+          <div class="pkg-price-row"><span class="pkg-price">$20</span><span class="pkg-price-note">one-time</span></div>
+          <div class="pkg-permo">Billed once &middot; 30 days</div>
+          <ul class="pkg-features"><li>Full access to all signals</li><li>Entry, TP &amp; SL levels</li><li>Private Telegram channel</li><li>Analyst commentary</li></ul>
+          <button class="pkg-btn pkg-btn-crypto pkg-cta" onclick="openWhopCheckout('starter')">Get Starter Access <span class="pkg-cta-arrow">&rarr;</span></button>
+          <div class="pkg-assure">&#128274; Secure checkout &middot; No auto-renewal</div>
+          <div class="pay-methods pay-xs"><img src="assets/icons/pay/visa.svg" alt="Visa" title="Visa" loading="lazy"><img src="assets/icons/pay/mastercard.svg" alt="Mastercard" title="Mastercard" loading="lazy"><img src="assets/icons/pay/amex.svg" alt="American Express" title="American Express" loading="lazy"><img src="assets/icons/pay/discover.svg" alt="Discover" title="Discover" loading="lazy"><img src="assets/icons/pay/applepay.svg" alt="Apple Pay" title="Apple Pay" loading="lazy"><img src="assets/icons/pay/googlepay.svg" alt="Google Pay" title="Google Pay" loading="lazy"><img src="assets/icons/pay/paypal.svg" alt="PayPal" title="PayPal" loading="lazy"><span class="pay-crypto" title="Crypto"><img src="assets/icons/btc.svg" alt="Bitcoin" loading="lazy"><img src="assets/icons/eth.svg" alt="Ethereum" loading="lazy"></span></div>
         </div>
         <div class="pkg-card featured">
-          <div class="pkg-duration">03 Months</div>
+          <div class="pkg-duration">03 Months access</div>
           <div class="pkg-name">TRADER</div>
-          <div class="pkg-price">$50<span class="pkg-per-month"> · $16.67/mo</span></div>
-          <div class="pkg-price-sub"><span style="color:#39FF14;font-weight:600;">$16.67/mo · save 17%</span></div>
-          <ul class="pkg-features">
-            <li>Full access to all signals</li>
-            <li>Entry, TP & SL levels</li>
-            <li>Private Telegram channel</li>
-            <li>Analyst commentary</li>
-          </ul>
-          <button class="pkg-btn pkg-btn-crypto" onclick="openWhopCheckout('trader')">Buy Now <span class="pkg-btn-price">$50</span> <span class="pkg-btn-discount">CARD · APPLE PAY</span></button>
+          <div class="pkg-price-row"><span class="pkg-price">$50</span><span class="pkg-price-note">one-time</span></div>
+          <div class="pkg-permo">Just $16.67/mo <span class="pkg-save">SAVE 17%</span></div>
+          <ul class="pkg-features"><li>Full access to all signals</li><li>Entry, TP &amp; SL levels</li><li>Private Telegram channel</li><li>Analyst commentary</li></ul>
+          <button class="pkg-btn pkg-btn-crypto pkg-cta" onclick="openWhopCheckout('trader')">Get Trader Access <span class="pkg-cta-arrow">&rarr;</span></button>
+          <div class="pkg-assure">&#128274; Secure checkout &middot; No auto-renewal</div>
+          <div class="pay-methods pay-xs"><img src="assets/icons/pay/visa.svg" alt="Visa" title="Visa" loading="lazy"><img src="assets/icons/pay/mastercard.svg" alt="Mastercard" title="Mastercard" loading="lazy"><img src="assets/icons/pay/amex.svg" alt="American Express" title="American Express" loading="lazy"><img src="assets/icons/pay/discover.svg" alt="Discover" title="Discover" loading="lazy"><img src="assets/icons/pay/applepay.svg" alt="Apple Pay" title="Apple Pay" loading="lazy"><img src="assets/icons/pay/googlepay.svg" alt="Google Pay" title="Google Pay" loading="lazy"><img src="assets/icons/pay/paypal.svg" alt="PayPal" title="PayPal" loading="lazy"><span class="pay-crypto" title="Crypto"><img src="assets/icons/btc.svg" alt="Bitcoin" loading="lazy"><img src="assets/icons/eth.svg" alt="Ethereum" loading="lazy"></span></div>
         </div>
-        <div class="pkg-card">
-          <div class="pkg-duration">06 Months</div>
+        <div class="pkg-card value">
+          <div class="pkg-duration">06 Months access</div>
           <div class="pkg-name">PRO</div>
-          <div class="pkg-price">$90<span class="pkg-per-month"> · $15/mo</span></div>
-          <div class="pkg-price-sub"><span style="color:#39FF14;font-weight:600;">$15/mo · save 25%</span></div>
-          <ul class="pkg-features">
-            <li>Full access to all signals</li>
-            <li>Entry, TP & SL levels</li>
-            <li>Private Telegram channel</li>
-            <li>Analyst commentary</li>
-          </ul>
-          <button class="pkg-btn pkg-btn-crypto" onclick="openWhopCheckout('pro')">Buy Now <span class="pkg-btn-price">$90</span> <span class="pkg-btn-discount">CARD · APPLE PAY</span></button>
+          <div class="pkg-price-row"><span class="pkg-price">$90</span><span class="pkg-price-note">one-time</span></div>
+          <div class="pkg-permo">Just $15/mo <span class="pkg-save">SAVE 25%</span></div>
+          <ul class="pkg-features"><li>Full access to all signals</li><li>Entry, TP &amp; SL levels</li><li>Private Telegram channel</li><li>Analyst commentary</li></ul>
+          <button class="pkg-btn pkg-btn-crypto pkg-cta" onclick="openWhopCheckout('pro')">Get Pro Access <span class="pkg-cta-arrow">&rarr;</span></button>
+          <div class="pkg-assure">&#128274; Secure checkout &middot; No auto-renewal</div>
+          <div class="pay-methods pay-xs"><img src="assets/icons/pay/visa.svg" alt="Visa" title="Visa" loading="lazy"><img src="assets/icons/pay/mastercard.svg" alt="Mastercard" title="Mastercard" loading="lazy"><img src="assets/icons/pay/amex.svg" alt="American Express" title="American Express" loading="lazy"><img src="assets/icons/pay/discover.svg" alt="Discover" title="Discover" loading="lazy"><img src="assets/icons/pay/applepay.svg" alt="Apple Pay" title="Apple Pay" loading="lazy"><img src="assets/icons/pay/googlepay.svg" alt="Google Pay" title="Google Pay" loading="lazy"><img src="assets/icons/pay/paypal.svg" alt="PayPal" title="PayPal" loading="lazy"><span class="pay-crypto" title="Crypto"><img src="assets/icons/btc.svg" alt="Bitcoin" loading="lazy"><img src="assets/icons/eth.svg" alt="Ethereum" loading="lazy"></span></div>
         </div>
       </div>
     </div>
@@ -2139,9 +2266,14 @@
   <div class="section-label reveal">Verified results</div>
   <h2 class="reveal">DAILY <span>RESULTS.</span><br>PUBLISHED HERE.</h2>
   <p class="results-intro reveal">A public daily recap of every trading day: closed trades, % gained, and the real P&amp;L screenshot. No cherry-picking. No hiding losses.</p>
-  <div class="daily-feed" id="dailyFeed">
-    <div class="daily-empty">Loading results…</div>
+  <div class="daily-carousel">
+    <button class="daily-nav prev" aria-label="Previous results" onclick="scrollDaily(-1)">&lsaquo;</button>
+    <div class="daily-feed" id="dailyFeed">
+      <div class="daily-empty">Loading results…</div>
+    </div>
+    <button class="daily-nav next" aria-label="More results" onclick="scrollDaily(1)">&rsaquo;</button>
   </div>
+  <div class="daily-swipe-hint" id="dailySwipeHint">Swipe through every published day &rarr;</div>
   <div id="dailyTail"></div>
 
   <div class="results-cta reveal">
@@ -2153,34 +2285,15 @@
 </section>
 
 <div class="divider"></div>
-
-
-  <div class="payment-trust reveal">
-    <div class="payment-row">
-      <span class="payment-label">Accepted payment methods</span>
-    </div>
-    <div class="payment-icons-row">
-      <div class="payment-icon-group">
-        <img src="assets/icons/btc.svg" alt="Bitcoin" height="24">
-        <img src="assets/icons/eth.svg" alt="Ethereum" height="24">
-        <img src="assets/icons/usdt.svg" alt="USDT" height="24">
-      </div>
-    </div>
-    <div class="coins-row" style="margin-top:16px;">
-      <span class="coin-chip"><span class="coin-dot" style="background:#f7931a"></span>BTC</span>
-      <span class="coin-chip"><span class="coin-dot" style="background:#627eea"></span>ETH</span>
-      <span class="coin-chip"><span class="coin-dot" style="background:#26a17b"></span>USDT</span>
-      <span class="coin-chip"><span class="coin-dot" style="background:#2775ca"></span>USDC</span>
-      <span class="coin-chip"><span class="coin-dot" style="background:#9945ff"></span>SOL</span>
-      <span class="coin-chip"><span class="coin-dot" style="background:#0033ad"></span>ADA</span>
-      <span class="coin-chip"><span class="coin-dot" style="background:#e84142"></span>AVAX</span>
-      <span class="coin-chip"><span class="coin-dot" style="background:#c2a633"></span>DOGE</span>
-      <span class="coin-chip"><span class="coin-dot" style="background:#345d9d"></span>LTC</span>
-      <span class="coin-chip"><span class="coin-dot" style="background:#8247e5"></span>MATIC</span>
-      <span class="coin-chip-more">+40 more</span>
-    </div>
+<div class="payment-trust reveal">
+  <div class="payment-row"><span class="payment-label">Pay your way &mdash; secure checkout</span></div>
+  <div class="pay-methods pay-md"><img src="assets/icons/pay/visa.svg" alt="Visa" title="Visa" loading="lazy"><img src="assets/icons/pay/mastercard.svg" alt="Mastercard" title="Mastercard" loading="lazy"><img src="assets/icons/pay/amex.svg" alt="American Express" title="American Express" loading="lazy"><img src="assets/icons/pay/discover.svg" alt="Discover" title="Discover" loading="lazy"><img src="assets/icons/pay/applepay.svg" alt="Apple Pay" title="Apple Pay" loading="lazy"><img src="assets/icons/pay/googlepay.svg" alt="Google Pay" title="Google Pay" loading="lazy"><img src="assets/icons/pay/paypal.svg" alt="PayPal" title="PayPal" loading="lazy"><span class="pay-crypto" title="Crypto"><img src="assets/icons/btc.svg" alt="Bitcoin" loading="lazy"><img src="assets/icons/eth.svg" alt="Ethereum" loading="lazy"></span></div>
+  <div class="payment-trust-notes">
+    <span>&#128274; Card details never touch our servers</span>
+    <span>&#127758; Prices shown in your local currency</span>
+    <span>&#9889; Activation code right after payment</span>
   </div>
-</section>
+</div>
 
 <div class="divider"></div>
 
@@ -2262,13 +2375,18 @@
     </details>
 
     <details class="faq-item">
-      <summary>Why do you accept only crypto?</summary>
-      <p>Crypto payments are instant, work in 150+ countries, don't require bank approvals or KYC, and protect both sides from chargebacks. Nothing else comes close for a global community.</p>
+      <summary>Which payment methods do you accept?</summary>
+      <p>Visa, Mastercard, American Express, Discover, Apple Pay, Google Pay, PayPal and crypto. Checkout shows prices in your local currency, so there are no surprise conversion fees.</p>
     </details>
 
     <details class="faq-item">
-      <summary>Is crypto payment safe?</summary>
-      <p>Yes. Payments are processed by OxaPay, an established crypto payment gateway used by thousands of businesses. You pay from your own wallet — we never see your keys or funds.</p>
+      <summary>Is this a subscription? Will I be charged again?</summary>
+      <p>No. Every plan is a single one-time payment for the period you choose. There is no auto-renewal and no hidden charges. When your access ends, you decide whether to continue.</p>
+    </details>
+
+    <details class="faq-item">
+      <summary>Is checkout secure?</summary>
+      <p>Yes. Payments are processed by Whop, a payments platform used by thousands of online businesses. Your card details are entered directly into Whop's secure checkout and never touch our servers.</p>
     </details>
 
     <details class="faq-item">
@@ -2311,50 +2429,39 @@
   <div class="section-label reveal">Ready to start?</div>
   <h2 class="reveal">GET <span>ACCESS NOW.</span></h2>
   <div class="packages-grid">
-    <div class="pkg-card reveal">
-      <div class="pkg-duration">01 Month</div>
-      <div class="pkg-name">STARTER</div>
-      <div class="pkg-price">$20<span class="pkg-per-month">/mo</span></div>
-      <div class="pkg-price-sub"><span style="color:#39FF14;font-weight:600;">Instant access after payment</span></div>
-      <ul class="pkg-features">
-        <li>Full access to all signals</li>
-        <li>Entry, TP & SL levels</li>
-        <li>Private Telegram channel</li>
-        <li>Analyst commentary</li>
-      </ul>
-      <button class="pkg-btn pkg-btn-crypto" onclick="openWhopCheckout('starter')">Buy Now <span class="pkg-btn-price">$20</span> <span class="pkg-btn-discount">CARD · APPLE PAY</span></button>
-    </div>
-    <div class="pkg-card featured reveal">
-      <div class="pkg-duration">03 Months</div>
-      <div class="pkg-name">TRADER</div>
-      <div class="pkg-price">$50<span class="pkg-per-month"> · $16.67/mo</span></div>
-      <div class="pkg-price-sub"><span style="color:#39FF14;font-weight:600;">$16.67/mo · save 17%</span></div>
-      <ul class="pkg-features">
-        <li>Full access to all signals</li>
-        <li>Entry, TP & SL levels</li>
-        <li>Private Telegram channel</li>
-        <li>Analyst commentary</li>
-      </ul>
-      <button class="pkg-btn pkg-btn-crypto" onclick="openWhopCheckout('trader')">Buy Now <span class="pkg-btn-price">$50</span> <span class="pkg-btn-discount">CARD · APPLE PAY</span></button>
-    </div>
-    <div class="pkg-card reveal">
-      <div class="pkg-duration">06 Months</div>
-      <div class="pkg-name">PRO</div>
-      <div class="pkg-price">$90<span class="pkg-per-month"> · $15/mo</span></div>
-      <div class="pkg-price-sub"><span style="color:#39FF14;font-weight:600;">$15/mo · save 25%</span></div>
-      <ul class="pkg-features">
-        <li>Full access to all signals</li>
-        <li>Entry, TP & SL levels</li>
-        <li>Private Telegram channel</li>
-        <li>Analyst commentary</li>
-      </ul>
-      <button class="pkg-btn pkg-btn-crypto" onclick="openWhopCheckout('pro')">Buy Now <span class="pkg-btn-price">$90</span> <span class="pkg-btn-discount">CARD · APPLE PAY</span></button>
-    </div>
-  </div>
+        <div class="pkg-card reveal">
+          <div class="pkg-duration">01 Month access</div>
+          <div class="pkg-name">STARTER</div>
+          <div class="pkg-price-row"><span class="pkg-price">$20</span><span class="pkg-price-note">one-time</span></div>
+          <div class="pkg-permo">Billed once &middot; 30 days</div>
+          <ul class="pkg-features"><li>Full access to all signals</li><li>Entry, TP &amp; SL levels</li><li>Private Telegram channel</li><li>Analyst commentary</li></ul>
+          <button class="pkg-btn pkg-btn-crypto pkg-cta" onclick="openWhopCheckout('starter')">Get Starter Access <span class="pkg-cta-arrow">&rarr;</span></button>
+          <div class="pkg-assure">&#128274; Secure checkout &middot; No auto-renewal</div>
+          <div class="pay-methods pay-xs"><img src="assets/icons/pay/visa.svg" alt="Visa" title="Visa" loading="lazy"><img src="assets/icons/pay/mastercard.svg" alt="Mastercard" title="Mastercard" loading="lazy"><img src="assets/icons/pay/amex.svg" alt="American Express" title="American Express" loading="lazy"><img src="assets/icons/pay/discover.svg" alt="Discover" title="Discover" loading="lazy"><img src="assets/icons/pay/applepay.svg" alt="Apple Pay" title="Apple Pay" loading="lazy"><img src="assets/icons/pay/googlepay.svg" alt="Google Pay" title="Google Pay" loading="lazy"><img src="assets/icons/pay/paypal.svg" alt="PayPal" title="PayPal" loading="lazy"><span class="pay-crypto" title="Crypto"><img src="assets/icons/btc.svg" alt="Bitcoin" loading="lazy"><img src="assets/icons/eth.svg" alt="Ethereum" loading="lazy"></span></div>
+        </div>
+        <div class="pkg-card featured reveal">
+          <div class="pkg-duration">03 Months access</div>
+          <div class="pkg-name">TRADER</div>
+          <div class="pkg-price-row"><span class="pkg-price">$50</span><span class="pkg-price-note">one-time</span></div>
+          <div class="pkg-permo">Just $16.67/mo <span class="pkg-save">SAVE 17%</span></div>
+          <ul class="pkg-features"><li>Full access to all signals</li><li>Entry, TP &amp; SL levels</li><li>Private Telegram channel</li><li>Analyst commentary</li></ul>
+          <button class="pkg-btn pkg-btn-crypto pkg-cta" onclick="openWhopCheckout('trader')">Get Trader Access <span class="pkg-cta-arrow">&rarr;</span></button>
+          <div class="pkg-assure">&#128274; Secure checkout &middot; No auto-renewal</div>
+          <div class="pay-methods pay-xs"><img src="assets/icons/pay/visa.svg" alt="Visa" title="Visa" loading="lazy"><img src="assets/icons/pay/mastercard.svg" alt="Mastercard" title="Mastercard" loading="lazy"><img src="assets/icons/pay/amex.svg" alt="American Express" title="American Express" loading="lazy"><img src="assets/icons/pay/discover.svg" alt="Discover" title="Discover" loading="lazy"><img src="assets/icons/pay/applepay.svg" alt="Apple Pay" title="Apple Pay" loading="lazy"><img src="assets/icons/pay/googlepay.svg" alt="Google Pay" title="Google Pay" loading="lazy"><img src="assets/icons/pay/paypal.svg" alt="PayPal" title="PayPal" loading="lazy"><span class="pay-crypto" title="Crypto"><img src="assets/icons/btc.svg" alt="Bitcoin" loading="lazy"><img src="assets/icons/eth.svg" alt="Ethereum" loading="lazy"></span></div>
+        </div>
+        <div class="pkg-card value reveal">
+          <div class="pkg-duration">06 Months access</div>
+          <div class="pkg-name">PRO</div>
+          <div class="pkg-price-row"><span class="pkg-price">$90</span><span class="pkg-price-note">one-time</span></div>
+          <div class="pkg-permo">Just $15/mo <span class="pkg-save">SAVE 25%</span></div>
+          <ul class="pkg-features"><li>Full access to all signals</li><li>Entry, TP &amp; SL levels</li><li>Private Telegram channel</li><li>Analyst commentary</li></ul>
+          <button class="pkg-btn pkg-btn-crypto pkg-cta" onclick="openWhopCheckout('pro')">Get Pro Access <span class="pkg-cta-arrow">&rarr;</span></button>
+          <div class="pkg-assure">&#128274; Secure checkout &middot; No auto-renewal</div>
+          <div class="pay-methods pay-xs"><img src="assets/icons/pay/visa.svg" alt="Visa" title="Visa" loading="lazy"><img src="assets/icons/pay/mastercard.svg" alt="Mastercard" title="Mastercard" loading="lazy"><img src="assets/icons/pay/amex.svg" alt="American Express" title="American Express" loading="lazy"><img src="assets/icons/pay/discover.svg" alt="Discover" title="Discover" loading="lazy"><img src="assets/icons/pay/applepay.svg" alt="Apple Pay" title="Apple Pay" loading="lazy"><img src="assets/icons/pay/googlepay.svg" alt="Google Pay" title="Google Pay" loading="lazy"><img src="assets/icons/pay/paypal.svg" alt="PayPal" title="PayPal" loading="lazy"><span class="pay-crypto" title="Crypto"><img src="assets/icons/btc.svg" alt="Bitcoin" loading="lazy"><img src="assets/icons/eth.svg" alt="Ethereum" loading="lazy"></span></div>
+        </div>
+      </div>
   <div class="payment-trust reveal" style="margin-top:24px;">
-    <div class="payment-icons-row">
-      <div class="payment-icon-group"><img src="assets/icons/btc.svg" alt="BTC" height="24"><img src="assets/icons/eth.svg" alt="ETH" height="24"><img src="assets/icons/usdt.svg" alt="USDT" height="24"></div>
-    </div>
+    <div class="pay-methods pay-md"><img src="assets/icons/pay/visa.svg" alt="Visa" title="Visa" loading="lazy"><img src="assets/icons/pay/mastercard.svg" alt="Mastercard" title="Mastercard" loading="lazy"><img src="assets/icons/pay/amex.svg" alt="American Express" title="American Express" loading="lazy"><img src="assets/icons/pay/discover.svg" alt="Discover" title="Discover" loading="lazy"><img src="assets/icons/pay/applepay.svg" alt="Apple Pay" title="Apple Pay" loading="lazy"><img src="assets/icons/pay/googlepay.svg" alt="Google Pay" title="Google Pay" loading="lazy"><img src="assets/icons/pay/paypal.svg" alt="PayPal" title="PayPal" loading="lazy"><span class="pay-crypto" title="Crypto"><img src="assets/icons/btc.svg" alt="Bitcoin" loading="lazy"><img src="assets/icons/eth.svg" alt="Ethereum" loading="lazy"></span></div>
   </div>
 </section>
 
@@ -2415,22 +2522,26 @@
     });
   });
 
+  function fmtStat(el, n) {
+    const suffix = el.dataset.suffix || '';
+    if (suffix) return n.toLocaleString('en-US') + suffix;
+    return n >= 1000 ? n.toLocaleString('en-US') + '+' : String(n);
+  }
   const counters = document.querySelectorAll('[data-count]');
   const counterObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
         const el = entry.target;
-        const target = parseInt(el.dataset.count);
-        const suffix = el.dataset.suffix || '';
         const duration = 1500;
         const start = performance.now();
+        // Re-read data-count every frame so live stats arriving mid-animation retarget it
         function update(now) {
           const elapsed = now - start;
           const progress = Math.min(elapsed / duration, 1);
           const eased = 1 - Math.pow(1 - progress, 3);
-          const current = Math.floor(eased * target);
-          el.textContent = target > 1000 ? current.toLocaleString() + '+' : current + suffix;
+          el.textContent = fmtStat(el, Math.floor(eased * parseInt(el.dataset.count)));
           if (progress < 1) requestAnimationFrame(update);
+          else el.dataset.animated = '1';
         }
         requestAnimationFrame(update);
         counterObserver.unobserve(el);
@@ -2501,6 +2612,28 @@
     if (e.key === 'Escape') document.getElementById('dailyLightbox')?.classList.remove('show');
   });
 
+  // Above-the-fold proof: the latest published recap, image-first
+  function renderHeroProof(posts, stats) {
+    const box = document.getElementById('heroProof');
+    const p = posts && posts[0];
+    if (!box || !p || !p.image) return;
+    const title = p.title_en || p.title || '';
+    const days = stats && stats.displayed_days_published ? stats.displayed_days_published : posts.length;
+    box.innerHTML = `
+      <div class="hero-proof-head"><span class="hero-proof-live"></span>LATEST RESULTS &middot; ${escapeHtml(fmtDateEN(p.date))}</div>
+      <div class="hero-proof-title">${escapeHtml(title)}</div>
+      <div class="hero-proof-img" onclick="openLightbox('${escapeHtml(p.image).replace(/'/g, "\\'")}')"><img src="${escapeHtml(p.image)}" alt="${escapeHtml(title)}"></div>
+      <a href="#results" class="hero-proof-link">See all ${days}+ days of public results &rarr;</a>`;
+    box.hidden = false;
+  }
+
+  window.scrollDaily = function(dir) {
+    const feed = document.getElementById('dailyFeed');
+    const card = feed && feed.querySelector('.daily-card');
+    if (!card) return;
+    feed.scrollBy({ left: dir * (card.getBoundingClientRect().width + 20) * (window.innerWidth > 900 ? 2 : 1), behavior: 'smooth' });
+  };
+
   // Update hero stats from the /api/daily-results.php stats blob
   function applyHeroStats(stats) {
     if (!stats) return;
@@ -2509,7 +2642,8 @@
       if (!el || val == null) return;
       el.setAttribute('data-count', Math.round(val));
       if (suffix) el.setAttribute('data-suffix', suffix);
-      el.textContent = (Math.round(val * 10) / 10) + (suffix || '');
+      // Animation still running → it picks up the new target; already finished → write it now
+      if (el.dataset.animated === '1') el.textContent = fmtStat(el, Math.round(val));
     };
     if (stats.total_trades != null) set('heroSignals', stats.total_trades, '');
     if (stats.cumulative_pct != null) set('heroCumulative', stats.cumulative_pct, '%');
@@ -2527,6 +2661,7 @@
       }
       applyHeroStats(data.stats);
       const posts = data.posts || [];
+      renderHeroProof(posts, data.stats);
       if (!posts.length) {
         feed.innerHTML = '';
         document.getElementById('dailyTail').innerHTML = renderMoreSoonCard();
@@ -2716,8 +2851,29 @@
   </div>
 </div>
 
+<!-- Sticky mobile CTA (shown when no pricing grid is on screen) -->
+<div class="sticky-cta" id="stickyCta">
+  <div class="sticky-cta-text"><strong>From $20</strong><span>One-time &middot; instant access</span></div>
+  <a href="#packages" class="sticky-cta-btn">Get access &rarr;</a>
+</div>
+<script>
+(function(){
+  const bar = document.getElementById('stickyCta');
+  const watched = [document.getElementById('packages'), document.querySelector('.bottom-packages')].filter(Boolean);
+  const visible = new Set();
+  let pastHero = false;
+  function update() { document.body.classList.toggle('sticky-cta-on', pastHero && visible.size === 0); }
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => e.isIntersecting ? visible.add(e.target) : visible.delete(e.target));
+    update();
+  }, { threshold: 0.15 });
+  watched.forEach(el => io.observe(el));
+  window.addEventListener('scroll', () => { pastHero = window.scrollY > window.innerHeight * 0.9; update(); }, { passive: true });
+})();
+</script>
+
 <!-- Test payment button (fixed, test page only) -->
-<button onclick="openWhopCheckout('test')" style="position:fixed;bottom:16px;left:16px;z-index:10004;font-family:'Space Mono',monospace;font-size:11px;font-weight:700;letter-spacing:1px;padding:10px 16px;background:#ff9f43;color:#000;border:none;border-radius:8px;cursor:pointer;box-shadow:0 4px 16px rgba(255,159,67,0.4);">🧪 TEST PAYMENT $1</button>
+<button class="test-pay-btn" onclick="openWhopCheckout('test')" style="position:fixed;bottom:16px;left:16px;z-index:10004;font-family:'Space Mono',monospace;font-size:11px;font-weight:700;letter-spacing:1px;padding:10px 16px;background:#ff9f43;color:#000;border:none;border-radius:8px;cursor:pointer;box-shadow:0 4px 16px rgba(255,159,67,0.4);">🧪 TEST PAYMENT $1</button>
 
 <!-- Whop embedded checkout modal -->
 <style>
@@ -2758,6 +2914,7 @@
   <div class="whop-panel">
     <button class="whop-close" onclick="closeWhopCheckout()">×</button>
     <div class="whop-plan-name" id="whopPlanName"></div>
+    <div class="whop-assure">&#128274; Secure checkout by Whop &middot; One-time payment &middot; Instant access</div>
     <div class="whop-mount" id="whopMount"></div>
     <div class="whop-success" id="whopSuccess">
       <div class="icon">✓</div>
