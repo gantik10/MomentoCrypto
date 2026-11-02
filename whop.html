@@ -3461,6 +3461,7 @@
     starter: { plan: 'plan_o4pZx6sSsYnpR', name: 'Starter — 1 Month',  usd: 20 },
     trader:  { plan: 'plan_qjAl1ZXSspoA8', name: 'Trader — 3 Months',  usd: 50 },
     pro:     { plan: 'plan_jqaoTVAwb4TNK', name: 'Pro — 6 Months',     usd: 90 },
+    test:    { plan: 'plan_lGmofeRqtTwRn', name: 'TEST — $1 / week',   usd: 1  },
   };
   let _whopGroup = null;        // current Whop element group (destroy before re-mount)
   let _whopElement = null;
@@ -3480,7 +3481,7 @@
     if (!cfg) return;
     // Analytics + Meta Pixel
     if (window.__mc_sid) fetch('/api/analytics/event', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ sid: window.__mc_sid, type:'pay_click', ts:Date.now(), data:{ package: pkg, method: 'whop' } }), keepalive:true });
-    if (window.fbq) fbq('track', 'InitiateCheckout', { content_ids: [pkg], content_type: 'product', value: cfg.usd, currency: 'USD', num_items: 1 });
+    if (window.fbq && pkg !== 'test') fbq('track', 'InitiateCheckout', { content_ids: [pkg], content_type: 'product', value: cfg.usd, currency: 'USD', num_items: 1 });
 
     if (!window.WhopElements) {
       alert('Checkout is still loading — please try again in a second.');
@@ -3698,5 +3699,8 @@
   });
 })();
 </script>
+
+<!-- Test payment button (/whop test page only): $1 every 7 days, full Whop -> bot deep-link flow -->
+<button onclick="openWhopCheckout('test')" style="position:fixed;top:96px;left:16px;z-index:10004;font-family:'Space Mono',monospace;font-size:11px;font-weight:700;letter-spacing:1px;padding:10px 16px;background:#ff8a2a;color:#1a0b00;border:0;border-radius:10px;cursor:pointer;box-shadow:0 8px 24px rgba(0,0,0,0.5)">TEST PAYMENT $1</button>
 </body>
 </html>

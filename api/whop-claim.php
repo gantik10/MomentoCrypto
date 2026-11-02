@@ -37,6 +37,8 @@ $PLAN_MAP = [
     'plan_o4pZx6sSsYnpR' => ['package' => 'starter', 'name' => 'Starter (1 Month, recurring)'],
     'plan_qjAl1ZXSspoA8' => ['package' => 'trader',  'name' => 'Trader (3 Months, recurring)'],
     'plan_jqaoTVAwb4TNK' => ['package' => 'pro',     'name' => 'Pro (6 Months, recurring)'],
+    // $1 / 7 days test plan (button on /whop only): full flow, but kept out of Meta + sales totals
+    'plan_lGmofeRqtTwRn' => ['package' => 'starter', 'name' => 'TEST $1 / week (flow check)', 'test' => true],
 ];
 
 function bail_to_landing(string $reason): void {
@@ -82,6 +84,7 @@ $planId = $pay['plan_id'] ?? '';
 if (!isset($PLAN_MAP[$planId])) bail_to_landing("unknown plan {$planId}");
 $package = $PLAN_MAP[$planId]['package'];
 $pkgName = $PLAN_MAP[$planId]['name'];
+$isTest = !empty($PLAN_MAP[$planId]['test']);
 $amount = floatval($pay['total']['amount'] ?? 0);
 $currency = strtoupper($pay['currency'] ?? 'USD');
 // Membership = the subscription Whop renews/cancels; the bot keys on it
@@ -110,6 +113,7 @@ $tokens[$token] = [
     'method' => 'whop',
     'membership_id' => $membershipId,
     'whop_user_id' => $whopUserId,
+    'test' => $isTest,
     'attribution' => $attribution,
 ];
 $tokens = array_filter($tokens, fn($t) => $t['created'] > time() - 86400);
@@ -138,11 +142,12 @@ if (!$already) {
         'method' => 'whop',
         'membership_id' => $membershipId,
         'whop_user_id' => $whopUserId,
+        'test' => $isTest,
         'attribution' => $attribution,
     ];
     file_put_contents($salesFile, json_encode($sales, JSON_PRETTY_PRINT));
 
-    mc_send_meta_purchase([
+    if (!$isTest) mc_send_meta_purchase([
         'order_id' => $paymentId,
         'package' => $package,
         'amount' => $amount,
@@ -153,7 +158,7 @@ if (!$already) {
     $tgToken = $env['TELEGRAM_BOT_TOKEN'] ?? '';
     $tgChat = $env['TELEGRAM_CHAT_ID'] ?? '';
     if ($tgToken && $tgChat) {
-        $msg = "💳 Whop payment confirmed!\n\n"
+        $msg = ($isTest ? "🧪 TEST " : "💳 ") . "Whop payment confirmed!\n\n"
             . "Plan: {$pkgName}\n"
             . "Amount: {$currency} {$amount}\n"
             . "Payment: {$paymentId}\n"
