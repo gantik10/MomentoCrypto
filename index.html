@@ -2896,7 +2896,7 @@
       <div class="hw-card">
         <div class="hw-meta"><span class="hw-chip">Step 02</span><span class="hw-time"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>30 sec</span></div>
         <h3 class="hw-title">Activate in Telegram</h3>
-        <p class="hw-desc">Your code appears instantly after payment. Send it to our Telegram bot and you&rsquo;re in the private channel.</p>
+        <p class="hw-desc">Right after payment you get your personal link to our Telegram bot. Tap it and you&rsquo;re in the private channel.</p>
         <div class="hw-screen">
       <div class="how-mock how-mock-bot">
         <div class="mock-bot-header">
@@ -2907,9 +2907,9 @@
           </div>
         </div>
         <div class="mock-bot-body">
-          <div class="mock-msg mock-msg-in">Welcome! Send your activation code to join the signals channel.</div>
-          <div class="mock-msg mock-msg-out">your-activation-code</div>
-          <div class="mock-msg mock-msg-in"><span class="mock-check">✓</span> Code accepted. You've been added to the channel.</div>
+          <div class="mock-msg mock-msg-out">/start</div>
+          <div class="mock-msg mock-msg-in">Welcome! Your subscription is linked to this Telegram account.</div>
+          <div class="mock-msg mock-msg-in"><span class="mock-check">✓</span> You've been added to the signals channel.</div>
         </div>
       </div>
         </div>
@@ -3016,7 +3016,7 @@
   <div class="payment-trust-notes">
     <span><img class="ptn-ico" src="assets/img/tr-lock.webp" alt="" width="22" height="22" loading="lazy">Card details: Whop checkout, never our servers</span>
     <span><img class="ptn-ico" src="assets/img/tr-globe.webp" alt="" width="22" height="22" loading="lazy">Pay from anywhere in the world</span>
-    <span><img class="ptn-ico" src="assets/img/tr-bolt.webp" alt="" width="22" height="22" loading="lazy">Activation code right after payment</span>
+    <span><img class="ptn-ico" src="assets/img/tr-bolt.webp" alt="" width="22" height="22" loading="lazy">Telegram access link right after payment</span>
   </div>
 </div>
 
@@ -3116,7 +3116,7 @@
 
     <details class="faq-item">
       <summary>What happens right after I pay?</summary>
-      <p>Your payment success page shows a unique, one-time activation code. Open our Telegram bot and paste it there. You&rsquo;ll be added to our private Telegram channel in under a minute.</p>
+      <p>Your payment success page shows your personal link to our Telegram bot. Tap it, press Start, and you&rsquo;ll be added to our private Telegram channel in under a minute. Your plan is linked to your Telegram account, so access carries on as it renews.</p>
     </details>
 
     <details class="faq-item">
@@ -3131,7 +3131,7 @@
 
     <details class="faq-item">
       <summary>Can I cancel or get a refund?</summary>
-      <p>Plans are non-refundable once you use the activation code, which grants access for the full paid period. If you have an issue before activation, message support within 24 hours and we&rsquo;ll help resolve it.</p>
+      <p>Plans are non-refundable once you&rsquo;ve joined the channel through our bot, which grants access for the full paid period. If you have an issue before joining, message support within 24 hours and we&rsquo;ll help resolve it.</p>
     </details>
 
     <details class="faq-item">
@@ -3505,7 +3505,7 @@
       onComplete: (result) => {
         if (window.__mc_sid) fetch('/api/analytics/event', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ sid: window.__mc_sid, type:'payment_complete', ts:Date.now(), data:{ sale: { package: pkg, order_id: (result && result.paymentId) || '', amount: cfg.usd, currency: 'USD', locale: 'en', method: 'whop' } } }), keepalive:true });
         // Hand off to the server-side claim: verifies payment with Whop, issues the
-        // one-time token, lands on /success.php with the Telegram activation code.
+        // success token, lands on /success.php with the Telegram bot link (start=membership id).
         // (Pixel Purchase fires on success.php with eventID = payment id.)
         const payId = (result && result.paymentId) || '';
         document.getElementById('whopSuccess').style.display = 'block';
@@ -3619,7 +3619,7 @@
     <div class="whop-success" id="whopSuccess">
       <div class="icon">✓</div>
       <h3>PAYMENT SUCCESSFUL</h3>
-      <p>Taking you to your activation code…</p>
+      <p>Taking you to your Telegram access link…</p>
     </div>
   </div>
 </div>

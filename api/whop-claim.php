@@ -1,7 +1,10 @@
 <?php
-// Whop post-payment claim: verifies a payment server-side via the Whop API,
-// then issues the same one-time success token the OxaPay flow uses and
-// redirects the buyer to /success.php?t=... (activation code → Telegram bot).
+// Whop post-payment claim: verifies a payment server-side via the Whop API (v1),
+// then issues a success token and redirects the buyer to /success.php?t=...
+// Whop buyers get a Telegram deep link carrying their Whop membership id
+// (t.me/momentocrypto_bot?start=mem_XXX) so the bot can bind the Telegram user to
+// the subscription and follow renewals/cancellations via Whop webhooks.
+// OxaPay / other methods keep the activation-code flow in success.php.
 //
 // Entry points:
 //   - index.html onComplete  → /api/whop-claim.php?payment=pay_XXX
@@ -59,8 +62,8 @@ if (isset($claims[$paymentId])) {
     exit;
 }
 
-// Verify the payment with Whop (server-side source of truth)
-$ch = curl_init("https://api.whop.com/api/v2/payments/" . rawurlencode($paymentId));
+// Verify the payment with Whop (server-side source of truth, API v1)
+$ch = curl_init("https://api.whop.com/api/v1/payments/" . rawurlencode($paymentId));
 curl_setopt_array($ch, [
     CURLOPT_RETURNTRANSFER => true,
     CURLOPT_TIMEOUT => 10,
@@ -73,14 +76,17 @@ $pay = json_decode($resp ?: '', true);
 
 if ($http !== 200 || !is_array($pay)) bail_to_landing("whop api http={$http}");
 if (($pay['status'] ?? '') !== 'paid') bail_to_landing('payment status=' . ($pay['status'] ?? 'unknown'));
-if (!empty($pay['refunded_at'])) bail_to_landing('payment refunded');
+if (!empty($pay['refunded_at']) || floatval($pay['refunded_amount']['amount'] ?? 0) > 0) bail_to_landing('payment refunded');
 
-$planId = $pay['plan'] ?? '';
+$planId = $pay['plan_id'] ?? '';
 if (!isset($PLAN_MAP[$planId])) bail_to_landing("unknown plan {$planId}");
 $package = $PLAN_MAP[$planId]['package'];
 $pkgName = $PLAN_MAP[$planId]['name'];
-$amount = floatval($pay['final_amount'] ?? 0);
+$amount = floatval($pay['total']['amount'] ?? 0);
 $currency = strtoupper($pay['currency'] ?? 'USD');
+// Membership = the subscription Whop renews/cancels; the bot keys on it
+$membershipId = preg_match('/^mem_[A-Za-z0-9]+$/', $pay['membership_id'] ?? '') ? $pay['membership_id'] : '';
+$whopUserId = $pay['user']['id'] ?? '';
 
 // Buyer attribution: the buyer's own browser hits this endpoint, so IP/UA are genuine
 $attribution = [
@@ -102,6 +108,8 @@ $tokens[$token] = [
     'amount' => $amount,
     'currency' => $currency,
     'method' => 'whop',
+    'membership_id' => $membershipId,
+    'whop_user_id' => $whopUserId,
     'attribution' => $attribution,
 ];
 $tokens = array_filter($tokens, fn($t) => $t['created'] > time() - 86400);
@@ -128,6 +136,8 @@ if (!$already) {
         'amount' => $amount,
         'currency' => $currency,
         'method' => 'whop',
+        'membership_id' => $membershipId,
+        'whop_user_id' => $whopUserId,
         'attribution' => $attribution,
     ];
     file_put_contents($salesFile, json_encode($sales, JSON_PRETTY_PRINT));
@@ -147,6 +157,7 @@ if (!$already) {
             . "Plan: {$pkgName}\n"
             . "Amount: {$currency} {$amount}\n"
             . "Payment: {$paymentId}\n"
+            . "Membership: " . ($membershipId ?: '—') . "\n"
             . "Time: " . date('Y-m-d H:i') . " UTC";
         $tg = curl_init("https://api.telegram.org/bot{$tgToken}/sendMessage");
         curl_setopt_array($tg, [
@@ -161,7 +172,7 @@ if (!$already) {
 }
 
 file_put_contents(__DIR__ . '/whop_claim.log',
-    date('Y-m-d H:i:s') . " | OK | {$paymentId} | {$package} | {$currency} {$amount}\n", FILE_APPEND);
+    date('Y-m-d H:i:s') . " | OK | {$paymentId} | {$package} | {$currency} {$amount} | " . ($membershipId ?: 'no-membership') . "\n", FILE_APPEND);
 
 header('Location: /success.php?t=' . $token);
 exit;

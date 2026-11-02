@@ -31,18 +31,31 @@ $amount = 0;
 $currency = 'USD';
 $locale = 'en';
 $utmSource = '';
+$membershipId = '';   // Whop subscription id → Telegram deep link instead of an activation code
+$firstView = false;   // purchase tracking fires once per token
 
 if (!$token || strlen($token) !== 64) {
     $error = true;
 } else {
     $tokens = file_exists($tokensFile) ? json_decode(file_get_contents($tokensFile), true) : [];
 
+    // Whop tokens carry the membership id: the bot binds the Telegram user on /start, so the
+    // page can be reopened (within the token's 24h lifetime) if Telegram didn't open the first time.
+    // Code-based tokens (OxaPay etc.) stay strictly one-time because the code is shared.
+    // Kill switch: WHOP_DEEPLINK=0 in .env sends Whop buyers back to the activation-code flow
+    $isWhopLink = ($env['WHOP_DEEPLINK'] ?? '1') !== '0'
+        && isset($tokens[$token])
+        && ($tokens[$token]['method'] ?? '') === 'whop'
+        && preg_match('/^mem_[A-Za-z0-9]+$/', $tokens[$token]['membership_id'] ?? '');
+
     if (!isset($tokens[$token])) {
         $error = true;
-    } elseif ($tokens[$token]['used']) {
+    } elseif ($tokens[$token]['used'] && !$isWhopLink) {
         $error = true;
     } else {
         $tokData = $tokens[$token];
+        $firstView = empty($tokData['used']);
+        if ($isWhopLink) $membershipId = $tokData['membership_id'];
         $package = $tokData['package'] ?? '';
         $orderId = $tokData['order_id'] ?? '';
         $amount = floatval($tokData['amount'] ?? 0);
@@ -51,10 +64,12 @@ if (!$token || strlen($token) !== 64) {
         $utmSource = $tokData['attribution']['utm_source'] ?? '';
         $code = $activationCodes[$package] ?? '';
 
-        // Mark token as used
-        $tokens[$token]['used'] = true;
-        $tokens[$token]['used_at'] = time();
-        file_put_contents($tokensFile, json_encode($tokens));
+        // Mark token as used (first view only, keep the original timestamp on reopen)
+        if ($firstView) {
+            $tokens[$token]['used'] = true;
+            $tokens[$token]['used_at'] = time();
+            file_put_contents($tokensFile, json_encode($tokens));
+        }
     }
 }
 
@@ -78,6 +93,14 @@ $t = [
     'support' => 'CONTACT SUPPORT',
     'back' => '← Back to MomentoCrypto',
     'footer_note' => 'This link is one-time only. Save your code now. If you have any issues, contact support via the bot.',
+    // Whop: deep link with the membership id, no code
+    'subtitle_link' => 'Your payment is confirmed. Open our Telegram bot with the button below &mdash; your subscription is linked to your Telegram account automatically.',
+    'link_step1' => 'Tap <strong>Open Telegram bot</strong> below',
+    'link_step2_pre' => 'Press', 'link_step2_post' => 'in the bot',
+    'link_step3_pre' => "Done! You're added to the", 'link_step3_post' => 'and your access renews with your plan',
+    'copy_link' => 'Copy bot link',
+    'copied_link' => 'Link copied',
+    'link_note' => "Telegram didn't open? Copy the link and open it on the device where you use Telegram. This page stays available for 24 hours. Need help? Contact support via the bot.",
 ];
 
 // Build Telegram start param:
@@ -86,7 +109,11 @@ $t = [
 $attribution = isset($tokData) ? ($tokData['attribution'] ?? []) : [];
 $isFbUser = !empty($attribution['fbclid']) || !empty($attribution['fbc']) ||
     preg_match('/(facebook|^fb$|meta|instagram|^ig$)/i', $utmSource);
-if ($isFbUser) {
+if ($membershipId) {
+    // Whop: the start payload IS the membership id; the bot binds the Telegram user to it and
+    // follows renewals/cancellations via Whop webhooks (membership.* / payment.*)
+    $tgStart = $membershipId;
+} elseif ($isFbUser) {
     $tgStart = 'tradefb';
 } else {
     $tgStart = 'paid';
@@ -106,7 +133,7 @@ $currencySymbol = $currency === 'EUR' ? '€' : ($currency === 'INR' ? '₹' : '
 <meta name="robots" content="noindex, nofollow">
 <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Bebas+Neue&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 
-<?php if (!$error && $metaPixelId && $orderId): ?>
+<?php if (!$error && $firstView && $metaPixelId && $orderId): ?>
 <!-- Meta Pixel — Purchase event (dedup with CAPI via event_id = order_id) -->
 <script>
 !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
@@ -165,6 +192,9 @@ fbq('track', 'Purchase', {
   .bot-btn svg { flex-shrink: 0; }
   .back-btn { display: inline-block; margin-top: 24px; font-family: 'Space Mono', monospace; font-size: 12px; letter-spacing: 1px; color: var(--white-dim); text-decoration: none; transition: color 0.2s; }
   .back-btn:hover { color: var(--green); }
+  .bot-btn-main { margin-bottom: 14px; }
+  .copy-link-btn { font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--white-dim); background: transparent; border: 1px solid rgba(245,245,245,0.18); padding: 9px 20px; cursor: pointer; margin-bottom: 36px; transition: color 0.2s, border-color 0.2s; }
+  .copy-link-btn:hover { color: var(--white); border-color: rgba(57,255,20,0.5); }
   .footer-note { font-family: 'Space Mono', monospace; font-size: 10px; color: rgba(245,245,245,0.25); margin-top: 32px; line-height: 1.6; }
 </style>
 </head>
@@ -186,9 +216,25 @@ fbq('track', 'Purchase', {
 <div class="success-card">
   <div class="check-icon">✓</div>
   <h1><?= $t['title_ok'] ?></h1>
-  <p class="subtitle"><?= $t['subtitle_ok'] ?></p>
+  <p class="subtitle"><?= $membershipId ? $t['subtitle_link'] : $t['subtitle_ok'] ?></p>
   <?php if ($orderId): ?><div class="order-meta"><?= htmlspecialchars($currencySymbol . ' ' . number_format($amount, 2, '.', '') . ' · ' . $orderId) ?></div><?php endif; ?>
 
+  <?php if ($membershipId): ?>
+  <a href="<?= htmlspecialchars($tgBotLink) ?>" class="bot-btn bot-btn-main" onclick="if(window.__mc_send)window.__mc_send('bot_link_open',{package:<?= htmlspecialchars(json_encode($package)) ?>})">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12l-6.871 4.326-2.962-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.194 1.006.131.833.941z" fill="currentColor"/></svg>
+    <?= $t['open_bot'] ?>
+  </a>
+  <div><button class="copy-link-btn" id="copyLinkBtn" onclick="copyBotLink()"><?= $t['copy_link'] ?></button></div>
+
+  <div class="steps steps-link">
+    <div class="steps-title"><?= $t['steps_title'] ?></div>
+    <div class="step"><div class="step-num">1</div><div class="step-text"><?= $t['link_step1'] ?></div></div>
+    <div class="step"><div class="step-num">2</div><div class="step-text"><?= $t['link_step2_pre'] ?> <strong><?= $t['step2_strong'] ?></strong> <?= $t['link_step2_post'] ?></div></div>
+    <div class="step"><div class="step-num">3</div><div class="step-text"><?= $t['link_step3_pre'] ?> <strong><?= $t['step4_strong'] ?></strong> <?= $t['link_step3_post'] ?></div></div>
+  </div>
+
+  <div class="footer-note"><?= $t['link_note'] ?></div>
+  <?php else: ?>
   <div class="code-section">
     <div class="code-label"><?= $t['code_label'] ?></div>
     <div class="code-value" id="codeValue"><?= htmlspecialchars($code) ?></div>
@@ -209,16 +255,26 @@ fbq('track', 'Purchase', {
   </a>
 
   <div class="footer-note"><?= $t['footer_note'] ?></div>
+  <?php endif; ?>
 </div>
 
 <script>
-  if (window.__mc_send) {
+  if (window.__mc_send && <?= json_encode($firstView) ?>) {
     window.__mc_send('payment_complete', {
       sale: { package: <?= json_encode($package) ?>, order_id: <?= json_encode($orderId) ?>, amount: <?= json_encode($amount) ?>, currency: <?= json_encode($currency) ?>, locale: <?= json_encode($locale) ?> }
     });
   }
   // Clear lost-redirect flag — user arrived successfully
   try { localStorage.removeItem('mc_last_pay_attempt'); } catch {}
+
+  function copyBotLink() {
+    navigator.clipboard.writeText(<?= json_encode($tgBotLink) ?>).then(() => {
+      if (window.__mc_send) window.__mc_send('bot_link_copied', { package: <?= json_encode($package) ?> });
+      const btn = document.getElementById('copyLinkBtn');
+      btn.textContent = <?= json_encode($t['copied_link']) ?>;
+      setTimeout(() => { btn.textContent = <?= json_encode($t['copy_link']) ?>; }, 2000);
+    });
+  }
 
   function copyCode() {
     const code = document.getElementById('codeValue').textContent;
