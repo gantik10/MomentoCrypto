@@ -3480,10 +3480,15 @@
   };
   let _whopGroup = null;        // current Whop element group (destroy before re-mount)
   let _whopElement = null;
+  let _whopScrollY = 0;            // page position to restore when the checkout closes
 
   function closeWhopCheckout() {
     const overlay = document.getElementById('whopOverlay');
     if (overlay) overlay.classList.remove('show');
+    if (document.documentElement.classList.contains('whop-open')) {
+      document.documentElement.classList.remove('whop-open');
+      window.scrollTo({ top: _whopScrollY, behavior: 'instant' });
+    }
     try { if (_whopElement && _whopElement.destroy) _whopElement.destroy(); } catch {}
     try { if (_whopGroup && _whopGroup.destroy) _whopGroup.destroy(); } catch {}
     _whopElement = null; _whopGroup = null;
@@ -3509,7 +3514,10 @@
     document.getElementById('whopPlanName').textContent = cfg.name + ' · 1 day free, then $' + cfg.usd;
     document.getElementById('whopSuccess').style.display = 'none';
     document.getElementById('whopMount').style.display = 'block';
+    _whopScrollY = window.scrollY;
+    document.documentElement.classList.add('whop-open');
     overlay.classList.add('show');
+    if (matchMedia('(max-width: 768px), (pointer: coarse)').matches) window.scrollTo({ top: 0, behavior: 'instant' });  // full-page checkout starts at its top
 
     _whopGroup = window.WhopElements().checkout.create({
       plan: cfg.plan,
@@ -3541,6 +3549,8 @@
     const overlay = document.getElementById('whopOverlay');
     if (overlay && overlay.classList.contains('show') && e.target === overlay) closeWhopCheckout();
   });
+  // Back button from the success page (bfcache): don't come back to a stale full-page checkout
+  window.addEventListener('pageshow', (e) => { if (e.persisted) closeWhopCheckout(); });
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') closeWhopCheckout();
   });
@@ -3628,6 +3638,26 @@
   .whop-success h3 { font-family: 'Bebas Neue', sans-serif; font-size: 30px; letter-spacing: 2px; color: #39FF14; margin-bottom: 10px; }
   .whop-success p { font-size: 14px; color: rgba(245,245,245,0.65); line-height: 1.6; }
   @media (max-width: 520px) { .whop-panel { padding: 18px 14px; } }
+  /* Phones/tablets: Whop's iframe grows to its full height and iOS sends swipes over an iframe
+     to the page, not to a scrolling panel. So the checkout takes over the page while open:
+     everything else is hidden and the page itself scrolls the form. */
+  html.whop-open { overflow: hidden; }
+  @media (max-width: 768px), (pointer: coarse) {
+    html.whop-open { overflow: visible; }
+    html.whop-open body > *:not(#whopOverlay) { display: none !important; }
+    html.whop-open .whop-overlay {
+      position: relative; inset: auto; min-height: 100vh; min-height: 100dvh;
+      display: block; padding: 0; background: #111; backdrop-filter: none; transition: none;
+    }
+    html.whop-open .whop-panel {
+      max-width: none; max-height: none; overflow: visible; min-height: 100vh; min-height: 100dvh;
+      border: 0; border-radius: 0; box-shadow: none; padding: 18px 16px 48px;
+    }
+    html.whop-open .whop-close {
+      position: fixed; top: 10px; right: 10px; width: 40px; height: 40px; border-radius: 50%;
+      background: rgba(20,20,20,0.9); border: 1px solid rgba(255,255,255,0.15); color: #fff; font-size: 22px;
+    }
+  }
 </style>
 <div class="whop-overlay" id="whopOverlay">
   <div class="whop-panel">
