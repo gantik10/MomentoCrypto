@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>MomentoCrypto — Signals That Hit</title>
-<meta name="description" content="Crypto trading signals in a private Telegram channel. Entry, take-profit and stop-loss on every signal. Live since 2019. Plans from $20.">
+<meta name="description" content="Crypto trading signals in a private Telegram channel. Entry, take-profit and stop-loss on every signal. Live since 2019. Plans from $20, with a 1-day free trial.">
 <meta property="og:title" content="MomentoCrypto — Signals That Hit">
 <meta property="og:description" content="Live crypto signals. Entry, take-profit and stop-loss. Trading through bull and bear markets since 2019.">
 <meta property="og:type" content="website">
@@ -1950,6 +1950,16 @@
   @media (prefers-reduced-motion: reduce) { .pkg-card.featured .pkg-cta::after { animation: none; display: none; } }
   .pkg-assure { text-align: center; margin-top: 12px; font-size: 12px; color: rgba(245,245,245,0.55); }
 
+  /* 1-day free trial (all Whop plans have trial_period_days = 1) */
+  .trial-banner { display: flex; align-items: center; gap: 12px; margin: 0 0 22px; padding: 12px 16px; text-align: left;
+    background: rgba(var(--acc),0.07); border: 1px solid rgba(var(--acc),0.28); border-radius: 12px;
+    font-size: 14px; line-height: 1.5; color: rgba(245,245,245,0.75); }
+  .trial-banner strong { color: var(--white); font-weight: 600; }
+  .trial-chip { flex-shrink: 0; font-family: 'Space Mono', monospace; font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase;
+    color: #041a00; background: var(--green); padding: 4px 9px; border-radius: 6px; }
+  .bottom-packages .trial-banner { max-width: 760px; margin: 0 auto 28px; }
+  @media (max-width: 600px) { .trial-banner { align-items: flex-start; flex-direction: column; gap: 8px; font-size: 13px; } }
+
   .payment-trust-notes { display: flex; justify-content: center; flex-wrap: wrap; gap: 8px 24px; margin-top: 18px; font-size: 13px; color: rgba(245,245,245,0.6); }
 
   .whop-assure { font-size: 12px; color: rgba(245,245,245,0.55); margin: -8px 0 14px; }
@@ -2717,12 +2727,12 @@
     <h1 class="hx-title"><span class="hx-white">SIGNALS<br>THAT</span> <span class="green hx-green">HIT.</span></h1>
     <p class="hero-sub">Crypto trading signals in a private Telegram channel, with entry, take-profit and stop-loss. We&rsquo;ve stayed profitable through bull and bear markets since 2019.</p>
     <div class="hx-cta-row">
-      <a href="#packages" class="pkg-btn pkg-cta hx-cta"><svg class="pkg-cta-lock" width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="4" y="10" width="16" height="11" rx="2.5" fill="currentColor"/><path d="M8 10V7a4 4 0 0 1 8 0v3" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg><span class="pkg-cta-label">See plans from $20</span><span class="pkg-cta-arrow">&rarr;</span></a>
+      <a href="#packages" class="pkg-btn pkg-cta hx-cta"><svg class="pkg-cta-lock" width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="4" y="10" width="16" height="11" rx="2.5" fill="currentColor"/><path d="M8 10V7a4 4 0 0 1 8 0v3" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg><span class="pkg-cta-label">Start your free trial</span><span class="pkg-cta-arrow">&rarr;</span></a>
       <a href="#results" class="hx-ghost">View recaps</a>
     </div>
     <div class="hx-trust">
       <div class="hx-trust-pay"><img src="assets/icons/pay/visa.svg" alt="Visa" loading="lazy"><img src="assets/icons/pay/mastercard.svg" alt="Mastercard" loading="lazy"><img src="assets/icons/pay/amex.svg" alt="Amex" loading="lazy"><img src="assets/icons/pay/applepay.svg" alt="Apple Pay" loading="lazy"><img src="assets/icons/pay/googlepay.svg" alt="Google Pay" loading="lazy"><img src="assets/icons/pay/paypal.svg" alt="PayPal" loading="lazy"></div>
-      <span>Instant Telegram access &middot; Renews automatically</span>
+      <span>1-day free trial on all plans &middot; Instant Telegram access</span>
     </div>
     <div class="hero-stats hx-stats" id="heroStats">
       <div class="stat">
@@ -2748,6 +2758,7 @@
           <div class="pay-methods pay-sm"><img src="assets/icons/pay/visa.svg" alt="Visa" title="Visa" loading="lazy"><img src="assets/icons/pay/mastercard.svg" alt="Mastercard" title="Mastercard" loading="lazy"><img src="assets/icons/pay/amex.svg" alt="American Express" title="American Express" loading="lazy"><img src="assets/icons/pay/discover.svg" alt="Discover" title="Discover" loading="lazy"><img src="assets/icons/pay/applepay.svg" alt="Apple Pay" title="Apple Pay" loading="lazy"><img src="assets/icons/pay/googlepay.svg" alt="Google Pay" title="Google Pay" loading="lazy"><img src="assets/icons/pay/paypal.svg" alt="PayPal" title="PayPal" loading="lazy"><span class="pay-crypto" title="Crypto"><img src="assets/icons/btc.svg" alt="Bitcoin" loading="lazy"><img src="assets/icons/eth.svg" alt="Ethereum" loading="lazy"></span></div>
         </div>
       </div>
+      <div class="trial-banner"><span class="trial-chip">Free trial</span><span><strong>Every plan starts with a 1-day free trial.</strong> Get full access now &mdash; you&rsquo;re only charged when the trial ends. Cancel before then and pay nothing.</span></div>
       <div class="packages-grid">
         <div class="pkg-card plan-starter">
           <div class="pkg-duration">01 Month access</div>
@@ -2755,8 +2766,8 @@
           <div class="pkg-price-row"><span class="pkg-price">$20</span><span class="pkg-price-note">/ month</span></div>
           <div class="pkg-permo">Renews automatically every month</div>
           <ul class="pkg-features"><li>Access to all signals</li><li>Entry, TP &amp; SL</li><li>Private Telegram channel</li><li>Analyst commentary</li></ul>
-          <button class="pkg-btn pkg-btn-crypto pkg-cta" onclick="openWhopCheckout('starter')"><svg class="pkg-cta-lock" width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="4" y="10" width="16" height="11" rx="2.5" fill="currentColor"/><path d="M8 10V7a4 4 0 0 1 8 0v3" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg><span class="pkg-cta-label">Get Starter Access</span><span class="pkg-cta-arrow">&rarr;</span></button>
-          <div class="pkg-assure">&#128274; Secure checkout &middot; Renews automatically</div>
+          <button class="pkg-btn pkg-btn-crypto pkg-cta" onclick="openWhopCheckout('starter')"><svg class="pkg-cta-lock" width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="4" y="10" width="16" height="11" rx="2.5" fill="currentColor"/><path d="M8 10V7a4 4 0 0 1 8 0v3" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg><span class="pkg-cta-label">Start free trial</span><span class="pkg-cta-arrow">&rarr;</span></button>
+          <div class="pkg-assure">&#128274; 1 day free, then $20 &middot; Renews automatically</div>
           <div class="pay-methods pay-xs"><img src="assets/icons/pay/visa.svg" alt="Visa" title="Visa" loading="lazy"><img src="assets/icons/pay/mastercard.svg" alt="Mastercard" title="Mastercard" loading="lazy"><img src="assets/icons/pay/amex.svg" alt="American Express" title="American Express" loading="lazy"><img src="assets/icons/pay/discover.svg" alt="Discover" title="Discover" loading="lazy"><img src="assets/icons/pay/applepay.svg" alt="Apple Pay" title="Apple Pay" loading="lazy"><img src="assets/icons/pay/googlepay.svg" alt="Google Pay" title="Google Pay" loading="lazy"><img src="assets/icons/pay/paypal.svg" alt="PayPal" title="PayPal" loading="lazy"><span class="pay-crypto" title="Crypto"><img src="assets/icons/btc.svg" alt="Bitcoin" loading="lazy"><img src="assets/icons/eth.svg" alt="Ethereum" loading="lazy"></span></div>
         </div>
         <div class="pkg-card featured plan-trader">
@@ -2765,8 +2776,8 @@
           <div class="pkg-price-row"><span class="pkg-price">$50</span><span class="pkg-price-note">/ 3 months</span></div>
           <div class="pkg-permo">Just $16.67/mo <span class="pkg-save">SAVE 17%</span></div>
           <ul class="pkg-features"><li>Access to all signals</li><li>Entry, TP &amp; SL</li><li>Private Telegram channel</li><li>Analyst commentary</li></ul>
-          <button class="pkg-btn pkg-btn-crypto pkg-cta" onclick="openWhopCheckout('trader')"><svg class="pkg-cta-lock" width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="4" y="10" width="16" height="11" rx="2.5" fill="currentColor"/><path d="M8 10V7a4 4 0 0 1 8 0v3" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg><span class="pkg-cta-label">Get Trader Access</span><span class="pkg-cta-arrow">&rarr;</span></button>
-          <div class="pkg-assure">&#128274; Secure checkout &middot; Renews automatically</div>
+          <button class="pkg-btn pkg-btn-crypto pkg-cta" onclick="openWhopCheckout('trader')"><svg class="pkg-cta-lock" width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="4" y="10" width="16" height="11" rx="2.5" fill="currentColor"/><path d="M8 10V7a4 4 0 0 1 8 0v3" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg><span class="pkg-cta-label">Start free trial</span><span class="pkg-cta-arrow">&rarr;</span></button>
+          <div class="pkg-assure">&#128274; 1 day free, then $50 &middot; Renews automatically</div>
           <div class="pay-methods pay-xs"><img src="assets/icons/pay/visa.svg" alt="Visa" title="Visa" loading="lazy"><img src="assets/icons/pay/mastercard.svg" alt="Mastercard" title="Mastercard" loading="lazy"><img src="assets/icons/pay/amex.svg" alt="American Express" title="American Express" loading="lazy"><img src="assets/icons/pay/discover.svg" alt="Discover" title="Discover" loading="lazy"><img src="assets/icons/pay/applepay.svg" alt="Apple Pay" title="Apple Pay" loading="lazy"><img src="assets/icons/pay/googlepay.svg" alt="Google Pay" title="Google Pay" loading="lazy"><img src="assets/icons/pay/paypal.svg" alt="PayPal" title="PayPal" loading="lazy"><span class="pay-crypto" title="Crypto"><img src="assets/icons/btc.svg" alt="Bitcoin" loading="lazy"><img src="assets/icons/eth.svg" alt="Ethereum" loading="lazy"></span></div>
         </div>
         <div class="pkg-card value plan-pro">
@@ -2775,8 +2786,8 @@
           <div class="pkg-price-row"><span class="pkg-price">$90</span><span class="pkg-price-note">/ 6 months</span></div>
           <div class="pkg-permo">Just $15/mo <span class="pkg-save">SAVE 25%</span></div>
           <ul class="pkg-features"><li>Access to all signals</li><li>Entry, TP &amp; SL</li><li>Private Telegram channel</li><li>Analyst commentary</li></ul>
-          <button class="pkg-btn pkg-btn-crypto pkg-cta" onclick="openWhopCheckout('pro')"><svg class="pkg-cta-lock" width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="4" y="10" width="16" height="11" rx="2.5" fill="currentColor"/><path d="M8 10V7a4 4 0 0 1 8 0v3" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg><span class="pkg-cta-label">Get Pro Access</span><span class="pkg-cta-arrow">&rarr;</span></button>
-          <div class="pkg-assure">&#128274; Secure checkout &middot; Renews automatically</div>
+          <button class="pkg-btn pkg-btn-crypto pkg-cta" onclick="openWhopCheckout('pro')"><svg class="pkg-cta-lock" width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="4" y="10" width="16" height="11" rx="2.5" fill="currentColor"/><path d="M8 10V7a4 4 0 0 1 8 0v3" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg><span class="pkg-cta-label">Start free trial</span><span class="pkg-cta-arrow">&rarr;</span></button>
+          <div class="pkg-assure">&#128274; 1 day free, then $90 &middot; Renews automatically</div>
           <div class="pay-methods pay-xs"><img src="assets/icons/pay/visa.svg" alt="Visa" title="Visa" loading="lazy"><img src="assets/icons/pay/mastercard.svg" alt="Mastercard" title="Mastercard" loading="lazy"><img src="assets/icons/pay/amex.svg" alt="American Express" title="American Express" loading="lazy"><img src="assets/icons/pay/discover.svg" alt="Discover" title="Discover" loading="lazy"><img src="assets/icons/pay/applepay.svg" alt="Apple Pay" title="Apple Pay" loading="lazy"><img src="assets/icons/pay/googlepay.svg" alt="Google Pay" title="Google Pay" loading="lazy"><img src="assets/icons/pay/paypal.svg" alt="PayPal" title="PayPal" loading="lazy"><span class="pay-crypto" title="Crypto"><img src="assets/icons/btc.svg" alt="Bitcoin" loading="lazy"><img src="assets/icons/eth.svg" alt="Ethereum" loading="lazy"></span></div>
         </div>
       </div>
@@ -2865,7 +2876,7 @@
       <div class="hw-card">
         <div class="hw-meta"><span class="hw-chip">Step 01</span><span class="hw-time"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>1 min</span></div>
         <h3 class="hw-title">Pick your plan</h3>
-        <p class="hw-desc">Choose 1, 3 or 6 months. Pay by card, Apple&nbsp;Pay, Google&nbsp;Pay or PayPal. Renews automatically.</p>
+        <p class="hw-desc">Choose 1, 3 or 6 months &mdash; every plan starts with a 1-day free trial. Pay by card, Apple&nbsp;Pay, Google&nbsp;Pay or PayPal. Renews automatically.</p>
         <div class="hw-screen">
       <div class="how-mock how-mock-plans">
         <div class="mock-plan">
@@ -2975,8 +2986,8 @@
   </div>
 
   <div class="hw-cta reveal">
-    <a href="#packages" class="pkg-btn pkg-cta hx-cta"><svg class="pkg-cta-lock" width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="4" y="10" width="16" height="11" rx="2.5" fill="currentColor"/><path d="M8 10V7a4 4 0 0 1 8 0v3" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg><span class="pkg-cta-label">Get started</span><span class="pkg-cta-arrow">&rarr;</span></a>
-    <div class="hw-cta-sub">Whop checkout &middot; Instant access &middot; Renews automatically</div>
+    <a href="#packages" class="pkg-btn pkg-cta hx-cta"><svg class="pkg-cta-lock" width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="4" y="10" width="16" height="11" rx="2.5" fill="currentColor"/><path d="M8 10V7a4 4 0 0 1 8 0v3" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg><span class="pkg-cta-label">Start your free trial</span><span class="pkg-cta-arrow">&rarr;</span></a>
+    <div class="hw-cta-sub">1-day free trial &middot; Instant access &middot; Renews automatically</div>
   </div>
 
   <div class="how-note reveal">
@@ -3101,13 +3112,18 @@
     </details>
 
     <details class="faq-item">
+      <summary>Is there a free trial?</summary>
+      <p>Yes. Every plan &mdash; 1, 3 or 6 months &mdash; starts with a 1-day free trial. You get full access to our private Telegram channel straight away, and you&rsquo;re only charged the plan price when the trial ends. Cancel from your Whop account before then and you pay nothing. One free trial per person.</p>
+    </details>
+
+    <details class="faq-item">
       <summary>Which payment methods do you accept?</summary>
       <p>We accept Visa, Mastercard, American Express, Discover, Apple Pay, Google Pay, PayPal and crypto through Whop. Prices are in US dollars and already include tax &mdash; the price you see is the price you pay.</p>
     </details>
 
     <details class="faq-item">
       <summary>Does my plan renew?</summary>
-      <p>Yes. Your plan renews automatically at the end of each period &mdash; every 1, 3 or 6 months &mdash; at the same price, so your access carries on without a break. You can manage it anytime from your Whop account.</p>
+      <p>Yes. Your first charge comes when your 1-day free trial ends. After that, your plan renews automatically at the end of each period &mdash; every 1, 3 or 6 months &mdash; at the same price, so your access carries on without a break. You can manage it anytime from your Whop account.</p>
     </details>
 
     <details class="faq-item">
@@ -3116,8 +3132,8 @@
     </details>
 
     <details class="faq-item">
-      <summary>What happens right after I pay?</summary>
-      <p>Your payment success page shows your personal link to our Telegram bot. Tap it, press Start, and you&rsquo;ll be added to our private Telegram channel in under a minute. Your plan is linked to your Telegram account, so access carries on as it renews.</p>
+      <summary>What happens right after I sign up?</summary>
+      <p>Your success page shows your personal link to our Telegram bot. Tap it, press Start, and you&rsquo;ll be added to our private Telegram channel in under a minute. Your plan is linked to your Telegram account, so access carries on as it renews.</p>
     </details>
 
     <details class="faq-item">
@@ -3132,7 +3148,7 @@
 
     <details class="faq-item">
       <summary>Can I cancel or get a refund?</summary>
-      <p>Plans are non-refundable once you&rsquo;ve joined the channel through our bot, which grants access for the full paid period. If you have an issue before joining, message support within 24 hours and we&rsquo;ll help resolve it.</p>
+      <p>You can cancel anytime from your Whop account &mdash; cancel during your free trial and you&rsquo;re never charged. Paid plans are non-refundable once you&rsquo;ve joined the channel through our bot, which grants access for the full paid period. If you have an issue before joining, message support within 24 hours and we&rsquo;ll help resolve it.</p>
     </details>
 
     <details class="faq-item">
@@ -3154,6 +3170,7 @@
 <section class="bottom-packages">
   <div class="section-label reveal">Ready to join?</div>
   <h2 class="reveal">GET <span>YOUR ACCESS.</span></h2>
+  <div class="trial-banner reveal"><span class="trial-chip">Free trial</span><span><strong>Every plan starts with a 1-day free trial.</strong> Get full access now &mdash; you&rsquo;re only charged when the trial ends. Cancel before then and pay nothing.</span></div>
   <div class="packages-grid">
         <div class="pkg-card plan-starter reveal">
           <div class="pkg-duration">01 Month access</div>
@@ -3161,8 +3178,8 @@
           <div class="pkg-price-row"><span class="pkg-price">$20</span><span class="pkg-price-note">/ month</span></div>
           <div class="pkg-permo">Renews automatically every month</div>
           <ul class="pkg-features"><li>Access to all signals</li><li>Entry, TP &amp; SL</li><li>Private Telegram channel</li><li>Analyst commentary</li></ul>
-          <button class="pkg-btn pkg-btn-crypto pkg-cta" onclick="openWhopCheckout('starter')"><svg class="pkg-cta-lock" width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="4" y="10" width="16" height="11" rx="2.5" fill="currentColor"/><path d="M8 10V7a4 4 0 0 1 8 0v3" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg><span class="pkg-cta-label">Get Starter Access</span><span class="pkg-cta-arrow">&rarr;</span></button>
-          <div class="pkg-assure">&#128274; Secure checkout &middot; Renews automatically</div>
+          <button class="pkg-btn pkg-btn-crypto pkg-cta" onclick="openWhopCheckout('starter')"><svg class="pkg-cta-lock" width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="4" y="10" width="16" height="11" rx="2.5" fill="currentColor"/><path d="M8 10V7a4 4 0 0 1 8 0v3" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg><span class="pkg-cta-label">Start free trial</span><span class="pkg-cta-arrow">&rarr;</span></button>
+          <div class="pkg-assure">&#128274; 1 day free, then $20 &middot; Renews automatically</div>
           <div class="pay-methods pay-xs"><img src="assets/icons/pay/visa.svg" alt="Visa" title="Visa" loading="lazy"><img src="assets/icons/pay/mastercard.svg" alt="Mastercard" title="Mastercard" loading="lazy"><img src="assets/icons/pay/amex.svg" alt="American Express" title="American Express" loading="lazy"><img src="assets/icons/pay/discover.svg" alt="Discover" title="Discover" loading="lazy"><img src="assets/icons/pay/applepay.svg" alt="Apple Pay" title="Apple Pay" loading="lazy"><img src="assets/icons/pay/googlepay.svg" alt="Google Pay" title="Google Pay" loading="lazy"><img src="assets/icons/pay/paypal.svg" alt="PayPal" title="PayPal" loading="lazy"><span class="pay-crypto" title="Crypto"><img src="assets/icons/btc.svg" alt="Bitcoin" loading="lazy"><img src="assets/icons/eth.svg" alt="Ethereum" loading="lazy"></span></div>
         </div>
         <div class="pkg-card featured plan-trader reveal">
@@ -3171,8 +3188,8 @@
           <div class="pkg-price-row"><span class="pkg-price">$50</span><span class="pkg-price-note">/ 3 months</span></div>
           <div class="pkg-permo">Just $16.67/mo <span class="pkg-save">SAVE 17%</span></div>
           <ul class="pkg-features"><li>Access to all signals</li><li>Entry, TP &amp; SL</li><li>Private Telegram channel</li><li>Analyst commentary</li></ul>
-          <button class="pkg-btn pkg-btn-crypto pkg-cta" onclick="openWhopCheckout('trader')"><svg class="pkg-cta-lock" width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="4" y="10" width="16" height="11" rx="2.5" fill="currentColor"/><path d="M8 10V7a4 4 0 0 1 8 0v3" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg><span class="pkg-cta-label">Get Trader Access</span><span class="pkg-cta-arrow">&rarr;</span></button>
-          <div class="pkg-assure">&#128274; Secure checkout &middot; Renews automatically</div>
+          <button class="pkg-btn pkg-btn-crypto pkg-cta" onclick="openWhopCheckout('trader')"><svg class="pkg-cta-lock" width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="4" y="10" width="16" height="11" rx="2.5" fill="currentColor"/><path d="M8 10V7a4 4 0 0 1 8 0v3" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg><span class="pkg-cta-label">Start free trial</span><span class="pkg-cta-arrow">&rarr;</span></button>
+          <div class="pkg-assure">&#128274; 1 day free, then $50 &middot; Renews automatically</div>
           <div class="pay-methods pay-xs"><img src="assets/icons/pay/visa.svg" alt="Visa" title="Visa" loading="lazy"><img src="assets/icons/pay/mastercard.svg" alt="Mastercard" title="Mastercard" loading="lazy"><img src="assets/icons/pay/amex.svg" alt="American Express" title="American Express" loading="lazy"><img src="assets/icons/pay/discover.svg" alt="Discover" title="Discover" loading="lazy"><img src="assets/icons/pay/applepay.svg" alt="Apple Pay" title="Apple Pay" loading="lazy"><img src="assets/icons/pay/googlepay.svg" alt="Google Pay" title="Google Pay" loading="lazy"><img src="assets/icons/pay/paypal.svg" alt="PayPal" title="PayPal" loading="lazy"><span class="pay-crypto" title="Crypto"><img src="assets/icons/btc.svg" alt="Bitcoin" loading="lazy"><img src="assets/icons/eth.svg" alt="Ethereum" loading="lazy"></span></div>
         </div>
         <div class="pkg-card value plan-pro reveal">
@@ -3181,8 +3198,8 @@
           <div class="pkg-price-row"><span class="pkg-price">$90</span><span class="pkg-price-note">/ 6 months</span></div>
           <div class="pkg-permo">Just $15/mo <span class="pkg-save">SAVE 25%</span></div>
           <ul class="pkg-features"><li>Access to all signals</li><li>Entry, TP &amp; SL</li><li>Private Telegram channel</li><li>Analyst commentary</li></ul>
-          <button class="pkg-btn pkg-btn-crypto pkg-cta" onclick="openWhopCheckout('pro')"><svg class="pkg-cta-lock" width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="4" y="10" width="16" height="11" rx="2.5" fill="currentColor"/><path d="M8 10V7a4 4 0 0 1 8 0v3" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg><span class="pkg-cta-label">Get Pro Access</span><span class="pkg-cta-arrow">&rarr;</span></button>
-          <div class="pkg-assure">&#128274; Secure checkout &middot; Renews automatically</div>
+          <button class="pkg-btn pkg-btn-crypto pkg-cta" onclick="openWhopCheckout('pro')"><svg class="pkg-cta-lock" width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="4" y="10" width="16" height="11" rx="2.5" fill="currentColor"/><path d="M8 10V7a4 4 0 0 1 8 0v3" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg><span class="pkg-cta-label">Start free trial</span><span class="pkg-cta-arrow">&rarr;</span></button>
+          <div class="pkg-assure">&#128274; 1 day free, then $90 &middot; Renews automatically</div>
           <div class="pay-methods pay-xs"><img src="assets/icons/pay/visa.svg" alt="Visa" title="Visa" loading="lazy"><img src="assets/icons/pay/mastercard.svg" alt="Mastercard" title="Mastercard" loading="lazy"><img src="assets/icons/pay/amex.svg" alt="American Express" title="American Express" loading="lazy"><img src="assets/icons/pay/discover.svg" alt="Discover" title="Discover" loading="lazy"><img src="assets/icons/pay/applepay.svg" alt="Apple Pay" title="Apple Pay" loading="lazy"><img src="assets/icons/pay/googlepay.svg" alt="Google Pay" title="Google Pay" loading="lazy"><img src="assets/icons/pay/paypal.svg" alt="PayPal" title="PayPal" loading="lazy"><span class="pay-crypto" title="Crypto"><img src="assets/icons/btc.svg" alt="Bitcoin" loading="lazy"><img src="assets/icons/eth.svg" alt="Ethereum" loading="lazy"></span></div>
         </div>
       </div>
@@ -3491,7 +3508,7 @@
     closeWhopCheckout(); // clean slate: CheckoutElement is exclusive per mount
 
     const overlay = document.getElementById('whopOverlay');
-    document.getElementById('whopPlanName').textContent = cfg.name + ' · $' + cfg.usd;
+    document.getElementById('whopPlanName').textContent = cfg.name + ' · 1 day free, then $' + cfg.usd;
     document.getElementById('whopSuccess').style.display = 'none';
     document.getElementById('whopMount').style.display = 'block';
     overlay.classList.add('show');
@@ -3622,7 +3639,7 @@
     <div class="whop-mount" id="whopMount"></div>
     <div class="whop-success" id="whopSuccess">
       <div class="icon">✓</div>
-      <h3>PAYMENT SUCCESSFUL</h3>
+      <h3>YOU&rsquo;RE IN</h3>
       <p>Taking you to your Telegram access link…</p>
     </div>
   </div>
