@@ -46,9 +46,10 @@ function mc_send_meta_purchase($order) {
         'content_name' => 'MomentoCrypto ' . ucfirst($order['package'] ?? 'unknown'),
         'num_items' => 1,
     ];
+    if (isset($order['predicted_ltv'])) $customData['predicted_ltv'] = floatval($order['predicted_ltv']);
 
     $eventData = [
-        'event_name' => 'Purchase',
+        'event_name' => $order['event_name'] ?? 'Purchase',
         'event_time' => time(),
         'event_id' => $order['order_id'],
         'event_source_url' => $attr['landing_url'] ?? 'https://momentocrypto.com/br',
@@ -76,7 +77,7 @@ function mc_send_meta_purchase($order) {
     curl_close($ch);
 
     file_put_contents(__DIR__ . '/meta_capi.log',
-        date('Y-m-d H:i:s') . " | order={$order['order_id']} | value={$order['amount']} {$order['currency']} | http={$httpCode} | resp=" . substr($response, 0, 500) . "\n",
+        date('Y-m-d H:i:s') . " | " . ($order['event_name'] ?? 'Purchase') . " | order={$order['order_id']} | value={$order['amount']} {$order['currency']} | http={$httpCode} | resp=" . substr($response, 0, 500) . "\n",
         FILE_APPEND);
 
     return ['http' => $httpCode, 'response' => $response];

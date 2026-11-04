@@ -3503,14 +3503,16 @@
         theme: { appearance: 'dark', accentColor: 'green' },
       },
       onComplete: (result) => {
-        if (window.__mc_sid) fetch('/api/analytics/event', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ sid: window.__mc_sid, type:'payment_complete', ts:Date.now(), data:{ sale: { package: pkg, order_id: (result && result.paymentId) || '', amount: cfg.usd, currency: 'USD', locale: 'en', method: 'whop' } } }), keepalive:true });
+        if (window.__mc_sid) fetch('/api/analytics/event', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ sid: window.__mc_sid, type:'payment_complete', ts:Date.now(), data:{ sale: { package: pkg, order_id: (result && (result.paymentId || result.setupIntentId)) || '', amount: (result && result.setupIntentId) ? 0 : cfg.usd, currency: 'USD', locale: 'en', method: 'whop' } } }), keepalive:true });
         // Hand off to the server-side claim: verifies payment with Whop, issues the
         // success token, lands on /success.php with the Telegram bot link (start=membership id).
         // (Pixel Purchase fires on success.php with eventID = payment id.)
+        // Free trials may finish as a setup intent (card saved, nothing charged) instead of a payment.
         const payId = (result && result.paymentId) || '';
+        const setupId = (result && result.setupIntentId) || '';
         document.getElementById('whopSuccess').style.display = 'block';
         document.getElementById('whopMount').style.display = 'none';
-        window.location.href = '/api/whop-claim.php?payment=' + encodeURIComponent(payId);
+        window.location.href = '/api/whop-claim.php?' + (payId || !setupId ? 'payment=' + encodeURIComponent(payId) : 'setup=' + encodeURIComponent(setupId));
       },
     });
     _whopElement = _whopGroup.create('checkout');

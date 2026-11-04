@@ -33,6 +33,8 @@ $locale = 'en';
 $utmSource = '';
 $membershipId = '';   // Whop subscription id → Telegram deep link instead of an activation code
 $firstView = false;   // purchase tracking fires once per token
+$isTrial = false;     // Whop free trial: nothing charged yet
+$planUsd = 0;
 
 if (!$token || strlen($token) !== 64) {
     $error = true;
@@ -56,6 +58,8 @@ if (!$token || strlen($token) !== 64) {
         $tokData = $tokens[$token];
         $firstView = empty($tokData['used']);
         if ($isWhopLink) $membershipId = $tokData['membership_id'];
+        $isTrial = !empty($tokData['trial']);
+        $planUsd = floatval($tokData['plan_usd'] ?? 0);
         $package = $tokData['package'] ?? '';
         $orderId = $tokData['order_id'] ?? '';
         $amount = floatval($tokData['amount'] ?? 0);
@@ -94,6 +98,9 @@ $t = [
     'back' => '← Back to MomentoCrypto',
     'footer_note' => 'This link is one-time only. Save your code now. If you have any issues, contact support via the bot.',
     // Whop: deep link with the membership id, no code
+    'title_trial' => 'FREE TRIAL STARTED',
+    'subtitle_trial' => 'Your free trial is active &mdash; nothing is charged until it ends. Open our Telegram bot with the button below &mdash; your subscription is linked to your Telegram account automatically.',
+    'trial_meta' => 'Free trial',
     'subtitle_link' => 'Your payment is confirmed. Open our Telegram bot with the button below &mdash; your subscription is linked to your Telegram account automatically.',
     'link_step1' => 'Tap <strong>Open Telegram bot</strong> below',
     'link_step2_pre' => 'Press', 'link_step2_post' => 'in the bot',
@@ -129,18 +136,19 @@ $currencySymbol = $currency === 'EUR' ? '€' : ($currency === 'INR' ? '₹' : '
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title><?= $error ? $t['title_err'] : $t['title_ok'] ?> — MomentoCrypto</title>
+<title><?= $error ? $t['title_err'] : ($isTrial ? $t['title_trial'] : $t['title_ok']) ?> — MomentoCrypto</title>
 <meta name="robots" content="noindex, nofollow">
 <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Bebas+Neue&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 
 <?php if (!$error && $firstView && empty($tokData['test']) && $metaPixelId && $orderId): ?>
-<!-- Meta Pixel — Purchase event (dedup with CAPI via event_id = order_id) -->
+<!-- Meta Pixel — Purchase event, or StartTrial for a Whop free trial (dedup with CAPI via event_id = order_id) -->
 <script>
 !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
 fbq('init', <?= json_encode($metaPixelId) ?>);
 fbq('track', 'PageView');
-fbq('track', 'Purchase', {
-  value: <?= json_encode($amount) ?>,
+fbq('track', <?= json_encode($isTrial ? 'StartTrial' : 'Purchase') ?>, {
+  value: <?= json_encode($amount) ?>,<?php if ($isTrial): ?>
+  predicted_ltv: <?= json_encode($planUsd) ?>,<?php endif; ?>
   currency: <?= json_encode($currency) ?>,
   content_ids: [<?= json_encode($package) ?>],
   content_type: 'product',
@@ -148,7 +156,7 @@ fbq('track', 'Purchase', {
   num_items: 1,
 }, { eventID: <?= json_encode($orderId) ?> });
 </script>
-<noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=<?= htmlspecialchars($metaPixelId) ?>&ev=Purchase&noscript=1&cd[value]=<?= $amount ?>&cd[currency]=<?= $currency ?>"/></noscript>
+<noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=<?= htmlspecialchars($metaPixelId) ?>&ev=<?= $isTrial ? 'StartTrial' : 'Purchase' ?>&noscript=1&cd[value]=<?= $amount ?>&cd[currency]=<?= $currency ?>"/></noscript>
 <?php endif; ?>
 
 <!-- MC Analytics -->
@@ -215,9 +223,9 @@ fbq('track', 'Purchase', {
 <?php else: ?>
 <div class="success-card">
   <div class="check-icon">✓</div>
-  <h1><?= $t['title_ok'] ?></h1>
-  <p class="subtitle"><?= $membershipId ? $t['subtitle_link'] : $t['subtitle_ok'] ?></p>
-  <?php if ($orderId): ?><div class="order-meta"><?= htmlspecialchars($currencySymbol . ' ' . number_format($amount, 2, '.', '') . ' · ' . $orderId) ?></div><?php endif; ?>
+  <h1><?= $isTrial ? $t['title_trial'] : $t['title_ok'] ?></h1>
+  <p class="subtitle"><?= $isTrial && $membershipId ? $t['subtitle_trial'] : ($membershipId ? $t['subtitle_link'] : $t['subtitle_ok']) ?></p>
+  <?php if ($orderId): ?><div class="order-meta"><?= htmlspecialchars(($isTrial ? $t['trial_meta'] : $currencySymbol . ' ' . number_format($amount, 2, '.', '')) . ' · ' . $orderId) ?></div><?php endif; ?>
 
   <?php if ($membershipId): ?>
   <a href="<?= htmlspecialchars($tgBotLink) ?>" class="bot-btn bot-btn-main" onclick="if(window.__mc_send)window.__mc_send('bot_link_open',{package:<?= htmlspecialchars(json_encode($package)) ?>})">
@@ -261,7 +269,7 @@ fbq('track', 'Purchase', {
 <script>
   if (window.__mc_send && <?= json_encode($firstView) ?>) {
     window.__mc_send('payment_complete', {
-      sale: { package: <?= json_encode($package) ?>, order_id: <?= json_encode($orderId) ?>, amount: <?= json_encode($amount) ?>, currency: <?= json_encode($currency) ?>, locale: <?= json_encode($locale) ?> }
+      sale: { package: <?= json_encode($package) ?>, order_id: <?= json_encode($orderId) ?>, amount: <?= json_encode($amount) ?>, currency: <?= json_encode($currency) ?>, locale: <?= json_encode($locale) ?>, trial: <?= json_encode($isTrial) ?> }
     });
   }
   // Clear lost-redirect flag — user arrived successfully
